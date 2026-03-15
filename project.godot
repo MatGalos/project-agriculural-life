@@ -11,8 +11,9 @@ config_version=5
 [application]
 
 config/name="Project_Agricultural_life"
+config/version="0.0.1.2"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://Assets/Icons/AppIcons/icon.svg"
 
 [dotnet]
 
