@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://cjems7lx65wi4"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_pmpwp"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_2kb25"]
+sky_material = SubResource("ProceduralSkyMaterial_pmpwp")
+
+[sub_resource type="Environment" id="Environment_mrs7u"]
+background_mode = 2
+sky = SubResource("Sky_2kb25")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_pmpwp"]
+
+[node name="MainScene" type="Node3D" unique_id=93633250]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1328849237]
+environment = SubResource("Environment_mrs7u")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=67861561]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=2140182178]
+shape = SubResource("WorldBoundaryShape3D_pmpwp")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1704417420]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3663317, 0)

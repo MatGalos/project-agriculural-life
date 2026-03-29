@@ -11,12 +11,18 @@ config_version=5
 [application]
 
 config/name="Project_Agricultural_life"
+config/version="0.0.1.2"
+run/main_scene="uid://bg2wnf0pafkqt"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://Assets/Icons/AppIcons/icon.svg"
 
 [dotnet]
 
 project/assembly_name="Project_Agricultural_life"
+
+[gui]
+
+theme/custom_font="uid://bhn13anuojr4n"
 
 [physics]
 
