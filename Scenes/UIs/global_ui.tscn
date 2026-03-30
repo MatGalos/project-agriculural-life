@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dmhet5sgguh5s"]
+
+[ext_resource type="PackedScene" uid="uid://cja8qampts6ut" path="res://Scenes/UIs/Menus/PauseMenu/pauseMenu.tscn" id="1_wfhki"]
+
+[node name="GlobalUI" type="CanvasLayer" unique_id=557024846]
+
+[node name="PauseMenu" parent="." unique_id=1779250105 instance=ExtResource("1_wfhki")]
