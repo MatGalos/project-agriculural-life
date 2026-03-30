@@ -1,0 +1,125 @@
+[gd_scene format=3 uid="uid://cja8qampts6ut"]
+
+[ext_resource type="Script" uid="uid://clva5q357i66b" path="res://Scripts/UIs/Menus/PauseMenu/pauseMenu.gd" id="1_t48jr"]
+[ext_resource type="Shader" uid="uid://bwo0opmxvukej" path="res://Shaders/UIs/Menus/PauseMenu/pauseMenu.gdshader" id="2_lx4i1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_05kyi"]
+shader = ExtResource("2_lx4i1")
+shader_parameter/blurAmount = 3.0
+
+[node name="PauseMenu" type="Control" unique_id=1779250105 node_paths=PackedStringArray("continueButton", "saveButton", "loadButton", "optionsButton", "saveAndQuitToMenu", "saveAndQuitToDesktop", "blurBg")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_t48jr")
+continueButton = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/ContinueButton")
+saveButton = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/SaveButton")
+loadButton = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/LoadButton")
+optionsButton = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/OptionsButton")
+saveAndQuitToMenu = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/SaveAndQuitToMenuButton")
+saveAndQuitToDesktop = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/SaveAndQuitToDesktopMenu")
+blurBg = NodePath("blurBg")
+
+[node name="blurBg" type="ColorRect" parent="." unique_id=447635258]
+visible = false
+material = SubResource("ShaderMaterial_05kyi")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Control" parent="." unique_id=837144493]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1840797543]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=1500378062]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="Separator" type="Control" parent="Panel/MarginContainer/VBoxContainer" unique_id=1120114370]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=663459965]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "Paused"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer" unique_id=1009378099]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer" unique_id=381658834]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Separator" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1938863417]
+layout_mode = 2
+
+[node name="ContinueButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1884860041]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Continue"
+
+[node name="Separator2" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=29916341]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=408290562]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Save"
+
+[node name="Separator3" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=34013420]
+layout_mode = 2
+
+[node name="LoadButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1294670980]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Load"
+
+[node name="Separator4" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=899424875]
+layout_mode = 2
+
+[node name="OptionsButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=335253849]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Options"
+
+[node name="Separator5" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=131647439]
+layout_mode = 2
+
+[node name="SaveAndQuitToMenuButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1935920013]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Save and quit to menu"
+
+[node name="Separator6" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=170501703]
+layout_mode = 2
+
+[node name="SaveAndQuitToDesktopMenu" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=900244190]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Save and quit to desktop"
