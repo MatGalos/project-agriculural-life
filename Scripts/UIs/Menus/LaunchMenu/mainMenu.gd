@@ -8,9 +8,9 @@ extends Control
 @export var optionsButton: Button
 @export var creditsButton: Button
 @export var exitButton: Button
- 
-@onready var newGameScene = preload("res://Scenes/Game/mainScene.tscn") as PackedScene
 
+@onready var newGameScene: PackedScene = preload("res://Scenes/Game/mainScene.tscn") as PackedScene
+@onready var background = $ColorRect
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var version = ProjectSettings.get_setting("application/config/version")
@@ -20,6 +20,8 @@ func _ready():
 	optionsButton.button_down.connect(onOptionsButtonPressed)
 	creditsButton.button_down.connect(onCreditsButtonPressed)
 	exitButton.button_down.connect(onExitButtonPressed)
+	
+	visible = true
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -29,7 +31,8 @@ func _process(delta):
 # Function with behaviour for when start new game button is pressed, it should
 # launch the new game
 func onStartButtonPressed() -> void:
-	get_tree().change_scene_to_packed(newGameScene)
+	gamemanager.startGame()
+	get_tree().change_scene_to_packed.call_deferred(newGameScene)
 
 # Function with behaviour for when load game button is pressed, it should
 # direct to menu with load save selection
@@ -39,7 +42,7 @@ func onLoadButtonPressed() -> void:
 # Function with behaviour for when options button is pressed, it should redirect
 # to the options menu
 func onOptionsButtonPressed() -> void:
-	pass
+	gamemanager.openOptions(gamemanager.menuContext.Main_Menu)
 
 # Function with behaviour for when credits button is pressed, it should redirect
 # to the credits
@@ -50,3 +53,6 @@ func onCreditsButtonPressed() -> void:
 # and exit to the desktop
 func onExitButtonPressed() -> void:
 	get_tree().quit()
+
+func onOptionsClosed():
+	show()
