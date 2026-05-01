@@ -7,6 +7,10 @@ Project for my master thesis about implementing stock market as a part of mechan
 - Implemented basic menus
     - Implemented basic start menu
     - Implemented basic pause menu
+    - Implemented basic options menu template
+
+### Version 0.0.1.4
+- Implemented basic options menu template
 
 ### Version 0.0.1.3
 - Implemented basic pause menu

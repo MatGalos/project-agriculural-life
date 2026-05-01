@@ -10,7 +10,7 @@ extends Control
 @export var saveAndQuitToDesktop:Button
 @export var blurBg: ColorRect
 
-@onready var mainMenuScene = preload("res://Scenes/UIs/Menus/LaunchMenu/MainMenu.tscn") as PackedScene
+@onready var mainMenuScene: PackedScene = preload("res://Scenes/UIs/Menus/LaunchMenu/MainMenu.tscn") as PackedScene
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -23,7 +23,6 @@ func _ready():
 	visible = false
 	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	blurBg.visible = false
-	print("readu")
 	
 	gamemanager.pauseChanged.connect(onPauseButtonPressed)
 
@@ -49,12 +48,13 @@ func onLoadGameButtonPressed() -> void:
 # Function with behaviour for when options button is pressed, it should redirect to
 # options menu
 func onOptionsButtonPressed() -> void:
-	pass
+	gamemanager.openOptions(gamemanager.menuContext.Pause_Menu)
 
 # Function with behaviour for when save and quit to menu button is pressed, 
 # it should save the game and redirect to main menu
 func onSaveAndQuitToMenuButtonPressed() -> void:
 	gamemanager.setPaused(false)
+	gamemanager.returnToMenu()
 	get_tree().change_scene_to_packed(mainMenuScene)
 
 # Function with behaviour for when load button is pressed, it should redirect to
@@ -62,6 +62,9 @@ func onSaveAndQuitToMenuButtonPressed() -> void:
 func onSaveAndQuitToDesktopButtonPressed() -> void:
 	gamemanager.setPaused(false)
 	get_tree().quit()
+
+func onOptionsClosed():
+	visible = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
