@@ -10,7 +10,7 @@ extends Control
 @export var exitButton: Button
 
 @onready var newGameScene: PackedScene = preload("res://Scenes/Game/mainScene.tscn") as PackedScene
-@onready var background = $ColorRect
+@onready var background: ColorRect = $ColorRect
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var version = ProjectSettings.get_setting("application/config/version")
