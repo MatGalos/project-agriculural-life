@@ -10,6 +10,10 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented basic options menu template
 - Implemented basic Player In-Game UI
     - Implemented display for date and time
+    - Implemented display for funds
+
+### Version 0.0.1.6
+- Implemented display for funds
 
 ### Version 0.0.1.5
 - Implemented display for date and time

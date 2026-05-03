@@ -23,7 +23,7 @@ grow_horizontal = 0
 layout_mode = 0
 offset_right = 112.0
 offset_bottom = 48.0
-color = Color(0.15127608, 0.15127608, 0.15127608, 1)
+color = Color(0.15294118, 0.15294118, 0.15294118, 1)
 
 [node name="DateTimeContainer" type="VBoxContainer" parent="Root/DateTimeController" unique_id=1634932118]
 layout_mode = 0
@@ -40,3 +40,23 @@ horizontal_alignment = 1
 layout_mode = 2
 text = "10:00"
 horizontal_alignment = 1
+
+[node name="FundsController" type="Control" parent="Root" unique_id=1626376011]
+anchors_preset = 0
+offset_left = 1040.0
+offset_top = 53.0
+offset_right = 1152.0
+offset_bottom = 73.0
+
+[node name="ColorRect" type="ColorRect" parent="Root/FundsController" unique_id=1870293777]
+layout_mode = 0
+offset_right = 112.0
+offset_bottom = 20.0
+color = Color(0.153, 0.153, 0.153, 1)
+
+[node name="FundsLabel" type="Label" parent="Root/FundsController" unique_id=1665244698]
+layout_mode = 0
+offset_right = 112.0
+offset_bottom = 20.0
+text = "100$"
+horizontal_alignment = 2
