@@ -90,3 +90,17 @@ text = "This is gonna display events that will happen in the game"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+
+[node name="MapController" type="Control" parent="Root" unique_id=3203391]
+anchors_preset = 0
+offset_right = 147.0
+offset_bottom = 153.0
+
+[node name="ColorRect" type="ColorRect" parent="Root/MapController" unique_id=243788001]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)

@@ -12,6 +12,10 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented display for date and time
     - Implemented display for funds
     - Implemented display for events
+    - Implemented display for mini map
+
+### Version 0.0.1.8
+- Implemented display for mini map
 
 ### Version 0.0.1.7
 - Implemented display for events
