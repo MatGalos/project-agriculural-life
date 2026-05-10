@@ -13,6 +13,10 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented display for funds
     - Implemented display for events
     - Implemented display for mini map
+    - Implemented display for quick inventory
+
+### Version 0.0.1.9
+- Implemented display for quick inventory
 
 ### Version 0.0.1.8
 - Implemented display for mini map
