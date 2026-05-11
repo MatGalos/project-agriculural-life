@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dbash3tpjwypy"]
 
 [node name="PlayerHUD" type="CanvasLayer" unique_id=76956586]
+metadata/_edit_vertical_guides_ = [601.0]
 
 [node name="Root" type="Control" parent="." unique_id=1894068692]
 layout_mode = 3
@@ -104,3 +105,71 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
+
+[node name="QuickInventoryController" type="Control" parent="Root" unique_id=592605232]
+anchors_preset = 0
+offset_left = 356.0
+offset_top = 567.0
+offset_right = 852.0
+offset_bottom = 639.0
+
+[node name="PanelContainer" type="PanelContainer" parent="Root/QuickInventoryController" unique_id=1496204891]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Root/QuickInventoryController/PanelContainer" unique_id=497413186]
+layout_mode = 2
+
+[node name="Slot1" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=482116249]
+custom_minimum_size = Vector2(96, 64)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot1" unique_id=1036302836]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Slot 1"
+
+[node name="Slot2" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=768597355]
+custom_minimum_size = Vector2(96, 64)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot2" unique_id=1025412621]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Slot 2"
+
+[node name="Slot3" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=711113282]
+custom_minimum_size = Vector2(96, 64)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot3" unique_id=2024014200]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Slot 3"
+
+[node name="Slot4" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=141672993]
+custom_minimum_size = Vector2(96, 64)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot4" unique_id=1430704183]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Slot 4"
+
+[node name="Slot5" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=2027116879]
+custom_minimum_size = Vector2(96, 64)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot5" unique_id=1150460589]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Slot 5"
