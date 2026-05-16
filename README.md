@@ -14,6 +14,15 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented display for events
     - Implemented display for mini map
     - Implemented display for quick inventory
+- Implemented assets for the game
+    - Implemented asset for the grass block
+    - Implemented asset for the plowed block
+    - Implemented terrain atlas
+
+## Version 0.0.1.10
+- Implemented asset for the grass block
+- Implemented asset for the plowed block
+- Implemented terrain atlas
 
 ### Version 0.0.1.9
 - Implemented display for quick inventory
