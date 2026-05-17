@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cxxr0r1e8i1bj" path="res://Assets/Models/Terrain/grass_block.glb" id="2_grjqy"]
 [ext_resource type="PackedScene" uid="uid://e0txou2qyc0l" path="res://Assets/Models/Terrain/plowed_block.glb" id="3_mudw0"]
 [ext_resource type="PackedScene" uid="uid://c6rbyep4rt0t4" path="res://Assets/Models/Buildings/well.glb" id="4_mudw0"]
+[ext_resource type="PackedScene" uid="uid://dtlgskl6tvubp" path="res://Assets/Models/Buildings/house.glb" id="5_f246w"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_pmpwp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -356,3 +357,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 6)
 
 [node name="grass_block66" parent="." unique_id=180993245 instance=ExtResource("2_grjqy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 5)
+
+[node name="house" parent="." unique_id=734705202 instance=ExtResource("5_f246w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.997143, 0, -7.5261)

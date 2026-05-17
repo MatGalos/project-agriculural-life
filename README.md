@@ -19,6 +19,10 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented asset for the plowed block
     - Implemented terrain atlas
     - Implemented asset for the well
+    - Implemented asset for the player house
+
+## Version 0.0.1.12
+- Implemented asset for the player house
 
 ## Version 0.0.1.11
 - Implemented asset for the well
