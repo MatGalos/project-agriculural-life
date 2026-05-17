@@ -21,6 +21,10 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented asset for the well
     - Implemented asset for the player house
     - Implemented asset for the silo
+    - Implemented ground plane
+
+## Version 0.0.1.14
+- Implemented ground plane
 
 ## Version 0.0.1.13
 - Implemented asset for the silo
