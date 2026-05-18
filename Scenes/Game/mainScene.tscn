@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://c6rbyep4rt0t4" path="res://Assets/Models/Buildings/well.glb" id="4_mudw0"]
 [ext_resource type="PackedScene" uid="uid://dtlgskl6tvubp" path="res://Assets/Models/Buildings/house.glb" id="5_f246w"]
 [ext_resource type="PackedScene" uid="uid://4f4mbabd4bie" path="res://Assets/Models/Buildings/Silo.glb" id="6_f63ko"]
+[ext_resource type="Script" uid="uid://daayhh3m0lprt" path="res://Scripts/Player/CharacterController.gd" id="7_biuxf"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_pmpwp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -22,12 +23,30 @@ glow_enabled = true
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_pmpwp"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_f63ko"]
+size = Vector3(5, 3, 4)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_biuxf"]
+height = 3.0
+radius = 1.5
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f63ko"]
 albedo_color = Color(0.22130549, 0.12136536, 0.004583708, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_biuxf"]
 material = SubResource("StandardMaterial3D_f63ko")
 size = Vector3(50, 1, 50)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tfxbu"]
+size = Vector3(50, 2, 50)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_juroi"]
+radius = 0.3
+height = 1.6
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_0sacj"]
+radius = 0.3
+height = 1.6
 
 [node name="MainScene" type="Node3D" unique_id=93633250]
 script = ExtResource("1_2kb25")
@@ -41,7 +60,7 @@ environment = SubResource("Environment_mrs7u")
 shape = SubResource("WorldBoundaryShape3D_pmpwp")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1704417420]
-transform = Transform3D(0.99988896, 0.00958329, 0.01141975, -0.006532274, 0.9701983, -0.24222445, -0.013400729, 0.24212293, 0.9701531, 6.8567686, 2.5692291, 4.3298087)
+transform = Transform3D(0.8592289, 0.12936082, 0.49496633, -0.0065322747, 0.9701984, -0.24222447, -0.5115499, 0.20489301, 0.8344674, 6.8567686, 2.5692291, 4.3298087)
 
 [node name="grass_block" parent="." unique_id=1329809952 instance=ExtResource("2_grjqy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
@@ -7317,9 +7336,35 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 5)
 [node name="house" parent="." unique_id=734705202 instance=ExtResource("5_f246w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.997143, 0, -7.5261)
 
+[node name="StaticBody3D" type="StaticBody3D" parent="house" unique_id=119921390]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="house/StaticBody3D" unique_id=1511921401]
+shape = SubResource("BoxShape3D_f63ko")
+
 [node name="Silo" parent="." unique_id=491221179 instance=ExtResource("6_f63ko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0015109, 0, -6.998237)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Silo" unique_id=179158355]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Silo/StaticBody3D" unique_id=2084084856]
+shape = SubResource("CylinderShape3D_biuxf")
 
 [node name="GroundPlane" type="MeshInstance3D" parent="." unique_id=230013704]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.75, 0)
 mesh = SubResource("BoxMesh_biuxf")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="GroundPlane" unique_id=1479513534]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundPlane/StaticBody3D" unique_id=289975348]
+shape = SubResource("BoxShape3D_tfxbu")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=272230547]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+script = ExtResource("7_biuxf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=507975966]
+shape = SubResource("CapsuleShape3D_juroi")
+debug_color = Color(0.9137255, 0.1882353, 0.5647059, 0.7882353)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=914081212]
+mesh = SubResource("CapsuleMesh_0sacj")

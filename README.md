@@ -22,6 +22,11 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented asset for the player house
     - Implemented asset for the silo
     - Implemented ground plane
+- Misc.
+    - Implemented basic collisions
+
+## Version 0.0.1.15
+- Implemented basic collisions
 
 ## Version 0.0.1.14
 - Implemented ground plane
