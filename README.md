@@ -14,6 +14,7 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented display for events
     - Implemented display for mini map
     - Implemented display for quick inventory
+    - Implemented display for crosshair
 - Implemented assets for the game
     - Implemented asset for the grass block
     - Implemented asset for the plowed block
@@ -27,6 +28,9 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented basic controls
 - Misc.
     - Implemented basic collisions
+
+## Version 0.0.1.17
+- Implemented display for crosshair
 
 ## Version 0.0.1.16
 - Implemented third person camera
