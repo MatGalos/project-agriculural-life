@@ -59,9 +59,6 @@ environment = SubResource("Environment_mrs7u")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=2140182178]
 shape = SubResource("WorldBoundaryShape3D_pmpwp")
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1704417420]
-transform = Transform3D(0.8592289, 0.12936082, 0.49496633, -0.0065322747, 0.9701984, -0.24222447, -0.5115499, 0.20489301, 0.8344674, 6.8567686, 2.5692291, 4.3298087)
-
 [node name="grass_block" parent="." unique_id=1329809952 instance=ExtResource("2_grjqy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
 
@@ -7368,3 +7365,9 @@ debug_color = Color(0.9137255, 0.1882353, 0.5647059, 0.7882353)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=914081212]
 mesh = SubResource("CapsuleMesh_0sacj")
+
+[node name="CameraPivot" type="Node3D" parent="CharacterBody3D" unique_id=1098476915]
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/CameraPivot" unique_id=1056288513]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.6, -2)
+current = true

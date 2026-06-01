@@ -22,8 +22,15 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented asset for the player house
     - Implemented asset for the silo
     - Implemented ground plane
+- Implemented game mechanics
+    - Implemented third person camera
+    - Implemented basic controls
 - Misc.
     - Implemented basic collisions
+
+## Version 0.0.1.16
+- Implemented third person camera
+- Implemented basic controls
 
 ## Version 0.0.1.15
 - Implemented basic collisions
