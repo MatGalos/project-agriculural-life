@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dbash3tpjwypy"]
 
 [ext_resource type="Script" uid="uid://dndcdnl5x5b0u" path="res://Scripts/UIs/PlayerHUD/player_hud.gd" id="1_p5k4q"]
+[ext_resource type="Script" uid="uid://dmmcmeit8j1u" path="res://Scripts/UIs/PlayerHUD/quick_inventory_controller.gd" id="2_8o0iu"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_334lg"]
 font_size = 32
@@ -128,6 +129,7 @@ offset_top = -72.0
 offset_right = 248.0
 grow_horizontal = 2
 grow_vertical = 0
+script = ExtResource("2_8o0iu")
 
 [node name="PanelContainer" type="PanelContainer" parent="Root/QuickInventoryController" unique_id=1496204891]
 layout_mode = 1
