@@ -12,6 +12,7 @@ var actions: Array[Dictionary] = [
 	{"name": "move_backward", "display": "Move Backward"},
 	{"name": "move_left", "display": "Move Left"},
 	{"name": "move_right", "display": "Move Right"},
+	{"name": "interact", "display": "Interact"},
 	{"name": "pauseMenu", "display": "Pause Menu"},
 	{"name": "hotbar_slot_1", "display": "Hotbar Slot 1"},
 	{"name": "hotbar_slot_2", "display": "Hotbar Slot 2"},

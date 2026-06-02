@@ -2,10 +2,12 @@
 
 [ext_resource type="Script" uid="uid://dldgqufx1mb8" path="res://Scripts/Game/main_scene.gd" id="1_2kb25"]
 [ext_resource type="PackedScene" uid="uid://cxxr0r1e8i1bj" path="res://Assets/Models/Terrain/grass_block.glb" id="2_grjqy"]
+[ext_resource type="Script" uid="uid://bqqvwo7rgbgxh" path="res://Scripts/Interactions/Interactable.gd" id="4_biuxf"]
 [ext_resource type="PackedScene" uid="uid://c6rbyep4rt0t4" path="res://Assets/Models/Buildings/well.glb" id="4_mudw0"]
 [ext_resource type="PackedScene" uid="uid://dtlgskl6tvubp" path="res://Assets/Models/Buildings/house.glb" id="5_f246w"]
 [ext_resource type="PackedScene" uid="uid://4f4mbabd4bie" path="res://Assets/Models/Buildings/Silo.glb" id="6_f63ko"]
 [ext_resource type="Script" uid="uid://daayhh3m0lprt" path="res://Scripts/Player/CharacterController.gd" id="7_biuxf"]
+[ext_resource type="Script" uid="uid://cof00ypavhfyq" path="res://Scripts/Player/InteractionController.gd" id="8_tfxbu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_pmpwp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -21,6 +23,10 @@ tonemap_mode = 2
 glow_enabled = true
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_pmpwp"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_tfxbu"]
+height = 2.909
+radius = 1.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_f63ko"]
 size = Vector3(5, 3, 4)
@@ -7278,9 +7284,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
 [node name="grass_block60" parent="." unique_id=1724120178 instance=ExtResource("2_grjqy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
 
-[node name="well" parent="." unique_id=345261666 instance=ExtResource("4_mudw0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5139036, 0, 5.5457916)
-
 [node name="grass_block61" parent="." unique_id=1114645512 instance=ExtResource("2_grjqy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 5)
 
@@ -7731,18 +7734,32 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 12)
 [node name="grass_block2517" parent="." unique_id=1617079382 instance=ExtResource("2_grjqy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 13)
 
-[node name="house" parent="." unique_id=734705202 instance=ExtResource("5_f246w")]
+[node name="well" parent="." unique_id=345261666 groups=["interactable"] instance=ExtResource("4_mudw0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5139036, 0, 5.5457916)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="well" unique_id=1731792541]
+script = ExtResource("4_biuxf")
+prompt_text = "E - Fill up water"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="well/StaticBody3D" unique_id=1305884455]
+shape = SubResource("CylinderShape3D_tfxbu")
+
+[node name="house" parent="." unique_id=734705202 groups=["interactable"] instance=ExtResource("5_f246w")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.997143, 0, -7.5261)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="house" unique_id=119921390]
+script = ExtResource("4_biuxf")
+prompt_text = "E - Enter house"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="house/StaticBody3D" unique_id=1511921401]
 shape = SubResource("BoxShape3D_f63ko")
 
-[node name="Silo" parent="." unique_id=491221179 instance=ExtResource("6_f63ko")]
+[node name="Silo" parent="." unique_id=491221179 groups=["interactable"] instance=ExtResource("6_f63ko")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0015109, 0, -6.998237)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Silo" unique_id=179158355]
+script = ExtResource("4_biuxf")
+prompt_text = "E - Check stock"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Silo/StaticBody3D" unique_id=2084084856]
 shape = SubResource("CylinderShape3D_biuxf")
@@ -7772,3 +7789,9 @@ mesh = SubResource("CapsuleMesh_0sacj")
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D/CameraPivot" unique_id=1056288513]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.6, -2)
 current = true
+
+[node name="InteractionRayCast" type="RayCast3D" parent="CharacterBody3D/CameraPivot/Camera3D" unique_id=1967188927]
+target_position = Vector3(0, 0, -8)
+
+[node name="InteractionController" type="Node3D" parent="CharacterBody3D" unique_id=1517850321]
+script = ExtResource("8_tfxbu")
