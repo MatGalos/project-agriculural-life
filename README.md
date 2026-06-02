@@ -28,38 +28,42 @@ Project for my master thesis about implementing stock market as a part of mechan
 - Implemented game mechanics
     - Implemented third person camera
     - Implemented basic controls
+    - Implemented sprinting
 - Misc.
     - Implemented basic collisions
 
-## Version 0.0.1.20
+### Version 0.0.1.23
+- Implemented sprinting
+
+### Version 0.0.1.20
 - Implemented controls menu inside options
 
-## Version 0.0.1.18
+### Version 0.0.1.18
 - Implemented description under the crosshair
 
-## Version 0.0.1.17
+### Version 0.0.1.17
 - Implemented display for crosshair
 
-## Version 0.0.1.16
+### Version 0.0.1.16
 - Implemented third person camera
 - Implemented basic controls
 
-## Version 0.0.1.15
+### Version 0.0.1.15
 - Implemented basic collisions
 
-## Version 0.0.1.14
+### Version 0.0.1.14
 - Implemented ground plane
 
-## Version 0.0.1.13
+### Version 0.0.1.13
 - Implemented asset for the silo
 
-## Version 0.0.1.12
+### Version 0.0.1.12
 - Implemented asset for the player house
 
-## Version 0.0.1.11
+### Version 0.0.1.11
 - Implemented asset for the well
 
-## Version 0.0.1.10
+### Version 0.0.1.10
 - Implemented asset for the grass block
 - Implemented asset for the plowed block
 - Implemented terrain atlas

@@ -7787,7 +7787,7 @@ mesh = SubResource("CapsuleMesh_0sacj")
 [node name="CameraPivot" type="Node3D" parent="CharacterBody3D" unique_id=1098476915]
 
 [node name="Camera3D" type="Camera3D" parent="CharacterBody3D/CameraPivot" unique_id=1056288513]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.6, -2)
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 0, 0.6, -2)
 current = true
 
 [node name="InteractionRayCast" type="RayCast3D" parent="CharacterBody3D/CameraPivot/Camera3D" unique_id=1967188927]
