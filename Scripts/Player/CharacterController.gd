@@ -34,7 +34,7 @@ func _input(event):
 
 
 func _physics_process(delta):
-	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var input_dir := InputManager.get_move_vector()
 
 	var forward := -camera_pivot.global_transform.basis.z
 	var right := camera_pivot.global_transform.basis.x
@@ -45,7 +45,7 @@ func _physics_process(delta):
 	forward = forward.normalized()
 	right = right.normalized()
 
-	var direction := (right * input_dir.x + forward * input_dir.y).normalized()
+	var direction := (right * input_dir.x - forward * input_dir.y).normalized()
 
 	velocity.x = direction.x * speed
 	velocity.z = direction.z * speed
