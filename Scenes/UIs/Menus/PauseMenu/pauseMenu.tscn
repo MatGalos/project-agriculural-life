@@ -7,7 +7,7 @@
 shader = ExtResource("2_lx4i1")
 shader_parameter/blurAmount = 3.0
 
-[node name="PauseMenu" type="Control" unique_id=1779250105 node_paths=PackedStringArray("continueButton", "saveButton", "loadButton", "optionsButton", "saveAndQuitToMenu", "saveAndQuitToDesktop", "blurBg")]
+[node name="PauseMenu" type="Control" unique_id=1779250105 node_paths=PackedStringArray("continueButton", "saveButton", "loadButton", "optionsButton", "saveAndQuitToMenu", "saveAndQuitToDesktop", "blurBg", "panel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,6 +22,7 @@ optionsButton = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/Opti
 saveAndQuitToMenu = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/SaveAndQuitToMenuButton")
 saveAndQuitToDesktop = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/SaveAndQuitToDesktopMenu")
 blurBg = NodePath("blurBg")
+panel = NodePath("Panel")
 
 [node name="blurBg" type="ColorRect" parent="." unique_id=447635258]
 visible = false

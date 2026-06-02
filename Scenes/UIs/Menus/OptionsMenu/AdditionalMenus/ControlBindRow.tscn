@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://cu5gkeiyqhxjq"]
+
+[ext_resource type="Script" uid="uid://dky2svkcio1m1" path="res://Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/control_bind_row.gd" id="1_rnnim"]
+
+[node name="ControlBindRow" type="HBoxContainer" unique_id=386521510]
+custom_minimum_size = Vector2(0, 36)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+script = ExtResource("1_rnnim")
+
+[node name="ActionLabel" type="Label" parent="." unique_id=624677290]
+layout_mode = 2
+size_flags_horizontal = 3
+vertical_alignment = 1
+
+[node name="BindButton" type="Button" parent="." unique_id=397772006]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2

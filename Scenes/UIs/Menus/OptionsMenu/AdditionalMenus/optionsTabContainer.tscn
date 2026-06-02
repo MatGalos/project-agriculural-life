@@ -1,5 +1,8 @@
 [gd_scene format=3 uid="uid://dgsmyf268o2ys"]
 
+[ext_resource type="Script" uid="uid://bx5vomsf7vvdj" path="res://Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/controls.gd" id="1_5aoxo"]
+[ext_resource type="PackedScene" uid="uid://cu5gkeiyqhxjq" path="res://Scenes/UIs/Menus/OptionsMenu/AdditionalMenus/ControlBindRow.tscn" id="2_i8lp4"]
+
 [node name="optionsTabContainer" type="Control" unique_id=1539039912]
 layout_mode = 3
 anchors_preset = 15
@@ -46,6 +49,8 @@ alignment = 1
 [node name="Controls" type="TabBar" parent="TabContainer" unique_id=924020882]
 visible = false
 layout_mode = 2
+script = ExtResource("1_5aoxo")
+control_bind_row_scene = ExtResource("2_i8lp4")
 metadata/_tab_index = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="TabContainer/Controls" unique_id=1479582303]
@@ -63,7 +68,20 @@ theme_override_constants/margin_bottom = 24
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Controls/MarginContainer" unique_id=1162910988]
 layout_mode = 2
 theme_override_constants/separation = 64
-alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Controls/MarginContainer/VBoxContainer" unique_id=1518968375]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ControlsList" type="VBoxContainer" parent="TabContainer/Controls/MarginContainer/VBoxContainer/ScrollContainer" unique_id=1542887367]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="ResetToDefault" type="Button" parent="TabContainer/Controls/MarginContainer/VBoxContainer" unique_id=1834789366]
+layout_mode = 2
+text = "Reset to default"
 
 [node name="Graphics" type="TabBar" parent="TabContainer" unique_id=1796361035]
 visible = false

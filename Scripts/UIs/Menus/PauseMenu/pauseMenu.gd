@@ -9,6 +9,7 @@ extends Control
 @export var saveAndQuitToMenu: Button
 @export var saveAndQuitToDesktop:Button
 @export var blurBg: ColorRect
+@export var panel: Control
 
 @onready var mainMenuScene: PackedScene = preload("res://Scenes/UIs/Menus/LaunchMenu/MainMenu.tscn") as PackedScene
 
@@ -23,12 +24,22 @@ func _ready():
 	visible = false
 	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	blurBg.visible = false
+	panel.visible = false
 	
 	gamemanager.pauseChanged.connect(onPauseButtonPressed)
 
 func onPauseButtonPressed (paused: bool) -> void:
-	visible = paused
-	blurBg.visible = paused
+	setMenuVisible(paused)
+
+func setMenuVisible(is_visible: bool) -> void:
+	visible = is_visible
+	blurBg.visible = is_visible
+	panel.visible = is_visible
+
+func showBlurOnly() -> void:
+	visible = true
+	blurBg.visible = true
+	panel.visible = false
 
 # Function with behaviour for when continue button is pressed, it should resume
 # the game

@@ -20,7 +20,7 @@ func close():
 		ui.menuContext.Main_Menu:
 			ui.mainMenu.visible = true
 		ui.menuContext.Pause_Menu:
-			ui.pauseMenu.visible = true
+			ui.pauseMenu.setMenuVisible(true)
 
 func setContext(context):
 	match context:
