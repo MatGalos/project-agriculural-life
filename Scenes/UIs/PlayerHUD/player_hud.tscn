@@ -1,10 +1,13 @@
 [gd_scene format=3 uid="uid://dbash3tpjwypy"]
 
+[ext_resource type="Script" uid="uid://dndcdnl5x5b0u" path="res://Scripts/UIs/PlayerHUD/player_hud.gd" id="1_p5k4q"]
+
 [sub_resource type="LabelSettings" id="LabelSettings_334lg"]
 font_size = 32
 
 [node name="PlayerHUD" type="CanvasLayer" unique_id=76956586]
-metadata/_edit_vertical_guides_ = [601.0]
+script = ExtResource("1_p5k4q")
+metadata/_edit_vertical_guides_ = [-57.0]
 
 [node name="Root" type="Control" parent="." unique_id=1894068692]
 layout_mode = 3
@@ -214,3 +217,18 @@ text = "+"
 label_settings = SubResource("LabelSettings_334lg")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="PromptLabel" type="Label" parent="Root/CenterContainer" unique_id=2073249251]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -210.0
+offset_top = 52.0
+offset_right = 210.0
+offset_bottom = 92.0
+grow_horizontal = 2
+text = "Description"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
