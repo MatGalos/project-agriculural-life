@@ -10,7 +10,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 16
+theme_override_constants/separation = 48
 script = ExtResource("1_rnnim")
 
 [node name="ActionLabel" type="Label" parent="." unique_id=624677290]

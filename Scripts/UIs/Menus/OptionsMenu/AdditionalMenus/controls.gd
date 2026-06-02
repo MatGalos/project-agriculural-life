@@ -2,7 +2,7 @@ extends Control
 
 @export var control_bind_row_scene: PackedScene
 
-@onready var controls_list: VBoxContainer = $MarginContainer/VBoxContainer/ScrollContainer/ControlsList
+@onready var controls_list: VBoxContainer = $MarginContainer/VBoxContainer/ScrollContainer/ListMargin/ControlsList
 @onready var reset_button: Button= $MarginContainer/VBoxContainer/ResetToDefault
 
 var waiting_for_action := ""
@@ -12,7 +12,12 @@ var actions: Array[Dictionary] = [
 	{"name": "move_backward", "display": "Move Backward"},
 	{"name": "move_left", "display": "Move Left"},
 	{"name": "move_right", "display": "Move Right"},
-	{"name": "pauseMenu", "display": "Pause Menu"}
+	{"name": "pauseMenu", "display": "Pause Menu"},
+	{"name": "hotbar_slot_1", "display": "Hotbar Slot 1"},
+	{"name": "hotbar_slot_2", "display": "Hotbar Slot 2"},
+	{"name": "hotbar_slot_3", "display": "Hotbar Slot 3"},
+	{"name": "hotbar_slot_4", "display": "Hotbar Slot 4"},
+	{"name": "hotbar_slot_5", "display": "Hotbar Slot 5"}
 ]
 
 func _ready() -> void:
@@ -47,6 +52,6 @@ func _input(event: InputEvent) -> void:
 		build_list()
 		get_viewport().set_input_as_handled()
 
-func _on_reset_button_pressed():
+func _on_reset_button_pressed() -> void:
 	InputManager.reset_to_defaults()
 	build_list()

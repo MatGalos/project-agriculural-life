@@ -67,14 +67,19 @@ theme_override_constants/margin_bottom = 24
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Controls/MarginContainer" unique_id=1162910988]
 layout_mode = 2
-theme_override_constants/separation = 64
+theme_override_constants/separation = 24
 
 [node name="ScrollContainer" type="ScrollContainer" parent="TabContainer/Controls/MarginContainer/VBoxContainer" unique_id=1518968375]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ControlsList" type="VBoxContainer" parent="TabContainer/Controls/MarginContainer/VBoxContainer/ScrollContainer" unique_id=1542887367]
+[node name="ListMargin" type="MarginContainer" parent="TabContainer/Controls/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 16
+
+[node name="ControlsList" type="VBoxContainer" parent="TabContainer/Controls/MarginContainer/VBoxContainer/ScrollContainer/ListMargin" unique_id=1542887367]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8

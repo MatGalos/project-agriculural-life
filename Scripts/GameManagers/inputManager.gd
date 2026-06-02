@@ -7,7 +7,12 @@ var actions := [
 	"move_backward",
 	"move_left",
 	"move_right",
-	"pauseMenu"
+	"pauseMenu",
+	"hotbar_slot_1",
+	"hotbar_slot_2",
+	"hotbar_slot_3",
+	"hotbar_slot_4",
+	"hotbar_slot_5"
 ]
 
 func _ready():
@@ -75,15 +80,38 @@ func reset_to_defaults():
 	InputMap.action_erase_events("move_left")
 	InputMap.action_erase_events("move_right")
 	InputMap.action_erase_events("pauseMenu")
+	InputMap.action_erase_events("hotbar_slot_1")
+	InputMap.action_erase_events("hotbar_slot_2")
+	InputMap.action_erase_events("hotbar_slot_3")
+	InputMap.action_erase_events("hotbar_slot_4")
+	InputMap.action_erase_events("hotbar_slot_5")
 
 	_add_key("move_forward", KEY_W)
 	_add_key("move_backward", KEY_S)
 	_add_key("move_left", KEY_A)
 	_add_key("move_right", KEY_D)
 	_add_key("pauseMenu", KEY_ESCAPE)
+	_add_key("hotbar_slot_1", KEY_1)
+	_add_key("hotbar_slot_2", KEY_2)
+	_add_key("hotbar_slot_3", KEY_3)
+	_add_key("hotbar_slot_4", KEY_4)
+	_add_key("hotbar_slot_5", KEY_5)
 
 	save_controls()
 
+func get_pressed_hotbar_slot() -> int:
+	if Input.is_action_just_pressed("hotbar_slot_1"):
+		return 1
+	if Input.is_action_just_pressed("hotbar_slot_2"):
+		return 2
+	if Input.is_action_just_pressed("hotbar_slot_3"):
+		return 3
+	if Input.is_action_just_pressed("hotbar_slot_4"):
+		return 4
+	if Input.is_action_just_pressed("hotbar_slot_5"):
+		return 5
+
+	return -1
 
 func _add_key(action_name: String, keycode: Key):
 	var event := InputEventKey.new()
