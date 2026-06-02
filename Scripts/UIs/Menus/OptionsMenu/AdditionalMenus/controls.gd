@@ -19,7 +19,8 @@ var actions: Array[Dictionary] = [
 	{"name": "hotbar_slot_2", "display": "Hotbar Slot 2"},
 	{"name": "hotbar_slot_3", "display": "Hotbar Slot 3"},
 	{"name": "hotbar_slot_4", "display": "Hotbar Slot 4"},
-	{"name": "hotbar_slot_5", "display": "Hotbar Slot 5"}
+	{"name": "hotbar_slot_5", "display": "Hotbar Slot 5"},
+	{"name": "open_inventory", "display": "Open Inventory"}
 ]
 
 func _ready() -> void:

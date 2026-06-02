@@ -56,6 +56,13 @@ func _input(event: InputEvent) -> void:
 		return
 	
 	if event.is_action_pressed("pauseMenu"):
+		var player_hud: PlayerHUD = get_tree().get_first_node_in_group("player_hud") as PlayerHUD
+
+		if player_hud and player_hud.is_inventory_open():
+			player_hud.close_inventory()
+			get_viewport().set_input_as_handled()
+			return
+
 		togglePause()
 
 func startGame() -> void:

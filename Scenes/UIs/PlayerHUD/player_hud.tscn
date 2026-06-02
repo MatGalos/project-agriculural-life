@@ -2,11 +2,12 @@
 
 [ext_resource type="Script" uid="uid://dndcdnl5x5b0u" path="res://Scripts/UIs/PlayerHUD/player_hud.gd" id="1_p5k4q"]
 [ext_resource type="Script" uid="uid://dmmcmeit8j1u" path="res://Scripts/UIs/PlayerHUD/quick_inventory_controller.gd" id="2_8o0iu"]
+[ext_resource type="PackedScene" uid="uid://6ki8w20olwhc" path="res://Scenes/UIs/PlayerHUD/inventory_panel.tscn" id="3_haiak"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_334lg"]
 font_size = 32
 
-[node name="PlayerHUD" type="CanvasLayer" unique_id=76956586]
+[node name="PlayerHUD" type="CanvasLayer" unique_id=76956586 groups=["player_hud"]]
 script = ExtResource("1_p5k4q")
 metadata/_edit_vertical_guides_ = [-57.0]
 
@@ -238,3 +239,7 @@ text = "Description"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+
+[node name="InventoryPanel" parent="Root" unique_id=1308746992 groups=["Inventory_panel"] instance=ExtResource("3_haiak")]
+visible = false
+layout_mode = 1

@@ -9,6 +9,7 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented basic pause menu
     - Implemented basic options menu template
     - Implemented controls menu inside options
+    - Implemented pause menu
 - Implemented basic Player In-Game UI
     - Implemented display for date and time
     - Implemented display for funds
@@ -31,6 +32,9 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented sprinting
 - Misc.
     - Implemented basic collisions
+
+### Version 0.0.1.24
+- Implemented Inventory
 
 ### Version 0.0.1.23
 - Implemented sprinting
