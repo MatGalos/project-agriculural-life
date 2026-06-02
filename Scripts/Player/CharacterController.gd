@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
-@export var speed := 5.0
+@export var speed := 4.0
+@export var sprint_speed := 6.0
 @export var gravity := 20.0
 @export var mouse_sensitivity := 0.003
 @export var camera_distance := 4.0
@@ -42,8 +43,9 @@ func _physics_process(delta):
 
 	var direction := (right * input_dir.x - forward * input_dir.y).normalized()
 
-	velocity.x = direction.x * speed
-	velocity.z = direction.z * speed
+	var current_speed := sprint_speed if InputManager.is_sprint_pressed() else speed
+	velocity.x = direction.x * current_speed
+	velocity.z = direction.z * current_speed
 
 	if not is_on_floor():
 		velocity.y -= gravity * delta
