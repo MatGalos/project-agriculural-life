@@ -3,11 +3,11 @@ class_name GameManager
 extends Node
 
 @onready var globalUIScene: PackedScene = preload("res://Scenes/UIs/global_ui.tscn")
-var pauseMenu
-var optionsMenu
-var mainMenu
+var pauseMenu: PauseMenu
+var optionsMenu: OptionsMenu
+var mainMenu: MainMenu
 
-var globalUIInstance
+var globalUIInstance: CanvasLayer
 var isPaused: bool = false
 var isInGame: bool = false 
 
@@ -20,23 +20,24 @@ var optionsContext: int = 0
 
 signal pauseChanged(paused: bool)
 
-func _ready():
+func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_process_input(true)
 	
-	globalUIInstance = globalUIScene.instantiate()
+	globalUIInstance = globalUIScene.instantiate() as CanvasLayer
 	get_tree().root.add_child.call_deferred(globalUIInstance)
 	await get_tree().process_frame
 	
-	pauseMenu = globalUIInstance.get_node("PauseMenu")
-	optionsMenu = globalUIInstance.get_node("OptionsMenu")
-	mainMenu = globalUIInstance.get_node("MainMenu")
+	pauseMenu = globalUIInstance.get_node("PauseMenu") as PauseMenu
+	optionsMenu = globalUIInstance.get_node("OptionsMenu") as OptionsMenu
+	mainMenu = globalUIInstance.get_node("MainMenu") as MainMenu
 	mainMenu.visible = true
-	pauseMenu.visible = false
+	pauseMenu.setMenuVisible(false)
 	optionsMenu.visible = false
+	_updateMouseMode()
 
 # function to toggle pause
-func togglePause():
+func togglePause() -> void:
 	setPaused(!isPaused)
 
 # function to set the pause for the game.
@@ -46,35 +47,42 @@ func setPaused(value: bool) -> void:
 	
 	isPaused = value
 	get_tree().paused = isPaused
+	_updateMouseMode()
 	
 	pauseChanged.emit(isPaused)
 
-func _input(event):
+func _input(event: InputEvent) -> void:
 	if not isInGame:
 		return
 	
 	if event.is_action_pressed("pauseMenu"):
 		togglePause()
 
-func startGame():
+func startGame() -> void:
 	isInGame = true
 	mainMenu.visible = false
+	_updateMouseMode()
 
-func returnToMenu():
+func returnToMenu() -> void:
 	isInGame = false
 	mainMenu.visible = true
-	pauseMenu.visible = false
+	pauseMenu.setMenuVisible(false)
 	optionsMenu.visible = false
+	_updateMouseMode()
 
-func openOptions(from_context):
+func openOptions(from_context: int) -> void:
 	optionsContext = from_context
-	pauseMenu.visible = false
+	if from_context == menuContext.Pause_Menu:
+		pauseMenu.showBlurOnly()
+	else:
+		pauseMenu.setMenuVisible(false)
 	mainMenu.visible = false
 	optionsMenu.setContext(from_context)
 	optionsMenu.visible = true
+	_updateMouseMode()
 
 
-func showGlobalUI():
+func showGlobalUI() -> void:
 	if not globalUIInstance:
 		return
 	if globalUIInstance:
@@ -82,8 +90,15 @@ func showGlobalUI():
 	if mainMenu:
 		mainMenu.visible = true
 	if pauseMenu:
-		pauseMenu.visible = false
+		pauseMenu.setMenuVisible(false)
 	if optionsMenu:
 		optionsMenu.visible = false
 	isPaused = false
 	get_tree().paused = false
+	_updateMouseMode()
+
+func _updateMouseMode() -> void:
+	if isInGame and not isPaused and not optionsMenu.visible:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
