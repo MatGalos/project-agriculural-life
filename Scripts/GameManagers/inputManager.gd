@@ -12,7 +12,8 @@ var actions := [
 	"hotbar_slot_2",
 	"hotbar_slot_3",
 	"hotbar_slot_4",
-	"hotbar_slot_5"
+	"hotbar_slot_5",
+	"interact"
 ]
 
 func _ready():
@@ -85,6 +86,7 @@ func reset_to_defaults():
 	InputMap.action_erase_events("hotbar_slot_3")
 	InputMap.action_erase_events("hotbar_slot_4")
 	InputMap.action_erase_events("hotbar_slot_5")
+	InputMap.action_erase_events("interact")
 
 	_add_key("move_forward", KEY_W)
 	_add_key("move_backward", KEY_S)
@@ -96,6 +98,7 @@ func reset_to_defaults():
 	_add_key("hotbar_slot_3", KEY_3)
 	_add_key("hotbar_slot_4", KEY_4)
 	_add_key("hotbar_slot_5", KEY_5)
+	_add_key("interact", KEY_E)
 
 	save_controls()
 
@@ -117,3 +120,6 @@ func _add_key(action_name: String, keycode: Key):
 	var event := InputEventKey.new()
 	event.physical_keycode = keycode
 	InputMap.action_add_event(action_name, event)
+
+func is_interact_pressed() -> bool:
+	return Input.is_action_just_pressed("interact")

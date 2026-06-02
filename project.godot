@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Project_Agricultural_life"
-config/version="0.0.1.21"
+config/version="0.0.1.22"
 run/main_scene="uid://bg2wnf0pafkqt"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://Assets/Icons/AppIcons/icon.svg"
@@ -26,6 +26,12 @@ HotbarManager="*uid://cvagb1pmnxf00"
 [dotnet]
 
 project/assembly_name="Project_Agricultural_life"
+
+[global_group]
+
+interactable="group for the interactive objects"
+interaction_prompt="to display interactions"
+crosshair="group for the crosshair"
 
 [gui]
 
@@ -81,6 +87,11 @@ hotbar_slot_4={
 hotbar_slot_5={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":53,"key_label":0,"unicode":53,"location":0,"echo":false,"script":null)
+]
+}
+interact={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":69,"key_label":0,"unicode":101,"location":0,"echo":false,"script":null)
 ]
 }
 

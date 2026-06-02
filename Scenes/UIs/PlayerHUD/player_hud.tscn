@@ -211,7 +211,7 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="Root/CenterContainer/Crosshair" unique_id=172733087]
+[node name="Label" type="Label" parent="Root/CenterContainer/Crosshair" unique_id=172733087 groups=["crosshair"]]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -223,7 +223,8 @@ label_settings = SubResource("LabelSettings_334lg")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PromptLabel" type="Label" parent="Root/CenterContainer" unique_id=2073249251]
+[node name="PromptLabel" type="Label" parent="Root/CenterContainer" unique_id=2073249251 groups=["interaction_prompt"]]
+visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
