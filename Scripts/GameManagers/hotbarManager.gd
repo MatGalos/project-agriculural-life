@@ -2,16 +2,16 @@ extends Node
 
 signal selected_slot_changed(slot_index: int)
 
-var selected_slot := 1
+var selected_slot: int = 1
 
-func _process(_delta):
-	var pressed_slot := InputManager.get_pressed_hotbar_slot()
+func _process(_delta: float) -> void:
+	var pressed_slot: int = InputManager.get_pressed_hotbar_slot()
 
 	if pressed_slot != -1:
 		select_slot(pressed_slot)
 
 
-func select_slot(slot_index: int):
+func select_slot(slot_index: int) -> void:
 	if slot_index < 1 or slot_index > 5:
 		return
 

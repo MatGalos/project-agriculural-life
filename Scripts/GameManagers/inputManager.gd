@@ -2,7 +2,7 @@ extends Node
 
 const CONFIG_PATH := "user://controls.cfg"
 
-var actions := [
+var actions: Array[String] = [
 	"move_forward",
 	"move_backward",
 	"move_left",
@@ -14,10 +14,11 @@ var actions := [
 	"hotbar_slot_4",
 	"hotbar_slot_5",
 	"interact",
-	"sprint"
+	"sprint",
+	"open_inventory"
 ]
 
-func _ready():
+func _ready() -> void:
 	load_controls()
 
 
@@ -30,24 +31,24 @@ func get_move_vector() -> Vector2:
 	)
 
 
-func rebind_action(action_name: String, event: InputEvent):
+func rebind_action(action_name: String, event: InputEvent) -> void:
 	InputMap.action_erase_events(action_name)
 	InputMap.action_add_event(action_name, event)
 	save_controls()
 
 
-func save_controls():
-	var config := ConfigFile.new()
+func save_controls() -> void:
+	var config: ConfigFile = ConfigFile.new()
 
-	for action_name in actions:
-		var events := InputMap.action_get_events(action_name)
-		var serialized := []
+	for action_name: String in actions:
+		var events: Array[InputEvent] = InputMap.action_get_events(action_name)
+		var serialized: Array[Dictionary] = []
 
-		for event in events:
+		for event: InputEvent in events:
 			if event is InputEventKey:
 				serialized.append({
 					"type": "key",
-					"physical_keycode": event.physical_keycode
+					"physical_keycode": (event as InputEventKey).physical_keycode
 				})
 
 		config.set_value("controls", action_name, serialized)
@@ -55,28 +56,28 @@ func save_controls():
 	config.save(CONFIG_PATH)
 
 
-func load_controls():
-	var config := ConfigFile.new()
-	var err := config.load(CONFIG_PATH)
+func load_controls() -> void:
+	var config: ConfigFile = ConfigFile.new()
+	var err: Error = config.load(CONFIG_PATH)
 
 	if err != OK:
 		return
 
-	for action_name in actions:
+	for action_name: String in actions:
 		if not config.has_section_key("controls", action_name):
 			continue
 
 		InputMap.action_erase_events(action_name)
 
-		var serialized: Array = config.get_value("controls", action_name, [])
+		var serialized: Array = config.get_value("controls", action_name, []) as Array
 
-		for data in serialized:
+		for data: Dictionary in serialized:
 			if data.get("type", "") == "key":
-				var event := InputEventKey.new()
-				event.physical_keycode = data["physical_keycode"]
+				var event: InputEventKey = InputEventKey.new()
+				event.physical_keycode = int(data["physical_keycode"])
 				InputMap.action_add_event(action_name, event)
 
-func reset_to_defaults():
+func reset_to_defaults() -> void:
 	InputMap.action_erase_events("move_forward")
 	InputMap.action_erase_events("move_backward")
 	InputMap.action_erase_events("move_left")
@@ -89,6 +90,7 @@ func reset_to_defaults():
 	InputMap.action_erase_events("hotbar_slot_5")
 	InputMap.action_erase_events("interact")
 	InputMap.action_erase_events("sprint")
+	InputMap.action_erase_events("open_inventory")
 
 	_add_key("move_forward", KEY_W)
 	_add_key("move_backward", KEY_S)
@@ -102,6 +104,7 @@ func reset_to_defaults():
 	_add_key("hotbar_slot_5", KEY_5)
 	_add_key("interact", KEY_E)
 	_add_key("sprint", KEY_SHIFT)
+	_add_key("open_inventory", KEY_T)
 
 	save_controls()
 
@@ -119,8 +122,8 @@ func get_pressed_hotbar_slot() -> int:
 
 	return -1
 
-func _add_key(action_name: String, keycode: Key):
-	var event := InputEventKey.new()
+func _add_key(action_name: String, keycode: Key) -> void:
+	var event: InputEventKey = InputEventKey.new()
 	event.physical_keycode = keycode
 	InputMap.action_add_event(action_name, event)
 
@@ -129,3 +132,7 @@ func is_interact_pressed() -> bool:
 
 func is_sprint_pressed() -> bool:
 	return Input.is_action_pressed("sprint")
+
+
+func is_inventory_pressed() -> bool:
+	return Input.is_action_just_pressed("open_inventory")

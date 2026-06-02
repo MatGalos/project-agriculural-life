@@ -1,4 +1,5 @@
 extends CanvasLayer
+class_name PlayerHUD
 
 const CROSSHAIR_SIZE := 40.0
 
@@ -20,10 +21,12 @@ const CROSSHAIR_SIZE := 40.0
 @onready var inventory_slot_4: PanelContainer = $Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot4
 @onready var inventory_slot_5: PanelContainer = $Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot5
 @onready var prompt_label: Label = $Root/CenterContainer/PromptLabel
+@onready var inventory_panel: InventoryPanel = $Root/InventoryPanel
 
 
 func _ready() -> void:
 	get_viewport().size_changed.connect(_update_layout)
+	inventory_panel.close()
 	_update_layout()
 
 
@@ -135,3 +138,18 @@ func _update_inventory_label_fonts(font_size: int) -> void:
 func _set_slot_label_font_size(slot: PanelContainer, font_size: int) -> void:
 	var label: Label = slot.get_node("Label") as Label
 	label.add_theme_font_size_override("font_size", font_size)
+
+func open_inventory() -> void:
+	inventory_panel.open()
+
+
+func close_inventory() -> void:
+	inventory_panel.close()
+
+
+func toggle_inventory() -> void:
+	inventory_panel.toggle()
+
+
+func is_inventory_open() -> bool:
+	return inventory_panel.is_open()
