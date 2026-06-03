@@ -1,0 +1,249 @@
+[gd_scene format=3 uid="uid://dbash3tpjwypy"]
+
+[ext_resource type="Script" uid="uid://dndcdnl5x5b0u" path="res://Scripts/UIs/PlayerHUD/player_hud.gd" id="1_p5k4q"]
+[ext_resource type="Script" uid="uid://dmmcmeit8j1u" path="res://Scripts/UIs/PlayerHUD/quick_inventory_controller.gd" id="2_8o0iu"]
+[ext_resource type="PackedScene" uid="uid://6ki8w20olwhc" path="res://Scenes/UIs/PlayerHUD/inventory_panel.tscn" id="3_haiak"]
+[ext_resource type="PackedScene" uid="uid://bps6irkoda73v" path="res://Scenes/UIs/PlayerHUD/phone_panel.tscn" id="4_i3s5d"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_334lg"]
+font_size = 32
+
+[node name="PlayerHUD" type="CanvasLayer" unique_id=76956586 groups=["player_hud"]]
+script = ExtResource("1_p5k4q")
+metadata/_edit_vertical_guides_ = [-57.0]
+
+[node name="Root" type="Control" parent="." unique_id=1894068692]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DateTimeController" type="Control" parent="Root" unique_id=1343393468]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -112.0
+offset_bottom = 48.0
+grow_horizontal = 0
+
+[node name="ColorRect" type="ColorRect" parent="Root/DateTimeController" unique_id=950126228]
+layout_mode = 0
+offset_right = 112.0
+offset_bottom = 48.0
+color = Color(0.15294118, 0.15294118, 0.15294118, 1)
+
+[node name="DateTimeContainer" type="VBoxContainer" parent="Root/DateTimeController" unique_id=1634932118]
+layout_mode = 0
+offset_top = 4.0
+offset_right = 112.0
+offset_bottom = 44.0
+
+[node name="DateLabel" type="Label" parent="Root/DateTimeController/DateTimeContainer" unique_id=1312538155]
+layout_mode = 2
+text = "30th of Winter"
+horizontal_alignment = 1
+
+[node name="TimeLabel" type="Label" parent="Root/DateTimeController/DateTimeContainer" unique_id=1239664169]
+layout_mode = 2
+text = "10:00"
+horizontal_alignment = 1
+
+[node name="FundsController" type="Control" parent="Root" unique_id=1626376011]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -112.0
+offset_top = 53.0
+offset_bottom = 73.0
+grow_horizontal = 0
+
+[node name="ColorRect" type="ColorRect" parent="Root/FundsController" unique_id=1870293777]
+layout_mode = 0
+offset_right = 112.0
+offset_bottom = 20.0
+color = Color(0.153, 0.153, 0.153, 1)
+
+[node name="FundsLabel" type="Label" parent="Root/FundsController" unique_id=1665244698]
+layout_mode = 0
+offset_right = 112.0
+offset_bottom = 20.0
+text = "100$"
+horizontal_alignment = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="EventController" type="Control" parent="Root" unique_id=251260563]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -140.0
+offset_right = 147.0
+grow_vertical = 0
+
+[node name="ColorRect" type="ColorRect" parent="Root/EventController" unique_id=988571592]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.153, 0.153, 0.153, 1)
+
+[node name="EventLabel" type="Label" parent="Root/EventController" unique_id=974498104]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "This is gonna display events that will happen in the game"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="MapController" type="Control" parent="Root" unique_id=3203391]
+anchors_preset = 0
+offset_right = 147.0
+offset_bottom = 153.0
+
+[node name="ColorRect" type="ColorRect" parent="Root/MapController" unique_id=243788001]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="QuickInventoryController" type="Control" parent="Root" unique_id=592605232]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -248.0
+offset_top = -72.0
+offset_right = 248.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("2_8o0iu")
+
+[node name="PanelContainer" type="PanelContainer" parent="Root/QuickInventoryController" unique_id=1496204891]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Root/QuickInventoryController/PanelContainer" unique_id=497413186]
+layout_mode = 2
+
+[node name="Slot1" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=482116249]
+custom_minimum_size = Vector2(96, 64)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot1" unique_id=1036302836]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Slot 1"
+
+[node name="Slot2" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=768597355]
+custom_minimum_size = Vector2(96, 64)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot2" unique_id=1025412621]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Slot 2"
+
+[node name="Slot3" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=711113282]
+custom_minimum_size = Vector2(96, 64)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot3" unique_id=2024014200]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Slot 3"
+
+[node name="Slot4" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=141672993]
+custom_minimum_size = Vector2(96, 64)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot4" unique_id=1430704183]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Slot 4"
+
+[node name="Slot5" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=2027116879]
+custom_minimum_size = Vector2(96, 64)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot5" unique_id=1150460589]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Slot 5"
+
+[node name="CenterContainer" type="Control" parent="Root" unique_id=1440516504]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Crosshair" type="Control" parent="Root/CenterContainer" unique_id=484003292]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="Root/CenterContainer/Crosshair" unique_id=172733087 groups=["crosshair"]]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "+"
+label_settings = SubResource("LabelSettings_334lg")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PromptLabel" type="Label" parent="Root/CenterContainer" unique_id=2073249251 groups=["interaction_prompt"]]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -210.0
+offset_top = 52.0
+offset_right = 210.0
+offset_bottom = 92.0
+grow_horizontal = 2
+text = "Description"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="InventoryPanel" parent="Root" unique_id=1308746992 groups=["Inventory_panel"] instance=ExtResource("3_haiak")]
+visible = false
+layout_mode = 1
+
+[node name="PhonePanel" parent="Root" instance=ExtResource("4_i3s5d")]
+visible = false

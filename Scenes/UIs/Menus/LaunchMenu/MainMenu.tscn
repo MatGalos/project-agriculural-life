@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://bg2wnf0pafkqt"]
+
+[ext_resource type="Script" uid="uid://b5uhdrc81fcde" path="res://Scripts/UIs/Menus/LaunchMenu/mainMenu.gd" id="1_oixpk"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_s25uk"]
+font_size = 63
+
+[node name="MainMenu" type="Control" unique_id=176163149 node_paths=PackedStringArray("versionLabel", "startButton", "loadButton", "optionsButton", "creditsButton", "exitButton")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oixpk")
+versionLabel = NodePath("MarginContainer/Version")
+startButton = NodePath("MarginContainer/HBoxContainer/VBoxContainer/StartButton")
+loadButton = NodePath("MarginContainer/HBoxContainer/VBoxContainer/LoadButton")
+optionsButton = NodePath("MarginContainer/HBoxContainer/VBoxContainer/OptionsButton")
+creditsButton = NodePath("MarginContainer/HBoxContainer/VBoxContainer/CreditsButton")
+exitButton = NodePath("MarginContainer/HBoxContainer/VBoxContainer/ExitButton")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1514569189]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101960786, 0.3372549, 0.15686275, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1504166298]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=692876216]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="Separator" type="Control" parent="MarginContainer/VBoxContainer" unique_id=134057406]
+layout_mode = 2
+
+[node name="Title (To be replaced later)" type="Label" parent="MarginContainer/VBoxContainer" unique_id=775014586]
+layout_mode = 2
+text = "Project Agricultural Life"
+label_settings = SubResource("LabelSettings_s25uk")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1945481364]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=122931434]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Separator2" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1549393791]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=657587983]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Start the game"
+
+[node name="Separator3" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1793404344]
+layout_mode = 2
+
+[node name="LoadButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=795951830]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Load the game"
+
+[node name="Separator4" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=859619643]
+layout_mode = 2
+
+[node name="OptionsButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=579216073]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Options"
+
+[node name="Separator5" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1644968830]
+layout_mode = 2
+
+[node name="CreditsButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=719801092]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Credits"
+
+[node name="Separator6" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=228358304]
+layout_mode = 2
+
+[node name="ExitButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=558665022]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Exit to Desktop"
+
+[node name="Version" type="Label" parent="MarginContainer" unique_id=15008933]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+horizontal_alignment = 2
+vertical_alignment = 2
