@@ -9,6 +9,11 @@ Project for my master thesis about implementing stock market as a part of mechan
         - Implemented model for hoe
     - Implemented watering can
         - Implemented model for watering can
+    - Implemented Scythe
+        - Implemented model for Scythe
+
+### Version 0.1.1.3
+- Implemented model for Scythe
 
 ### Version 0.1.1.2
 - Implemented model for watering can
