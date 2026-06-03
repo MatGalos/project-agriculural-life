@@ -22,11 +22,13 @@ const CROSSHAIR_SIZE := 40.0
 @onready var inventory_slot_5: PanelContainer = $Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot5
 @onready var prompt_label: Label = $Root/CenterContainer/PromptLabel
 @onready var inventory_panel: InventoryPanel = $Root/InventoryPanel
+@onready var phone_panel: Control = $Root/PhonePanel
 
 
 func _ready() -> void:
 	get_viewport().size_changed.connect(_update_layout)
 	inventory_panel.close()
+	phone_panel.visible = false
 	_update_layout()
 
 
@@ -140,6 +142,9 @@ func _set_slot_label_font_size(slot: PanelContainer, font_size: int) -> void:
 	label.add_theme_font_size_override("font_size", font_size)
 
 func open_inventory() -> void:
+	if is_phone_open():
+		return
+
 	inventory_panel.open()
 
 
@@ -148,8 +153,33 @@ func close_inventory() -> void:
 
 
 func toggle_inventory() -> void:
-	inventory_panel.toggle()
+	if is_inventory_open():
+		close_inventory()
+	else:
+		open_inventory()
 
 
 func is_inventory_open() -> bool:
 	return inventory_panel.is_open()
+
+func open_phone() -> void:
+	if is_inventory_open():
+		return
+
+	phone_panel.visible = true
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+func close_phone() -> void:
+	phone_panel.visible = false
+
+	if gamemanager.isInGame and not gamemanager.isPaused:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+func toggle_phone() -> void:
+	if is_phone_open():
+		close_phone()
+	else:
+		open_phone()
+
+func is_phone_open() -> bool:
+	return phone_panel.visible

@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://bps6irkoda73v"]
+
+[ext_resource type="Script" uid="uid://bn75wwkhfc3n2" path="res://Scripts/UIs/PlayerHUD/phone_panel.gd" id="1_hrd0b"]
+
+[node name="PhonePanel" type="Control" unique_id=270439995]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -324.0
+offset_right = -176.0
+offset_bottom = 276.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+script = ExtResource("1_hrd0b")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=229916539]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1508891745]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=722606447]
+layout_mode = 2
+
+[node name="PhoneHeader" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1269155512]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PhoneHeader" unique_id=1672163018]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 17.0
+grow_horizontal = 2
+text = "FarmPhone"
+horizontal_alignment = 1
+
+[node name="ContentArea" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=2119467755]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea" unique_id=961120559]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ContentLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer" unique_id=2079017479]
+layout_mode = 2
+
+[node name="BottomNav" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1794645931]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav" unique_id=954857757]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="News" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1519948762]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "news"
+
+[node name="Account" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1428452633]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "account"
+
+[node name="Market" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1483380714]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Market"
+
+[node name="Weather" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=688998947]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "weather"
+
+[node name="Storage" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=107771774]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Storage"

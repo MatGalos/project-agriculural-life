@@ -15,7 +15,8 @@ var actions: Array[String] = [
 	"hotbar_slot_5",
 	"interact",
 	"sprint",
-	"open_inventory"
+	"open_inventory",
+	"open_phone"
 ]
 
 func _ready() -> void:
@@ -91,6 +92,7 @@ func reset_to_defaults() -> void:
 	InputMap.action_erase_events("interact")
 	InputMap.action_erase_events("sprint")
 	InputMap.action_erase_events("open_inventory")
+	InputMap.action_erase_events("open_phone")
 
 	_add_key("move_forward", KEY_W)
 	_add_key("move_backward", KEY_S)
@@ -105,6 +107,7 @@ func reset_to_defaults() -> void:
 	_add_key("interact", KEY_E)
 	_add_key("sprint", KEY_SHIFT)
 	_add_key("open_inventory", KEY_T)
+	_add_key("open_phone", KEY_Q)
 
 	save_controls()
 
@@ -136,3 +139,6 @@ func is_sprint_pressed() -> bool:
 
 func is_inventory_pressed() -> bool:
 	return Input.is_action_just_pressed("open_inventory")
+
+func is_phone_pressed() -> bool:
+	return Input.is_action_just_pressed("open_phone")

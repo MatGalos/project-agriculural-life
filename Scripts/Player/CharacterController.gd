@@ -29,6 +29,10 @@ func _input(event: InputEvent) -> void:
 		player_hud.toggle_inventory()
 		return
 
+	if InputManager.is_phone_pressed() and player_hud:
+		player_hud.toggle_phone()
+		return
+
 	if _is_inventory_open():
 		return
 
@@ -42,7 +46,7 @@ func _input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if gamemanager.isPaused or _is_inventory_open():
+	if gamemanager.is_paused or _is_inventory_open() or _is_phone_open():
 		velocity.x = 0
 		velocity.z = 0
 		move_and_slide()
@@ -77,3 +81,10 @@ func _is_inventory_open() -> bool:
 		return false
 
 	return player_hud.is_inventory_open()
+
+
+func _is_phone_open() -> bool:
+	if not player_hud or not player_hud.has_method("is_phone_open"):
+		return false
+
+	return player_hud.is_phone_open()
