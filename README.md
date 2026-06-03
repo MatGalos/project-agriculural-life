@@ -5,8 +5,13 @@ Project for my master thesis about implementing stock market as a part of mechan
 
 ## Version 0.2
 - Implemented Tools
- - Implemented hoe
-    - Implemented model for hoe
+    - Implemented hoe
+        - Implemented model for hoe
+    - Implemented watering can
+        - Implemented model for watering can
+
+### Version 0.1.1.2
+- Implemented model for watering can
 
 ### Version 0.1.1.1
 - Implemented model for hoe
