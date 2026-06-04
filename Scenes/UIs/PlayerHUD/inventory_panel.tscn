@@ -1,17 +1,29 @@
 [gd_scene format=3 uid="uid://6ki8w20olwhc"]
 
 [ext_resource type="Script" uid="uid://bhwxedvl3euva" path="res://Scripts/UIs/PlayerHUD/inventory_panel.gd" id="1_yn2sk"]
+[ext_resource type="PackedScene" uid="uid://ccego0c5l0tuu" path="res://Scenes/UIs/PlayerHUD/Inventory/inventory_slot_ui.tscn" id="2_cslww"]
+[ext_resource type="Resource" uid="uid://exkyhl0jf7gm" path="res://Data/Inventory/player_inventory.tres" id="3_n3at5"]
 
 [node name="InventoryPanel" type="Control" unique_id=1308746992]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -160.0
+offset_right = 240.0
+offset_bottom = 160.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 script = ExtResource("1_yn2sk")
+slot_ui_scene = ExtResource("2_cslww")
+inventory_data = ExtResource("3_n3at5")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=798571825]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1246258312]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,6 +31,21 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Inventory" type="Label" parent="VBoxContainer" unique_id=310859338]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=711844938]
 layout_mode = 2
-text = "Inventory placeholder"
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=798571825]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Inventory" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=310859338]
+layout_mode = 2
+text = "Inventory"
+
+[node name="SlotsGrid" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1974687077]
+layout_mode = 2
+columns = 6

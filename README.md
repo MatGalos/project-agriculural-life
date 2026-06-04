@@ -22,6 +22,10 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented item category for seeds
     - Implemented item category for tools
     - Implemented item category for resources
+- Improved Inventory
+
+### Version 0.1.1.15
+- Improved Inventory
 
 ### Version 0.1.1.11
 - Implemented item category for resources

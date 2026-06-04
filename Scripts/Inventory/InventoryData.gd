@@ -95,3 +95,46 @@ func remove_item(item_data: ItemData, amount: int) -> bool:
 			return true
 
 	return true
+
+func move_or_merge_slot(from_index: int, to_index: int) -> void:
+	if from_index == to_index:
+		return
+
+	var from_slot := get_slot(from_index)
+	var to_slot := get_slot(to_index)
+
+	if from_slot == null or to_slot == null:
+		return
+
+	if from_slot.is_empty():
+		return
+
+	# Target pusty → przenieś cały slot
+	if to_slot.is_empty():
+		to_slot.item_data = from_slot.item_data
+		to_slot.amount = from_slot.amount
+		from_slot.clear()
+		return
+
+	# Ten sam item → spróbuj połączyć stacki
+	if to_slot.item_data == from_slot.item_data:
+		var space_left := to_slot.item_data.max_stack - to_slot.amount
+		var amount_to_move := mini(from_slot.amount, space_left)
+
+		to_slot.amount += amount_to_move
+		from_slot.amount -= amount_to_move
+
+		if from_slot.amount <= 0:
+			from_slot.clear()
+
+		return
+
+	# Inny item → zamień miejscami
+	var temp_item := to_slot.item_data
+	var temp_amount := to_slot.amount
+
+	to_slot.item_data = from_slot.item_data
+	to_slot.amount = from_slot.amount
+
+	from_slot.item_data = temp_item
+	from_slot.amount = temp_amount

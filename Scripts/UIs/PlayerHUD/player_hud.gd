@@ -48,7 +48,7 @@ func _ready() -> void:
 	for i in range(player_inventory.slots.size()):
 		var slot = player_inventory.slots[i]
 		if not slot.is_empty():
-			print(i, ": ", slot.item_data.display_name, " x", slot.amount)
+			print(i, ": ", slot.item_data.display_name, " x", slot.amount)			
 	get_viewport().size_changed.connect(_update_layout)
 	inventory_panel.close()
 	phone_panel.visible = false
