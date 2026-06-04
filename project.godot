@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Project_Agricultural_life"
-config/version="0.1.1.5"
+config/version="0.1.1.6"
 run/main_scene="uid://bg2wnf0pafkqt"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://Assets/Icons/AppIcons/icon.svg"
