@@ -15,6 +15,11 @@ Project for my master thesis about implementing stock market as a part of mechan
         - Implemented model for seed bag
 - Implemented assets for the game
     - Implemented asset for the watered block
+    - Implemented assets for plants
+        - Implemented assets for wheat
+
+### Version 0.1.1.6
+- Implemented assets for wheat
 
 ### Version 0.1.1.5
 - Implemented asset for the watered block

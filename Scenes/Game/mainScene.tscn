@@ -8,6 +8,12 @@
 [ext_resource type="PackedScene" uid="uid://4f4mbabd4bie" path="res://Assets/Models/Buildings/Silo.glb" id="6_f63ko"]
 [ext_resource type="Script" uid="uid://daayhh3m0lprt" path="res://Scripts/Player/CharacterController.gd" id="7_biuxf"]
 [ext_resource type="Script" uid="uid://cof00ypavhfyq" path="res://Scripts/Player/InteractionController.gd" id="8_tfxbu"]
+[ext_resource type="PackedScene" uid="uid://du31hyp8wkkfw" path="res://Assets/Models/Terrain/watered_block.glb" id="9_3njyw"]
+[ext_resource type="PackedScene" uid="uid://bt4qb3djw7y45" path="res://Assets/Models/Plants/Wheat/wheat_ready.glb" id="10_584e8"]
+[ext_resource type="PackedScene" uid="uid://w143t0d81gog" path="res://Assets/Models/Plants/Wheat/wheat_stage_3.glb" id="11_f7c6i"]
+[ext_resource type="PackedScene" uid="uid://bx5e30ffsbksr" path="res://Assets/Models/Plants/Wheat/wheat_stage_2.glb" id="12_wuuak"]
+[ext_resource type="PackedScene" uid="uid://chap06qri123f" path="res://Assets/Models/Plants/Wheat/wheat_stage_1.glb" id="13_5glr7"]
+[ext_resource type="PackedScene" uid="uid://bosuflibbfb15" path="res://Assets/Models/Plants/Wheat/wheat_seeded.glb" id="14_6s3ud"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_pmpwp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -7795,3 +7801,33 @@ target_position = Vector3(0, 0, -8)
 
 [node name="InteractionController" type="Node3D" parent="CharacterBody3D" unique_id=1517850321]
 script = ExtResource("8_tfxbu")
+
+[node name="watered_block" parent="." unique_id=545012093 instance=ExtResource("9_3njyw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 8)
+
+[node name="wheat_ready" parent="." unique_id=82455873 instance=ExtResource("10_584e8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 8)
+
+[node name="watered_block2" parent="." unique_id=1198713172 instance=ExtResource("9_3njyw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 9)
+
+[node name="wheat_stage_3" parent="." unique_id=410865390 instance=ExtResource("11_f7c6i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 9)
+
+[node name="watered_block3" parent="." unique_id=347913038 instance=ExtResource("9_3njyw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 10)
+
+[node name="watered_block4" parent="." unique_id=946739731 instance=ExtResource("9_3njyw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 11)
+
+[node name="wheat_stage_2" parent="." unique_id=638106047 instance=ExtResource("12_wuuak")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 10)
+
+[node name="watered_block5" parent="." unique_id=400822313 instance=ExtResource("9_3njyw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 12)
+
+[node name="wheat_stage_1" parent="." unique_id=355079988 instance=ExtResource("13_5glr7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 11)
+
+[node name="wheat_seeded" parent="." unique_id=475440537 instance=ExtResource("14_6s3ud")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 12)
