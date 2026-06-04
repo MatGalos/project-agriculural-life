@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ToolItemData" format=3 uid="uid://c88ap75j5udds"]
+
+[ext_resource type="Script" uid="uid://cmxvwq3u04826" path="res://Scripts/Items/ToolItemData.gd" id="1_rqkvv"]
+[ext_resource type="Texture2D" uid="uid://bux3fyra01i6q" path="res://Assets/Icons/Items/Tools/hoe.png" id="1_yah0f"]
+
+[resource]
+script = ExtResource("1_rqkvv")
+id = "hoe"
+display_name = "Hoe"
+description = "Used to plow soil."
+icon = ExtResource("1_yah0f")
+max_stack = 1
+category = 2
+metadata/_custom_type_script = "uid://cmxvwq3u04826"

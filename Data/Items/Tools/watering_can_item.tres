@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ToolItemData" format=3 uid="uid://btisn5y1xgx8q"]
+
+[ext_resource type="Script" uid="uid://cmxvwq3u04826" path="res://Scripts/Items/ToolItemData.gd" id="1_2dbb7"]
+[ext_resource type="Texture2D" uid="uid://cd3rkw78d37wf" path="res://Assets/Icons/Items/Tools/WateringCan.png" id="1_uuknd"]
+
+[resource]
+script = ExtResource("1_2dbb7")
+tool_type = 1
+id = "watering_can"
+display_name = "Watering Can"
+description = "Used to water crops."
+icon = ExtResource("1_uuknd")
+max_stack = 1
+category = 2
+metadata/_custom_type_script = "uid://cmxvwq3u04826"
