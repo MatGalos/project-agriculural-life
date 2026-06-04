@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bx5e30ffsbksr" path="res://Assets/Models/Plants/Wheat/wheat_stage_2.glb" id="12_wuuak"]
 [ext_resource type="PackedScene" uid="uid://chap06qri123f" path="res://Assets/Models/Plants/Wheat/wheat_stage_1.glb" id="13_5glr7"]
 [ext_resource type="PackedScene" uid="uid://bosuflibbfb15" path="res://Assets/Models/Plants/Wheat/wheat_seeded.glb" id="14_6s3ud"]
+[ext_resource type="Script" uid="uid://dyc7d1ebypwwp" path="res://Scripts/World/DayNightController.gd" id="15_584e8"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_pmpwp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -7831,3 +7832,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 11)
 
 [node name="wheat_seeded" parent="." unique_id=475440537 instance=ExtResource("14_6s3ud")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 12)
+
+[node name="SunLight" type="DirectionalLight3D" parent="." unique_id=2136742272]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
+
+[node name="DayNightController" type="Node3D" parent="." unique_id=894958895 node_paths=PackedStringArray("sun_light", "world_environment")]
+script = ExtResource("15_584e8")
+sun_light = NodePath("../SunLight")
+world_environment = NodePath("../WorldEnvironment")
