@@ -17,15 +17,14 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	_ensure_ui_nodes()
+
 	var interactable: Interactable = _get_looked_at_interactable()
 
 	if interactable == current_interactable:
 		return
 
 	current_interactable = interactable
-
-	if current_interactable:
-		print(current_interactable.get_display_name())
 
 	_update_prompt_label()
 	_update_crosshair_color()
@@ -71,3 +70,11 @@ func _update_crosshair_color() -> void:
 		crosshair_label.modulate = interact_crosshair_color
 	else:
 		crosshair_label.modulate = normal_crosshair_color
+
+
+func _ensure_ui_nodes() -> void:
+	if not prompt_label:
+		prompt_label = get_tree().get_first_node_in_group("interaction_prompt") as Label
+
+	if not crosshair_label:
+		crosshair_label = get_tree().get_first_node_in_group("crosshair") as Label

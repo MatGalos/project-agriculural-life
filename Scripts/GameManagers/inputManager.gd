@@ -33,6 +33,9 @@ func get_move_vector() -> Vector2:
 
 
 func rebind_action(action_name: String, event: InputEvent) -> void:
+	if not actions.has(action_name):
+		return
+
 	InputMap.action_erase_events(action_name)
 	InputMap.action_add_event(action_name, event)
 	save_controls()
@@ -79,20 +82,8 @@ func load_controls() -> void:
 				InputMap.action_add_event(action_name, event)
 
 func reset_to_defaults() -> void:
-	InputMap.action_erase_events("move_forward")
-	InputMap.action_erase_events("move_backward")
-	InputMap.action_erase_events("move_left")
-	InputMap.action_erase_events("move_right")
-	InputMap.action_erase_events("pauseMenu")
-	InputMap.action_erase_events("hotbar_slot_1")
-	InputMap.action_erase_events("hotbar_slot_2")
-	InputMap.action_erase_events("hotbar_slot_3")
-	InputMap.action_erase_events("hotbar_slot_4")
-	InputMap.action_erase_events("hotbar_slot_5")
-	InputMap.action_erase_events("interact")
-	InputMap.action_erase_events("sprint")
-	InputMap.action_erase_events("open_inventory")
-	InputMap.action_erase_events("open_phone")
+	for action_name in actions:
+		InputMap.action_erase_events(action_name)
 
 	_add_key("move_forward", KEY_W)
 	_add_key("move_backward", KEY_S)

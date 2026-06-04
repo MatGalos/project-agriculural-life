@@ -11,7 +11,9 @@ func open() -> void:
 
 func close() -> void:
 	visible = false
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+	if gamemanager.isInGame and not gamemanager.isPaused:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
 func toggle() -> void:
