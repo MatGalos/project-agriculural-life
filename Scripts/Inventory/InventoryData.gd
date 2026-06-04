@@ -50,3 +50,48 @@ func add_item(item_data: ItemData, amount: int) -> int:
 				return 0
 
 	return remaining
+
+func get_item_count(item_data: ItemData) -> int:
+	if item_data == null:
+		return 0
+
+	var total := 0
+
+	for slot in slots:
+		if not slot.is_empty() and slot.item_data == item_data:
+			total += slot.amount
+
+	return total
+
+
+func has_item(item_data: ItemData, amount: int) -> bool:
+	return get_item_count(item_data) >= amount
+
+
+func remove_item(item_data: ItemData, amount: int) -> bool:
+	if item_data == null or amount <= 0:
+		return false
+
+	if not has_item(item_data, amount):
+		return false
+
+	var remaining := amount
+
+	for slot in slots:
+		if slot.is_empty():
+			continue
+
+		if slot.item_data != item_data:
+			continue
+
+		var amount_to_remove := mini(slot.amount, remaining)
+		slot.amount -= amount_to_remove
+		remaining -= amount_to_remove
+
+		if slot.amount <= 0:
+			slot.clear()
+
+		if remaining <= 0:
+			return true
+
+	return true
