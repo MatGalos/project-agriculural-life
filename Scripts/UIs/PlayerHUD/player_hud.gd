@@ -4,6 +4,7 @@ class_name PlayerHUD
 const CROSSHAIR_SIZE := 40.0
 
 @export var player_inventory: InventoryData
+@export var test_item: ItemData
 
 @onready var date_time_controller: Control = $Root/DateTimeController
 @onready var date_time_bg: ColorRect = $Root/DateTimeController/ColorRect
@@ -30,6 +31,13 @@ const CROSSHAIR_SIZE := 40.0
 func _ready() -> void:
 	player_inventory.setup()
 	print("Inventory slots: ", player_inventory.slots.size())
+	var leftover := player_inventory.add_item(test_item, 120)
+	print("Leftover: ", leftover)
+
+	for i in range(player_inventory.slots.size()):
+		var slot = player_inventory.slots[i]
+		if not slot.is_empty():
+			print(i, ": ", slot.item_data.display_name, " x", slot.amount)
 	get_viewport().size_changed.connect(_update_layout)
 	inventory_panel.close()
 	phone_panel.visible = false

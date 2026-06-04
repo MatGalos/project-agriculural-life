@@ -19,3 +19,22 @@ func can_stack_with(item: ItemData) -> bool:
 		return false
 
 	return item_data == item and amount < item_data.max_stack
+
+
+func get_space_left() -> int:
+	if is_empty():
+		return 0
+
+	return item_data.max_stack - amount
+
+
+func add_to_stack(add_amount: int) -> int:
+	if is_empty():
+		return add_amount
+
+	var space_left := get_space_left()
+	var amount_to_add := mini(add_amount, space_left)
+
+	amount += amount_to_add
+
+	return add_amount - amount_to_add
