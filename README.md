@@ -17,6 +17,10 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented asset for the watered block
     - Implemented assets for plants
         - Implemented assets for wheat
+- Implement structure for items
+
+### Version 0.1.1.7
+- Implement structure for items
 
 ### Version 0.1.1.6
 - Implemented assets for wheat
