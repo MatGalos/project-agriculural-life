@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ToolItemData" format=3 uid="uid://8haib013i3dl"]
+
+[ext_resource type="Texture2D" uid="uid://v6n3v5sq41ch" path="res://Assets/Icons/Items/Tools/Scythe.png" id="1_4olr2"]
+[ext_resource type="Script" uid="uid://cmxvwq3u04826" path="res://Scripts/Items/ToolItemData.gd" id="1_81bfs"]
+
+[resource]
+script = ExtResource("1_81bfs")
+tool_type = 3
+id = "scythe"
+display_name = "Scythe"
+description = " Used to harvest mature crops."
+icon = ExtResource("1_4olr2")
+max_stack = 1
+category = 2
+metadata/_custom_type_script = "uid://cmxvwq3u04826"
