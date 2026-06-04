@@ -3,6 +3,8 @@ class_name PlayerHUD
 
 const CROSSHAIR_SIZE := 40.0
 
+@export var player_inventory: InventoryData
+
 @onready var date_time_controller: Control = $Root/DateTimeController
 @onready var date_time_bg: ColorRect = $Root/DateTimeController/ColorRect
 @onready var date_time_container: VBoxContainer = $Root/DateTimeController/DateTimeContainer
@@ -26,6 +28,8 @@ const CROSSHAIR_SIZE := 40.0
 
 
 func _ready() -> void:
+	player_inventory.setup()
+	print("Inventory slots: ", player_inventory.slots.size())
 	get_viewport().size_changed.connect(_update_layout)
 	inventory_panel.close()
 	phone_panel.visible = false

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dndcdnl5x5b0u" path="res://Scripts/UIs/PlayerHUD/player_hud.gd" id="1_p5k4q"]
 [ext_resource type="Script" uid="uid://dmmcmeit8j1u" path="res://Scripts/UIs/PlayerHUD/quick_inventory_controller.gd" id="2_8o0iu"]
+[ext_resource type="Resource" uid="uid://exkyhl0jf7gm" path="res://Data/Inventory/player_inventory.tres" id="2_ktytg"]
 [ext_resource type="PackedScene" uid="uid://6ki8w20olwhc" path="res://Scenes/UIs/PlayerHUD/inventory_panel.tscn" id="3_haiak"]
 [ext_resource type="PackedScene" uid="uid://bps6irkoda73v" path="res://Scenes/UIs/PlayerHUD/phone_panel.tscn" id="4_i3s5d"]
 
@@ -10,6 +11,7 @@ font_size = 32
 
 [node name="PlayerHUD" type="CanvasLayer" unique_id=76956586 groups=["player_hud"]]
 script = ExtResource("1_p5k4q")
+player_inventory = ExtResource("2_ktytg")
 metadata/_edit_vertical_guides_ = [-57.0]
 
 [node name="Root" type="Control" parent="." unique_id=1894068692]
@@ -245,5 +247,6 @@ autowrap_mode = 2
 visible = false
 layout_mode = 1
 
-[node name="PhonePanel" parent="Root" instance=ExtResource("4_i3s5d")]
+[node name="PhonePanel" parent="Root" unique_id=1744212345 instance=ExtResource("4_i3s5d")]
 visible = false
+layout_mode = 1

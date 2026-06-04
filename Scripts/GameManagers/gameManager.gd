@@ -2,6 +2,7 @@ class_name GameManager
 
 extends Node
 
+@export var player_inventory: InventoryData
 @onready var globalUIScene: PackedScene = preload("res://Scenes/UIs/global_ui.tscn")
 var pauseMenu: PauseMenu
 var optionsMenu: OptionsMenu
