@@ -19,6 +19,10 @@ Project for my master thesis about implementing stock market as a part of mechan
         - Implemented assets for wheat
 - Implement structure for items
     - Implemented item category for crops
+    - Implemented item category for seeds
+
+### Version 0.1.1.9
+- Implemented item category for seeds
 
 ### Version 0.1.1.8
 - Implemented item category for crops
