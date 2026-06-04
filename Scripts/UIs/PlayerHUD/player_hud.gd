@@ -38,6 +38,17 @@ func _ready() -> void:
 		var slot = player_inventory.slots[i]
 		if not slot.is_empty():
 			print(i, ": ", slot.item_data.display_name, " x", slot.amount)
+
+	print("Has 50 Wheat: ", player_inventory.has_item(test_item, 50))
+	print("Has 200 Wheat: ", player_inventory.has_item(test_item, 200))
+
+	var removed := player_inventory.remove_item(test_item, 50)
+	print("Removed 50 Wheat: ", removed)
+
+	for i in range(player_inventory.slots.size()):
+		var slot = player_inventory.slots[i]
+		if not slot.is_empty():
+			print(i, ": ", slot.item_data.display_name, " x", slot.amount)
 	get_viewport().size_changed.connect(_update_layout)
 	inventory_panel.close()
 	phone_panel.visible = false
