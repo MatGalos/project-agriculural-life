@@ -2,7 +2,6 @@ class_name GameManager
 
 extends Node
 
-@export var player_inventory: InventoryData
 @onready var globalUIScene: PackedScene = preload("res://Scenes/UIs/global_ui.tscn")
 var pauseMenu: PauseMenu
 var optionsMenu: OptionsMenu
@@ -40,9 +39,14 @@ func _ready() -> void:
 	get_tree().root.add_child.call_deferred(globalUIInstance)
 	await get_tree().process_frame
 	
-	pauseMenu = globalUIInstance.get_node("PauseMenu") as PauseMenu
-	optionsMenu = globalUIInstance.get_node("OptionsMenu") as OptionsMenu
-	mainMenu = globalUIInstance.get_node("MainMenu") as MainMenu
+	pauseMenu = globalUIInstance.get_node_or_null("PauseMenu") as PauseMenu
+	optionsMenu = globalUIInstance.get_node_or_null("OptionsMenu") as OptionsMenu
+	mainMenu = globalUIInstance.get_node_or_null("MainMenu") as MainMenu
+
+	if pauseMenu == null or optionsMenu == null or mainMenu == null:
+		push_error("Global UI is missing one or more required menus.")
+		return
+
 	mainMenu.visible = true
 	pauseMenu.setMenuVisible(false)
 	optionsMenu.visible = false

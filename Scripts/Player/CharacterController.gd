@@ -25,6 +25,8 @@ func _input(event: InputEvent) -> void:
 	if gamemanager.isPaused:
 		return
 
+	_ensure_player_hud()
+
 	if InputManager.is_inventory_pressed() and player_hud:
 		player_hud.toggle_inventory()
 		return
@@ -46,6 +48,8 @@ func _input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_ensure_player_hud()
+
 	if gamemanager.is_paused or _is_inventory_open() or _is_phone_open():
 		velocity.x = 0
 		velocity.z = 0
@@ -88,3 +92,10 @@ func _is_phone_open() -> bool:
 		return false
 
 	return player_hud.is_phone_open()
+
+
+func _ensure_player_hud() -> void:
+	if player_hud:
+		return
+
+	player_hud = get_tree().get_first_node_in_group("player_hud") as PlayerHUD

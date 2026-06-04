@@ -66,6 +66,7 @@ func _get_drag_data(_position):
 	preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	set_drag_preview(preview)
 
+	# Use an explicit payload type so other UI drags cannot be dropped into inventory slots.
 	return {
 		"type": "inventory_slot",
 		"slot_index": slot_index

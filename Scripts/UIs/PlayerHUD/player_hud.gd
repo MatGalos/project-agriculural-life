@@ -4,7 +4,11 @@ class_name PlayerHUD
 const CROSSHAIR_SIZE := 40.0
 
 @export var player_inventory: InventoryData
-@export var test_item: ItemData
+@export var hoe_item: ItemData
+@export var wheat_seed_item: ItemData
+@export var watering_can_item: ItemData
+@export var scythe_item: ItemData
+@export var wheat_item: ItemData
 
 @onready var date_time_controller: Control = $Root/DateTimeController
 @onready var date_time_bg: ColorRect = $Root/DateTimeController/ColorRect
@@ -27,30 +31,13 @@ const CROSSHAIR_SIZE := 40.0
 @onready var inventory_panel: InventoryPanel = $Root/InventoryPanel
 @onready var phone_panel: Control = $Root/PhonePanel
 
-
 func _ready() -> void:
-	player_inventory.setup()
-	print("Inventory slots: ", player_inventory.slots.size())
-	var leftover := player_inventory.add_item(test_item, 120)
-	print("Leftover: ", leftover)
+	_setup_starting_inventory()
 
-	for i in range(player_inventory.slots.size()):
-		var slot = player_inventory.slots[i]
-		if not slot.is_empty():
-			print(i, ": ", slot.item_data.display_name, " x", slot.amount)
-
-	print("Has 50 Wheat: ", player_inventory.has_item(test_item, 50))
-	print("Has 200 Wheat: ", player_inventory.has_item(test_item, 200))
-
-	var removed := player_inventory.remove_item(test_item, 50)
-	print("Removed 50 Wheat: ", removed)
-
-	for i in range(player_inventory.slots.size()):
-		var slot = player_inventory.slots[i]
-		if not slot.is_empty():
-			print(i, ": ", slot.item_data.display_name, " x", slot.amount)			
 	get_viewport().size_changed.connect(_update_layout)
 	inventory_panel.close()
+	inventory_panel.refresh()
+	quick_inventory_controller.refresh()
 	phone_panel.visible = false
 	_update_layout()
 
@@ -161,8 +148,22 @@ func _update_inventory_label_fonts(font_size: int) -> void:
 
 
 func _set_slot_label_font_size(slot: PanelContainer, font_size: int) -> void:
-	var label: Label = slot.get_node("Label") as Label
-	label.add_theme_font_size_override("font_size", font_size)
+	var label: Label = slot.get_node("AmountLabel") as Label
+	if label:
+		label.add_theme_font_size_override("font_size", font_size)
+
+
+func _setup_starting_inventory() -> void:
+	if player_inventory == null:
+		return
+
+	player_inventory.setup()
+	player_inventory.clear_inventory()
+	player_inventory.add_item(hoe_item, 1)
+	player_inventory.add_item(wheat_seed_item, 20)
+	player_inventory.add_item(watering_can_item, 1)
+	player_inventory.add_item(scythe_item, 1)
+	player_inventory.add_item(wheat_item, 10)
 
 func open_inventory() -> void:
 	if is_phone_open():

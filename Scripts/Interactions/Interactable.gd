@@ -4,7 +4,7 @@ class_name Interactable
 @export var prompt_text := "E - Interact"
 
 func interact() -> void:
-	print(get_prompt_text(), " completed for: ", get_display_name())
+	return
 
 func get_prompt_text() -> String:
 	return prompt_text

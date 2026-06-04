@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="HotbarData" format=3 uid="uid://ba25bvqplx8wi"]
+
+[ext_resource type="Script" uid="uid://ftgalg15krpc" path="res://Scripts/Inventory/HotbarData.gd" id="1_bxax8"]
+
+[resource]
+script = ExtResource("1_bxax8")
+metadata/_custom_type_script = "uid://ftgalg15krpc"

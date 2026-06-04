@@ -11,6 +11,10 @@ var slot_ui_nodes: Array[InventorySlotUI] = []
 func _ready() -> void:
 	visible = false
 	add_to_group("inventory_panel")
+
+	if inventory_data and not inventory_data.inventory_changed.is_connected(refresh):
+		inventory_data.inventory_changed.connect(refresh)
+
 	build_slots()
 	refresh()
 
@@ -73,4 +77,7 @@ func move_or_merge_slot(from_index: int, to_index: int) -> void:
 		return
 
 	inventory_data.move_or_merge_slot(from_index, to_index)
-	refresh()
+
+	var hotbar_ui = get_tree().get_first_node_in_group("hotbar_ui")
+	if hotbar_ui and hotbar_ui.has_method("refresh"):
+		hotbar_ui.refresh()

@@ -49,7 +49,7 @@ func _input(event: InputEvent) -> void:
 	if waiting_for_action == "":
 		return
 
-	if event is InputEventKey and event.pressed:
+	if event is InputEventKey and event.pressed and not event.echo:
 		InputManager.rebind_action(waiting_for_action, event)
 
 		waiting_for_action = ""
