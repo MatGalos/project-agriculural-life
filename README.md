@@ -21,6 +21,10 @@ Project for my master thesis about implementing stock market as a part of mechan
     - Implemented item category for crops
     - Implemented item category for seeds
     - Implemented item category for tools
+    - Implemented item category for resources
+
+### Version 0.1.1.11
+- Implemented item category for resources
 
 ### Version 0.1.1.10
 - Implemented item category for tools
