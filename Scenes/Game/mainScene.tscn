@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dtlgskl6tvubp" path="res://Assets/Models/Buildings/house.glb" id="5_f246w"]
 [ext_resource type="PackedScene" uid="uid://4f4mbabd4bie" path="res://Assets/Models/Buildings/Silo.glb" id="6_f63ko"]
 [ext_resource type="Script" uid="uid://daayhh3m0lprt" path="res://Scripts/Player/CharacterController.gd" id="7_biuxf"]
+[ext_resource type="PackedScene" uid="uid://bpc10uol4byfo" path="res://Scenes/Game/Farming/farm_tile.tscn" id="8_f7c6i"]
 [ext_resource type="Script" uid="uid://cof00ypavhfyq" path="res://Scripts/Player/InteractionController.gd" id="8_tfxbu"]
 [ext_resource type="PackedScene" uid="uid://du31hyp8wkkfw" path="res://Assets/Models/Terrain/watered_block.glb" id="9_3njyw"]
 [ext_resource type="PackedScene" uid="uid://bt4qb3djw7y45" path="res://Assets/Models/Plants/Wheat/wheat_ready.glb" id="10_584e8"]
@@ -7805,6 +7806,9 @@ script = ExtResource("8_tfxbu")
 
 [node name="watered_block" parent="." unique_id=545012093 instance=ExtResource("9_3njyw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 8)
+
+[node name="FarmTile" parent="." unique_id=574448585 instance=ExtResource("8_f7c6i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 7)
 
 [node name="wheat_ready" parent="." unique_id=82455873 instance=ExtResource("10_584e8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 8)

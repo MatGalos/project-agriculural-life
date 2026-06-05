@@ -16,7 +16,8 @@ var actions: Array[String] = [
 	"interact",
 	"sprint",
 	"open_inventory",
-	"open_phone"
+	"open_phone",
+	"use_tool"
 ]
 
 func _ready() -> void:
@@ -36,6 +37,7 @@ func rebind_action(action_name: String, event: InputEvent) -> void:
 	if not actions.has(action_name):
 		return
 
+	_ensure_action_exists(action_name)
 	InputMap.action_erase_events(action_name)
 	InputMap.action_add_event(action_name, event)
 	save_controls()
@@ -45,6 +47,8 @@ func save_controls() -> void:
 	var config: ConfigFile = ConfigFile.new()
 
 	for action_name: String in actions:
+		_ensure_action_exists(action_name)
+
 		var events: Array[InputEvent] = InputMap.action_get_events(action_name)
 		var serialized: Array[Dictionary] = []
 
@@ -53,6 +57,11 @@ func save_controls() -> void:
 				serialized.append({
 					"type": "key",
 					"physical_keycode": (event as InputEventKey).physical_keycode
+				})
+			elif event is InputEventMouseButton:
+				serialized.append({
+					"type": "mouse_button",
+					"button_index": (event as InputEventMouseButton).button_index
 				})
 
 		config.set_value("controls", action_name, serialized)
@@ -71,18 +80,26 @@ func load_controls() -> void:
 		if not config.has_section_key("controls", action_name):
 			continue
 
-		InputMap.action_erase_events(action_name)
-
 		var serialized: Array = config.get_value("controls", action_name, []) as Array
+		if serialized.is_empty():
+			continue
+
+		_ensure_action_exists(action_name)
+		InputMap.action_erase_events(action_name)
 
 		for data: Dictionary in serialized:
 			if data.get("type", "") == "key":
-				var event: InputEventKey = InputEventKey.new()
-				event.physical_keycode = int(data["physical_keycode"])
-				InputMap.action_add_event(action_name, event)
+				var key_event: InputEventKey = InputEventKey.new()
+				key_event.physical_keycode = int(data["physical_keycode"])
+				InputMap.action_add_event(action_name, key_event)
+			elif data.get("type", "") == "mouse_button":
+				var mouse_event: InputEventMouseButton = InputEventMouseButton.new()
+				mouse_event.button_index = int(data["button_index"])
+				InputMap.action_add_event(action_name, mouse_event)
 
 func reset_to_defaults() -> void:
-	for action_name in actions:
+	for action_name: String in actions:
+		_ensure_action_exists(action_name)
 		InputMap.action_erase_events(action_name)
 
 	_add_key("move_forward", KEY_W)
@@ -99,6 +116,7 @@ func reset_to_defaults() -> void:
 	_add_key("sprint", KEY_SHIFT)
 	_add_key("open_inventory", KEY_T)
 	_add_key("open_phone", KEY_Q)
+	_add_mouse_button("use_tool", MOUSE_BUTTON_LEFT)
 
 	save_controls()
 
@@ -117,9 +135,20 @@ func get_pressed_hotbar_slot() -> int:
 	return -1
 
 func _add_key(action_name: String, keycode: Key) -> void:
+	_ensure_action_exists(action_name)
 	var event: InputEventKey = InputEventKey.new()
 	event.physical_keycode = keycode
 	InputMap.action_add_event(action_name, event)
+
+func _add_mouse_button(action_name: String, button_index: MouseButton) -> void:
+	_ensure_action_exists(action_name)
+	var event: InputEventMouseButton = InputEventMouseButton.new()
+	event.button_index = button_index
+	InputMap.action_add_event(action_name, event)
+
+func _ensure_action_exists(action_name: String) -> void:
+	if not InputMap.has_action(action_name):
+		InputMap.add_action(action_name)
 
 func is_interact_pressed() -> bool:
 	return Input.is_action_just_pressed("interact")
@@ -133,3 +162,6 @@ func is_inventory_pressed() -> bool:
 
 func is_phone_pressed() -> bool:
 	return Input.is_action_just_pressed("open_phone")
+
+func is_use_tool_pressed() -> bool:
+	return Input.is_action_just_pressed("use_tool")
