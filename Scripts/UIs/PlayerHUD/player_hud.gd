@@ -47,7 +47,7 @@ func _update_layout() -> void:
 	var min_axis: float = minf(viewport_size.x, viewport_size.y)
 	var ui_scale: float = clampf(min_axis / 720.0, 0.78, 1.35)
 	var margin: float = clampf(min_axis * 0.025, 12.0, 32.0)
-	
+
 	_update_corner_panels(ui_scale, margin)
 	_update_bottom_panels(ui_scale, margin)
 	_update_center_prompt(viewport_size, min_axis)
@@ -58,15 +58,15 @@ func _update_corner_panels(ui_scale: float, margin: float) -> void:
 	var funds_width: float = date_width
 	var funds_height: float = 28.0 * ui_scale
 	var map_size: Vector2 = Vector2(150.0, 156.0) * ui_scale
-	
+
 	_set_top_right_rect(date_time_controller, margin, margin, date_width, date_height)
 	_set_rect(date_time_bg, 0.0, 0.0, date_width, date_height)
 	_set_rect(date_time_container, 0.0, 4.0 * ui_scale, date_width, date_height - (8.0 * ui_scale))
-	
+
 	_set_top_right_rect(funds_controller, margin, margin + date_height + (8.0 * ui_scale), funds_width, funds_height)
 	_set_rect(funds_bg, 0.0, 0.0, funds_width, funds_height)
 	_set_rect(funds_label, 0.0, 0.0, funds_width - (8.0 * ui_scale), funds_height)
-	
+
 	_set_rect(map_controller, margin, margin, map_size.x, map_size.y)
 	date_label.add_theme_font_size_override("font_size", roundi(14.0 * ui_scale))
 	time_label.add_theme_font_size_override("font_size", roundi(14.0 * ui_scale))
@@ -77,12 +77,12 @@ func _update_bottom_panels(ui_scale: float, margin: float) -> void:
 	var slot_size: Vector2 = Vector2(96.0, 64.0) * ui_scale
 	var inventory_width: float = slot_size.x * 5.0
 	var inventory_height: float = slot_size.y
-	
+
 	_set_bottom_left_rect(event_controller, margin, margin, event_size.x, event_size.y)
 	_set_bottom_center_rect(quick_inventory_controller, margin, inventory_width, inventory_height)
-	
+
 	_set_inventory_slot_sizes(slot_size)
-	
+
 	event_label.add_theme_font_size_override("font_size", roundi(14.0 * ui_scale))
 	_update_inventory_label_fonts(roundi(13.0 * ui_scale))
 
@@ -92,7 +92,7 @@ func _update_center_prompt(viewport_size: Vector2, min_axis: float) -> void:
 	var prompt_font_size: int = roundi(clampf(min_axis * 0.026, 18.0, 28.0))
 	var prompt_height: float = maxf(float(prompt_font_size) * 1.7, 40.0)
 	var prompt_top: float = (CROSSHAIR_SIZE * 0.5) + prompt_gap
-	
+
 	prompt_label.offset_left = -prompt_width * 0.5
 	prompt_label.offset_top = prompt_top
 	prompt_label.offset_right = prompt_width * 0.5

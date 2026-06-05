@@ -2,12 +2,16 @@ class_name GameManager
 
 extends Node
 
+signal pauseChanged(paused: bool)
+
 @onready var globalUIScene: PackedScene = preload("res://Scenes/UIs/global_ui.tscn")
+
 var pauseMenu: PauseMenu
 var optionsMenu: OptionsMenu
 var mainMenu: MainMenu
-
 var globalUIInstance: CanvasLayer
+var optionsContext: int = 0
+
 var isPaused: bool = false
 var is_paused: bool:
 	get:
@@ -27,18 +31,15 @@ enum menuContext {
 	Pause_Menu
 }
 
-var optionsContext: int = 0
-
-signal pauseChanged(paused: bool)
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_process_input(true)
-	
+
 	globalUIInstance = globalUIScene.instantiate() as CanvasLayer
 	get_tree().root.add_child.call_deferred(globalUIInstance)
 	await get_tree().process_frame
-	
+
 	pauseMenu = globalUIInstance.get_node_or_null("PauseMenu") as PauseMenu
 	optionsMenu = globalUIInstance.get_node_or_null("OptionsMenu") as OptionsMenu
 	mainMenu = globalUIInstance.get_node_or_null("MainMenu") as MainMenu
@@ -52,51 +53,37 @@ func _ready() -> void:
 	optionsMenu.visible = false
 	_updateMouseMode()
 
-# function to toggle pause
+
+func _input(event: InputEvent) -> void:
+	if not isInGame:
+		return
+
+	if event.is_action_pressed("pauseMenu"):
+		_handle_pause_action()
+
+
 func togglePause() -> void:
 	setPaused(!isPaused)
 
-# function to set the pause for the game.
+
 func setPaused(value: bool) -> void:
 	if isPaused == value:
 		get_tree().paused = value
 		_updateMouseMode()
 		return
-	
+
 	isPaused = value
 	get_tree().paused = isPaused
 	_updateMouseMode()
-	
 	pauseChanged.emit(isPaused)
 
-func _input(event: InputEvent) -> void:
-	if not isInGame:
-		return
-	
-	if event.is_action_pressed("pauseMenu"):
-		if optionsMenu and optionsMenu.visible:
-			get_viewport().set_input_as_handled()
-			return
-
-		var player_hud: PlayerHUD = get_tree().get_first_node_in_group("player_hud") as PlayerHUD
-
-		if player_hud and player_hud.is_inventory_open():
-			player_hud.close_inventory()
-			get_viewport().set_input_as_handled()
-			return
-
-		if player_hud and player_hud.is_phone_open():
-			player_hud.close_phone()
-			get_viewport().set_input_as_handled()
-			return
-
-		togglePause()
 
 func startGame() -> void:
 	isInGame = true
 	setPaused(false)
 	mainMenu.visible = false
 	_updateMouseMode()
+
 
 func returnToMenu() -> void:
 	isInGame = false
@@ -106,12 +93,15 @@ func returnToMenu() -> void:
 	optionsMenu.visible = false
 	_updateMouseMode()
 
+
 func openOptions(from_context: int) -> void:
 	optionsContext = from_context
+
 	if from_context == menuContext.Pause_Menu:
 		pauseMenu.showBlurOnly()
 	else:
 		pauseMenu.setMenuVisible(false)
+
 	mainMenu.visible = false
 	optionsMenu.setContext(from_context)
 	optionsMenu.visible = true
@@ -121,16 +111,39 @@ func openOptions(from_context: int) -> void:
 func showGlobalUI() -> void:
 	if not globalUIInstance:
 		return
-	if globalUIInstance:
-		globalUIInstance.visible = true
+
+	globalUIInstance.visible = true
+
 	if mainMenu:
 		mainMenu.visible = true
 	if pauseMenu:
 		pauseMenu.setMenuVisible(false)
 	if optionsMenu:
 		optionsMenu.visible = false
+
 	setPaused(false)
 	_updateMouseMode()
+
+
+func _handle_pause_action() -> void:
+	if optionsMenu and optionsMenu.visible:
+		get_viewport().set_input_as_handled()
+		return
+
+	var player_hud: PlayerHUD = get_tree().get_first_node_in_group("player_hud") as PlayerHUD
+
+	if player_hud and player_hud.is_inventory_open():
+		player_hud.close_inventory()
+		get_viewport().set_input_as_handled()
+		return
+
+	if player_hud and player_hud.is_phone_open():
+		player_hud.close_phone()
+		get_viewport().set_input_as_handled()
+		return
+
+	togglePause()
+
 
 func _updateMouseMode() -> void:
 	var options_visible: bool = optionsMenu != null and optionsMenu.visible

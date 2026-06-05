@@ -23,43 +23,43 @@ var _minute_accumulator := 0.0
 func _process(delta: float) -> void:
 	if not is_time_running:
 		return
-	
+
 	var game_minutes_per_real_second := GAME_MINUTES_PER_DAY / REAL_SECONDS_PER_GAME_DAY
 	_minute_accumulator += delta * game_minutes_per_real_second
-	
+
 	while _minute_accumulator >= 1.0:
 		_minute_accumulator -= 1.0
 		_add_minutes(1)
 
 func _add_minutes(minutes: int) -> void:
 	current_minute_of_day += minutes
-	
+
 	while current_minute_of_day >= GAME_MINUTES_PER_DAY:
 		current_minute_of_day -= GAME_MINUTES_PER_DAY
 		_advance_day()
-	
+
 	time_changed.emit()
 
 func _advance_day() -> void:
 	current_day += 1
-	
+
 	if current_day > DAYS_PER_MONTH:
 		current_day = 1
 		_advance_month()
-	
+
 	day_changed.emit()
 
 func _advance_month() -> void:
 	var previous_season := get_season_name()
-	
+
 	current_month += 1
-	
+
 	if current_month > MONTHS_PER_YEAR:
 		current_month = 1
 		_advance_year()
-	
+
 	month_changed.emit()
-	
+
 	if previous_season != get_season_name():
 		season_changed.emit()
 
@@ -105,12 +105,12 @@ func skip_to_morning() -> void:
 	else:
 		_advance_day()
 		current_minute_of_day = 6 * 60
-	
+
 	time_changed.emit()
 
 func get_ordinal_day() -> String:
 	var suffix := "th"
-	
+
 	if current_day % 100 < 11 or current_day % 100 > 13:
 		match current_day % 10:
 			1:
@@ -119,5 +119,5 @@ func get_ordinal_day() -> String:
 				suffix = "nd"
 			3:
 				suffix = "rd"
-	
+
 	return "%d%s" % [current_day, suffix]
