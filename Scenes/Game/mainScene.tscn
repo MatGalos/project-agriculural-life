@@ -7844,3 +7844,6 @@ transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70
 script = ExtResource("15_584e8")
 sun_light = NodePath("../SunLight")
 world_environment = NodePath("../WorldEnvironment")
+
+[node name="FarmTile2" parent="." unique_id=1625733671 instance=ExtResource("8_f7c6i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 6)

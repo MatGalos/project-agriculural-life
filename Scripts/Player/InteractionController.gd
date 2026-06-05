@@ -5,11 +5,15 @@ extends Node
 @onready var crosshair_label: Label = get_tree().get_first_node_in_group("crosshair") as Label
 
 var current_interactable: Interactable = null
+var current_tool_prompt := ""
+
 var normal_crosshair_color := Color.WHITE
 var interact_crosshair_color := Color.YELLOW
 
+
 func _ready() -> void:
 	raycast.enabled = true
+
 	var player_body: CollisionObject3D = get_parent() as CollisionObject3D
 
 	if player_body:
@@ -19,23 +23,43 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	_ensure_ui_nodes()
 
-	var interactable: Interactable = _get_looked_at_interactable()
+	var tool_prompt := _get_looked_at_tool_prompt()
+	var interactable: Interactable = null
 
-	if interactable == current_interactable:
+	if tool_prompt == "":
+		interactable = _get_looked_at_interactable()
+
+	if interactable == current_interactable and tool_prompt == current_tool_prompt:
 		return
 
 	current_interactable = interactable
+	current_tool_prompt = tool_prompt
 
 	_update_prompt_label()
 	_update_crosshair_color()
 
 
 func _input(_event: InputEvent) -> void:
+	if current_tool_prompt != "":
+		return
+
 	if not current_interactable:
 		return
 
 	if InputManager.is_interact_pressed():
 		current_interactable.interact()
+
+
+func _get_looked_at_tool_prompt() -> String:
+	if not raycast.is_colliding():
+		return ""
+
+	var collider: Object = raycast.get_collider()
+
+	if collider == null:
+		return ""
+
+	return ToolManager.get_tool_prompt_for_target(collider as Node)
 
 
 func _get_looked_at_interactable() -> Interactable:
@@ -47,11 +71,25 @@ func _get_looked_at_interactable() -> Interactable:
 	if collider is Interactable:
 		return collider as Interactable
 
+	if collider is Node:
+		var current := collider as Node
+
+		while current != null:
+			if current is Interactable:
+				return current as Interactable
+
+			current = current.get_parent()
+
 	return null
 
 
 func _update_prompt_label() -> void:
 	if not prompt_label:
+		return
+
+	if current_tool_prompt != "":
+		prompt_label.text = current_tool_prompt
+		prompt_label.visible = true
 		return
 
 	if current_interactable:
@@ -66,7 +104,7 @@ func _update_crosshair_color() -> void:
 	if not crosshair_label:
 		return
 
-	if current_interactable:
+	if current_tool_prompt != "" or current_interactable:
 		crosshair_label.modulate = interact_crosshair_color
 	else:
 		crosshair_label.modulate = normal_crosshair_color

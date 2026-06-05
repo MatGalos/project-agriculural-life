@@ -34,6 +34,10 @@ Project for my master thesis about implementing stock market as a part of mechan
 - Implemented day/night cycle
 - Improved hotbar
 - Implemented tile system
+- Implemented crop system
+
+### Version 0.1.1.26
+- Implemented crop system
 
 ### Version 0.1.1.23
 - Implemented functionality for hoe
