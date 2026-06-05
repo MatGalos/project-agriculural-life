@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CropData" format=3 uid="uid://0g4ykcb2gtqg"]
+
+[ext_resource type="Script" uid="uid://cbipb3o5yusrn" path="res://Scripts/Farming/CropData.gd" id="1_7d2tb"]
+[ext_resource type="Resource" uid="uid://bwm4y7o4y40ew" path="res://Data/Items/Crops/wheat_item.tres" id="1_24kgf"]
+[ext_resource type="PackedScene" uid="uid://bt4qb3djw7y45" path="res://Assets/Models/Plants/Wheat/wheat_ready.glb" id="2_balnx"]
+[ext_resource type="Resource" uid="uid://cct5ygvjvokag" path="res://Data/Items/Seeds/wheat_seed_item.tres" id="4_3o72e"]
+[ext_resource type="PackedScene" uid="uid://bosuflibbfb15" path="res://Assets/Models/Plants/Wheat/wheat_seeded.glb" id="5_2eip5"]
+[ext_resource type="PackedScene" uid="uid://chap06qri123f" path="res://Assets/Models/Plants/Wheat/wheat_stage_1.glb" id="6_hkyfg"]
+[ext_resource type="PackedScene" uid="uid://bx5e30ffsbksr" path="res://Assets/Models/Plants/Wheat/wheat_stage_2.glb" id="7_vx262"]
+[ext_resource type="PackedScene" uid="uid://w143t0d81gog" path="res://Assets/Models/Plants/Wheat/wheat_stage_3.glb" id="8_pja63"]
+
+[resource]
+script = ExtResource("1_7d2tb")
+crop_id = "wheat"
+display_name = "Wheat"
+seed_item = ExtResource("4_3o72e")
+harvest_item = ExtResource("1_24kgf")
+seeded_scene = ExtResource("5_2eip5")
+stage_1_scene = ExtResource("6_hkyfg")
+stage_2_scene = ExtResource("7_vx262")
+stage_3_scene = ExtResource("8_pja63")
+ready_scene = ExtResource("2_balnx")
+metadata/_custom_type_script = "uid://cbipb3o5yusrn"
