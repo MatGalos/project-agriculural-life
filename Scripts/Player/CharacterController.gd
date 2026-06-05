@@ -9,6 +9,7 @@ extends CharacterBody3D
 @onready var camera_pivot: Node3D = $CameraPivot
 @onready var camera: Camera3D = $CameraPivot/Camera3D
 @onready var player_hud: PlayerHUD = get_tree().get_first_node_in_group("player_hud") as PlayerHUD
+@onready var interaction_raycast: RayCast3D = $CameraPivot/Camera3D/InteractionRayCast
 
 var pitch: float = 0.0
 
@@ -35,7 +36,20 @@ func _input(event: InputEvent) -> void:
 		player_hud.toggle_phone()
 		return
 
-	if _is_inventory_open():
+	if _is_inventory_open() or _is_phone_open():
+		return
+	
+	if InputManager.is_use_tool_pressed():
+		if gamemanager.is_paused or player_hud.is_inventory_open() or player_hud.is_phone_open():
+			return
+
+		if interaction_raycast.is_colliding():
+			var target := interaction_raycast.get_collider()
+			print("Tool target: ", target.name)
+			ToolManager.use_active_tool(target)
+		else:
+			print("No tool target")
+
 		return
 
 	if event is InputEventMouseMotion:

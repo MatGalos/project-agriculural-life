@@ -25,6 +25,8 @@ func close() -> void:
 		gamemanager.menuContext.Pause_Menu:
 			gamemanager.pauseMenu.setMenuVisible(true)
 
+	gamemanager._updateMouseMode()
+
 
 func setContext(context: int) -> void:
 	match context:

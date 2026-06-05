@@ -5,11 +5,20 @@
 [ext_resource type="PackedScene" uid="uid://e0txou2qyc0l" path="res://Assets/Models/Terrain/plowed_block.glb" id="3_r2fu7"]
 [ext_resource type="PackedScene" uid="uid://du31hyp8wkkfw" path="res://Assets/Models/Terrain/watered_block.glb" id="4_6ht3b"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_72lpx"]
+size = Vector3(1, 0.4, 1)
+
 [node name="FarmTile" type="Node3D" unique_id=574448585 node_paths=PackedStringArray("grass_model", "plowed_model", "watered_model")]
 script = ExtResource("1_72lpx")
 grass_model = NodePath("grass_block")
 plowed_model = NodePath("plowed_block")
 watered_model = NodePath("watered_block")
+
+[node name="TileCollider" type="StaticBody3D" parent="." unique_id=890554369]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TileCollider" unique_id=526981285]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+shape = SubResource("BoxShape3D_72lpx")
 
 [node name="grass_block" parent="." unique_id=2120384145 instance=ExtResource("2_vprn1")]
 

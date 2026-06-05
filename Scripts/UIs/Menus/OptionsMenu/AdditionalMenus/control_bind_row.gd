@@ -29,5 +29,5 @@ func _ready() -> void:
 
 
 func _on_bind_button_pressed() -> void:
-	bind_button.text = "Press key..."
+	bind_button.text = "Press input..."
 	rebind_requested.emit(action_name)

@@ -11,12 +11,16 @@ Project for my master thesis about implementing stock market as a part of mechan
 - Implemented Tools
     - Implemented hoe
         - Implemented model for hoe
+        - Implemented functionality for hoe
     - Implemented watering can
         - Implemented model for watering can
+        - Implemented functionality for watering can
     - Implemented Scythe
         - Implemented model for Scythe
+        - Implemented functionality for scythe
     - Implemented Seed bag
         - Implemented model for seed bag
+        - Implemented functionality for seed bag
 - Implemented assets for the game
     - Implemented asset for the watered block
     - Implemented assets for plants
@@ -30,6 +34,12 @@ Project for my master thesis about implementing stock market as a part of mechan
 - Implemented day/night cycle
 - Improved hotbar
 - Implemented tile system
+
+### Version 0.1.1.23
+- Implemented functionality for hoe
+- Implemented functionality for watering can
+- Implemented functionality for scythe
+- Implemented functionality for seed bag
 
 ### Version 0.1.1.21
 - Implemented tile system
