@@ -29,6 +29,10 @@ Project for my master thesis about implementing stock market as a part of mechan
 - Improved Inventory
 - Implemented day/night cycle
 - Improved hotbar
+- Implemented tile system
+
+### Version 0.1.1.21
+- Implemented tile system
 
 ### Version 0.1.1.20
 - Implemented day/night cycle
