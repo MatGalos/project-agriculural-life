@@ -13,6 +13,7 @@ extends CharacterBody3D
 
 var pitch: float = 0.0
 
+
 func _ready() -> void:
 	camera_pivot.position = Vector3(0, 1.4, 0)
 	camera_pivot.rotation = Vector3.ZERO
@@ -20,10 +21,12 @@ func _ready() -> void:
 	camera.position = Vector3(0, 0.5, camera_distance)
 	camera.rotation = Vector3.ZERO
 	camera.current = true
+	interaction_raycast.collide_with_areas = true
+	interaction_raycast.collide_with_bodies = true
 
 
 func _input(event: InputEvent) -> void:
-	if gamemanager.isPaused:
+	if gamemanager.is_paused:
 		return
 
 	_ensure_player_hud()
@@ -38,27 +41,13 @@ func _input(event: InputEvent) -> void:
 
 	if _is_inventory_open() or _is_phone_open():
 		return
-	
+
 	if InputManager.is_use_tool_pressed():
-		if gamemanager.is_paused or player_hud.is_inventory_open() or player_hud.is_phone_open():
-			return
-
-		if interaction_raycast.is_colliding():
-			var target := interaction_raycast.get_collider()
-			print("Tool target: ", target.name)
-			ToolManager.use_active_tool(target)
-		else:
-			print("No tool target")
-
+		_use_selected_tool()
 		return
 
 	if event is InputEventMouseMotion:
-		var mouse_motion: InputEventMouseMotion = event as InputEventMouseMotion
-		camera_pivot.rotate_y(-mouse_motion.relative.x * mouse_sensitivity)
-
-		pitch -= mouse_motion.relative.y * mouse_sensitivity
-		pitch = clamp(pitch, deg_to_rad(-45), deg_to_rad(35))
-		camera_pivot.rotation.x = pitch
+		_rotate_camera(event as InputEventMouseMotion)
 
 
 func _physics_process(delta: float) -> void:
@@ -71,7 +60,6 @@ func _physics_process(delta: float) -> void:
 		return
 
 	var input_dir: Vector2 = InputManager.get_move_vector()
-
 	var forward: Vector3 = -camera_pivot.global_transform.basis.z
 	var right: Vector3 = camera_pivot.global_transform.basis.x
 
@@ -82,7 +70,6 @@ func _physics_process(delta: float) -> void:
 	right = right.normalized()
 
 	var direction: Vector3 = (right * input_dir.x - forward * input_dir.y).normalized()
-
 	var current_speed: float = sprint_speed if InputManager.is_sprint_pressed() else speed
 	velocity.x = direction.x * current_speed
 	velocity.z = direction.z * current_speed
@@ -91,7 +78,25 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= gravity * delta
 	else:
 		velocity.y = 0
+
 	move_and_slide()
+
+
+func _rotate_camera(mouse_motion: InputEventMouseMotion) -> void:
+	camera_pivot.rotate_y(-mouse_motion.relative.x * mouse_sensitivity)
+
+	pitch -= mouse_motion.relative.y * mouse_sensitivity
+	pitch = clamp(pitch, deg_to_rad(-45), deg_to_rad(35))
+	camera_pivot.rotation.x = pitch
+
+
+func _use_selected_tool() -> void:
+	if not interaction_raycast.is_colliding():
+		return
+
+	var target := interaction_raycast.get_collider()
+	if target is Node:
+		ToolManager.use_active_tool(target as Node)
 
 
 func _is_inventory_open() -> bool:

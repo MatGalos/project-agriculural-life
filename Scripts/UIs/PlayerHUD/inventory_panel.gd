@@ -15,6 +15,9 @@ func _ready() -> void:
 	if inventory_data and not inventory_data.inventory_changed.is_connected(refresh):
 		inventory_data.inventory_changed.connect(refresh)
 
+	if not ToolManager.watering_can_changed.is_connected(refresh):
+		ToolManager.watering_can_changed.connect(refresh)
+
 	build_slots()
 	refresh()
 

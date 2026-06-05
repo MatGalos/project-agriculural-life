@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cxxr0r1e8i1bj" path="res://Assets/Models/Terrain/grass_block.glb" id="2_grjqy"]
 [ext_resource type="Script" uid="uid://bqqvwo7rgbgxh" path="res://Scripts/Interactions/Interactable.gd" id="4_biuxf"]
 [ext_resource type="PackedScene" uid="uid://c6rbyep4rt0t4" path="res://Assets/Models/Buildings/well.glb" id="4_mudw0"]
+[ext_resource type="Script" uid="uid://cupaqh4jym6xc" path="res://Scripts/Interactions/WellInteractable.gd" id="4_wuuak"]
 [ext_resource type="PackedScene" uid="uid://dtlgskl6tvubp" path="res://Assets/Models/Buildings/house.glb" id="5_f246w"]
 [ext_resource type="PackedScene" uid="uid://4f4mbabd4bie" path="res://Assets/Models/Buildings/Silo.glb" id="6_f63ko"]
 [ext_resource type="Script" uid="uid://daayhh3m0lprt" path="res://Scripts/Player/CharacterController.gd" id="7_biuxf"]
@@ -7746,7 +7747,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 13)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5139036, 0, 5.5457916)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="well" unique_id=1731792541]
-script = ExtResource("4_biuxf")
+script = ExtResource("4_wuuak")
 prompt_text = "E - Fill up water"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="well/StaticBody3D" unique_id=1305884455]
