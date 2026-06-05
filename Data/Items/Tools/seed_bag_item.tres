@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ToolItemData" format=3 uid="uid://dkf56y2mm73dg"]
+
+[ext_resource type="Script" uid="uid://cmxvwq3u04826" path="res://Scripts/Items/ToolItemData.gd" id="1_dtacn"]
+[ext_resource type="Texture2D" uid="uid://dosrblq7150d5" path="res://Assets/Icons/Items/Tools/SeedBag.png" id="1_slbn7"]
+
+[resource]
+script = ExtResource("1_dtacn")
+tool_type = 2
+id = "seed_bag"
+display_name = "Seed Bag"
+description = "Used to plant seeds."
+icon = ExtResource("1_slbn7")
+max_stack = 1
+category = 2
+metadata/_custom_type_script = "uid://cmxvwq3u04826"

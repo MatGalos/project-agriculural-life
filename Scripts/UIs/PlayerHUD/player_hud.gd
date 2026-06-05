@@ -3,6 +3,13 @@ class_name PlayerHUD
 
 const CROSSHAIR_SIZE := 40.0
 
+@export var player_inventory: InventoryData
+@export var hoe_item: ItemData
+@export var wheat_seed_item: ItemData
+@export var watering_can_item: ItemData
+@export var scythe_item: ItemData
+@export var wheat_item: ItemData
+
 @onready var date_time_controller: Control = $Root/DateTimeController
 @onready var date_time_bg: ColorRect = $Root/DateTimeController/ColorRect
 @onready var date_time_container: VBoxContainer = $Root/DateTimeController/DateTimeContainer
@@ -24,13 +31,16 @@ const CROSSHAIR_SIZE := 40.0
 @onready var inventory_panel: InventoryPanel = $Root/InventoryPanel
 @onready var phone_panel: Control = $Root/PhonePanel
 
-
 func _ready() -> void:
+	_setup_starting_inventory()
+	TimeManager.time_changed.connect(_on_time_changed)
+	_update_time_ui()
 	get_viewport().size_changed.connect(_update_layout)
 	inventory_panel.close()
+	inventory_panel.refresh()
+	quick_inventory_controller.refresh()
 	phone_panel.visible = false
 	_update_layout()
-
 
 func _update_layout() -> void:
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
@@ -41,7 +51,6 @@ func _update_layout() -> void:
 	_update_corner_panels(ui_scale, margin)
 	_update_bottom_panels(ui_scale, margin)
 	_update_center_prompt(viewport_size, min_axis)
-
 
 func _update_corner_panels(ui_scale: float, margin: float) -> void:
 	var date_width: float = 140.0 * ui_scale
@@ -63,7 +72,6 @@ func _update_corner_panels(ui_scale: float, margin: float) -> void:
 	time_label.add_theme_font_size_override("font_size", roundi(14.0 * ui_scale))
 	funds_label.add_theme_font_size_override("font_size", roundi(15.0 * ui_scale))
 
-
 func _update_bottom_panels(ui_scale: float, margin: float) -> void:
 	var event_size: Vector2 = Vector2(190.0, 96.0) * ui_scale
 	var slot_size: Vector2 = Vector2(96.0, 64.0) * ui_scale
@@ -78,7 +86,6 @@ func _update_bottom_panels(ui_scale: float, margin: float) -> void:
 	event_label.add_theme_font_size_override("font_size", roundi(14.0 * ui_scale))
 	_update_inventory_label_fonts(roundi(13.0 * ui_scale))
 
-
 func _update_center_prompt(viewport_size: Vector2, min_axis: float) -> void:
 	var prompt_width: float = clampf(viewport_size.x * 0.42, 280.0, 640.0)
 	var prompt_gap: float = clampf(min_axis * 0.045, 28.0, 64.0)
@@ -92,13 +99,11 @@ func _update_center_prompt(viewport_size: Vector2, min_axis: float) -> void:
 	prompt_label.offset_bottom = prompt_top + prompt_height
 	prompt_label.add_theme_font_size_override("font_size", prompt_font_size)
 
-
 func _set_rect(control: Control, left: float, top: float, width: float, height: float) -> void:
 	control.offset_left = left
 	control.offset_top = top
 	control.offset_right = left + width
 	control.offset_bottom = top + height
-
 
 func _set_top_right_rect(control: Control, right_margin: float, top: float, width: float, height: float) -> void:
 	control.offset_left = -right_margin - width
@@ -106,13 +111,11 @@ func _set_top_right_rect(control: Control, right_margin: float, top: float, widt
 	control.offset_right = -right_margin
 	control.offset_bottom = top + height
 
-
 func _set_bottom_left_rect(control: Control, left: float, bottom_margin: float, width: float, height: float) -> void:
 	control.offset_left = left
 	control.offset_top = -bottom_margin - height
 	control.offset_right = left + width
 	control.offset_bottom = -bottom_margin
-
 
 func _set_bottom_center_rect(control: Control, bottom_margin: float, width: float, height: float) -> void:
 	control.offset_left = -width * 0.5
@@ -120,14 +123,12 @@ func _set_bottom_center_rect(control: Control, bottom_margin: float, width: floa
 	control.offset_right = width * 0.5
 	control.offset_bottom = -bottom_margin
 
-
 func _set_inventory_slot_sizes(slot_size: Vector2) -> void:
 	inventory_slot_1.custom_minimum_size = slot_size
 	inventory_slot_2.custom_minimum_size = slot_size
 	inventory_slot_3.custom_minimum_size = slot_size
 	inventory_slot_4.custom_minimum_size = slot_size
 	inventory_slot_5.custom_minimum_size = slot_size
-
 
 func _update_inventory_label_fonts(font_size: int) -> void:
 	_set_slot_label_font_size(inventory_slot_1, font_size)
@@ -138,8 +139,22 @@ func _update_inventory_label_fonts(font_size: int) -> void:
 
 
 func _set_slot_label_font_size(slot: PanelContainer, font_size: int) -> void:
-	var label: Label = slot.get_node("Label") as Label
-	label.add_theme_font_size_override("font_size", font_size)
+	var label: Label = slot.get_node("AmountLabel") as Label
+	if label:
+		label.add_theme_font_size_override("font_size", font_size)
+
+
+func _setup_starting_inventory() -> void:
+	if player_inventory == null:
+		return
+
+	player_inventory.setup()
+	player_inventory.clear_inventory()
+	player_inventory.add_item(hoe_item, 1)
+	player_inventory.add_item(wheat_seed_item, 20)
+	player_inventory.add_item(watering_can_item, 1)
+	player_inventory.add_item(scythe_item, 1)
+	player_inventory.add_item(wheat_item, 10)
 
 func open_inventory() -> void:
 	if is_phone_open():
@@ -183,3 +198,10 @@ func toggle_phone() -> void:
 
 func is_phone_open() -> bool:
 	return phone_panel.visible
+
+func _on_time_changed() -> void:
+	_update_time_ui()
+
+func _update_time_ui() -> void:
+	date_label.text = TimeManager.get_date_string()
+	time_label.text = TimeManager.get_time_string()

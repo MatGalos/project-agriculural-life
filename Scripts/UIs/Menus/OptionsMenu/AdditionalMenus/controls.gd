@@ -13,6 +13,7 @@ var actions: Array[Dictionary] = [
 	{"name": "move_left", "display": "Move Left"},
 	{"name": "move_right", "display": "Move Right"},
 	{"name": "interact", "display": "Interact"},
+	{"name": "use_tool", "display": "Use Tool"},
 	{"name": "pauseMenu", "display": "Pause Menu"},
 	{"name": "sprint", "display": "Sprint"},
 	{"name": "hotbar_slot_1", "display": "Hotbar Slot 1"},
@@ -42,14 +43,24 @@ func build_list() -> void:
 
 
 func _on_rebind_requested(action_name: String) -> void:
-	waiting_for_action = action_name
+	call_deferred("_start_waiting_for_action", action_name)
 
 
 func _input(event: InputEvent) -> void:
+	if not is_visible_in_tree():
+		waiting_for_action = ""
+		return
+
 	if waiting_for_action == "":
 		return
 
-	if event is InputEventKey and event.pressed:
+	if event is InputEventKey and event.pressed and not event.echo:
+		InputManager.rebind_action(waiting_for_action, event)
+
+		waiting_for_action = ""
+		build_list()
+		get_viewport().set_input_as_handled()
+	elif event is InputEventMouseButton and event.pressed:
 		InputManager.rebind_action(waiting_for_action, event)
 
 		waiting_for_action = ""
@@ -59,3 +70,13 @@ func _input(event: InputEvent) -> void:
 func _on_reset_button_pressed() -> void:
 	InputManager.reset_to_defaults()
 	build_list()
+
+func _start_waiting_for_action(action_name: String) -> void:
+	if not is_visible_in_tree():
+		return
+
+	waiting_for_action = action_name
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_VISIBILITY_CHANGED and not is_visible_in_tree():
+		waiting_for_action = ""

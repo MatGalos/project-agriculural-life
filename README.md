@@ -1,104 +1,156 @@
-# project-agriculural-life
-Project for my master thesis about implementing stock market as a part of mechanic to the farming simulator
+# Project Agricultural Life
 
-# Changelog
+Project for my master thesis about implementing stock-market mechanics in a farming simulator.
 
-## Version 0.1
-- Implemented basic menus
-    - Implemented basic start menu
-    - Implemented basic pause menu
-    - Implemented basic options menu template
-    - Implemented controls menu inside options
-    - Implemented pause menu
-    - Implemented mock for phone menu
-- Implemented basic Player In-Game UI
-    - Implemented display for date and time
-    - Implemented display for funds
-    - Implemented display for events
-    - Implemented display for mini map
-    - Implemented display for quick inventory
-    - Implemented display for crosshair
-    - Implemented display for descriptions under crosshair
-- Implemented assets for the game
-    - Implemented asset for the grass block
-    - Implemented asset for the plowed block
-    - Implemented terrain atlas
-    - Implemented asset for the well
-    - Implemented asset for the player house
-    - Implemented asset for the silo
-    - Implemented ground plane
-- Implemented game mechanics
-    - Implemented third person camera
-    - Implemented basic controls
-    - Implemented sprinting
-- Misc.
-    - Implemented basic collisions
+## Documentation
 
-### Version 0.0.1.25
-- Implemented mock for phone menu
+- [Architecture notes](Docs/architecture.md)
 
-### Version 0.0.1.24
-- Implemented Inventory
+## Current Gameplay Scope
 
-### Version 0.0.1.23
-- Implemented sprinting
+- Third-person player controller with mouse camera and sprinting.
+- Rebindable keyboard and mouse controls saved in `user://controls.cfg`.
+- Inventory, drag-and-drop slots, and hotbar selection.
+- Tool use through the selected hotbar item.
+- Farm tiles with grass, plowed, and watered states.
+- Crop planting, daily growth, and harvesting.
+- Watering can capacity, refill at the well, and water-fill bars in inventory/hotbar UI.
+- Day/night and date progression.
+- Basic interactables for well, house, and silo prompts.
 
-### Version 0.0.1.20
-- Implemented controls menu inside options
+## Changelog
 
-### Version 0.0.1.18
-- Implemented description under the crosshair
+### Version 0.2
 
-### Version 0.0.1.17
-- Implemented display for crosshair
+- Implemented tools:
+  - Hoe model and functionality.
+  - Watering can model and functionality.
+  - Scythe model and functionality.
+  - Seed bag model and seed planting functionality.
+- Implemented item categories:
+  - Crops.
+  - Seeds.
+  - Tools.
+  - Resources.
+- Implemented crop system and wheat growth visuals.
+- Implemented tile system with grass, plowed, and watered states.
+- Improved inventory and hotbar.
+- Implemented day/night cycle.
+- Added terrain, building, tool, and crop assets.
 
-### Version 0.0.1.16
-- Implemented third person camera
-- Implemented basic controls
+### Version 0.1.1.28
 
-### Version 0.0.1.15
-- Implemented basic collisions
+- Added `use_tool` support to controls and settings.
+- Added mouse-button serialization for control rebinding.
+- Fixed controls reset so mouse binds are preserved and restored.
+- Added seed-item planting: wheat seeds act as the wheat seed bag.
+- Added scalable crop lookup through `ToolManager.all_crops`.
+- Added watering-can water indicators in inventory and hotbar UI.
+- Added well refill integration for the watering can.
+- Cleaned up gameplay scripts and updated architecture documentation.
 
-### Version 0.0.1.14
-- Implemented ground plane
 
-### Version 0.0.1.13
-- Implemented asset for the silo
+### Version 0.1.1.27
 
-### Version 0.0.1.12
-- Implemented asset for the player house
+- Implemented watering-can fill/refill state.
 
-### Version 0.0.1.11
-- Implemented asset for the well
+### Version 0.1.1.26
 
-### Version 0.0.1.10
-- Implemented asset for the grass block
-- Implemented asset for the plowed block
-- Implemented terrain atlas
+- Implemented crop system.
 
-### Version 0.0.1.9
-- Implemented display for quick inventory
+### Version 0.1.1.23
 
-### Version 0.0.1.8
-- Implemented display for mini map
+- Implemented functionality for hoe.
+- Implemented functionality for watering can.
+- Implemented functionality for scythe.
+- Implemented functionality for seed bag.
 
-### Version 0.0.1.7
-- Implemented display for events
+### Version 0.1.1.21
 
-### Version 0.0.1.6
-- Implemented display for funds
+- Implemented tile system.
 
-### Version 0.0.1.5
-- Implemented display for date and time
+### Version 0.1.1.20
 
-### Version 0.0.1.4
-- Implemented basic options menu template
+- Implemented day/night cycle.
 
-### Version 0.0.1.3
-- Implemented basic pause menu
+### Version 0.1.1.18
 
-### Version 0.0.1.2
-- Implemented basic start menu
+- Improved hotbar.
 
-### Version 0.0.1.1
-- Initiated the project
+### Version 0.1.1.15
+
+- Improved inventory.
+
+### Version 0.1.1.11
+
+- Implemented item category for resources.
+
+### Version 0.1.1.10
+
+- Implemented item category for tools.
+
+### Version 0.1.1.9
+
+- Implemented item category for seeds.
+
+### Version 0.1.1.8
+
+- Implemented item category for crops.
+
+### Version 0.1.1.7
+
+- Implemented item structure.
+
+### Version 0.1.1.6
+
+- Implemented wheat assets.
+
+### Version 0.1.1.5
+
+- Implemented watered block asset.
+
+### Version 0.1.1.4
+
+- Implemented seed bag model.
+
+### Version 0.1.1.3
+
+- Implemented scythe model.
+
+### Version 0.1.1.2
+
+- Implemented watering can model.
+
+### Version 0.1.1.1
+
+- Implemented hoe model.
+
+### Version 0.1
+
+- Implemented basic menus:
+  - Start menu.
+  - Pause menu.
+  - Options menu template.
+  - Controls menu inside options.
+  - Mock phone menu.
+- Implemented basic player in-game UI:
+  - Date and time display.
+  - Funds display.
+  - Event display.
+  - Mini-map placeholder.
+  - Quick inventory.
+  - Crosshair.
+  - Interaction descriptions under crosshair.
+- Implemented base game assets:
+  - Grass block.
+  - Plowed block.
+  - Terrain atlas.
+  - Well.
+  - Player house.
+  - Silo.
+  - Ground plane.
+- Implemented base gameplay mechanics:
+  - Third-person camera.
+  - Basic controls.
+  - Sprinting.
+  - Basic collisions.
