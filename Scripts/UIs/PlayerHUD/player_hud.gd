@@ -40,6 +40,8 @@ func _ready() -> void:
 	inventory_panel.refresh()
 	quick_inventory_controller.refresh()
 	phone_panel.visible = false
+	MoneyManager.money_changed.connect(_on_money_changed)
+	_update_money_ui()
 	_update_layout()
 
 func _update_layout() -> void:
@@ -205,3 +207,9 @@ func _on_time_changed() -> void:
 func _update_time_ui() -> void:
 	date_label.text = TimeManager.get_date_string()
 	time_label.text = TimeManager.get_time_string()
+
+func _on_money_changed(_new_amount: int) -> void:
+	_update_money_ui()
+
+func _update_money_ui() -> void:
+	funds_label.text = "%d$" % MoneyManager.get_money()
