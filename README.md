@@ -22,6 +22,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 
 ### Version 0.3
 - Restuctured the world
+- Implemented WorldManager
 
 ### Version 0.2
 
