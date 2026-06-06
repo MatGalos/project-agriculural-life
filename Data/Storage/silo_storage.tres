@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="StorageData" format=3 uid="uid://c46mxpfymbli4"]
+
+[ext_resource type="Script" uid="uid://dg7x75hhwwedu" path="res://Scripts/Items/ItemData.gd" id="1_eywhy"]
+[ext_resource type="Resource" uid="uid://bwm4y7o4y40ew" path="res://Data/Items/Crops/wheat_item.tres" id="2_hbh8h"]
+[ext_resource type="Script" uid="uid://d0wxl62w3dcwv" path="res://Scripts/Storage/StorageData.gd" id="2_lh4ti"]
+[ext_resource type="Resource" uid="uid://cct5ygvjvokag" path="res://Data/Items/Seeds/wheat_seed_item.tres" id="3_1pwc1"]
+
+[resource]
+script = ExtResource("2_lh4ti")
+item_database = Array[ExtResource("1_eywhy")]([ExtResource("2_hbh8h"), ExtResource("3_1pwc1")])
+metadata/_custom_type_script = "uid://d0wxl62w3dcwv"
