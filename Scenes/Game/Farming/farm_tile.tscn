@@ -14,6 +14,7 @@ crop_root = NodePath("CropRoot")
 grass_model = NodePath("grass_block")
 plowed_model = NodePath("plowed_block")
 watered_model = NodePath("watered_block")
+tile_id = null
 
 [node name="TileCollider" type="StaticBody3D" parent="." unique_id=890554369]
 
