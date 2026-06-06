@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="ItemPriceData" format=3 uid="uid://cgbo53vtumx1h"]
+
+[ext_resource type="Script" uid="uid://b7gcud8aoyqm4" path="res://Scripts/Economy/ItemPriceData.gd" id="1_q4uoq"]
+
+[resource]
+script = ExtResource("1_q4uoq")
+metadata/_custom_type_script = "uid://b7gcud8aoyqm4"

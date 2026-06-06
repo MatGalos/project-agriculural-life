@@ -25,6 +25,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Implemented WorldManager
 - Implemented Game Economy
   - Implement MoneyManager
+  - Implement PriceData
 
 ### Version 0.2
 
