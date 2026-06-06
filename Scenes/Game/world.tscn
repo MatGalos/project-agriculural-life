@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dtlgskl6tvubp" path="res://Assets/Models/Buildings/house.glb" id="3_huwqc"]
 [ext_resource type="Script" uid="uid://xh3wntssccmq" path="res://Scripts/Interactions/HouseInteractable.gd" id="4_ojop3"]
 [ext_resource type="PackedScene" uid="uid://4f4mbabd4bie" path="res://Assets/Models/Buildings/Silo.glb" id="5_g7nqd"]
-[ext_resource type="Script" uid="uid://bqqvwo7rgbgxh" path="res://Scripts/Interactions/Interactable.gd" id="6_262j6"]
+[ext_resource type="Script" uid="uid://da7ceqybaem4i" path="res://Scripts/Interactions/SiloInteractable.gd" id="6_6y6xk"]
 [ext_resource type="Script" uid="uid://b4bcklim2bhpc" path="res://Scripts/Generation/FarmGridGeneration.gd" id="7_j8hn3"]
 [ext_resource type="PackedScene" uid="uid://cxxr0r1e8i1bj" path="res://Assets/Models/Terrain/grass_block.glb" id="7_xvcwp"]
 [ext_resource type="PackedScene" uid="uid://bpc10uol4byfo" path="res://Scenes/Game/Farming/farm_tile.tscn" id="8_xvcwp"]
@@ -61,7 +61,7 @@ shape = SubResource("BoxShape3D_g7nqd")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0015109, 0, -6.998237)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="HomeArea/Silo" unique_id=1857743202]
-script = ExtResource("6_262j6")
+script = ExtResource("6_6y6xk")
 prompt_text = "E - Check stock"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HomeArea/Silo/StaticBody3D" unique_id=710056272]
