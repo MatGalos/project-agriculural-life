@@ -1,0 +1,2120 @@
+[gd_scene format=3 uid="uid://cg5o4nhjp5o2r"]
+
+[ext_resource type="PackedScene" uid="uid://c6rbyep4rt0t4" path="res://Assets/Models/Buildings/well.glb" id="1_mu2i5"]
+[ext_resource type="Script" uid="uid://cupaqh4jym6xc" path="res://Scripts/Interactions/WellInteractable.gd" id="2_8tr08"]
+[ext_resource type="PackedScene" uid="uid://dtlgskl6tvubp" path="res://Assets/Models/Buildings/house.glb" id="3_huwqc"]
+[ext_resource type="Script" uid="uid://xh3wntssccmq" path="res://Scripts/Interactions/HouseInteractable.gd" id="4_ojop3"]
+[ext_resource type="PackedScene" uid="uid://4f4mbabd4bie" path="res://Assets/Models/Buildings/Silo.glb" id="5_g7nqd"]
+[ext_resource type="Script" uid="uid://bqqvwo7rgbgxh" path="res://Scripts/Interactions/Interactable.gd" id="6_262j6"]
+[ext_resource type="Script" uid="uid://b4bcklim2bhpc" path="res://Scripts/Generation/FarmGridGeneration.gd" id="7_j8hn3"]
+[ext_resource type="PackedScene" uid="uid://cxxr0r1e8i1bj" path="res://Assets/Models/Terrain/grass_block.glb" id="7_xvcwp"]
+[ext_resource type="PackedScene" uid="uid://bpc10uol4byfo" path="res://Scenes/Game/Farming/farm_tile.tscn" id="8_xvcwp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_home_ground"]
+size = Vector3(10, 0.5, 21)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_huwqc"]
+height = 2.909
+radius = 1.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g7nqd"]
+size = Vector3(5, 5, 4)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_j8hn3"]
+height = 5.5
+radius = 1.5
+
+[node name="World" type="Node3D" unique_id=1489175734]
+
+[node name="HomeArea" type="Node3D" parent="." unique_id=607767263]
+
+[node name="GroundCollision" type="StaticBody3D" parent="HomeArea" unique_id=1911168729]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HomeArea/GroundCollision" unique_id=635468442]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1.5)
+shape = SubResource("BoxShape3D_home_ground")
+
+[node name="well" parent="HomeArea" unique_id=246926320 groups=["interactable"] instance=ExtResource("1_mu2i5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5139036, 0, 5.5457916)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="HomeArea/well" unique_id=1719168196]
+script = ExtResource("2_8tr08")
+prompt_text = "E - Fill up water"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HomeArea/well/StaticBody3D" unique_id=559540065]
+shape = SubResource("CylinderShape3D_huwqc")
+
+[node name="house" parent="HomeArea" unique_id=1779788653 groups=["interactable"] instance=ExtResource("3_huwqc")]
+transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 1.9971428, 0, 0.47389984)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="HomeArea/house" unique_id=1424777898]
+script = ExtResource("4_ojop3")
+prompt_text = "E - Enter house"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HomeArea/house/StaticBody3D" unique_id=1471593994]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_g7nqd")
+
+[node name="Silo" parent="HomeArea" unique_id=732485724 groups=["interactable"] instance=ExtResource("5_g7nqd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0015109, 0, -6.998237)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="HomeArea/Silo" unique_id=1857743202]
+script = ExtResource("6_262j6")
+prompt_text = "E - Check stock"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HomeArea/Silo/StaticBody3D" unique_id=710056272]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CylinderShape3D_j8hn3")
+
+[node name="Grass" type="Node3D" parent="HomeArea" unique_id=225793907]
+
+[node name="grass_block" parent="HomeArea/Grass" unique_id=2120384145 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="grass_block2" parent="HomeArea/Grass" unique_id=1720790482 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1)
+
+[node name="grass_block5" parent="HomeArea/Grass" unique_id=521213934 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 4)
+
+[node name="grass_block6" parent="HomeArea/Grass" unique_id=897280040 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 5)
+
+[node name="grass_block81" parent="HomeArea/Grass" unique_id=379949665 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 10)
+
+[node name="grass_block82" parent="HomeArea/Grass" unique_id=1773407721 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 8)
+
+[node name="grass_block83" parent="HomeArea/Grass" unique_id=1334379094 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 9)
+
+[node name="grass_block7" parent="HomeArea/Grass" unique_id=428397694 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 6)
+
+[node name="grass_block9" parent="HomeArea/Grass" unique_id=195951402 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -4)
+
+[node name="grass_block10" parent="HomeArea/Grass" unique_id=936100088 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -3)
+
+[node name="grass_block11" parent="HomeArea/Grass" unique_id=1003731894 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -2)
+
+[node name="grass_block13" parent="HomeArea/Grass" unique_id=789471557 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -8)
+
+[node name="grass_block14" parent="HomeArea/Grass" unique_id=958994353 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -7)
+
+[node name="grass_block15" parent="HomeArea/Grass" unique_id=1838164624 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -6)
+
+[node name="grass_block16" parent="HomeArea/Grass" unique_id=1665767673 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -9)
+
+[node name="grass_block12" parent="HomeArea/Grass" unique_id=1774500472 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -5)
+
+[node name="grass_block8" parent="HomeArea/Grass" unique_id=865842687 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 3)
+
+[node name="grass_block17" parent="HomeArea/Grass" unique_id=952036111 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 2)
+
+[node name="grass_block18" parent="HomeArea/Grass" unique_id=1326534522 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 3)
+
+[node name="grass_block19" parent="HomeArea/Grass" unique_id=121900845 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 6)
+
+[node name="grass_block20" parent="HomeArea/Grass" unique_id=285570024 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 7)
+
+[node name="grass_block21" parent="HomeArea/Grass" unique_id=155519656 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 8)
+
+[node name="grass_block22" parent="HomeArea/Grass" unique_id=2059997706 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -2)
+
+[node name="grass_block23" parent="HomeArea/Grass" unique_id=2078627140 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -1)
+
+[node name="grass_block24" parent="HomeArea/Grass" unique_id=1144682045 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
+
+[node name="grass_block25" parent="HomeArea/Grass" unique_id=1269189314 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -6)
+
+[node name="grass_block26" parent="HomeArea/Grass" unique_id=94159753 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -5)
+
+[node name="grass_block27" parent="HomeArea/Grass" unique_id=735968829 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -4)
+
+[node name="grass_block28" parent="HomeArea/Grass" unique_id=1517140198 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -7)
+
+[node name="grass_block29" parent="HomeArea/Grass" unique_id=1527302396 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -3)
+
+[node name="grass_block30" parent="HomeArea/Grass" unique_id=58909078 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 5)
+
+[node name="grass_block31" parent="HomeArea/Grass" unique_id=585315916 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 4)
+
+[node name="grass_block33" parent="HomeArea/Grass" unique_id=1138046595 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 2)
+
+[node name="grass_block34" parent="HomeArea/Grass" unique_id=1571378016 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 3)
+
+[node name="grass_block35" parent="HomeArea/Grass" unique_id=648270881 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 6)
+
+[node name="grass_block36" parent="HomeArea/Grass" unique_id=46383826 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 7)
+
+[node name="grass_block37" parent="HomeArea/Grass" unique_id=1128519406 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 8)
+
+[node name="grass_block38" parent="HomeArea/Grass" unique_id=2126815370 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -2)
+
+[node name="grass_block39" parent="HomeArea/Grass" unique_id=261506858 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -1)
+
+[node name="grass_block40" parent="HomeArea/Grass" unique_id=354144316 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
+
+[node name="grass_block41" parent="HomeArea/Grass" unique_id=1078814710 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6)
+
+[node name="grass_block42" parent="HomeArea/Grass" unique_id=1365353996 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -5)
+
+[node name="grass_block43" parent="HomeArea/Grass" unique_id=1145177313 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -4)
+
+[node name="grass_block44" parent="HomeArea/Grass" unique_id=105478016 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -7)
+
+[node name="grass_block45" parent="HomeArea/Grass" unique_id=1201490389 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -3)
+
+[node name="grass_block46" parent="HomeArea/Grass" unique_id=1930174514 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 5)
+
+[node name="grass_block47" parent="HomeArea/Grass" unique_id=1194576340 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 4)
+
+[node name="grass_block48" parent="HomeArea/Grass" unique_id=440224434 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 2)
+
+[node name="grass_block49" parent="HomeArea/Grass" unique_id=486795655 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 3)
+
+[node name="grass_block50" parent="HomeArea/Grass" unique_id=1757136291 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 6)
+
+[node name="grass_block51" parent="HomeArea/Grass" unique_id=581691446 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 7)
+
+[node name="grass_block52" parent="HomeArea/Grass" unique_id=1794116349 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 8)
+
+[node name="grass_block53" parent="HomeArea/Grass" unique_id=766425411 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -2)
+
+[node name="grass_block54" parent="HomeArea/Grass" unique_id=1528263957 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -1)
+
+[node name="grass_block55" parent="HomeArea/Grass" unique_id=1093719601 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 0)
+
+[node name="grass_block56" parent="HomeArea/Grass" unique_id=1547393534 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -6)
+
+[node name="grass_block57" parent="HomeArea/Grass" unique_id=1899822658 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -5)
+
+[node name="grass_block58" parent="HomeArea/Grass" unique_id=330570958 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -4)
+
+[node name="grass_block59" parent="HomeArea/Grass" unique_id=223951571 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -7)
+
+[node name="grass_block60" parent="HomeArea/Grass" unique_id=750677538 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -3)
+
+[node name="grass_block61" parent="HomeArea/Grass" unique_id=1421234541 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 5)
+
+[node name="grass_block62" parent="HomeArea/Grass" unique_id=182345494 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 4)
+
+[node name="grass_block63" parent="HomeArea/Grass" unique_id=1747542695 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9)
+
+[node name="grass_block64" parent="HomeArea/Grass" unique_id=327848103 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -9)
+
+[node name="grass_block65" parent="HomeArea/Grass" unique_id=453922222 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -8)
+
+[node name="grass_block66" parent="HomeArea/Grass" unique_id=101946824 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -9)
+
+[node name="grass_block67" parent="HomeArea/Grass" unique_id=1508498792 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -8)
+
+[node name="grass_block68" parent="HomeArea/Grass" unique_id=922795799 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 10)
+
+[node name="grass_block69" parent="HomeArea/Grass" unique_id=941529672 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 7)
+
+[node name="grass_block70" parent="HomeArea/Grass" unique_id=864551934 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -9)
+
+[node name="grass_block71" parent="HomeArea/Grass" unique_id=218959448 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 10)
+
+[node name="grass_block72" parent="HomeArea/Grass" unique_id=1042850764 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 9)
+
+[node name="grass_block73" parent="HomeArea/Grass" unique_id=252448039 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 10)
+
+[node name="grass_block74" parent="HomeArea/Grass" unique_id=848740661 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 9)
+
+[node name="grass_block75" parent="HomeArea/Grass" unique_id=1304064467 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 9)
+
+[node name="grass_block76" parent="HomeArea/Grass" unique_id=2139016521 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -9)
+
+[node name="grass_block77" parent="HomeArea/Grass" unique_id=74484111 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -8)
+
+[node name="grass_block78" parent="HomeArea/Grass" unique_id=1175446379 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -9)
+
+[node name="grass_block79" parent="HomeArea/Grass" unique_id=648224787 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 1)
+
+[node name="grass_block80" parent="HomeArea/Grass" unique_id=843859266 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 1)
+
+[node name="grass_block32" parent="HomeArea/Grass" unique_id=351282721 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 1)
+
+[node name="grass_block3" parent="HomeArea/Grass" unique_id=91740370 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 2)
+
+[node name="grass_block4" parent="HomeArea/Grass" unique_id=224523614 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1)
+
+[node name="grass_block84" parent="HomeArea/Grass" unique_id=880141125 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+
+[node name="grass_block85" parent="HomeArea/Grass" unique_id=700814452 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 10)
+
+[node name="grass_block86" parent="HomeArea/Grass" unique_id=2024033987 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 10)
+
+[node name="grass_block87" parent="HomeArea/Grass" unique_id=448016600 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 10)
+
+[node name="grass_block88" parent="HomeArea/Grass" unique_id=1733852546 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 10)
+
+[node name="grass_block89" parent="HomeArea/Grass" unique_id=1317034114 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+
+[node name="grass_block90" parent="HomeArea/Grass" unique_id=568067553 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 3)
+
+[node name="grass_block91" parent="HomeArea/Grass" unique_id=1654408769 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="grass_block92" parent="HomeArea/Grass" unique_id=1220366497 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 4)
+
+[node name="grass_block93" parent="HomeArea/Grass" unique_id=2076665829 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7)
+
+[node name="grass_block94" parent="HomeArea/Grass" unique_id=813181163 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 7)
+
+[node name="grass_block95" parent="HomeArea/Grass" unique_id=1098830463 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+
+[node name="grass_block96" parent="HomeArea/Grass" unique_id=1951127894 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9)
+
+[node name="grass_block97" parent="HomeArea/Grass" unique_id=649568812 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 8)
+
+[node name="grass_block98" parent="HomeArea/Grass" unique_id=838629880 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 9)
+
+[node name="grass_block99" parent="HomeArea/Grass" unique_id=1863244152 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 3)
+
+[node name="grass_block100" parent="HomeArea/Grass" unique_id=1565678292 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 3)
+
+[node name="grass_block101" parent="HomeArea/Grass" unique_id=855894310 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 3)
+
+[node name="grass_block102" parent="HomeArea/Grass" unique_id=1867242610 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 4)
+
+[node name="grass_block103" parent="HomeArea/Grass" unique_id=1911221724 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 5)
+
+[node name="grass_block104" parent="HomeArea/Grass" unique_id=263234640 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 6)
+
+[node name="grass_block105" parent="HomeArea/Grass" unique_id=1249803711 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 7)
+
+[node name="grass_block106" parent="HomeArea/Grass" unique_id=1593623822 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 8)
+
+[node name="grass_block107" parent="HomeArea/Grass" unique_id=412212304 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 9)
+
+[node name="grass_block108" parent="HomeArea/Grass" unique_id=342531655 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 9)
+
+[node name="grass_block109" parent="HomeArea/Grass" unique_id=386426226 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 9)
+
+[node name="grass_block110" parent="HomeArea/Grass" unique_id=1944484043 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 4)
+
+[node name="grass_block111" parent="HomeArea/Grass" unique_id=1354575901 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 5)
+
+[node name="grass_block112" parent="HomeArea/Grass" unique_id=1282435104 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 6)
+
+[node name="grass_block113" parent="HomeArea/Grass" unique_id=2112119018 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 7)
+
+[node name="grass_block114" parent="HomeArea/Grass" unique_id=1230959082 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 8)
+
+[node name="grass_block115" parent="HomeArea/Grass" unique_id=1700522756 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 8)
+
+[node name="grass_block116" parent="HomeArea/Grass" unique_id=1494174341 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 7)
+
+[node name="grass_block117" parent="HomeArea/Grass" unique_id=566340605 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 4)
+
+[node name="grass_block118" parent="HomeArea/Grass" unique_id=97556417 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 5)
+
+[node name="grass_block119" parent="HomeArea/Grass" unique_id=359620321 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 6)
+
+[node name="grass_block120" parent="HomeArea/Grass" unique_id=1672155380 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -9)
+
+[node name="grass_block121" parent="HomeArea/Grass" unique_id=1906813142 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -9)
+
+[node name="grass_block122" parent="HomeArea/Grass" unique_id=698176747 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -8)
+
+[node name="grass_block123" parent="HomeArea/Grass" unique_id=1378208863 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -8)
+
+[node name="grass_block124" parent="HomeArea/Grass" unique_id=1983291124 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -7)
+
+[node name="grass_block125" parent="HomeArea/Grass" unique_id=1763796853 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -7)
+
+[node name="grass_block126" parent="HomeArea/Grass" unique_id=1497089513 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -6)
+
+[node name="grass_block127" parent="HomeArea/Grass" unique_id=230090088 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -6)
+
+[node name="grass_block128" parent="HomeArea/Grass" unique_id=803927782 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
+
+[node name="grass_block129" parent="HomeArea/Grass" unique_id=1108485412 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -5)
+
+[node name="grass_block130" parent="HomeArea/Grass" unique_id=1032398598 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -5)
+
+[node name="grass_block131" parent="HomeArea/Grass" unique_id=812812335 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -5)
+
+[node name="grass_block132" parent="HomeArea/Grass" unique_id=158287084 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -5)
+
+[node name="grass_block133" parent="HomeArea/Grass" unique_id=288095850 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
+
+[node name="grass_block134" parent="HomeArea/Grass" unique_id=2051741576 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -4)
+
+[node name="grass_block135" parent="HomeArea/Grass" unique_id=518782924 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -4)
+
+[node name="grass_block136" parent="HomeArea/Grass" unique_id=1951652721 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -4)
+
+[node name="grass_block137" parent="HomeArea/Grass" unique_id=68051902 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -4)
+
+[node name="grass_block138" parent="HomeArea/Grass" unique_id=1402069009 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="grass_block139" parent="HomeArea/Grass" unique_id=2061225769 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="grass_block140" parent="HomeArea/Grass" unique_id=432158474 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -2)
+
+[node name="grass_block141" parent="HomeArea/Grass" unique_id=885354237 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -3)
+
+[node name="grass_block142" parent="HomeArea/Grass" unique_id=1298391153 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
+
+[node name="grass_block143" parent="HomeArea/Grass" unique_id=647325650 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -2)
+
+[node name="grass_block144" parent="HomeArea/Grass" unique_id=1819913335 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -2)
+
+[node name="grass_block145" parent="HomeArea/Grass" unique_id=164756571 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -3)
+
+[node name="grass_block146" parent="HomeArea/Grass" unique_id=341334930 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -3)
+
+[node name="grass_block147" parent="HomeArea/Grass" unique_id=684894283 instance=ExtResource("7_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -3)
+
+[node name="Farm" type="Node3D" parent="." unique_id=477204305]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, 0)
+
+[node name="FarmGridGenerator" type="Node3D" parent="Farm" unique_id=1517176154]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -9)
+script = ExtResource("7_j8hn3")
+tile_scene = ExtResource("8_xvcwp")
+width = 20
+height = 20
+
+[node name="Tile_0_0" parent="Farm/FarmGridGenerator" unique_id=574448585 instance=ExtResource("8_xvcwp")]
+tile_id = "small_0_0"
+
+[node name="Tile_1_0" parent="Farm/FarmGridGenerator" unique_id=474369990 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0)
+tile_id = "small_1_0"
+
+[node name="Tile_2_0" parent="Farm/FarmGridGenerator" unique_id=439291899 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+tile_id = "small_2_0"
+
+[node name="Tile_3_0" parent="Farm/FarmGridGenerator" unique_id=580725084 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+tile_id = "small_3_0"
+
+[node name="Tile_4_0" parent="Farm/FarmGridGenerator" unique_id=149513343 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+tile_id = "small_4_0"
+
+[node name="Tile_5_0" parent="Farm/FarmGridGenerator" unique_id=1156093638 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
+tile_id = "small_5_0"
+
+[node name="Tile_6_0" parent="Farm/FarmGridGenerator" unique_id=1095359458 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
+tile_id = "small_6_0"
+
+[node name="Tile_7_0" parent="Farm/FarmGridGenerator" unique_id=1536841179 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 0)
+tile_id = "small_7_0"
+
+[node name="Tile_8_0" parent="Farm/FarmGridGenerator" unique_id=82489893 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0)
+tile_id = "small_8_0"
+
+[node name="Tile_9_0" parent="Farm/FarmGridGenerator" unique_id=6868152 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 0)
+tile_id = "small_9_0"
+
+[node name="Tile_10_0" parent="Farm/FarmGridGenerator" unique_id=1480168829 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 0)
+tile_id = "small_10_0"
+
+[node name="Tile_11_0" parent="Farm/FarmGridGenerator" unique_id=1611835784 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 0)
+tile_id = "small_11_0"
+
+[node name="Tile_12_0" parent="Farm/FarmGridGenerator" unique_id=613294400 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 0)
+tile_id = "small_12_0"
+
+[node name="Tile_13_0" parent="Farm/FarmGridGenerator" unique_id=1537776415 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 0)
+tile_id = "small_13_0"
+
+[node name="Tile_14_0" parent="Farm/FarmGridGenerator" unique_id=2100793464 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 0)
+tile_id = "small_14_0"
+
+[node name="Tile_15_0" parent="Farm/FarmGridGenerator" unique_id=2043133667 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 0)
+tile_id = "small_15_0"
+
+[node name="Tile_16_0" parent="Farm/FarmGridGenerator" unique_id=1371342053 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 0)
+tile_id = "small_16_0"
+
+[node name="Tile_17_0" parent="Farm/FarmGridGenerator" unique_id=1885716065 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 0)
+tile_id = "small_17_0"
+
+[node name="Tile_18_0" parent="Farm/FarmGridGenerator" unique_id=1939576532 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 0)
+tile_id = "small_18_0"
+
+[node name="Tile_19_0" parent="Farm/FarmGridGenerator" unique_id=747692740 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 0)
+tile_id = "small_19_0"
+
+[node name="Tile_0_1" parent="Farm/FarmGridGenerator" unique_id=460808486 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+tile_id = "small_0_1"
+
+[node name="Tile_1_1" parent="Farm/FarmGridGenerator" unique_id=670496947 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
+tile_id = "small_1_1"
+
+[node name="Tile_2_1" parent="Farm/FarmGridGenerator" unique_id=1671182247 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1)
+tile_id = "small_2_1"
+
+[node name="Tile_3_1" parent="Farm/FarmGridGenerator" unique_id=714942402 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 1)
+tile_id = "small_3_1"
+
+[node name="Tile_4_1" parent="Farm/FarmGridGenerator" unique_id=1834743549 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 1)
+tile_id = "small_4_1"
+
+[node name="Tile_5_1" parent="Farm/FarmGridGenerator" unique_id=1316002532 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 1)
+tile_id = "small_5_1"
+
+[node name="Tile_6_1" parent="Farm/FarmGridGenerator" unique_id=1598271336 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 1)
+tile_id = "small_6_1"
+
+[node name="Tile_7_1" parent="Farm/FarmGridGenerator" unique_id=1845801138 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 1)
+tile_id = "small_7_1"
+
+[node name="Tile_8_1" parent="Farm/FarmGridGenerator" unique_id=348976673 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 1)
+tile_id = "small_8_1"
+
+[node name="Tile_9_1" parent="Farm/FarmGridGenerator" unique_id=925136478 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 1)
+tile_id = "small_9_1"
+
+[node name="Tile_10_1" parent="Farm/FarmGridGenerator" unique_id=622155630 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 1)
+tile_id = "small_10_1"
+
+[node name="Tile_11_1" parent="Farm/FarmGridGenerator" unique_id=193460217 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 1)
+tile_id = "small_11_1"
+
+[node name="Tile_12_1" parent="Farm/FarmGridGenerator" unique_id=814832676 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 1)
+tile_id = "small_12_1"
+
+[node name="Tile_13_1" parent="Farm/FarmGridGenerator" unique_id=1285846316 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 1)
+tile_id = "small_13_1"
+
+[node name="Tile_14_1" parent="Farm/FarmGridGenerator" unique_id=1457844220 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 1)
+tile_id = "small_14_1"
+
+[node name="Tile_15_1" parent="Farm/FarmGridGenerator" unique_id=1023203673 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 1)
+tile_id = "small_15_1"
+
+[node name="Tile_16_1" parent="Farm/FarmGridGenerator" unique_id=131355909 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 1)
+tile_id = "small_16_1"
+
+[node name="Tile_17_1" parent="Farm/FarmGridGenerator" unique_id=1834943361 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 1)
+tile_id = "small_17_1"
+
+[node name="Tile_18_1" parent="Farm/FarmGridGenerator" unique_id=1957456111 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 1)
+tile_id = "small_18_1"
+
+[node name="Tile_19_1" parent="Farm/FarmGridGenerator" unique_id=369891241 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 1)
+tile_id = "small_19_1"
+
+[node name="Tile_0_2" parent="Farm/FarmGridGenerator" unique_id=1407771677 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+tile_id = "small_0_2"
+
+[node name="Tile_1_2" parent="Farm/FarmGridGenerator" unique_id=440930814 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 2)
+tile_id = "small_1_2"
+
+[node name="Tile_2_2" parent="Farm/FarmGridGenerator" unique_id=1688430712 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2)
+tile_id = "small_2_2"
+
+[node name="Tile_3_2" parent="Farm/FarmGridGenerator" unique_id=1029538853 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 2)
+tile_id = "small_3_2"
+
+[node name="Tile_4_2" parent="Farm/FarmGridGenerator" unique_id=1701730197 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 2)
+tile_id = "small_4_2"
+
+[node name="Tile_5_2" parent="Farm/FarmGridGenerator" unique_id=1764319403 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 2)
+tile_id = "small_5_2"
+
+[node name="Tile_6_2" parent="Farm/FarmGridGenerator" unique_id=1080971274 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 2)
+tile_id = "small_6_2"
+
+[node name="Tile_7_2" parent="Farm/FarmGridGenerator" unique_id=2017898133 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 2)
+tile_id = "small_7_2"
+
+[node name="Tile_8_2" parent="Farm/FarmGridGenerator" unique_id=1706128113 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 2)
+tile_id = "small_8_2"
+
+[node name="Tile_9_2" parent="Farm/FarmGridGenerator" unique_id=756810066 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 2)
+tile_id = "small_9_2"
+
+[node name="Tile_10_2" parent="Farm/FarmGridGenerator" unique_id=917957254 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 2)
+tile_id = "small_10_2"
+
+[node name="Tile_11_2" parent="Farm/FarmGridGenerator" unique_id=1082411426 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 2)
+tile_id = "small_11_2"
+
+[node name="Tile_12_2" parent="Farm/FarmGridGenerator" unique_id=1844151316 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 2)
+tile_id = "small_12_2"
+
+[node name="Tile_13_2" parent="Farm/FarmGridGenerator" unique_id=1506637928 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 2)
+tile_id = "small_13_2"
+
+[node name="Tile_14_2" parent="Farm/FarmGridGenerator" unique_id=193473247 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 2)
+tile_id = "small_14_2"
+
+[node name="Tile_15_2" parent="Farm/FarmGridGenerator" unique_id=907736649 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 2)
+tile_id = "small_15_2"
+
+[node name="Tile_16_2" parent="Farm/FarmGridGenerator" unique_id=986309774 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 2)
+tile_id = "small_16_2"
+
+[node name="Tile_17_2" parent="Farm/FarmGridGenerator" unique_id=889198815 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 2)
+tile_id = "small_17_2"
+
+[node name="Tile_18_2" parent="Farm/FarmGridGenerator" unique_id=1087033136 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 2)
+tile_id = "small_18_2"
+
+[node name="Tile_19_2" parent="Farm/FarmGridGenerator" unique_id=431311933 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 2)
+tile_id = "small_19_2"
+
+[node name="Tile_0_3" parent="Farm/FarmGridGenerator" unique_id=1278079905 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+tile_id = "small_0_3"
+
+[node name="Tile_1_3" parent="Farm/FarmGridGenerator" unique_id=2110386923 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 3)
+tile_id = "small_1_3"
+
+[node name="Tile_2_3" parent="Farm/FarmGridGenerator" unique_id=2021627748 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 3)
+tile_id = "small_2_3"
+
+[node name="Tile_3_3" parent="Farm/FarmGridGenerator" unique_id=1247112014 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 3)
+tile_id = "small_3_3"
+
+[node name="Tile_4_3" parent="Farm/FarmGridGenerator" unique_id=1107900827 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 3)
+tile_id = "small_4_3"
+
+[node name="Tile_5_3" parent="Farm/FarmGridGenerator" unique_id=1858588275 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 3)
+tile_id = "small_5_3"
+
+[node name="Tile_6_3" parent="Farm/FarmGridGenerator" unique_id=547137766 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 3)
+tile_id = "small_6_3"
+
+[node name="Tile_7_3" parent="Farm/FarmGridGenerator" unique_id=1633541054 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 3)
+tile_id = "small_7_3"
+
+[node name="Tile_8_3" parent="Farm/FarmGridGenerator" unique_id=2133606636 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 3)
+tile_id = "small_8_3"
+
+[node name="Tile_9_3" parent="Farm/FarmGridGenerator" unique_id=1882702504 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 3)
+tile_id = "small_9_3"
+
+[node name="Tile_10_3" parent="Farm/FarmGridGenerator" unique_id=1518236754 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 3)
+tile_id = "small_10_3"
+
+[node name="Tile_11_3" parent="Farm/FarmGridGenerator" unique_id=71252036 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 3)
+tile_id = "small_11_3"
+
+[node name="Tile_12_3" parent="Farm/FarmGridGenerator" unique_id=496551419 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 3)
+tile_id = "small_12_3"
+
+[node name="Tile_13_3" parent="Farm/FarmGridGenerator" unique_id=74439321 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 3)
+tile_id = "small_13_3"
+
+[node name="Tile_14_3" parent="Farm/FarmGridGenerator" unique_id=39200040 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 3)
+tile_id = "small_14_3"
+
+[node name="Tile_15_3" parent="Farm/FarmGridGenerator" unique_id=482071306 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 3)
+tile_id = "small_15_3"
+
+[node name="Tile_16_3" parent="Farm/FarmGridGenerator" unique_id=1158789064 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 3)
+tile_id = "small_16_3"
+
+[node name="Tile_17_3" parent="Farm/FarmGridGenerator" unique_id=1777344405 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 3)
+tile_id = "small_17_3"
+
+[node name="Tile_18_3" parent="Farm/FarmGridGenerator" unique_id=1200378418 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 3)
+tile_id = "small_18_3"
+
+[node name="Tile_19_3" parent="Farm/FarmGridGenerator" unique_id=1113616012 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 3)
+tile_id = "small_19_3"
+
+[node name="Tile_0_4" parent="Farm/FarmGridGenerator" unique_id=2141954865 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+tile_id = "small_0_4"
+
+[node name="Tile_1_4" parent="Farm/FarmGridGenerator" unique_id=1645819884 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 4)
+tile_id = "small_1_4"
+
+[node name="Tile_2_4" parent="Farm/FarmGridGenerator" unique_id=150372931 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 4)
+tile_id = "small_2_4"
+
+[node name="Tile_3_4" parent="Farm/FarmGridGenerator" unique_id=1814898494 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 4)
+tile_id = "small_3_4"
+
+[node name="Tile_4_4" parent="Farm/FarmGridGenerator" unique_id=1125653293 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 4)
+tile_id = "small_4_4"
+
+[node name="Tile_5_4" parent="Farm/FarmGridGenerator" unique_id=443832123 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 4)
+tile_id = "small_5_4"
+
+[node name="Tile_6_4" parent="Farm/FarmGridGenerator" unique_id=571339284 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 4)
+tile_id = "small_6_4"
+
+[node name="Tile_7_4" parent="Farm/FarmGridGenerator" unique_id=846042634 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 4)
+tile_id = "small_7_4"
+
+[node name="Tile_8_4" parent="Farm/FarmGridGenerator" unique_id=1429965344 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 4)
+tile_id = "small_8_4"
+
+[node name="Tile_9_4" parent="Farm/FarmGridGenerator" unique_id=40438380 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 4)
+tile_id = "small_9_4"
+
+[node name="Tile_10_4" parent="Farm/FarmGridGenerator" unique_id=1606420092 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 4)
+tile_id = "small_10_4"
+
+[node name="Tile_11_4" parent="Farm/FarmGridGenerator" unique_id=1828629663 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 4)
+tile_id = "small_11_4"
+
+[node name="Tile_12_4" parent="Farm/FarmGridGenerator" unique_id=1552375222 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 4)
+tile_id = "small_12_4"
+
+[node name="Tile_13_4" parent="Farm/FarmGridGenerator" unique_id=268961606 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 4)
+tile_id = "small_13_4"
+
+[node name="Tile_14_4" parent="Farm/FarmGridGenerator" unique_id=501261285 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 4)
+tile_id = "small_14_4"
+
+[node name="Tile_15_4" parent="Farm/FarmGridGenerator" unique_id=689600233 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 4)
+tile_id = "small_15_4"
+
+[node name="Tile_16_4" parent="Farm/FarmGridGenerator" unique_id=860986016 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 4)
+tile_id = "small_16_4"
+
+[node name="Tile_17_4" parent="Farm/FarmGridGenerator" unique_id=1934810596 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 4)
+tile_id = "small_17_4"
+
+[node name="Tile_18_4" parent="Farm/FarmGridGenerator" unique_id=1012164627 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 4)
+tile_id = "small_18_4"
+
+[node name="Tile_19_4" parent="Farm/FarmGridGenerator" unique_id=1615520126 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 4)
+tile_id = "small_19_4"
+
+[node name="Tile_0_5" parent="Farm/FarmGridGenerator" unique_id=661906232 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+tile_id = "small_0_5"
+
+[node name="Tile_1_5" parent="Farm/FarmGridGenerator" unique_id=822478012 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 5)
+tile_id = "small_1_5"
+
+[node name="Tile_2_5" parent="Farm/FarmGridGenerator" unique_id=174314855 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 5)
+tile_id = "small_2_5"
+
+[node name="Tile_3_5" parent="Farm/FarmGridGenerator" unique_id=1972902649 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 5)
+tile_id = "small_3_5"
+
+[node name="Tile_4_5" parent="Farm/FarmGridGenerator" unique_id=1417579041 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 5)
+tile_id = "small_4_5"
+
+[node name="Tile_5_5" parent="Farm/FarmGridGenerator" unique_id=269545737 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 5)
+tile_id = "small_5_5"
+
+[node name="Tile_6_5" parent="Farm/FarmGridGenerator" unique_id=891745795 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 5)
+tile_id = "small_6_5"
+
+[node name="Tile_7_5" parent="Farm/FarmGridGenerator" unique_id=2057599152 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 5)
+tile_id = "small_7_5"
+
+[node name="Tile_8_5" parent="Farm/FarmGridGenerator" unique_id=1760651513 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 5)
+tile_id = "small_8_5"
+
+[node name="Tile_9_5" parent="Farm/FarmGridGenerator" unique_id=1176932204 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 5)
+tile_id = "small_9_5"
+
+[node name="Tile_10_5" parent="Farm/FarmGridGenerator" unique_id=113624843 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 5)
+tile_id = "small_10_5"
+
+[node name="Tile_11_5" parent="Farm/FarmGridGenerator" unique_id=1205645261 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 5)
+tile_id = "small_11_5"
+
+[node name="Tile_12_5" parent="Farm/FarmGridGenerator" unique_id=1576126462 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 5)
+tile_id = "small_12_5"
+
+[node name="Tile_13_5" parent="Farm/FarmGridGenerator" unique_id=1348263784 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 5)
+tile_id = "small_13_5"
+
+[node name="Tile_14_5" parent="Farm/FarmGridGenerator" unique_id=860040617 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 5)
+tile_id = "small_14_5"
+
+[node name="Tile_15_5" parent="Farm/FarmGridGenerator" unique_id=1314832522 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 5)
+tile_id = "small_15_5"
+
+[node name="Tile_16_5" parent="Farm/FarmGridGenerator" unique_id=643230886 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 5)
+tile_id = "small_16_5"
+
+[node name="Tile_17_5" parent="Farm/FarmGridGenerator" unique_id=197590295 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 5)
+tile_id = "small_17_5"
+
+[node name="Tile_18_5" parent="Farm/FarmGridGenerator" unique_id=1383711807 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 5)
+tile_id = "small_18_5"
+
+[node name="Tile_19_5" parent="Farm/FarmGridGenerator" unique_id=1430884176 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 5)
+tile_id = "small_19_5"
+
+[node name="Tile_0_6" parent="Farm/FarmGridGenerator" unique_id=834092116 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6)
+tile_id = "small_0_6"
+
+[node name="Tile_1_6" parent="Farm/FarmGridGenerator" unique_id=1637659445 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 6)
+tile_id = "small_1_6"
+
+[node name="Tile_2_6" parent="Farm/FarmGridGenerator" unique_id=325658216 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 6)
+tile_id = "small_2_6"
+
+[node name="Tile_3_6" parent="Farm/FarmGridGenerator" unique_id=94344847 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 6)
+tile_id = "small_3_6"
+
+[node name="Tile_4_6" parent="Farm/FarmGridGenerator" unique_id=844310956 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 6)
+tile_id = "small_4_6"
+
+[node name="Tile_5_6" parent="Farm/FarmGridGenerator" unique_id=1862836795 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 6)
+tile_id = "small_5_6"
+
+[node name="Tile_6_6" parent="Farm/FarmGridGenerator" unique_id=1352603661 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 6)
+tile_id = "small_6_6"
+
+[node name="Tile_7_6" parent="Farm/FarmGridGenerator" unique_id=1533519908 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 6)
+tile_id = "small_7_6"
+
+[node name="Tile_8_6" parent="Farm/FarmGridGenerator" unique_id=1842918879 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 6)
+tile_id = "small_8_6"
+
+[node name="Tile_9_6" parent="Farm/FarmGridGenerator" unique_id=1591288919 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 6)
+tile_id = "small_9_6"
+
+[node name="Tile_10_6" parent="Farm/FarmGridGenerator" unique_id=219534275 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 6)
+tile_id = "small_10_6"
+
+[node name="Tile_11_6" parent="Farm/FarmGridGenerator" unique_id=1449561265 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 6)
+tile_id = "small_11_6"
+
+[node name="Tile_12_6" parent="Farm/FarmGridGenerator" unique_id=651878974 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 6)
+tile_id = "small_12_6"
+
+[node name="Tile_13_6" parent="Farm/FarmGridGenerator" unique_id=2036266429 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 6)
+tile_id = "small_13_6"
+
+[node name="Tile_14_6" parent="Farm/FarmGridGenerator" unique_id=1603245221 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 6)
+tile_id = "small_14_6"
+
+[node name="Tile_15_6" parent="Farm/FarmGridGenerator" unique_id=1306270458 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 6)
+tile_id = "small_15_6"
+
+[node name="Tile_16_6" parent="Farm/FarmGridGenerator" unique_id=1545076046 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 6)
+tile_id = "small_16_6"
+
+[node name="Tile_17_6" parent="Farm/FarmGridGenerator" unique_id=1861034409 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 6)
+tile_id = "small_17_6"
+
+[node name="Tile_18_6" parent="Farm/FarmGridGenerator" unique_id=654491993 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 6)
+tile_id = "small_18_6"
+
+[node name="Tile_19_6" parent="Farm/FarmGridGenerator" unique_id=1416942348 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 6)
+tile_id = "small_19_6"
+
+[node name="Tile_0_7" parent="Farm/FarmGridGenerator" unique_id=1956964194 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7)
+tile_id = "small_0_7"
+
+[node name="Tile_1_7" parent="Farm/FarmGridGenerator" unique_id=251081145 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 7)
+tile_id = "small_1_7"
+
+[node name="Tile_2_7" parent="Farm/FarmGridGenerator" unique_id=1322246666 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 7)
+tile_id = "small_2_7"
+
+[node name="Tile_3_7" parent="Farm/FarmGridGenerator" unique_id=1755484306 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 7)
+tile_id = "small_3_7"
+
+[node name="Tile_4_7" parent="Farm/FarmGridGenerator" unique_id=916156467 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 7)
+tile_id = "small_4_7"
+
+[node name="Tile_5_7" parent="Farm/FarmGridGenerator" unique_id=1152895081 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 7)
+tile_id = "small_5_7"
+
+[node name="Tile_6_7" parent="Farm/FarmGridGenerator" unique_id=1257516471 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 7)
+tile_id = "small_6_7"
+
+[node name="Tile_7_7" parent="Farm/FarmGridGenerator" unique_id=714700747 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 7)
+tile_id = "small_7_7"
+
+[node name="Tile_8_7" parent="Farm/FarmGridGenerator" unique_id=1863024270 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 7)
+tile_id = "small_8_7"
+
+[node name="Tile_9_7" parent="Farm/FarmGridGenerator" unique_id=180334869 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 7)
+tile_id = "small_9_7"
+
+[node name="Tile_10_7" parent="Farm/FarmGridGenerator" unique_id=85915925 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 7)
+tile_id = "small_10_7"
+
+[node name="Tile_11_7" parent="Farm/FarmGridGenerator" unique_id=2072946498 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 7)
+tile_id = "small_11_7"
+
+[node name="Tile_12_7" parent="Farm/FarmGridGenerator" unique_id=549640615 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 7)
+tile_id = "small_12_7"
+
+[node name="Tile_13_7" parent="Farm/FarmGridGenerator" unique_id=560714770 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 7)
+tile_id = "small_13_7"
+
+[node name="Tile_14_7" parent="Farm/FarmGridGenerator" unique_id=302174853 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 7)
+tile_id = "small_14_7"
+
+[node name="Tile_15_7" parent="Farm/FarmGridGenerator" unique_id=1163983651 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 7)
+tile_id = "small_15_7"
+
+[node name="Tile_16_7" parent="Farm/FarmGridGenerator" unique_id=173844208 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 7)
+tile_id = "small_16_7"
+
+[node name="Tile_17_7" parent="Farm/FarmGridGenerator" unique_id=1557385451 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 7)
+tile_id = "small_17_7"
+
+[node name="Tile_18_7" parent="Farm/FarmGridGenerator" unique_id=108207304 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 7)
+tile_id = "small_18_7"
+
+[node name="Tile_19_7" parent="Farm/FarmGridGenerator" unique_id=65136946 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 7)
+tile_id = "small_19_7"
+
+[node name="Tile_0_8" parent="Farm/FarmGridGenerator" unique_id=569267045 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
+tile_id = "small_0_8"
+
+[node name="Tile_1_8" parent="Farm/FarmGridGenerator" unique_id=1400308200 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 8)
+tile_id = "small_1_8"
+
+[node name="Tile_2_8" parent="Farm/FarmGridGenerator" unique_id=254335169 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 8)
+tile_id = "small_2_8"
+
+[node name="Tile_3_8" parent="Farm/FarmGridGenerator" unique_id=689197772 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 8)
+tile_id = "small_3_8"
+
+[node name="Tile_4_8" parent="Farm/FarmGridGenerator" unique_id=1877262324 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 8)
+tile_id = "small_4_8"
+
+[node name="Tile_5_8" parent="Farm/FarmGridGenerator" unique_id=1337857157 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 8)
+tile_id = "small_5_8"
+
+[node name="Tile_6_8" parent="Farm/FarmGridGenerator" unique_id=534919759 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 8)
+tile_id = "small_6_8"
+
+[node name="Tile_7_8" parent="Farm/FarmGridGenerator" unique_id=3279545 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 8)
+tile_id = "small_7_8"
+
+[node name="Tile_8_8" parent="Farm/FarmGridGenerator" unique_id=2139913089 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 8)
+tile_id = "small_8_8"
+
+[node name="Tile_9_8" parent="Farm/FarmGridGenerator" unique_id=716829675 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 8)
+tile_id = "small_9_8"
+
+[node name="Tile_10_8" parent="Farm/FarmGridGenerator" unique_id=761132490 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 8)
+tile_id = "small_10_8"
+
+[node name="Tile_11_8" parent="Farm/FarmGridGenerator" unique_id=210930859 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 8)
+tile_id = "small_11_8"
+
+[node name="Tile_12_8" parent="Farm/FarmGridGenerator" unique_id=1870038364 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 8)
+tile_id = "small_12_8"
+
+[node name="Tile_13_8" parent="Farm/FarmGridGenerator" unique_id=800490850 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 8)
+tile_id = "small_13_8"
+
+[node name="Tile_14_8" parent="Farm/FarmGridGenerator" unique_id=1491145292 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 8)
+tile_id = "small_14_8"
+
+[node name="Tile_15_8" parent="Farm/FarmGridGenerator" unique_id=891802640 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 8)
+tile_id = "small_15_8"
+
+[node name="Tile_16_8" parent="Farm/FarmGridGenerator" unique_id=1676539077 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 8)
+tile_id = "small_16_8"
+
+[node name="Tile_17_8" parent="Farm/FarmGridGenerator" unique_id=524523481 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 8)
+tile_id = "small_17_8"
+
+[node name="Tile_18_8" parent="Farm/FarmGridGenerator" unique_id=1406194293 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 8)
+tile_id = "small_18_8"
+
+[node name="Tile_19_8" parent="Farm/FarmGridGenerator" unique_id=95947511 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 8)
+tile_id = "small_19_8"
+
+[node name="Tile_0_9" parent="Farm/FarmGridGenerator" unique_id=934733766 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 9)
+tile_id = "small_0_9"
+
+[node name="Tile_1_9" parent="Farm/FarmGridGenerator" unique_id=703486047 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 9)
+tile_id = "small_1_9"
+
+[node name="Tile_2_9" parent="Farm/FarmGridGenerator" unique_id=611377296 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 9)
+tile_id = "small_2_9"
+
+[node name="Tile_3_9" parent="Farm/FarmGridGenerator" unique_id=828085610 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 9)
+tile_id = "small_3_9"
+
+[node name="Tile_4_9" parent="Farm/FarmGridGenerator" unique_id=124958463 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 9)
+tile_id = "small_4_9"
+
+[node name="Tile_5_9" parent="Farm/FarmGridGenerator" unique_id=803646861 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 9)
+tile_id = "small_5_9"
+
+[node name="Tile_6_9" parent="Farm/FarmGridGenerator" unique_id=905563208 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 9)
+tile_id = "small_6_9"
+
+[node name="Tile_7_9" parent="Farm/FarmGridGenerator" unique_id=702809068 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 9)
+tile_id = "small_7_9"
+
+[node name="Tile_8_9" parent="Farm/FarmGridGenerator" unique_id=1823401881 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 9)
+tile_id = "small_8_9"
+
+[node name="Tile_9_9" parent="Farm/FarmGridGenerator" unique_id=1510689851 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 9)
+tile_id = "small_9_9"
+
+[node name="Tile_10_9" parent="Farm/FarmGridGenerator" unique_id=1277009087 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 9)
+tile_id = "small_10_9"
+
+[node name="Tile_11_9" parent="Farm/FarmGridGenerator" unique_id=9851323 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 9)
+tile_id = "small_11_9"
+
+[node name="Tile_12_9" parent="Farm/FarmGridGenerator" unique_id=231220766 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 9)
+tile_id = "small_12_9"
+
+[node name="Tile_13_9" parent="Farm/FarmGridGenerator" unique_id=377628247 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 9)
+tile_id = "small_13_9"
+
+[node name="Tile_14_9" parent="Farm/FarmGridGenerator" unique_id=612854171 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 9)
+tile_id = "small_14_9"
+
+[node name="Tile_15_9" parent="Farm/FarmGridGenerator" unique_id=2082821851 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 9)
+tile_id = "small_15_9"
+
+[node name="Tile_16_9" parent="Farm/FarmGridGenerator" unique_id=1100774037 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 9)
+tile_id = "small_16_9"
+
+[node name="Tile_17_9" parent="Farm/FarmGridGenerator" unique_id=933985319 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 9)
+tile_id = "small_17_9"
+
+[node name="Tile_18_9" parent="Farm/FarmGridGenerator" unique_id=1634979132 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 9)
+tile_id = "small_18_9"
+
+[node name="Tile_19_9" parent="Farm/FarmGridGenerator" unique_id=2145043397 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 9)
+tile_id = "small_19_9"
+
+[node name="Tile_0_10" parent="Farm/FarmGridGenerator" unique_id=1721631311 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+tile_id = "small_0_10"
+
+[node name="Tile_1_10" parent="Farm/FarmGridGenerator" unique_id=1768732244 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 10)
+tile_id = "small_1_10"
+
+[node name="Tile_2_10" parent="Farm/FarmGridGenerator" unique_id=1142525517 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 10)
+tile_id = "small_2_10"
+
+[node name="Tile_3_10" parent="Farm/FarmGridGenerator" unique_id=1283714024 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 10)
+tile_id = "small_3_10"
+
+[node name="Tile_4_10" parent="Farm/FarmGridGenerator" unique_id=1901260770 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 10)
+tile_id = "small_4_10"
+
+[node name="Tile_5_10" parent="Farm/FarmGridGenerator" unique_id=1401895394 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 10)
+tile_id = "small_5_10"
+
+[node name="Tile_6_10" parent="Farm/FarmGridGenerator" unique_id=1064216652 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 10)
+tile_id = "small_6_10"
+
+[node name="Tile_7_10" parent="Farm/FarmGridGenerator" unique_id=56061185 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 10)
+tile_id = "small_7_10"
+
+[node name="Tile_8_10" parent="Farm/FarmGridGenerator" unique_id=256144721 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 10)
+tile_id = "small_8_10"
+
+[node name="Tile_9_10" parent="Farm/FarmGridGenerator" unique_id=246000310 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 10)
+tile_id = "small_9_10"
+
+[node name="Tile_10_10" parent="Farm/FarmGridGenerator" unique_id=1326542726 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
+tile_id = "small_10_10"
+
+[node name="Tile_11_10" parent="Farm/FarmGridGenerator" unique_id=502760757 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 10)
+tile_id = "small_11_10"
+
+[node name="Tile_12_10" parent="Farm/FarmGridGenerator" unique_id=1983985030 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 10)
+tile_id = "small_12_10"
+
+[node name="Tile_13_10" parent="Farm/FarmGridGenerator" unique_id=17257455 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 10)
+tile_id = "small_13_10"
+
+[node name="Tile_14_10" parent="Farm/FarmGridGenerator" unique_id=1168147028 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 10)
+tile_id = "small_14_10"
+
+[node name="Tile_15_10" parent="Farm/FarmGridGenerator" unique_id=408030087 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 10)
+tile_id = "small_15_10"
+
+[node name="Tile_16_10" parent="Farm/FarmGridGenerator" unique_id=1310337423 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 10)
+tile_id = "small_16_10"
+
+[node name="Tile_17_10" parent="Farm/FarmGridGenerator" unique_id=16229995 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 10)
+tile_id = "small_17_10"
+
+[node name="Tile_18_10" parent="Farm/FarmGridGenerator" unique_id=70101375 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 10)
+tile_id = "small_18_10"
+
+[node name="Tile_19_10" parent="Farm/FarmGridGenerator" unique_id=1761068233 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 10)
+tile_id = "small_19_10"
+
+[node name="Tile_0_11" parent="Farm/FarmGridGenerator" unique_id=1396033619 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11)
+tile_id = "small_0_11"
+
+[node name="Tile_1_11" parent="Farm/FarmGridGenerator" unique_id=1553108305 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 11)
+tile_id = "small_1_11"
+
+[node name="Tile_2_11" parent="Farm/FarmGridGenerator" unique_id=1094744368 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 11)
+tile_id = "small_2_11"
+
+[node name="Tile_3_11" parent="Farm/FarmGridGenerator" unique_id=550369802 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 11)
+tile_id = "small_3_11"
+
+[node name="Tile_4_11" parent="Farm/FarmGridGenerator" unique_id=1374236417 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 11)
+tile_id = "small_4_11"
+
+[node name="Tile_5_11" parent="Farm/FarmGridGenerator" unique_id=1017826437 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 11)
+tile_id = "small_5_11"
+
+[node name="Tile_6_11" parent="Farm/FarmGridGenerator" unique_id=1798089829 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 11)
+tile_id = "small_6_11"
+
+[node name="Tile_7_11" parent="Farm/FarmGridGenerator" unique_id=899239318 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 11)
+tile_id = "small_7_11"
+
+[node name="Tile_8_11" parent="Farm/FarmGridGenerator" unique_id=1996555322 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 11)
+tile_id = "small_8_11"
+
+[node name="Tile_9_11" parent="Farm/FarmGridGenerator" unique_id=893818928 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 11)
+tile_id = "small_9_11"
+
+[node name="Tile_10_11" parent="Farm/FarmGridGenerator" unique_id=138997077 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 11)
+tile_id = "small_10_11"
+
+[node name="Tile_11_11" parent="Farm/FarmGridGenerator" unique_id=1527720557 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 11)
+tile_id = "small_11_11"
+
+[node name="Tile_12_11" parent="Farm/FarmGridGenerator" unique_id=162431023 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 11)
+tile_id = "small_12_11"
+
+[node name="Tile_13_11" parent="Farm/FarmGridGenerator" unique_id=1796293120 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 11)
+tile_id = "small_13_11"
+
+[node name="Tile_14_11" parent="Farm/FarmGridGenerator" unique_id=1579455181 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 11)
+tile_id = "small_14_11"
+
+[node name="Tile_15_11" parent="Farm/FarmGridGenerator" unique_id=89832731 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 11)
+tile_id = "small_15_11"
+
+[node name="Tile_16_11" parent="Farm/FarmGridGenerator" unique_id=1820092181 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 11)
+tile_id = "small_16_11"
+
+[node name="Tile_17_11" parent="Farm/FarmGridGenerator" unique_id=1603160669 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 11)
+tile_id = "small_17_11"
+
+[node name="Tile_18_11" parent="Farm/FarmGridGenerator" unique_id=766175460 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 11)
+tile_id = "small_18_11"
+
+[node name="Tile_19_11" parent="Farm/FarmGridGenerator" unique_id=1916489444 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 11)
+tile_id = "small_19_11"
+
+[node name="Tile_0_12" parent="Farm/FarmGridGenerator" unique_id=670727939 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+tile_id = "small_0_12"
+
+[node name="Tile_1_12" parent="Farm/FarmGridGenerator" unique_id=1211942891 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 12)
+tile_id = "small_1_12"
+
+[node name="Tile_2_12" parent="Farm/FarmGridGenerator" unique_id=158346935 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 12)
+tile_id = "small_2_12"
+
+[node name="Tile_3_12" parent="Farm/FarmGridGenerator" unique_id=1762643188 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 12)
+tile_id = "small_3_12"
+
+[node name="Tile_4_12" parent="Farm/FarmGridGenerator" unique_id=1491280499 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 12)
+tile_id = "small_4_12"
+
+[node name="Tile_5_12" parent="Farm/FarmGridGenerator" unique_id=674067004 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 12)
+tile_id = "small_5_12"
+
+[node name="Tile_6_12" parent="Farm/FarmGridGenerator" unique_id=1593094649 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 12)
+tile_id = "small_6_12"
+
+[node name="Tile_7_12" parent="Farm/FarmGridGenerator" unique_id=1268701251 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 12)
+tile_id = "small_7_12"
+
+[node name="Tile_8_12" parent="Farm/FarmGridGenerator" unique_id=155153938 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 12)
+tile_id = "small_8_12"
+
+[node name="Tile_9_12" parent="Farm/FarmGridGenerator" unique_id=1564761962 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 12)
+tile_id = "small_9_12"
+
+[node name="Tile_10_12" parent="Farm/FarmGridGenerator" unique_id=1339311452 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 12)
+tile_id = "small_10_12"
+
+[node name="Tile_11_12" parent="Farm/FarmGridGenerator" unique_id=1429643392 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 12)
+tile_id = "small_11_12"
+
+[node name="Tile_12_12" parent="Farm/FarmGridGenerator" unique_id=292625857 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 12)
+tile_id = "small_12_12"
+
+[node name="Tile_13_12" parent="Farm/FarmGridGenerator" unique_id=232061602 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 12)
+tile_id = "small_13_12"
+
+[node name="Tile_14_12" parent="Farm/FarmGridGenerator" unique_id=930274606 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 12)
+tile_id = "small_14_12"
+
+[node name="Tile_15_12" parent="Farm/FarmGridGenerator" unique_id=76067039 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 12)
+tile_id = "small_15_12"
+
+[node name="Tile_16_12" parent="Farm/FarmGridGenerator" unique_id=582603925 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 12)
+tile_id = "small_16_12"
+
+[node name="Tile_17_12" parent="Farm/FarmGridGenerator" unique_id=1542744927 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 12)
+tile_id = "small_17_12"
+
+[node name="Tile_18_12" parent="Farm/FarmGridGenerator" unique_id=1669697443 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 12)
+tile_id = "small_18_12"
+
+[node name="Tile_19_12" parent="Farm/FarmGridGenerator" unique_id=1708459906 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 12)
+tile_id = "small_19_12"
+
+[node name="Tile_0_13" parent="Farm/FarmGridGenerator" unique_id=1535884685 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 13)
+tile_id = "small_0_13"
+
+[node name="Tile_1_13" parent="Farm/FarmGridGenerator" unique_id=2060311055 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 13)
+tile_id = "small_1_13"
+
+[node name="Tile_2_13" parent="Farm/FarmGridGenerator" unique_id=360656704 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 13)
+tile_id = "small_2_13"
+
+[node name="Tile_3_13" parent="Farm/FarmGridGenerator" unique_id=213966778 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 13)
+tile_id = "small_3_13"
+
+[node name="Tile_4_13" parent="Farm/FarmGridGenerator" unique_id=1981573674 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 13)
+tile_id = "small_4_13"
+
+[node name="Tile_5_13" parent="Farm/FarmGridGenerator" unique_id=1630159257 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 13)
+tile_id = "small_5_13"
+
+[node name="Tile_6_13" parent="Farm/FarmGridGenerator" unique_id=267779772 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 13)
+tile_id = "small_6_13"
+
+[node name="Tile_7_13" parent="Farm/FarmGridGenerator" unique_id=1899302880 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 13)
+tile_id = "small_7_13"
+
+[node name="Tile_8_13" parent="Farm/FarmGridGenerator" unique_id=232249160 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 13)
+tile_id = "small_8_13"
+
+[node name="Tile_9_13" parent="Farm/FarmGridGenerator" unique_id=1142829946 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 13)
+tile_id = "small_9_13"
+
+[node name="Tile_10_13" parent="Farm/FarmGridGenerator" unique_id=477240885 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 13)
+tile_id = "small_10_13"
+
+[node name="Tile_11_13" parent="Farm/FarmGridGenerator" unique_id=592877608 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 13)
+tile_id = "small_11_13"
+
+[node name="Tile_12_13" parent="Farm/FarmGridGenerator" unique_id=207478358 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 13)
+tile_id = "small_12_13"
+
+[node name="Tile_13_13" parent="Farm/FarmGridGenerator" unique_id=1910665649 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 13)
+tile_id = "small_13_13"
+
+[node name="Tile_14_13" parent="Farm/FarmGridGenerator" unique_id=1295089060 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 13)
+tile_id = "small_14_13"
+
+[node name="Tile_15_13" parent="Farm/FarmGridGenerator" unique_id=1300533329 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 13)
+tile_id = "small_15_13"
+
+[node name="Tile_16_13" parent="Farm/FarmGridGenerator" unique_id=727500148 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 13)
+tile_id = "small_16_13"
+
+[node name="Tile_17_13" parent="Farm/FarmGridGenerator" unique_id=811565394 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 13)
+tile_id = "small_17_13"
+
+[node name="Tile_18_13" parent="Farm/FarmGridGenerator" unique_id=1777505333 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 13)
+tile_id = "small_18_13"
+
+[node name="Tile_19_13" parent="Farm/FarmGridGenerator" unique_id=1624382707 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 13)
+tile_id = "small_19_13"
+
+[node name="Tile_0_14" parent="Farm/FarmGridGenerator" unique_id=1549731200 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 14)
+tile_id = "small_0_14"
+
+[node name="Tile_1_14" parent="Farm/FarmGridGenerator" unique_id=128675325 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 14)
+tile_id = "small_1_14"
+
+[node name="Tile_2_14" parent="Farm/FarmGridGenerator" unique_id=1984972450 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 14)
+tile_id = "small_2_14"
+
+[node name="Tile_3_14" parent="Farm/FarmGridGenerator" unique_id=1123948389 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 14)
+tile_id = "small_3_14"
+
+[node name="Tile_4_14" parent="Farm/FarmGridGenerator" unique_id=444811131 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 14)
+tile_id = "small_4_14"
+
+[node name="Tile_5_14" parent="Farm/FarmGridGenerator" unique_id=605708230 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 14)
+tile_id = "small_5_14"
+
+[node name="Tile_6_14" parent="Farm/FarmGridGenerator" unique_id=743001664 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 14)
+tile_id = "small_6_14"
+
+[node name="Tile_7_14" parent="Farm/FarmGridGenerator" unique_id=215773760 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 14)
+tile_id = "small_7_14"
+
+[node name="Tile_8_14" parent="Farm/FarmGridGenerator" unique_id=274226569 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 14)
+tile_id = "small_8_14"
+
+[node name="Tile_9_14" parent="Farm/FarmGridGenerator" unique_id=1789811523 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 14)
+tile_id = "small_9_14"
+
+[node name="Tile_10_14" parent="Farm/FarmGridGenerator" unique_id=1992708228 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 14)
+tile_id = "small_10_14"
+
+[node name="Tile_11_14" parent="Farm/FarmGridGenerator" unique_id=441586269 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 14)
+tile_id = "small_11_14"
+
+[node name="Tile_12_14" parent="Farm/FarmGridGenerator" unique_id=1398979896 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 14)
+tile_id = "small_12_14"
+
+[node name="Tile_13_14" parent="Farm/FarmGridGenerator" unique_id=740315031 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 14)
+tile_id = "small_13_14"
+
+[node name="Tile_14_14" parent="Farm/FarmGridGenerator" unique_id=1255835067 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 14)
+tile_id = "small_14_14"
+
+[node name="Tile_15_14" parent="Farm/FarmGridGenerator" unique_id=158573280 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 14)
+tile_id = "small_15_14"
+
+[node name="Tile_16_14" parent="Farm/FarmGridGenerator" unique_id=1783869573 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 14)
+tile_id = "small_16_14"
+
+[node name="Tile_17_14" parent="Farm/FarmGridGenerator" unique_id=464581283 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 14)
+tile_id = "small_17_14"
+
+[node name="Tile_18_14" parent="Farm/FarmGridGenerator" unique_id=1276203068 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 14)
+tile_id = "small_18_14"
+
+[node name="Tile_19_14" parent="Farm/FarmGridGenerator" unique_id=1986696268 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 14)
+tile_id = "small_19_14"
+
+[node name="Tile_0_15" parent="Farm/FarmGridGenerator" unique_id=1705268788 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
+tile_id = "small_0_15"
+
+[node name="Tile_1_15" parent="Farm/FarmGridGenerator" unique_id=528768695 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 15)
+tile_id = "small_1_15"
+
+[node name="Tile_2_15" parent="Farm/FarmGridGenerator" unique_id=1667113627 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 15)
+tile_id = "small_2_15"
+
+[node name="Tile_3_15" parent="Farm/FarmGridGenerator" unique_id=2042450142 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 15)
+tile_id = "small_3_15"
+
+[node name="Tile_4_15" parent="Farm/FarmGridGenerator" unique_id=1817795937 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 15)
+tile_id = "small_4_15"
+
+[node name="Tile_5_15" parent="Farm/FarmGridGenerator" unique_id=72323267 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 15)
+tile_id = "small_5_15"
+
+[node name="Tile_6_15" parent="Farm/FarmGridGenerator" unique_id=1867526833 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 15)
+tile_id = "small_6_15"
+
+[node name="Tile_7_15" parent="Farm/FarmGridGenerator" unique_id=1076069018 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 15)
+tile_id = "small_7_15"
+
+[node name="Tile_8_15" parent="Farm/FarmGridGenerator" unique_id=5325808 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 15)
+tile_id = "small_8_15"
+
+[node name="Tile_9_15" parent="Farm/FarmGridGenerator" unique_id=595247602 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 15)
+tile_id = "small_9_15"
+
+[node name="Tile_10_15" parent="Farm/FarmGridGenerator" unique_id=1525568649 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 15)
+tile_id = "small_10_15"
+
+[node name="Tile_11_15" parent="Farm/FarmGridGenerator" unique_id=797203582 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 15)
+tile_id = "small_11_15"
+
+[node name="Tile_12_15" parent="Farm/FarmGridGenerator" unique_id=917662370 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 15)
+tile_id = "small_12_15"
+
+[node name="Tile_13_15" parent="Farm/FarmGridGenerator" unique_id=1021731433 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 15)
+tile_id = "small_13_15"
+
+[node name="Tile_14_15" parent="Farm/FarmGridGenerator" unique_id=1078524887 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 15)
+tile_id = "small_14_15"
+
+[node name="Tile_15_15" parent="Farm/FarmGridGenerator" unique_id=1850208125 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 15)
+tile_id = "small_15_15"
+
+[node name="Tile_16_15" parent="Farm/FarmGridGenerator" unique_id=494882975 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 15)
+tile_id = "small_16_15"
+
+[node name="Tile_17_15" parent="Farm/FarmGridGenerator" unique_id=602676947 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 15)
+tile_id = "small_17_15"
+
+[node name="Tile_18_15" parent="Farm/FarmGridGenerator" unique_id=364925351 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 15)
+tile_id = "small_18_15"
+
+[node name="Tile_19_15" parent="Farm/FarmGridGenerator" unique_id=2140493239 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 15)
+tile_id = "small_19_15"
+
+[node name="Tile_0_16" parent="Farm/FarmGridGenerator" unique_id=2062316646 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 16)
+tile_id = "small_0_16"
+
+[node name="Tile_1_16" parent="Farm/FarmGridGenerator" unique_id=1104038846 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 16)
+tile_id = "small_1_16"
+
+[node name="Tile_2_16" parent="Farm/FarmGridGenerator" unique_id=1925070833 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 16)
+tile_id = "small_2_16"
+
+[node name="Tile_3_16" parent="Farm/FarmGridGenerator" unique_id=492525056 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 16)
+tile_id = "small_3_16"
+
+[node name="Tile_4_16" parent="Farm/FarmGridGenerator" unique_id=448781915 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 16)
+tile_id = "small_4_16"
+
+[node name="Tile_5_16" parent="Farm/FarmGridGenerator" unique_id=902740080 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 16)
+tile_id = "small_5_16"
+
+[node name="Tile_6_16" parent="Farm/FarmGridGenerator" unique_id=1951363679 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 16)
+tile_id = "small_6_16"
+
+[node name="Tile_7_16" parent="Farm/FarmGridGenerator" unique_id=1900129497 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 16)
+tile_id = "small_7_16"
+
+[node name="Tile_8_16" parent="Farm/FarmGridGenerator" unique_id=1091690973 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 16)
+tile_id = "small_8_16"
+
+[node name="Tile_9_16" parent="Farm/FarmGridGenerator" unique_id=175743054 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 16)
+tile_id = "small_9_16"
+
+[node name="Tile_10_16" parent="Farm/FarmGridGenerator" unique_id=42385780 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 16)
+tile_id = "small_10_16"
+
+[node name="Tile_11_16" parent="Farm/FarmGridGenerator" unique_id=130315793 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 16)
+tile_id = "small_11_16"
+
+[node name="Tile_12_16" parent="Farm/FarmGridGenerator" unique_id=1781741044 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 16)
+tile_id = "small_12_16"
+
+[node name="Tile_13_16" parent="Farm/FarmGridGenerator" unique_id=914929572 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 16)
+tile_id = "small_13_16"
+
+[node name="Tile_14_16" parent="Farm/FarmGridGenerator" unique_id=1880815041 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 16)
+tile_id = "small_14_16"
+
+[node name="Tile_15_16" parent="Farm/FarmGridGenerator" unique_id=1029049472 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 16)
+tile_id = "small_15_16"
+
+[node name="Tile_16_16" parent="Farm/FarmGridGenerator" unique_id=2024037347 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 16)
+tile_id = "small_16_16"
+
+[node name="Tile_17_16" parent="Farm/FarmGridGenerator" unique_id=918356846 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 16)
+tile_id = "small_17_16"
+
+[node name="Tile_18_16" parent="Farm/FarmGridGenerator" unique_id=1096305479 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 16)
+tile_id = "small_18_16"
+
+[node name="Tile_19_16" parent="Farm/FarmGridGenerator" unique_id=234139921 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 16)
+tile_id = "small_19_16"
+
+[node name="Tile_0_17" parent="Farm/FarmGridGenerator" unique_id=1922157982 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 17)
+tile_id = "small_0_17"
+
+[node name="Tile_1_17" parent="Farm/FarmGridGenerator" unique_id=1988680975 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 17)
+tile_id = "small_1_17"
+
+[node name="Tile_2_17" parent="Farm/FarmGridGenerator" unique_id=315694932 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 17)
+tile_id = "small_2_17"
+
+[node name="Tile_3_17" parent="Farm/FarmGridGenerator" unique_id=1979318927 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 17)
+tile_id = "small_3_17"
+
+[node name="Tile_4_17" parent="Farm/FarmGridGenerator" unique_id=2093985139 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 17)
+tile_id = "small_4_17"
+
+[node name="Tile_5_17" parent="Farm/FarmGridGenerator" unique_id=1423495003 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 17)
+tile_id = "small_5_17"
+
+[node name="Tile_6_17" parent="Farm/FarmGridGenerator" unique_id=353663972 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 17)
+tile_id = "small_6_17"
+
+[node name="Tile_7_17" parent="Farm/FarmGridGenerator" unique_id=1180101363 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 17)
+tile_id = "small_7_17"
+
+[node name="Tile_8_17" parent="Farm/FarmGridGenerator" unique_id=566106585 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 17)
+tile_id = "small_8_17"
+
+[node name="Tile_9_17" parent="Farm/FarmGridGenerator" unique_id=983789677 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 17)
+tile_id = "small_9_17"
+
+[node name="Tile_10_17" parent="Farm/FarmGridGenerator" unique_id=1294297027 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 17)
+tile_id = "small_10_17"
+
+[node name="Tile_11_17" parent="Farm/FarmGridGenerator" unique_id=2061091032 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 17)
+tile_id = "small_11_17"
+
+[node name="Tile_12_17" parent="Farm/FarmGridGenerator" unique_id=412528891 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 17)
+tile_id = "small_12_17"
+
+[node name="Tile_13_17" parent="Farm/FarmGridGenerator" unique_id=1043747197 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 17)
+tile_id = "small_13_17"
+
+[node name="Tile_14_17" parent="Farm/FarmGridGenerator" unique_id=1484373992 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 17)
+tile_id = "small_14_17"
+
+[node name="Tile_15_17" parent="Farm/FarmGridGenerator" unique_id=917642978 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 17)
+tile_id = "small_15_17"
+
+[node name="Tile_16_17" parent="Farm/FarmGridGenerator" unique_id=1603823572 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 17)
+tile_id = "small_16_17"
+
+[node name="Tile_17_17" parent="Farm/FarmGridGenerator" unique_id=1819917836 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 17)
+tile_id = "small_17_17"
+
+[node name="Tile_18_17" parent="Farm/FarmGridGenerator" unique_id=1551282825 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 17)
+tile_id = "small_18_17"
+
+[node name="Tile_19_17" parent="Farm/FarmGridGenerator" unique_id=1455282878 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 17)
+tile_id = "small_19_17"
+
+[node name="Tile_0_18" parent="Farm/FarmGridGenerator" unique_id=1853568148 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 18)
+tile_id = "small_0_18"
+
+[node name="Tile_1_18" parent="Farm/FarmGridGenerator" unique_id=1911033634 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 18)
+tile_id = "small_1_18"
+
+[node name="Tile_2_18" parent="Farm/FarmGridGenerator" unique_id=662029281 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 18)
+tile_id = "small_2_18"
+
+[node name="Tile_3_18" parent="Farm/FarmGridGenerator" unique_id=948812183 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 18)
+tile_id = "small_3_18"
+
+[node name="Tile_4_18" parent="Farm/FarmGridGenerator" unique_id=1018861446 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 18)
+tile_id = "small_4_18"
+
+[node name="Tile_5_18" parent="Farm/FarmGridGenerator" unique_id=864175326 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 18)
+tile_id = "small_5_18"
+
+[node name="Tile_6_18" parent="Farm/FarmGridGenerator" unique_id=182204971 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 18)
+tile_id = "small_6_18"
+
+[node name="Tile_7_18" parent="Farm/FarmGridGenerator" unique_id=1063736069 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 18)
+tile_id = "small_7_18"
+
+[node name="Tile_8_18" parent="Farm/FarmGridGenerator" unique_id=1385450030 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 18)
+tile_id = "small_8_18"
+
+[node name="Tile_9_18" parent="Farm/FarmGridGenerator" unique_id=645521055 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 18)
+tile_id = "small_9_18"
+
+[node name="Tile_10_18" parent="Farm/FarmGridGenerator" unique_id=542756719 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 18)
+tile_id = "small_10_18"
+
+[node name="Tile_11_18" parent="Farm/FarmGridGenerator" unique_id=105718512 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 18)
+tile_id = "small_11_18"
+
+[node name="Tile_12_18" parent="Farm/FarmGridGenerator" unique_id=157749591 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 18)
+tile_id = "small_12_18"
+
+[node name="Tile_13_18" parent="Farm/FarmGridGenerator" unique_id=368763700 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 18)
+tile_id = "small_13_18"
+
+[node name="Tile_14_18" parent="Farm/FarmGridGenerator" unique_id=832922813 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 18)
+tile_id = "small_14_18"
+
+[node name="Tile_15_18" parent="Farm/FarmGridGenerator" unique_id=976456065 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 18)
+tile_id = "small_15_18"
+
+[node name="Tile_16_18" parent="Farm/FarmGridGenerator" unique_id=2120033424 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 18)
+tile_id = "small_16_18"
+
+[node name="Tile_17_18" parent="Farm/FarmGridGenerator" unique_id=1986648362 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 18)
+tile_id = "small_17_18"
+
+[node name="Tile_18_18" parent="Farm/FarmGridGenerator" unique_id=473900908 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 18)
+tile_id = "small_18_18"
+
+[node name="Tile_19_18" parent="Farm/FarmGridGenerator" unique_id=579115030 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 18)
+tile_id = "small_19_18"
+
+[node name="Tile_0_19" parent="Farm/FarmGridGenerator" unique_id=1061085985 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 19)
+tile_id = "small_0_19"
+
+[node name="Tile_1_19" parent="Farm/FarmGridGenerator" unique_id=1379486450 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 19)
+tile_id = "small_1_19"
+
+[node name="Tile_2_19" parent="Farm/FarmGridGenerator" unique_id=1094573013 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 19)
+tile_id = "small_2_19"
+
+[node name="Tile_3_19" parent="Farm/FarmGridGenerator" unique_id=196897207 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 19)
+tile_id = "small_3_19"
+
+[node name="Tile_4_19" parent="Farm/FarmGridGenerator" unique_id=514074514 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 19)
+tile_id = "small_4_19"
+
+[node name="Tile_5_19" parent="Farm/FarmGridGenerator" unique_id=866203812 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 19)
+tile_id = "small_5_19"
+
+[node name="Tile_6_19" parent="Farm/FarmGridGenerator" unique_id=1181060005 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 19)
+tile_id = "small_6_19"
+
+[node name="Tile_7_19" parent="Farm/FarmGridGenerator" unique_id=536811494 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, 19)
+tile_id = "small_7_19"
+
+[node name="Tile_8_19" parent="Farm/FarmGridGenerator" unique_id=1849025204 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 19)
+tile_id = "small_8_19"
+
+[node name="Tile_9_19" parent="Farm/FarmGridGenerator" unique_id=793533293 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0, 19)
+tile_id = "small_9_19"
+
+[node name="Tile_10_19" parent="Farm/FarmGridGenerator" unique_id=2104300271 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 19)
+tile_id = "small_10_19"
+
+[node name="Tile_11_19" parent="Farm/FarmGridGenerator" unique_id=1273512965 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 19)
+tile_id = "small_11_19"
+
+[node name="Tile_12_19" parent="Farm/FarmGridGenerator" unique_id=1618800586 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 19)
+tile_id = "small_12_19"
+
+[node name="Tile_13_19" parent="Farm/FarmGridGenerator" unique_id=1457700927 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, 19)
+tile_id = "small_13_19"
+
+[node name="Tile_14_19" parent="Farm/FarmGridGenerator" unique_id=1172726334 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0, 19)
+tile_id = "small_14_19"
+
+[node name="Tile_15_19" parent="Farm/FarmGridGenerator" unique_id=846582067 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 19)
+tile_id = "small_15_19"
+
+[node name="Tile_16_19" parent="Farm/FarmGridGenerator" unique_id=455767846 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 19)
+tile_id = "small_16_19"
+
+[node name="Tile_17_19" parent="Farm/FarmGridGenerator" unique_id=1257711926 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0, 19)
+tile_id = "small_17_19"
+
+[node name="Tile_18_19" parent="Farm/FarmGridGenerator" unique_id=957061096 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 19)
+tile_id = "small_18_19"
+
+[node name="Tile_19_19" parent="Farm/FarmGridGenerator" unique_id=703244575 instance=ExtResource("8_xvcwp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 19)
+tile_id = "small_19_19"

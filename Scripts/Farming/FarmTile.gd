@@ -33,6 +33,7 @@ enum TileState {
 		call_deferred("update_visuals")
 	get:
 		return _watered_model
+@export var tile_id: String = ""
 
 var crop_data: CropData = null
 var crop_growth_days: int = 0

@@ -20,6 +20,9 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 
 ## Changelog
 
+### Version 0.3
+- Restuctured the world
+
 ### Version 0.2
 
 - Implemented tools:
@@ -37,93 +40,6 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Improved inventory and hotbar.
 - Implemented day/night cycle.
 - Added terrain, building, tool, and crop assets.
-
-### Version 0.1.1.28
-
-- Added `use_tool` support to controls and settings.
-- Added mouse-button serialization for control rebinding.
-- Fixed controls reset so mouse binds are preserved and restored.
-- Added seed-item planting: wheat seeds act as the wheat seed bag.
-- Added scalable crop lookup through `ToolManager.all_crops`.
-- Added watering-can water indicators in inventory and hotbar UI.
-- Added well refill integration for the watering can.
-- Cleaned up gameplay scripts and updated architecture documentation.
-
-
-### Version 0.1.1.27
-
-- Implemented watering-can fill/refill state.
-
-### Version 0.1.1.26
-
-- Implemented crop system.
-
-### Version 0.1.1.23
-
-- Implemented functionality for hoe.
-- Implemented functionality for watering can.
-- Implemented functionality for scythe.
-- Implemented functionality for seed bag.
-
-### Version 0.1.1.21
-
-- Implemented tile system.
-
-### Version 0.1.1.20
-
-- Implemented day/night cycle.
-
-### Version 0.1.1.18
-
-- Improved hotbar.
-
-### Version 0.1.1.15
-
-- Improved inventory.
-
-### Version 0.1.1.11
-
-- Implemented item category for resources.
-
-### Version 0.1.1.10
-
-- Implemented item category for tools.
-
-### Version 0.1.1.9
-
-- Implemented item category for seeds.
-
-### Version 0.1.1.8
-
-- Implemented item category for crops.
-
-### Version 0.1.1.7
-
-- Implemented item structure.
-
-### Version 0.1.1.6
-
-- Implemented wheat assets.
-
-### Version 0.1.1.5
-
-- Implemented watered block asset.
-
-### Version 0.1.1.4
-
-- Implemented seed bag model.
-
-### Version 0.1.1.3
-
-- Implemented scythe model.
-
-### Version 0.1.1.2
-
-- Implemented watering can model.
-
-### Version 0.1.1.1
-
-- Implemented hoe model.
 
 ### Version 0.1
 
