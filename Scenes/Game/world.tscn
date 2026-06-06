@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://b4bcklim2bhpc" path="res://Scripts/Generation/FarmGridGeneration.gd" id="7_j8hn3"]
 [ext_resource type="PackedScene" uid="uid://cxxr0r1e8i1bj" path="res://Assets/Models/Terrain/grass_block.glb" id="7_xvcwp"]
 [ext_resource type="PackedScene" uid="uid://bpc10uol4byfo" path="res://Scenes/Game/Farming/farm_tile.tscn" id="8_xvcwp"]
+[ext_resource type="Script" uid="uid://epxguj1ev7ej" path="res://Scripts/GameManagers/WorldManager.gd" id="10_6y6xk"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_home_ground"]
 size = Vector3(10, 0.5, 21)
@@ -2118,3 +2119,10 @@ tile_id = "small_18_19"
 [node name="Tile_19_19" parent="Farm/FarmGridGenerator" unique_id=703244575 instance=ExtResource("8_xvcwp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 19)
 tile_id = "small_19_19"
+
+[node name="WorldManager" type="Node" parent="." unique_id=2136268591 node_paths=PackedStringArray("world_root", "home_area", "farm_root", "farm_tiles_root")]
+script = ExtResource("10_6y6xk")
+world_root = NodePath("..")
+home_area = NodePath("../HomeArea")
+farm_root = NodePath("../Farm")
+farm_tiles_root = NodePath("../Farm/FarmGridGenerator")
