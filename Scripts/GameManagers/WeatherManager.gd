@@ -29,7 +29,8 @@ func _on_day_changed() -> void:
 func _apply_new_day_weather() -> void:
 	current_weather = tomorrow_weather
 	current_temperature = tomorrow_temperature
-
+	
+	_water_fields_if_needed()
 	tomorrow_weather = _roll_weather()
 	tomorrow_temperature = _roll_temperature(tomorrow_weather)
 
@@ -73,3 +74,21 @@ func get_current_temperature_string() -> String:
 
 func get_tomorrow_temperature_string() -> String:
 	return "%d°C" % tomorrow_temperature
+
+func _water_fields_if_needed() -> void:
+	if current_weather == null:
+		return
+
+	if not current_weather.waters_fields:
+		return
+
+	var farm_tiles := get_tree().get_nodes_in_group("farm_tile")
+
+	for tile in farm_tiles:
+		if tile == null:
+			continue
+
+		if tile is FarmTile and tile.current_state == FarmTile.TileState.PLOWED:
+			tile.water()
+
+	print("Weather watered fields: ", current_weather.display_name)
