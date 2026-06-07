@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://c2qivd1xjjeke"]
+
+[ext_resource type="Script" uid="uid://bhfvmmavwf3rj" path="res://Scripts/PhoneApps/ShopApp/ShopItemRow.gd" id="1_ak6hb"]
+
+[node name="ShopItemRow" type="HBoxContainer" unique_id=631531937]
+custom_minimum_size = Vector2(0, 40)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("1_ak6hb")
+
+[node name="IconRect" type="TextureRect" parent="." unique_id=1747909279]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="." unique_id=1535635075]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="PriceLabel" type="Label" parent="." unique_id=1091071158]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="BuyButton" type="Button" parent="." unique_id=897785528]
+layout_mode = 2
+text = "Buy"

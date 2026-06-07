@@ -1,7 +1,9 @@
 [gd_resource type="Resource" script_class="ShopItemData" format=3 uid="uid://c8w27lf1vjawr"]
 
 [ext_resource type="Script" uid="uid://c7fomv5bo2036" path="res://Scripts/PhoneApps/ShopApp/ShopItemData.gd" id="1_1qqsn"]
+[ext_resource type="Resource" uid="uid://cct5ygvjvokag" path="res://Data/Items/Seeds/wheat_seed_item.tres" id="1_2syae"]
 
 [resource]
 script = ExtResource("1_1qqsn")
+item_data = ExtResource("1_2syae")
 metadata/_custom_type_script = "uid://c7fomv5bo2036"

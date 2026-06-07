@@ -4,6 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://dy64evsu7tivf" path="res://Scenes/UIs/PlayerHUD/Phone/SellApp/SellingPanel.tscn" id="2_c8h6s"]
 [ext_resource type="Resource" uid="uid://c46mxpfymbli4" path="res://Data/Storage/silo_storage.tres" id="3_0jr7f"]
 [ext_resource type="PackedScene" uid="uid://c0i15p4b8nfb2" path="res://Scenes/UIs/PlayerHUD/Phone/SellApp/selling_item_row.tscn" id="4_y5yci"]
+[ext_resource type="PackedScene" uid="uid://citho0esmm5oc" path="res://Scenes/UIs/PlayerHUD/Phone/ShopApp/shop_Panel.tscn" id="5_8j0k5"]
+[ext_resource type="Resource" uid="uid://bfua1rlx5vmy4" path="res://Data/Shop/basic_shop.tres" id="6_4t3lr"]
+[ext_resource type="PackedScene" uid="uid://c2qivd1xjjeke" path="res://Scenes/UIs/PlayerHUD/Phone/ShopApp/shop_item_row.tscn" id="7_814bx"]
+[ext_resource type="Resource" uid="uid://exkyhl0jf7gm" path="res://Data/Inventory/player_inventory.tres" id="8_44o7y"]
 
 [node name="PhonePanel" type="Control" unique_id=270439995]
 layout_mode = 3
@@ -63,9 +67,22 @@ grow_vertical = 2
 layout_mode = 2
 
 [node name="SellApp" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer" unique_id=1774259236 instance=ExtResource("2_c8h6s")]
+visible = false
 layout_mode = 1
 storage_data = ExtResource("3_0jr7f")
 row_scene = ExtResource("4_y5yci")
+
+[node name="ShopApp" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer" unique_id=1245120243 instance=ExtResource("5_8j0k5")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+shop_data = ExtResource("6_4t3lr")
+row_scene = ExtResource("7_814bx")
+player_inventory = ExtResource("8_44o7y")
 
 [node name="BottomNav" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1794645931]
 layout_mode = 2
@@ -85,10 +102,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "account"
 
-[node name="Market" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1483380714]
+[node name="Shop" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1483380714]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Market"
+text = "shop"
 
 [node name="Weather" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=688998947]
 layout_mode = 2
