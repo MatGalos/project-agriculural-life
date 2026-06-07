@@ -51,7 +51,7 @@ func _apply_values() -> void:
 		return
 
 	var item := shop_item_data.item_data
-	var price := EconomyManager.get_buy_price(item)
+	var price := EconomyManager.get_buy_price(item) * shop_item_data.amount_per_purchase
 
 	icon_rect.texture = item.icon
 	name_label.text = item.display_name

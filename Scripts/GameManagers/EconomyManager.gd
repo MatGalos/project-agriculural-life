@@ -41,6 +41,9 @@ func get_sell_price(item_data: ItemData) -> int:
 	if item_data == null:
 		return 0
 
+	if CommodityMarketManager.has_commodity(item_data):
+		return CommodityMarketManager.get_current_price(item_data)
+
 	var price_data: ItemPriceData = prices_by_item_id.get(item_data.id, null)
 
 	if price_data == null:
