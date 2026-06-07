@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://bps6irkoda73v"]
 
 [ext_resource type="Script" uid="uid://bn75wwkhfc3n2" path="res://Scripts/UIs/PlayerHUD/phone_panel.gd" id="1_hrd0b"]
+[ext_resource type="PackedScene" uid="uid://dy64evsu7tivf" path="res://Scenes/UIs/PlayerHUD/Phone/SellApp/SellingPanel.tscn" id="2_c8h6s"]
+[ext_resource type="Resource" uid="uid://c46mxpfymbli4" path="res://Data/Storage/silo_storage.tres" id="3_0jr7f"]
+[ext_resource type="PackedScene" uid="uid://c0i15p4b8nfb2" path="res://Scenes/UIs/PlayerHUD/Phone/SellApp/selling_item_row.tscn" id="4_y5yci"]
 
 [node name="PhonePanel" type="Control" unique_id=270439995]
 layout_mode = 3
@@ -9,10 +12,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -576.0
-offset_top = -324.0
-offset_right = -176.0
-offset_bottom = 276.0
+offset_left = -200.0
+offset_top = -300.0
+offset_right = 200.0
+offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -56,8 +59,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ContentLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer" unique_id=2079017479]
+[node name="AppContainer" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer" unique_id=1125492911]
 layout_mode = 2
+
+[node name="SellApp" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer" unique_id=1774259236 instance=ExtResource("2_c8h6s")]
+layout_mode = 1
+storage_data = ExtResource("3_0jr7f")
+row_scene = ExtResource("4_y5yci")
 
 [node name="BottomNav" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1794645931]
 layout_mode = 2
@@ -91,3 +99,8 @@ text = "weather"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Storage"
+
+[node name="Sell" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1371647034]
+layout_mode = 2
+text = "Sell
+"
