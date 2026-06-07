@@ -34,6 +34,8 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Implemented functionality to move between inventory and storage
   - Implemented sell interface
   - Implemented buy interface
+- Implemented stock market
+  - Implemented commodity module
 - Implemented apps for phone menu
   - implemented sell app
   - implement shop app

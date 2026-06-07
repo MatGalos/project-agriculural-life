@@ -75,11 +75,6 @@ row_scene = ExtResource("4_y5yci")
 [node name="ShopApp" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer" unique_id=1245120243 instance=ExtResource("5_8j0k5")]
 visible = false
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 shop_data = ExtResource("6_4t3lr")
 row_scene = ExtResource("7_814bx")
 player_inventory = ExtResource("8_44o7y")
