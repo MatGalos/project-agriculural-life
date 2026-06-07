@@ -39,8 +39,9 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Make it update every hour
   - Integrated it into UI
 - Implemented apps for phone menu
-  - implemented sell app
-  - implement shop app
+  - Implemented sell app
+  - Implement shop app
+  - Implemented stock market app
 
 ### Version 0.2
 

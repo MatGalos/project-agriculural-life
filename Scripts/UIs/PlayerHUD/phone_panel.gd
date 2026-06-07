@@ -2,13 +2,16 @@ extends Control
 
 @onready var sell_button: Button = $PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer/Sell
 @onready var shop_button: Button = $PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer/Shop
+@onready var exchange_button: Button = $PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer/StockMarket
 @onready var sell_app: Control = $PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer/SellApp
 @onready var shop_app: Control = $PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer/ShopApp
+@onready var exchange_app: Control = $PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer/StockMarketApp
 
 func _ready() -> void:
 	visible = false
 	sell_button.pressed.connect(_on_sell_pressed)
 	shop_button.pressed.connect(_on_shop_pressed)
+	exchange_button.pressed.connect(_on_exchange_pressed)
 
 func open() -> void:
 	visible = true
@@ -43,3 +46,8 @@ func _hide_all_apps() -> void:
 	for child in $PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer.get_children():
 		if child is Control:
 			child.visible = false
+
+func _on_exchange_pressed() -> void:
+	_hide_all_apps()
+	exchange_app.visible = true
+	exchange_app.refresh()

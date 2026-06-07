@@ -8,6 +8,8 @@
 [ext_resource type="Resource" uid="uid://bfua1rlx5vmy4" path="res://Data/Shop/basic_shop.tres" id="6_4t3lr"]
 [ext_resource type="PackedScene" uid="uid://c2qivd1xjjeke" path="res://Scenes/UIs/PlayerHUD/Phone/ShopApp/shop_item_row.tscn" id="7_814bx"]
 [ext_resource type="Resource" uid="uid://exkyhl0jf7gm" path="res://Data/Inventory/player_inventory.tres" id="8_44o7y"]
+[ext_resource type="PackedScene" uid="uid://dx0gm8cd8556s" path="res://Scenes/UIs/PlayerHUD/Phone/CommodityExchangeApp/commodity_exchange_panel.tscn" id="9_4t3lr"]
+[ext_resource type="PackedScene" uid="uid://co8tk0tro0mec" path="res://Scenes/UIs/PlayerHUD/Phone/CommodityExchangeApp/commodity_item_row.tscn" id="10_814bx"]
 
 [node name="PhonePanel" type="Control" unique_id=270439995]
 layout_mode = 3
@@ -79,6 +81,11 @@ shop_data = ExtResource("6_4t3lr")
 row_scene = ExtResource("7_814bx")
 player_inventory = ExtResource("8_44o7y")
 
+[node name="StockMarketApp" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer" unique_id=1407838760 instance=ExtResource("9_4t3lr")]
+visible = false
+layout_mode = 1
+row_scene = ExtResource("10_814bx")
+
 [node name="BottomNav" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1794645931]
 layout_mode = 2
 
@@ -92,10 +99,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "news"
 
-[node name="Account" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1428452633]
+[node name="StockMarket" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1428452633]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "account"
+text = "Stock app"
 
 [node name="Shop" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1483380714]
 layout_mode = 2
@@ -114,5 +121,5 @@ text = "Storage"
 
 [node name="Sell" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1371647034]
 layout_mode = 2
-text = "Sell
+text = "Stock
 "
