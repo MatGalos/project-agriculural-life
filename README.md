@@ -31,6 +31,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Implemented StorageData
   - Implemented SiloInteractive
   - Implemented StorageUI
+  - Implemented functionality to move between inventory and storage
 
 ### Version 0.2
 

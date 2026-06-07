@@ -17,6 +17,9 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if _is_game_menu_open():
+		return
+
 	var pressed_slot: int = InputManager.get_pressed_hotbar_slot()
 
 	if pressed_slot != -1:
@@ -58,3 +61,8 @@ func get_selected_item() -> ItemData:
 		return null
 
 	return slot.item_data
+
+
+func _is_game_menu_open() -> bool:
+	var player_hud := get_tree().get_first_node_in_group("player_hud") as PlayerHUD
+	return player_hud != null and player_hud.is_any_game_menu_open()

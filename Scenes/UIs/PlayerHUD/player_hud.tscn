@@ -284,3 +284,4 @@ visible = false
 layout_mode = 1
 storage_data = ExtResource("12_uqy4o")
 row_scene = ExtResource("13_cn4vo")
+player_inventory = ExtResource("2_ktytg")

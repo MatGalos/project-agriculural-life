@@ -11,6 +11,9 @@ func add_item(item_data: ItemData, amount: int) -> void:
 	if item_data == null or amount <= 0:
 		return
 
+	if get_item_by_id(item_data.id) == null:
+		item_database.append(item_data)
+
 	var item_id := item_data.id
 
 	if not stored_items.has(item_id):

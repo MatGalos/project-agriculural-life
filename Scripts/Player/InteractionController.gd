@@ -40,6 +40,17 @@ func _process(_delta: float) -> void:
 
 
 func _input(_event: InputEvent) -> void:
+	if _is_storage_open() and InputManager.is_interact_pressed():
+		var player_hud := get_tree().get_first_node_in_group("player_hud") as PlayerHUD
+
+		if player_hud:
+			player_hud.close_storage()
+			get_viewport().set_input_as_handled()
+		return
+
+	if _is_any_game_menu_open():
+		return
+
 	if current_tool_prompt != "":
 		return
 
@@ -116,3 +127,13 @@ func _ensure_ui_nodes() -> void:
 
 	if not crosshair_label:
 		crosshair_label = get_tree().get_first_node_in_group("crosshair") as Label
+
+
+func _is_storage_open() -> bool:
+	var player_hud := get_tree().get_first_node_in_group("player_hud") as PlayerHUD
+	return player_hud != null and player_hud.is_storage_open()
+
+
+func _is_any_game_menu_open() -> bool:
+	var player_hud := get_tree().get_first_node_in_group("player_hud") as PlayerHUD
+	return player_hud != null and player_hud.is_any_game_menu_open()

@@ -1,31 +1,79 @@
 [gd_scene format=3 uid="uid://cb3qefv5afyy6"]
 
 [ext_resource type="Script" uid="uid://djx0ewvdb4b3d" path="res://Scripts/UIs/PlayerHUD/storage_panel.gd" id="1_cnyto"]
+[ext_resource type="Script" path="res://Scripts/Storage/StorageTransferDropTarget.gd" id="2_j7flx"]
 
 [node name="StoragePanel" type="Control" unique_id=758351012]
 layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -340.0
+offset_top = -200.0
+offset_right = 340.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("1_cnyto")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1008370134]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_cnyto")
-
-[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1008370134]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1082354511]
 layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=2049391671]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer" unique_id=2049391671]
 layout_mode = 2
+theme_override_constants/separation = 24
 
-[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=733966536]
+[node name="StorageColumn" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=537507186]
 layout_mode = 2
-text = "Silo Storage
-"
+size_flags_horizontal = 3
+mouse_filter = 0
+theme_override_constants/separation = 10
+script = ExtResource("2_j7flx")
+target_type = "storage"
 
-[node name="ItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1195032089]
+[node name="StorageTitleLabel" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/StorageColumn" unique_id=733966536]
 layout_mode = 2
+mouse_filter = 2
+text = "Silo Storage"
+horizontal_alignment = 1
+
+[node name="StorageItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer/StorageColumn" unique_id=1195032089]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+theme_override_constants/separation = 6
+
+[node name="InventoryColumn" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=1850153269]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 0
+theme_override_constants/separation = 10
+script = ExtResource("2_j7flx")
+target_type = "inventory"
+
+[node name="InventoryTitleLabel" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/InventoryColumn" unique_id=1683323750]
+layout_mode = 2
+mouse_filter = 2
+text = "Player Inventory"
+horizontal_alignment = 1
+
+[node name="InventoryItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer/InventoryColumn" unique_id=1614566925]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 1
+theme_override_constants/separation = 6

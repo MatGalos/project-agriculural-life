@@ -137,6 +137,11 @@ func _handle_pause_action() -> void:
 		get_viewport().set_input_as_handled()
 		return
 
+	if player_hud and player_hud.is_storage_open():
+		player_hud.close_storage()
+		get_viewport().set_input_as_handled()
+		return
+
 	if player_hud and player_hud.is_phone_open():
 		player_hud.close_phone()
 		get_viewport().set_input_as_handled()
