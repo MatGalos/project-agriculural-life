@@ -32,6 +32,9 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Implemented SiloInteractive
   - Implemented StorageUI
   - Implemented functionality to move between inventory and storage
+  - Implemented sell interface
+- Implemented apps for phone menu
+  - implemented sell app
 
 ### Version 0.2
 

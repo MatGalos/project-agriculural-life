@@ -1,13 +1,15 @@
 extends Control
 
+@onready var sell_button: Button = $PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer/Sell
+@onready var sell_app: Control = $PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer/SellApp
+
 func _ready() -> void:
 	visible = false
-
+	sell_button.pressed.connect(_on_sell_pressed)
 
 func open() -> void:
 	visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-
 
 func close() -> void:
 	visible = false
@@ -15,13 +17,21 @@ func close() -> void:
 	if gamemanager.isInGame and not gamemanager.isPaused:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-
 func toggle() -> void:
 	if visible:
 		close()
 	else:
 		open()
 
-
 func is_open() -> bool:
 	return visible
+
+func _on_sell_pressed() -> void:
+	_hide_all_apps()
+	sell_app.visible = true
+	sell_app.refresh()
+
+func _hide_all_apps() -> void:
+	for child in $PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer.get_children():
+		if child is Control:
+			child.visible = false
