@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeatherData" format=3 uid="uid://c7yejsmobd4xl"]
+
+[ext_resource type="Script" uid="uid://clu6qgm5qqwm2" path="res://Scripts/Weather/WeatherData.gd" id="1_pill3"]
+
+[resource]
+script = ExtResource("1_pill3")
+weather_type = 2
+display_name = "Rain"
+waters_fields = true
+light_energy_multiplier = 0.6
+sky_darkness_multiplier = 0.7
+min_temperature = 10
+max_temperature = 20
+metadata/_custom_type_script = "uid://clu6qgm5qqwm2"

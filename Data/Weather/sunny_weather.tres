@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="WeatherData" format=3 uid="uid://oq12c40kkc14"]
+
+[ext_resource type="Script" uid="uid://clu6qgm5qqwm2" path="res://Scripts/Weather/WeatherData.gd" id="1_jncba"]
+
+[resource]
+script = ExtResource("1_jncba")
+min_temperature = 16
+max_temperature = 28
+metadata/_custom_type_script = "uid://clu6qgm5qqwm2"

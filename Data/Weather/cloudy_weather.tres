@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="WeatherData" format=3 uid="uid://f86jhoifbyhe"]
+
+[ext_resource type="Script" uid="uid://clu6qgm5qqwm2" path="res://Scripts/Weather/WeatherData.gd" id="1_imtup"]
+
+[resource]
+script = ExtResource("1_imtup")
+weather_type = 1
+display_name = "Cloudy"
+light_energy_multiplier = 0.75
+sky_darkness_multiplier = 0.85
+max_temperature = 22
+metadata/_custom_type_script = "uid://clu6qgm5qqwm2"
