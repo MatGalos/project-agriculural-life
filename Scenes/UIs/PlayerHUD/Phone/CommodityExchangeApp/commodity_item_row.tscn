@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://co8tk0tro0mec"]
+
+[ext_resource type="Script" uid="uid://0x1ltep88f5q" path="res://Scripts/PhoneApps/CommodityExchangeApp/CommodityItemRow.gd" id="1_82dw8"]
+
+[node name="CommodityItemRow" type="HBoxContainer" unique_id=634247802]
+custom_minimum_size = Vector2(0, 40)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("1_82dw8")
+
+[node name="IconRect" type="TextureRect" parent="." unique_id=1131466130]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="." unique_id=1265315967]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="PriceLabel" type="Label" parent="." unique_id=769779940]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TrendLabel" type="Label" parent="." unique_id=240706337]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ChangeLabel" type="Label" parent="." unique_id=788339154]
+layout_mode = 2
+mouse_filter = 2

@@ -13,6 +13,7 @@ class_name CommodityData
 @export var current_price: float = 10.0
 
 @export var price_history: Array[float] = []
+@export var price_history_labels: Array[String] = []
 
 enum MarketTrend {
 	BEARISH,

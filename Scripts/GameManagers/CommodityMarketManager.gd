@@ -99,12 +99,31 @@ func _update_commodity_price(commodity: CommodityData, log_time: String) -> void
 	commodity.price_history.append(
 		commodity.current_price
 	)
+	commodity.price_history_labels.append(_get_history_label(log_time))
 
 	if commodity.price_history.size() > 30:
 		commodity.price_history.pop_front()
+		if not commodity.price_history_labels.is_empty():
+			commodity.price_history_labels.pop_front()
 
 func _ready() -> void:
+	_initialize_price_history()
 	TimeManager.time_changed.connect(_on_time_changed)
+
+
+func _initialize_price_history() -> void:
+	for commodity in commodities:
+		if commodity == null:
+			continue
+
+		if commodity.price_history.is_empty():
+			commodity.price_history.append(commodity.current_price)
+
+		if commodity.price_history_labels.is_empty():
+			commodity.price_history_labels.append(_get_history_label(TimeManager.get_time_string()))
+
+		while commodity.price_history_labels.size() < commodity.price_history.size():
+			commodity.price_history_labels.append(_get_history_label(TimeManager.get_time_string()))
 
 func _on_time_changed() -> void:
 	var current_day := TimeManager.current_day
@@ -151,3 +170,7 @@ func get_current_price(item_data: ItemData) -> int:
 		return 0
 
 	return int(round(commodity.current_price))
+
+
+func _get_history_label(time_string: String) -> String:
+	return "%s %s" % [TimeManager.get_date_string(), time_string]
