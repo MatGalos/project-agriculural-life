@@ -33,8 +33,10 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Implemented StorageUI
   - Implemented functionality to move between inventory and storage
   - Implemented sell interface
+  - Implemented buy interface
 - Implemented apps for phone menu
   - implemented sell app
+  - implement buy app
 
 ### Version 0.2
 
