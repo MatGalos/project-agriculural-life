@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeatherData" format=3 uid="uid://qgo5oeife2hk"]
+
+[ext_resource type="Script" uid="uid://clu6qgm5qqwm2" path="res://Scripts/Weather/WeatherData.gd" id="1_i5lsa"]
+
+[resource]
+script = ExtResource("1_i5lsa")
+weather_type = 3
+display_name = "Storm"
+waters_fields = true
+light_energy_multiplier = 0.4
+sky_darkness_multiplier = 0.55
+min_temperature = 8
+max_temperature = 18
+metadata/_custom_type_script = "uid://clu6qgm5qqwm2"
