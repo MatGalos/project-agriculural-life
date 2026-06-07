@@ -128,3 +128,16 @@ func _update_water_bar(item_data: ItemData) -> void:
 
 	water_bar_fill.position = Vector2.ZERO
 	water_bar_fill.size = Vector2(water_bar_background.size.x * ratio, water_bar_background.size.y)
+
+func _gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+			var storage_panel = get_tree().get_first_node_in_group("storage_panel")
+
+			if storage_panel == null:
+				return
+
+			if not storage_panel.visible:
+				return
+
+			storage_panel.transfer_from_inventory_slot(slot_index)

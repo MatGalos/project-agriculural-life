@@ -7,7 +7,7 @@ func get_prompt_text() -> String:
 
 
 func interact() -> void:
-	var storage_panel = get_tree().get_first_node_in_group("storage_panel")
+	var player_hud := get_tree().get_first_node_in_group("player_hud") as PlayerHUD
 
-	if storage_panel:
-		storage_panel.toggle()
+	if player_hud:
+		player_hud.toggle_storage()

@@ -30,6 +30,7 @@ const CROSSHAIR_SIZE := 40.0
 @onready var prompt_label: Label = $Root/CenterContainer/PromptLabel
 @onready var inventory_panel: InventoryPanel = $Root/InventoryPanel
 @onready var phone_panel: Control = $Root/PhonePanel
+@onready var storage_panel: StoragePanel = $Root/StoragePanel
 
 func _ready() -> void:
 	_setup_starting_inventory()
@@ -40,6 +41,7 @@ func _ready() -> void:
 	inventory_panel.refresh()
 	quick_inventory_controller.refresh()
 	phone_panel.visible = false
+	storage_panel.close()
 	MoneyManager.money_changed.connect(_on_money_changed)
 	_update_money_ui()
 	_update_layout()
@@ -159,7 +161,7 @@ func _setup_starting_inventory() -> void:
 	player_inventory.add_item(wheat_item, 10)
 
 func open_inventory() -> void:
-	if is_phone_open():
+	if is_phone_open() or is_storage_open():
 		return
 
 	inventory_panel.open()
@@ -180,7 +182,7 @@ func is_inventory_open() -> bool:
 	return inventory_panel.is_open()
 
 func open_phone() -> void:
-	if is_inventory_open():
+	if is_inventory_open() or is_storage_open():
 		return
 
 	phone_panel.visible = true
@@ -200,6 +202,27 @@ func toggle_phone() -> void:
 
 func is_phone_open() -> bool:
 	return phone_panel.visible
+
+func open_storage() -> void:
+	if is_inventory_open() or is_phone_open():
+		return
+
+	storage_panel.open()
+
+func close_storage() -> void:
+	storage_panel.close()
+
+func toggle_storage() -> void:
+	if is_storage_open():
+		close_storage()
+	else:
+		open_storage()
+
+func is_storage_open() -> bool:
+	return storage_panel != null and storage_panel.is_open()
+
+func is_any_game_menu_open() -> bool:
+	return is_inventory_open() or is_phone_open() or is_storage_open()
 
 func _on_time_changed() -> void:
 	_update_time_ui()
