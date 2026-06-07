@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="ShopData" format=3 uid="uid://bfua1rlx5vmy4"]
+
+[ext_resource type="Script" uid="uid://c7fomv5bo2036" path="res://Scripts/PhoneApps/ShopApp/ShopItemData.gd" id="1_isft6"]
+[ext_resource type="Script" uid="uid://bt312m6vqlhxs" path="res://Scripts/PhoneApps/ShopApp/ShopData.gd" id="2_lhmpb"]
+
+[resource]
+script = ExtResource("2_lhmpb")
+metadata/_custom_type_script = "uid://bt312m6vqlhxs"
