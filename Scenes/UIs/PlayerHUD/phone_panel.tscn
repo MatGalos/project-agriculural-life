@@ -10,6 +10,8 @@
 [ext_resource type="Resource" uid="uid://exkyhl0jf7gm" path="res://Data/Inventory/player_inventory.tres" id="8_44o7y"]
 [ext_resource type="PackedScene" uid="uid://dx0gm8cd8556s" path="res://Scenes/UIs/PlayerHUD/Phone/CommodityExchangeApp/commodity_exchange_panel.tscn" id="9_4t3lr"]
 [ext_resource type="PackedScene" uid="uid://co8tk0tro0mec" path="res://Scenes/UIs/PlayerHUD/Phone/CommodityExchangeApp/commodity_item_row.tscn" id="10_814bx"]
+[ext_resource type="PackedScene" uid="uid://datulgagyqbol" path="res://Scenes/UIs/PlayerHUD/Phone/WeatherApp/weather_panel.tscn" id="11_se1to"]
+[ext_resource type="PackedScene" uid="uid://beet0aeil50xy" path="res://Scenes/UIs/PlayerHUD/Phone/WeatherApp/weather_forecast_row.tscn" id="12_5upr8"]
 
 [node name="PhonePanel" type="Control" unique_id=270439995]
 layout_mode = 3
@@ -85,6 +87,11 @@ player_inventory = ExtResource("8_44o7y")
 visible = false
 layout_mode = 1
 row_scene = ExtResource("10_814bx")
+
+[node name="WeatherApp" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer" unique_id=719591160 instance=ExtResource("11_se1to")]
+visible = false
+layout_mode = 1
+row_scene = ExtResource("12_5upr8")
 
 [node name="BottomNav" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1794645931]
 layout_mode = 2

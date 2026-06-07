@@ -39,11 +39,13 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Make it update every hour
   - Integrated it into UI
 - Implement Weather system
+  - Implemented temperature into game
   - Implement rain into game
 - Implemented apps for phone menu
   - Implemented sell app
   - Implement shop app
   - Implemented stock market app
+  - Implement weather app
 
 ### Version 0.2
 

@@ -14,25 +14,35 @@ var tomorrow_weather: WeatherData
 
 var current_temperature: int = 20
 var tomorrow_temperature: int = 20
+const FORECAST_DAYS := 7
+
+var forecast: Array[Dictionary] = []
 
 func _ready() -> void:
 	TimeManager.day_changed.connect(_on_day_changed)
 
-	tomorrow_weather = _roll_weather()
-	tomorrow_temperature = _roll_temperature(tomorrow_weather)
-
+	_generate_initial_forecast()
 	_apply_new_day_weather()
 
 func _on_day_changed() -> void:
 	_apply_new_day_weather()
 
 func _apply_new_day_weather() -> void:
-	current_weather = tomorrow_weather
-	current_temperature = tomorrow_temperature
-	
+	if forecast.is_empty():
+		_generate_initial_forecast()
+
+	var today: Dictionary = forecast.pop_front()
+
+	current_weather = today["weather"] as WeatherData
+	current_temperature = int(today["temperature"])
+
 	_water_fields_if_needed()
-	tomorrow_weather = _roll_weather()
-	tomorrow_temperature = _roll_temperature(tomorrow_weather)
+
+	forecast.append(_generate_forecast_entry())
+
+	var tomorrow: Dictionary = forecast[0]
+	tomorrow_weather = tomorrow["weather"] as WeatherData
+	tomorrow_temperature = int(tomorrow["temperature"])
 
 	weather_changed.emit(current_weather, current_temperature)
 
@@ -92,3 +102,21 @@ func _water_fields_if_needed() -> void:
 			tile.water()
 
 	print("Weather watered fields: ", current_weather.display_name)
+
+func _generate_initial_forecast() -> void:
+	forecast.clear()
+
+	for i in range(FORECAST_DAYS):
+		forecast.append(_generate_forecast_entry())
+
+func _generate_forecast_entry() -> Dictionary:
+	var weather: WeatherData = _roll_weather()
+	var temperature: int = _roll_temperature(weather)
+
+	return {
+		"weather": weather,
+		"temperature": temperature
+	}
+
+func get_forecast() -> Array[Dictionary]:
+	return forecast

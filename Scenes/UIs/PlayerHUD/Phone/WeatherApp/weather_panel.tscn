@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://datulgagyqbol"]
+
+[ext_resource type="Script" uid="uid://o6o3yhcunume" path="res://Scripts/PhoneApps/WeatherApp/WeatherPanel.gd" id="1_fa7d6"]
+
+[node name="WeatherPanel" type="Control" unique_id=719591160]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fa7d6")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=536580729]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=359916078]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=1467291478]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1918302909]
+layout_mode = 2
+text = "Weather"
+
+[node name="TodayLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1402723343]
+layout_mode = 2
+text = "7-Day Forecast"
+
+[node name="ForecastTitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1472588973]
+layout_mode = 2
+text = "Today: -"
+
+[node name="ForecastContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=2079540814]
+layout_mode = 2
