@@ -10,6 +10,9 @@
 [ext_resource type="Resource" uid="uid://cct5ygvjvokag" path="res://Data/Items/Seeds/wheat_seed_item.tres" id="5_x4vgm"]
 [ext_resource type="Resource" uid="uid://btisn5y1xgx8q" path="res://Data/Items/Tools/watering_can_item.tres" id="6_6w4ij"]
 [ext_resource type="Resource" uid="uid://8haib013i3dl" path="res://Data/Items/Tools/scythe_item.tres" id="7_i6vwx"]
+[ext_resource type="PackedScene" uid="uid://cb3qefv5afyy6" path="res://Scenes/UIs/PlayerHUD/Storage/storage_panel.tscn" id="11_i6vwx"]
+[ext_resource type="Resource" uid="uid://c46mxpfymbli4" path="res://Data/Storage/silo_storage.tres" id="12_uqy4o"]
+[ext_resource type="PackedScene" uid="uid://cpaiyaqvr2mmn" path="res://Scenes/UIs/PlayerHUD/Storage/storage_item_row.tscn" id="13_cn4vo"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_334lg"]
 font_size = 32
@@ -275,3 +278,9 @@ layout_mode = 1
 [node name="PhonePanel" parent="Root" unique_id=1744212345 instance=ExtResource("4_i3s5d")]
 visible = false
 layout_mode = 1
+
+[node name="StoragePanel" parent="Root" unique_id=758351012 groups=["storage_panel"] instance=ExtResource("11_i6vwx")]
+visible = false
+layout_mode = 1
+storage_data = ExtResource("12_uqy4o")
+row_scene = ExtResource("13_cn4vo")

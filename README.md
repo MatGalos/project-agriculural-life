@@ -29,6 +29,8 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Implement EconomyManager
 - Implemeeted storage and selling mechanics
   - Implemented StorageData
+  - Implemented SiloInteractive
+  - Implemented StorageUI
 
 ### Version 0.2
 
