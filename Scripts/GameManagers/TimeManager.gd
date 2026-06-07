@@ -100,9 +100,13 @@ func get_day_progress() -> float:
 	return float(current_minute_of_day) / float(GAME_MINUTES_PER_DAY)
 
 func skip_to_morning() -> void:
+	var previous_day := current_day
+	var previous_hour := get_hour()
+
 	if get_hour() < 6:
 		current_minute_of_day = 6 * 60
 	else:
+		CommodityMarketManager.simulate_skipped_market_hours(previous_day, previous_hour, previous_day, 17)
 		_advance_day()
 		current_minute_of_day = 6 * 60
 

@@ -14,6 +14,9 @@ func _ready() -> void:
 	if storage_data and not storage_data.storage_changed.is_connected(refresh):
 		storage_data.storage_changed.connect(refresh)
 
+	if not CommodityMarketManager.commodity_prices_updated.is_connected(_on_commodity_prices_updated):
+		CommodityMarketManager.commodity_prices_updated.connect(_on_commodity_prices_updated)
+
 	refresh()
 
 
@@ -59,6 +62,23 @@ func refresh() -> void:
 
 func _on_sell_one_requested(item_data: ItemData) -> void:
 	_sell_item(item_data, 1)
+
+
+func _on_commodity_prices_updated() -> void:
+	if storage_data:
+		for item_entry in storage_data.get_all_items():
+			var item_data := item_entry["item_data"] as ItemData
+
+			if item_data and CommodityMarketManager.has_commodity(item_data):
+				print(
+					"[SellingPanel] Refreshing %s sell price to %d$ at %s" % [
+						item_data.display_name,
+						EconomyManager.get_sell_price(item_data),
+						TimeManager.get_time_string()
+					]
+				)
+
+	refresh()
 
 
 func _on_sell_all_requested(item_data: ItemData) -> void:
