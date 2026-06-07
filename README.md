@@ -36,7 +36,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Implemented buy interface
 - Implemented apps for phone menu
   - implemented sell app
-  - implement buy app
+  - implement shop app
 
 ### Version 0.2
 

@@ -1,11 +1,14 @@
 extends Control
 
 @onready var sell_button: Button = $PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer/Sell
+@onready var shop_button: Button = $PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer/Shop
 @onready var sell_app: Control = $PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer/SellApp
+@onready var shop_app: Control = $PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer/ShopApp
 
 func _ready() -> void:
 	visible = false
 	sell_button.pressed.connect(_on_sell_pressed)
+	shop_button.pressed.connect(_on_shop_pressed)
 
 func open() -> void:
 	visible = true
@@ -30,6 +33,11 @@ func _on_sell_pressed() -> void:
 	_hide_all_apps()
 	sell_app.visible = true
 	sell_app.refresh()
+
+func _on_shop_pressed() -> void:
+	_hide_all_apps()
+	shop_app.visible = true
+	shop_app.refresh()
 
 func _hide_all_apps() -> void:
 	for child in $PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer.get_children():

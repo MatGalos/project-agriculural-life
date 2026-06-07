@@ -34,16 +34,8 @@ func toggle() -> void:
 
 
 func refresh() -> void:
-	print("SELL REFRESH")
-	print("Storage data: ", storage_data)
-	print("Row scene: ", row_scene)
-
 	if storage_data == null or row_scene == null:
-		print("Missing storage_data or row_scene")
 		return
-
-	print("Stored items: ", storage_data.stored_items)
-	print("All items count: ", storage_data.get_all_items().size())
 
 	for child in items_container.get_children():
 		child.queue_free()
@@ -51,11 +43,8 @@ func refresh() -> void:
 	var items := storage_data.get_all_items()
 
 	for item_entry in items:
-		print("Adding row: ", item_entry)
-
 		var row := row_scene.instantiate() as SellingItemRow
 		if row == null:
-			print("Row is null / wrong script")
 			continue
 
 		items_container.add_child(row)
