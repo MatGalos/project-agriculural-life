@@ -41,6 +41,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Implement Weather system
   - Implemented temperature into game
   - Implement rain into game
+- Implement event system
 - Implemented apps for phone menu
   - Implemented sell app
   - Implement shop app
