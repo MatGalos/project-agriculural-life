@@ -115,6 +115,15 @@ func _use_seed_item(target: Node, seed_item: SeedItemData) -> void:
 	if crop_data == null:
 		return
 
+	if not crop_data.can_grow_in_current_season():
+		var message := "Cannot plant %s in %s" % [
+			crop_data.display_name,
+			TimeManager.get_current_season_display_name()
+		]
+		print(message)
+		_show_hud_event_message(message)
+		return
+
 	if not player_inventory.has_item(seed_item, 1):
 		return
 
@@ -190,3 +199,9 @@ func _refresh_inventory_ui() -> void:
 	var hotbar_ui := get_tree().get_first_node_in_group("hotbar_ui")
 	if hotbar_ui and hotbar_ui.has_method("refresh"):
 		hotbar_ui.refresh()
+
+
+func _show_hud_event_message(message: String) -> void:
+	var player_hud := get_tree().get_first_node_in_group("player_hud")
+	if player_hud and player_hud.has_method("show_event_message"):
+		player_hud.show_event_message(message)
