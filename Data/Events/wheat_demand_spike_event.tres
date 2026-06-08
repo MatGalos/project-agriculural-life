@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MarketEventData" format=3 uid="uid://okc4xbc8238s"]
+
+[ext_resource type="Script" uid="uid://dy0h10ql6luky" path="res://Scripts/Events/MarketEventData.gd" id="1_nqvrk"]
+[ext_resource type="Resource" uid="uid://bwm4y7o4y40ew" path="res://Data/Items/Crops/wheat_item.tres" id="2_hmagj"]
+
+[resource]
+script = ExtResource("1_nqvrk")
+event_id = "wheat_demand_spike"
+display_name = "Wheat Demand Spike"
+description = "Increased demand for wheat pushes prices upward."
+duration_days = 2
+trigger_chance = 0.2
+target_item = ExtResource("2_hmagj")
+trend_effect = 2
+trend_strength_modifier = 0.02
+volatility_modifier = 0.03
+metadata/_custom_type_script = "uid://dy0h10ql6luky"

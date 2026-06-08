@@ -158,10 +158,8 @@ func get_commodity_for_item(item_data: ItemData) -> CommodityData:
 
 	return null
 
-
 func has_commodity(item_data: ItemData) -> bool:
 	return get_commodity_for_item(item_data) != null
-
 
 func get_current_price(item_data: ItemData) -> int:
 	var commodity := get_commodity_for_item(item_data)
@@ -171,6 +169,26 @@ func get_current_price(item_data: ItemData) -> int:
 
 	return int(round(commodity.current_price))
 
-
 func _get_history_label(time_string: String) -> String:
 	return "%s %s" % [TimeManager.get_date_string(), time_string]
+
+func reset_event_modifiers() -> void:
+	for commodity in commodities:
+		if commodity == null:
+			continue
+
+		commodity.trend = CommodityData.MarketTrend.NEUTRAL
+		commodity.trend_strength = 0.01
+
+func apply_event_modifier(event_data: MarketEventData) -> void:
+	if event_data == null or event_data.target_item == null:
+		return
+
+	var commodity := get_commodity_for_item(event_data.target_item)
+
+	if commodity == null:
+		return
+
+	commodity.trend = event_data.trend_effect
+	commodity.trend_strength += event_data.trend_strength_modifier
+	commodity.volatility += event_data.volatility_modifier
