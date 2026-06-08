@@ -19,3 +19,10 @@ class_name CropData
 @export var days_to_ready: int = 4
 
 @export var harvest_amount: int = 1
+
+@export var allowed_seasons: Array[SeasonData.Season] = [
+	SeasonData.Season.SPRING
+]
+
+func can_grow_in_current_season() -> bool:
+	return allowed_seasons.has(TimeManager.get_current_season())

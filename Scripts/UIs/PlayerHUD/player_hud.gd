@@ -2,6 +2,7 @@ extends CanvasLayer
 class_name PlayerHUD
 
 const CROSSHAIR_SIZE := 40.0
+const EVENT_MESSAGE_DURATION := 7.0
 
 @export var player_inventory: InventoryData
 @export var hoe_item: ItemData
@@ -32,6 +33,8 @@ const CROSSHAIR_SIZE := 40.0
 @onready var phone_panel: Control = $Root/PhonePanel
 @onready var storage_panel: StoragePanel = $Root/StoragePanel
 
+var _event_message_version := 0
+
 func _ready() -> void:
 	_setup_starting_inventory()
 	TimeManager.time_changed.connect(_on_time_changed)
@@ -42,6 +45,7 @@ func _ready() -> void:
 	quick_inventory_controller.refresh()
 	phone_panel.visible = false
 	storage_panel.close()
+	_hide_event_message()
 	MoneyManager.money_changed.connect(_on_money_changed)
 	_update_money_ui()
 	_update_layout()
@@ -223,6 +227,26 @@ func is_storage_open() -> bool:
 
 func is_any_game_menu_open() -> bool:
 	return is_inventory_open() or is_phone_open() or is_storage_open()
+
+func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATION) -> void:
+	if message.is_empty():
+		_hide_event_message()
+		return
+
+	_event_message_version += 1
+	var current_version := _event_message_version
+
+	event_label.text = message
+	event_controller.visible = true
+
+	await get_tree().create_timer(duration).timeout
+
+	if current_version == _event_message_version:
+		_hide_event_message()
+
+func _hide_event_message() -> void:
+	event_controller.visible = false
+	event_label.text = ""
 
 func _on_time_changed() -> void:
 	_update_time_ui()

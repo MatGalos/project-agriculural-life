@@ -91,6 +91,7 @@ horizontal_alignment = 2
 metadata/_edit_use_anchors_ = true
 
 [node name="EventController" type="Control" parent="Root" unique_id=251260563]
+visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -115,7 +116,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "This is gonna display events that will happen in the game"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
