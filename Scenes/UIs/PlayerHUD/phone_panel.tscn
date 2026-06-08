@@ -12,6 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://co8tk0tro0mec" path="res://Scenes/UIs/PlayerHUD/Phone/CommodityExchangeApp/commodity_item_row.tscn" id="10_814bx"]
 [ext_resource type="PackedScene" uid="uid://datulgagyqbol" path="res://Scenes/UIs/PlayerHUD/Phone/WeatherApp/weather_panel.tscn" id="11_se1to"]
 [ext_resource type="PackedScene" uid="uid://beet0aeil50xy" path="res://Scenes/UIs/PlayerHUD/Phone/WeatherApp/weather_forecast_row.tscn" id="12_5upr8"]
+[ext_resource type="PackedScene" uid="uid://br8ir85avtkfg" path="res://Scenes/UIs/PlayerHUD/Phone/NewsApp/news_panel.tscn" id="13_0jn3t"]
+[ext_resource type="PackedScene" uid="uid://eywsmmhf7odx" path="res://Scenes/UIs/PlayerHUD/Phone/NewsApp/news_item_row.tscn" id="14_uutuo"]
 
 [node name="PhonePanel" type="Control" unique_id=270439995]
 layout_mode = 3
@@ -44,22 +46,26 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="PhoneHeader" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1269155512]
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 
 [node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PhoneHeader" unique_id=1672163018]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
+offset_top = 4.0
 offset_bottom = 17.0
 grow_horizontal = 2
 text = "FarmPhone"
 horizontal_alignment = 1
 
 [node name="ContentArea" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=2119467755]
+clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
 
 [node name="PanelContainer" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea" unique_id=961120559]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -68,6 +74,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="AppContainer" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer" unique_id=1125492911]
+clip_contents = true
 layout_mode = 2
 
 [node name="SellApp" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer" unique_id=1774259236 instance=ExtResource("2_c8h6s")]
@@ -92,6 +99,11 @@ row_scene = ExtResource("10_814bx")
 visible = false
 layout_mode = 1
 row_scene = ExtResource("12_5upr8")
+
+[node name="NewsApp" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer" unique_id=1909946604 instance=ExtResource("13_0jn3t")]
+visible = false
+layout_mode = 1
+row_scene = ExtResource("14_uutuo")
 
 [node name="BottomNav" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1794645931]
 layout_mode = 2

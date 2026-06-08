@@ -47,6 +47,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Implement shop app
   - Implemented stock market app
   - Implement weather app
+  - Implemented news app
 
 ### Version 0.2
 

@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://br8ir85avtkfg"]
+
+[ext_resource type="Script" uid="uid://dxm8ppvmmg7w2" path="res://Scripts/PhoneApps/NewsApp/NewsPanel.gd" id="1_gi4sr"]
+
+[node name="NewsPanel" type="Control" unique_id=1909946604]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gi4sr")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1553473128]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=521546201]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=758313188]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=523918142]
+layout_mode = 2
+text = "News"
+
+[node name="NewsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1778471088]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 8
