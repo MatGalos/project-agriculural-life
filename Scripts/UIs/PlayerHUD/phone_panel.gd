@@ -4,10 +4,12 @@ extends Control
 @onready var shop_button: Button = $PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer/Shop
 @onready var exchange_button: Button = $PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer/StockMarket
 @onready var weather_button: Button = $PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer/Weather
+@onready var news_button: Button = $PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer/News
 @onready var sell_app: Control = $PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer/SellApp
 @onready var shop_app: Control = $PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer/ShopApp
 @onready var exchange_app: Control = $PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer/StockMarketApp
 @onready var weather_app: Control = $PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer/WeatherApp
+@onready var news_app: Control = $PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer/NewsApp
 
 func _ready() -> void:
 	visible = false
@@ -15,6 +17,7 @@ func _ready() -> void:
 	shop_button.pressed.connect(_on_shop_pressed)
 	exchange_button.pressed.connect(_on_exchange_pressed)
 	weather_button.pressed.connect(_on_weather_pressed)
+	news_button.pressed.connect(_on_news_pressed)
 
 func open() -> void:
 	visible = true
@@ -59,3 +62,8 @@ func _on_weather_pressed() -> void:
 	_hide_all_apps()
 	weather_app.visible = true
 	weather_app.refresh()
+
+func _on_news_pressed() -> void:
+	_hide_all_apps()
+	news_app.visible = true
+	news_app.refresh()
