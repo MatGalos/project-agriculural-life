@@ -5,6 +5,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 ## Documentation
 
 - [Architecture notes](Docs/architecture.md)
+- [Function reference](Docs/function-reference.md)
 
 ## Current Gameplay Scope
 
@@ -14,20 +15,28 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Tool use through the selected hotbar item.
 - Farm tiles with grass, plowed, and watered states.
 - Crop planting, daily growth, and harvesting.
+- Seasonal crop restrictions based on the current in-game season.
+- Temporary HUD event messages for gameplay feedback, such as planting blocked by season.
 - Watering can capacity, refill at the well, and water-fill bars in inventory/hotbar UI.
 - Day/night and date progression.
+- Four-season calendar: Spring, Summer, Autumn, and Winter.
+- Money, buy prices, sell prices, and commodity-backed dynamic crop prices.
+- Commodity market updates during market hours with price history.
+- Market events that affect commodity trends and generate news entries.
+- Weather system with current weather, temperature, forecast, and rain/storm field watering.
+- Phone menu with sell, shop, stock market, weather, and news apps.
 - Basic interactables for well, house, and silo prompts.
 
 ## Changelog
 
 ### Version 0.3
-- Restuctured the world
+- Restructured the world
 - Implemented WorldManager
 - Implemented Game Economy
-  - Implement MoneyManager
-  - Implement PriceData
-  - Implement EconomyManager
-- Implemeeted storage and selling mechanics
+  - Implemented MoneyManager
+  - Implemented PriceData
+  - Implemented EconomyManager
+- Implemented storage and selling mechanics
   - Implemented StorageData
   - Implemented SiloInteractive
   - Implemented StorageUI
@@ -36,16 +45,20 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Implemented buy interface
 - Implemented stock market
   - Implemented commodity module
-  - Make it update every hour
+  - Made it update every market hour
   - Integrated it into UI
-- Implement Weather system
+- Implemented Weather system
   - Implemented temperature into game
-  - Implement rain into game
-- Implement event system
+  - Implemented rain into game
+- Implemented event system
 - Implemented seasons
+  - Added Spring, Summer, Autumn, and Winter calendar flow
+  - Added per-crop allowed season configuration
+  - Blocked planting when the selected crop cannot grow in the current season
+  - Added temporary HUD feedback for blocked seasonal planting
 - Implemented apps for phone menu
   - Implemented sell app
-  - Implement shop app
+  - Implemented shop app
   - Implemented stock market app
   - Implement weather app
   - Implemented news app
