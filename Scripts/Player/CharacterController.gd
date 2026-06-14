@@ -52,6 +52,10 @@ func _input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("load_debug"):
 		SaveManager.load_game()
+	
+	if event.is_action_pressed("new_debug"):
+		SaveManager.start_new_game(1)
+		return
 
 	if event is InputEventMouseMotion:
 		_rotate_camera(event as InputEventMouseMotion)

@@ -66,7 +66,9 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Implemented save game / load game functionality
   - Added three save slots.
   - Persisted player inventory, hotbar, position, time, weather, storage, market prices, active events, news history, and farm tile state.
-
+- Implemented basic menus
+  - Implemented new game menu
+  
 ### Version 0.2
 
 - Implemented tools:

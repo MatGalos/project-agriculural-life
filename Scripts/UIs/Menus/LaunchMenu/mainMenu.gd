@@ -9,11 +9,11 @@ extends Control
 @export var creditsButton: Button
 @export var exitButton: Button
 
-@onready var newGameScene: PackedScene = preload("res://Scenes/Game/mainScene.tscn") as PackedScene
 @onready var background: ColorRect = $ColorRect
 
 
 func _ready() -> void:
+	add_to_group("main_menu")
 	var version = ProjectSettings.get_setting("application/config/version")
 	versionLabel.text = "version " + str(version)
 	startButton.button_down.connect(onStartButtonPressed)
@@ -25,8 +25,7 @@ func _ready() -> void:
 
 
 func onStartButtonPressed() -> void:
-	gamemanager.startGame()
-	get_tree().change_scene_to_packed.call_deferred(newGameScene)
+	gamemanager.openNewGamePanel()
 
 
 func onLoadButtonPressed() -> void:
