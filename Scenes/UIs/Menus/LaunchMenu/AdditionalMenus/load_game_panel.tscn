@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://dnd8qaa681pbk"]
+
+[ext_resource type="Script" uid="uid://cghq0a27cyv1m" path="res://Scripts/UIs/Menus/LaunchMenu/AdditionalMenus/LoadGamePanel.gd" id="1_load"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_load_game_title"]
+font_size = 52
+
+[node name="LoadGamePanel" type="Control" unique_id=189585165]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_load")
+
+[node name="Background" type="ColorRect" parent="." unique_id=104231502]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101961, 0.337255, 0.156863, 1)
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=321672058]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -220.0
+offset_right = 230.0
+offset_bottom = 220.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1519720826]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 28
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=133218427]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=59528867]
+layout_mode = 2
+text = "Load Game"
+label_settings = SubResource("LabelSettings_load_game_title")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot1Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=701256684]
+custom_minimum_size = Vector2(0, 68)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Slot 1"
+
+[node name="Slot2Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=997639259]
+custom_minimum_size = Vector2(0, 68)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Slot 2"
+
+[node name="Slot3Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=951234118]
+custom_minimum_size = Vector2(0, 68)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Slot 3"
+
+[node name="BackButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=2066672007]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "Back to menu"

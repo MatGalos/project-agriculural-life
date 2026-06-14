@@ -755,3 +755,57 @@ func _reset_world_tiles() -> void:
 
 		tile.clear_crop()
 		tile.set_state(FarmTile.TileState.GRASS)
+
+func get_save_slot_info(slot: int) -> Dictionary:
+	var path := get_save_path(slot)
+
+	if not FileAccess.file_exists(path):
+		return {
+			"exists": false
+		}
+
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return {
+			"exists": false
+		}
+
+	var json_string := file.get_as_text()
+	file.close()
+
+	var json := JSON.new()
+	if json.parse(json_string) != OK:
+		return {
+			"exists": false
+		}
+
+	if not (json.data is Dictionary):
+		return {
+			"exists": false
+		}
+
+	var save_data := json.data as Dictionary
+	var player_data := save_data.get("player", {}) as Dictionary
+	var time_data := save_data.get("time", {}) as Dictionary
+
+	return {
+		"exists": true,
+		"money": int(player_data.get("money", 0)),
+		"year": int(time_data.get("year", 1)),
+		"month": int(time_data.get("month", 1)),
+		"day": int(time_data.get("day", 1)),
+		"minute_of_day": int(time_data.get("minute_of_day", 0))
+	}
+
+func get_season_name_from_month(month: int) -> String:
+	match month:
+		1:
+			return "Spring"
+		2:
+			return "Summer"
+		3:
+			return "Autumn"
+		4:
+			return "Winter"
+		_:
+			return "Unknown"

@@ -41,9 +41,11 @@ Important behavior:
 Rules:
 
 - `setPaused()` must be used instead of changing `get_tree().paused` directly.
-- `Esc` is ignored while options are open, so options cannot accidentally unpause the game.
+- `Esc` is ignored while options or load game are open, so submenu overlays cannot accidentally unpause the game or create a second pause stack.
 - Inventory and phone are closed before toggling pause.
 - Mouse capture is enabled only while the player is in game, not paused, and no blocking UI is visible.
+- Options and load game opened from pause keep the pause blur visible and hide the pause button panel.
+- Load game is moved to the front when opened so the pause blur remains behind it and cannot block slot buttons.
 
 ## Inventory Data
 
@@ -200,6 +202,9 @@ Save-slot behavior:
 - `get_save_path(slot)` resolves a slot to its `user://save_slot_%d.json` path.
 - `has_save(slot)` checks whether a slot file exists.
 - `delete_save(slot)` removes a slot file if it exists.
+- The new game menu selects a slot with `SaveManager.start_new_game(slot)`, clears any old file for that slot, resets runtime state, and writes the initial save.
+- The load game menu selects a slot with `set_current_save_slot(slot)`, starts gameplay, changes to the main game scene, and then applies `load_game()`.
+- Pause menu `Save`, `Save and quit to menu`, and `Save and quit to desktop` all write to the current save slot before continuing their action.
 
 Saved data:
 
@@ -219,10 +224,6 @@ Load behavior:
 - If the save contains a `news` array, it replaces the current news list atomically.
 - If the save has active events but no saved news array, news are rebuilt from the active saved events.
 - Farm tile state is restored through `WorldManager` tile IDs, so farm tiles must have stable `tile_id` values.
-
-Current limitation:
-
-- The slot backend exists, but current gameplay calls only `save_game()` and `load_game()` without a slot picker. Unless UI calls `set_current_save_slot()`, save/load uses slot `1`.
 
 ## Phone Apps
 

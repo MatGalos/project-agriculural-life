@@ -49,13 +49,11 @@ func onContinueButtonPressed() -> void:
 
 
 func onSaveGameButtonPressed() -> void:
-	# Save flow is not implemented yet.
-	pass
+	SaveManager.save_game()
 
 
 func onLoadGameButtonPressed() -> void:
-	# Load flow is not implemented yet.
-	pass
+	gamemanager.openLoadGamePanel(gamemanager.menuContext.Pause_Menu)
 
 
 func onOptionsButtonPressed() -> void:
@@ -63,12 +61,14 @@ func onOptionsButtonPressed() -> void:
 
 
 func onSaveAndQuitToMenuButtonPressed() -> void:
+	SaveManager.save_game()
 	gamemanager.setPaused(false)
 	gamemanager.returnToMenu()
 	get_tree().change_scene_to_packed(mainMenuScene)
 
 
 func onSaveAndQuitToDesktopButtonPressed() -> void:
+	SaveManager.save_game()
 	gamemanager.setPaused(false)
 	get_tree().quit()
 

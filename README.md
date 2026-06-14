@@ -26,6 +26,8 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Weather system with current weather, temperature, forecast, and rain/storm field watering.
 - Phone menu with sell, shop, stock market, weather, and news apps.
 - Save/load persistence with three save slots stored under `user://save_slot_%d.json`.
+- New game and load game menus for choosing the active save slot.
+- Pause menu save actions for saving the current slot, saving and returning to the main menu, or saving and quitting to desktop.
 - Basic interactables for well, house, and silo prompts.
 
 ## Changelog
@@ -68,7 +70,10 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Persisted player inventory, hotbar, position, time, weather, storage, market prices, active events, news history, and farm tile state.
 - Implemented basic menus
   - Implemented new game menu
-  
+  - Implemented load game menu
+  - Integrated load game into the pause menu with inherited pause blur background.
+  - Added pause menu save, save-and-quit-to-menu, and save-and-quit-to-desktop actions for the current save slot.
+
 ### Version 0.2
 
 - Implemented tools:
