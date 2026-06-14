@@ -686,3 +686,72 @@ func delete_save(slot: int) -> void:
 
 	if FileAccess.file_exists(path):
 		DirAccess.remove_absolute(path)
+
+func start_new_game(slot: int) -> void:
+	set_current_save_slot(slot)
+	delete_save(slot)
+	_reset_runtime_state_for_new_game()
+	save_game()
+	print("New game started in slot ", slot)
+
+func _reset_runtime_state_for_new_game() -> void:
+	MoneyManager.set_money(100)
+
+	TimeManager.current_year = 1
+	TimeManager.current_month = 1
+	TimeManager.current_day = 1
+	TimeManager.current_minute_of_day = 6 * 60
+	TimeManager._minute_accumulator = 0.0
+	TimeManager.time_changed.emit()
+
+	_reset_inventory()
+	_reset_storage()
+	_reset_world_tiles()
+
+	WeatherManager._generate_initial_forecast()
+	WeatherManager._apply_new_day_weather()
+
+	EventManager.active_market_events.clear()
+	EventManager._apply_market_event_effects()
+	EventManager.market_events_changed.emit()
+
+	NewsManager.clear_news()
+
+	CommodityMarketManager.reset_event_modifiers()
+	CommodityMarketManager.commodity_prices_updated.emit()
+
+func _reset_inventory() -> void:
+	var inventory := HotbarManager.inventory_data
+
+	if inventory == null:
+		return
+
+	inventory.setup()
+	inventory.clear_inventory()
+
+	inventory.add_item(_get_item_by_id("hoe"), 1)
+	inventory.add_item(_get_item_by_id("watering_can"), 1)
+	inventory.add_item(_get_item_by_id("scythe"), 1)
+	inventory.add_item(_get_item_by_id("wheat_seed"), 10)
+
+	inventory.inventory_changed.emit()
+
+func _reset_storage() -> void:
+	if silo_storage == null:
+		return
+
+	silo_storage.stored_items.clear()
+	silo_storage.storage_changed.emit()
+
+func _reset_world_tiles() -> void:
+	var world_manager = get_tree().get_first_node_in_group("world_manager")
+
+	if world_manager == null:
+		return
+
+	for tile in world_manager.get_all_farm_tiles():
+		if tile == null:
+			continue
+
+		tile.clear_crop()
+		tile.set_state(FarmTile.TileState.GRASS)

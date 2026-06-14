@@ -9,6 +9,7 @@ signal pauseChanged(paused: bool)
 var pauseMenu: PauseMenu
 var optionsMenu: OptionsMenu
 var mainMenu: MainMenu
+var newGamePanel: NewGamePanel
 var globalUIInstance: CanvasLayer
 var optionsContext: int = 0
 
@@ -43,12 +44,14 @@ func _ready() -> void:
 	pauseMenu = globalUIInstance.get_node_or_null("PauseMenu") as PauseMenu
 	optionsMenu = globalUIInstance.get_node_or_null("OptionsMenu") as OptionsMenu
 	mainMenu = globalUIInstance.get_node_or_null("MainMenu") as MainMenu
+	newGamePanel = globalUIInstance.get_node_or_null("NewGamePanel") as NewGamePanel
 
-	if pauseMenu == null or optionsMenu == null or mainMenu == null:
+	if pauseMenu == null or optionsMenu == null or mainMenu == null or newGamePanel == null:
 		push_error("Global UI is missing one or more required menus.")
 		return
 
 	mainMenu.visible = true
+	newGamePanel.visible = false
 	pauseMenu.setMenuVisible(false)
 	optionsMenu.visible = false
 	_updateMouseMode()
@@ -82,6 +85,7 @@ func startGame() -> void:
 	isInGame = true
 	setPaused(false)
 	mainMenu.visible = false
+	newGamePanel.visible = false
 	_updateMouseMode()
 
 
@@ -89,6 +93,27 @@ func returnToMenu() -> void:
 	isInGame = false
 	setPaused(false)
 	mainMenu.visible = true
+	newGamePanel.visible = false
+	pauseMenu.setMenuVisible(false)
+	optionsMenu.visible = false
+	_updateMouseMode()
+
+
+func openNewGamePanel() -> void:
+	isInGame = false
+	setPaused(false)
+	mainMenu.visible = false
+	newGamePanel.visible = true
+	pauseMenu.setMenuVisible(false)
+	optionsMenu.visible = false
+	_updateMouseMode()
+
+
+func showMainMenu() -> void:
+	isInGame = false
+	setPaused(false)
+	mainMenu.visible = true
+	newGamePanel.visible = false
 	pauseMenu.setMenuVisible(false)
 	optionsMenu.visible = false
 	_updateMouseMode()
@@ -103,6 +128,7 @@ func openOptions(from_context: int) -> void:
 		pauseMenu.setMenuVisible(false)
 
 	mainMenu.visible = false
+	newGamePanel.visible = false
 	optionsMenu.setContext(from_context)
 	optionsMenu.visible = true
 	_updateMouseMode()
@@ -116,6 +142,8 @@ func showGlobalUI() -> void:
 
 	if mainMenu:
 		mainMenu.visible = true
+	if newGamePanel:
+		newGamePanel.visible = false
 	if pauseMenu:
 		pauseMenu.setMenuVisible(false)
 	if optionsMenu:
