@@ -29,8 +29,7 @@ func onStartButtonPressed() -> void:
 
 
 func onLoadButtonPressed() -> void:
-	# Save loading is not implemented yet.
-	pass
+	gamemanager.openLoadGamePanel(gamemanager.menuContext.Main_Menu)
 
 
 func onOptionsButtonPressed() -> void:

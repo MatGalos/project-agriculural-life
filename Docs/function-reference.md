@@ -97,6 +97,10 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func setPaused(value: bool) -> void:` | Handles set paused behavior. |
 | `func startGame() -> void:` | Starts game. |
 | `func returnToMenu() -> void:` | Returns to to menu. |
+| `func openNewGamePanel() -> void:` | Opens the new game slot picker from the main menu. |
+| `func openLoadGamePanel(from_context: int) -> void:` | Opens the load game slot picker from the main menu or pause menu and applies the correct background/context. |
+| `func closeLoadGamePanel() -> void:` | Closes the load game slot picker and returns to the menu context it was opened from. |
+| `func showMainMenu() -> void:` | Shows the main menu and hides gameplay submenus. |
 | `func openOptions(from_context: int) -> void:` | Opens options. |
 | `func showGlobalUI() -> void:` | Handles show global ui behavior. |
 | `func _handle_pause_action() -> void:` | Handles handle pause action behavior. |
@@ -195,6 +199,9 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func set_current_save_slot(slot: int) -> void:` | Selects the active save slot, clamped to the valid slot range. |
 | `func has_save(slot: int) -> bool:` | Returns whether the given save slot file exists. |
 | `func delete_save(slot: int) -> void:` | Deletes the given save slot file if it exists. |
+| `func start_new_game(slot: int) -> void:` | Selects a save slot, clears any old save for that slot, resets runtime state, and writes a fresh save. |
+| `func get_save_slot_info(slot: int) -> Dictionary:` | Reads lightweight save metadata for a slot picker row without loading the full game state. |
+| `func get_season_name_from_month(month: int) -> String:` | Converts the saved month number into a season name for save slot display. |
 
 ## `Scripts/GameManagers/TimeManager.gd`
 
@@ -517,6 +524,21 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func onCreditsButtonPressed() -> void:` | Handles on credits button pressed behavior. |
 | `func onExitButtonPressed() -> void:` | Handles on exit button pressed behavior. |
 | `func onOptionsClosed() -> void:` | Handles on options closed behavior. |
+
+## `Scripts/UIs/Menus/LaunchMenu/AdditionalMenus/LoadGamePanel.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Initializes slot buttons, back button, pause-safe processing, and button callbacks. |
+| `func open() -> void:` | Shows the panel and refreshes save slot rows. |
+| `func close() -> void:` | Hides the panel. |
+| `func refresh() -> void:` | Refreshes save slot rows from `SaveManager.get_save_slot_info()`. |
+| `func setContext(context: int) -> void:` | Applies main-menu or pause-menu background behavior. |
+| `func _refresh_slots() -> void:` | Rebuilds all visible save slot buttons. |
+| `func _update_slot_button(button: Button, slot: int) -> void:` | Updates one save slot button and disables it when the slot is empty. |
+| `func _load_slot(slot: int) -> void:` | Selects the slot, starts gameplay, changes to the game scene, and defers save loading. |
+| `func _on_back_pressed() -> void:` | Returns to the correct previous menu through `gamemanager.closeLoadGamePanel()`. |
+| `func _load_game_deferred() -> void:` | Waits for the game scene to initialize before applying save data. |
 
 ## `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/control_bind_row.gd`
 
