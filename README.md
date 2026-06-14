@@ -25,6 +25,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Market events that affect commodity trends and generate news entries.
 - Weather system with current weather, temperature, forecast, and rain/storm field watering.
 - Phone menu with sell, shop, stock market, weather, and news apps.
+- Save/load persistence with three save slots stored under `user://save_slot_%d.json`.
 - Basic interactables for well, house, and silo prompts.
 
 ## Changelog
@@ -62,6 +63,9 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Implemented stock market app
   - Implement weather app
   - Implemented news app
+- Implemented save game / load game functionality
+  - Added three save slots.
+  - Persisted player inventory, hotbar, position, time, weather, storage, market prices, active events, news history, and farm tile state.
 
 ### Version 0.2
 

@@ -120,3 +120,10 @@ func _generate_forecast_entry() -> Dictionary:
 
 func get_forecast() -> Array[Dictionary]:
 	return forecast
+
+func get_weather_by_name(weather_name: String) -> WeatherData:
+	for weather in weather_options:
+		if weather != null and weather.display_name == weather_name:
+			return weather
+
+	return null

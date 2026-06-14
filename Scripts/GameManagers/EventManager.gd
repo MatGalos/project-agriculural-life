@@ -49,6 +49,13 @@ func _try_trigger_market_event() -> void:
 
 			active_market_events.append(active_event)
 			market_event_started.emit(event_data)
+			print(
+				"[NewsDebug][EventManager] emitted market_event_started for ",
+				event_data.display_name,
+				", NewsManager available=",
+				NewsManager != null
+			)
+			NewsManager.add_market_event_news(event_data)
 
 			print("Market event started: ", event_data.display_name)
 
@@ -72,3 +79,10 @@ func _apply_market_event_effects() -> void:
 
 func get_active_market_events() -> Array[ActiveMarketEvent]:
 	return active_market_events
+
+func get_event_by_id(event_id: String) -> MarketEventData:
+	for event_data in possible_market_events:
+		if event_data != null and event_data.event_id == event_id:
+			return event_data
+
+	return null

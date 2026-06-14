@@ -18,6 +18,7 @@ func _ready() -> void:
 	exchange_button.pressed.connect(_on_exchange_pressed)
 	weather_button.pressed.connect(_on_weather_pressed)
 	news_button.pressed.connect(_on_news_pressed)
+	add_to_group("phone_panel")
 
 func open() -> void:
 	visible = true
@@ -66,4 +67,5 @@ func _on_weather_pressed() -> void:
 func _on_news_pressed() -> void:
 	_hide_all_apps()
 	news_app.visible = true
+	print("[NewsDebug][PhonePanel] news pressed app=", news_app, ", has_refresh=", news_app.has_method("refresh"))
 	news_app.refresh()

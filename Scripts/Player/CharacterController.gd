@@ -15,6 +15,7 @@ var pitch: float = 0.0
 
 
 func _ready() -> void:
+	add_to_group("player")
 	camera_pivot.position = Vector3(0, 1.4, 0)
 	camera_pivot.rotation = Vector3.ZERO
 
@@ -45,6 +46,12 @@ func _input(event: InputEvent) -> void:
 	if InputManager.is_use_tool_pressed():
 		_use_selected_tool()
 		return
+	
+	if event.is_action_pressed("save_debug"):
+		SaveManager.save_game()
+
+	if event.is_action_pressed("load_debug"):
+		SaveManager.load_game()
 
 	if event is InputEventMouseMotion:
 		_rotate_camera(event as InputEventMouseMotion)

@@ -10,6 +10,7 @@ var farm_tiles_by_id: Dictionary = {}
 
 
 func _ready() -> void:
+	add_to_group("world_manager")
 	register_farm_tiles()
 
 

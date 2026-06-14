@@ -18,6 +18,7 @@ The project uses these gameplay autoloads:
 - `WeatherManager` owns current weather, temperature, forecast data, and rain/storm watering effects.
 - `EventManager` starts and expires market events that modify commodity behavior.
 - `NewsManager` converts market events into phone news entries.
+- `SaveManager` serializes and restores persistent game state across three save slots.
 - `UI` is the player HUD scene autoload.
 
 Keep cross-system state in autoloads only when multiple unrelated scenes need it. Scene-local display logic should stay in UI controllers.
@@ -182,7 +183,46 @@ Important behavior:
 - A started market event creates a `NewsItem`.
 - The news item stores title, body, current date, and category.
 - New entries are inserted at the front of `news_items`.
+- News history is capped at the latest 20 entries.
 - `news_added` lets the phone news panel refresh immediately.
+- `news_cleared` lets the phone news panel clear itself during save loading.
+- Loading a save replaces current news history with the saved news list, then rebuilds announced event IDs from active saved events.
+
+## Save System
+
+`SaveManager` stores game state in JSON files under `user://save_slot_%d.json`.
+
+Save-slot behavior:
+
+- `SAVE_SLOT_COUNT` is currently `3`.
+- `current_save_slot` defaults to slot `1`.
+- `set_current_save_slot(slot)` clamps slot values to the valid 1-3 range.
+- `get_save_path(slot)` resolves a slot to its `user://save_slot_%d.json` path.
+- `has_save(slot)` checks whether a slot file exists.
+- `delete_save(slot)` removes a slot file if it exists.
+
+Saved data:
+
+- Player money, position, inventory slots, hotbar mapping, and selected hotbar slot.
+- Time/date state.
+- Current weather and forecast.
+- Silo storage contents.
+- Commodity market state, including current prices, trends, volatility, and price history.
+- Active market events and their remaining duration.
+- News history, capped to the latest 20 entries.
+- Farm tile state, planted crop IDs, and crop growth days.
+
+Load behavior:
+
+- Runtime active events are cleared before applying save data so old-session events do not create stale news.
+- News are cleared before applying save data.
+- If the save contains a `news` array, it replaces the current news list atomically.
+- If the save has active events but no saved news array, news are rebuilt from the active saved events.
+- Farm tile state is restored through `WorldManager` tile IDs, so farm tiles must have stable `tile_id` values.
+
+Current limitation:
+
+- The slot backend exists, but current gameplay calls only `save_game()` and `load_game()` without a slot picker. Unless UI calls `set_current_save_slot()`, save/load uses slot `1`.
 
 ## Phone Apps
 
@@ -194,7 +234,7 @@ Current apps:
 - Shop app: buys items through configured shop data and `MoneyManager`.
 - Stock market app: displays commodity prices, market status, and recent history.
 - Weather app: displays current weather and forecast rows.
-- News app: displays latest `NewsManager` entries.
+- News app: displays latest `NewsManager` entries in a vertical scroll list.
 
 Rules:
 
