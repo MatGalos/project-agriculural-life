@@ -85,6 +85,7 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _is_event_already_active(event_data: MarketEventData) -> bool:` | Checks whether is event already active is true for internal flow. |
 | `func _apply_market_event_effects() -> void:` | Applies apply market event effects to current state. |
 | `func get_active_market_events() -> Array[ActiveMarketEvent]:` | Returns the current active market events. |
+| `func get_event_by_id(event_id: String) -> MarketEventData:` | Finds a configured market event resource by save-game event ID. |
 
 ## `Scripts/GameManagers/gameManager.gd`
 
@@ -150,8 +151,50 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
 | `func _on_market_event_started(event_data: MarketEventData) -> void:` | Handles the 'on market event started' signal callback. |
+| `func _on_market_event_ended(event_data: MarketEventData) -> void:` | Clears the announced-event marker when an active market event expires. |
+| `func sync_active_market_event_news() -> void:` | Ensures every currently active market event has a corresponding news entry when no saved news list overrides it. |
+| `func add_market_event_news(event_data: MarketEventData) -> void:` | Creates a news entry for a market event unless that event was already announced. |
 | `func add_news(news_item: NewsItem) -> void:` | Adds news and emits related updates when needed. |
+| `func clear_news() -> void:` | Clears current news and announced-event tracking, then emits `news_cleared`. |
+| `func replace_news_items(saved_news_items: Array[NewsItem]) -> void:` | Replaces current news with the loaded save-game news list, capped to `MAX_NEWS_COUNT`. |
 | `func get_latest_news() -> Array[NewsItem]:` | Returns the current latest news. |
+| `func rebuild_announced_event_ids_from_active_events() -> void:` | Rebuilds duplicate-prevention state from currently active market events after loading. |
+
+## `Scripts/GameManagers/SaveManager.gd`
+
+| Function | Description |
+| --- | --- |
+| `func save_game() -> void:` | Serializes the current game state to the selected save slot. |
+| `func load_game() -> void:` | Loads the selected save slot and applies all persisted game state. |
+| `func _get_item_by_id(item_id: String) -> ItemData:` | Finds an item resource by save-game item ID, using cache and directory lookup. |
+| `func _find_item_by_id_in_directory(item_id: String, directory_path: String) -> ItemData:` | Recursively searches item resource directories for a matching item ID. |
+| `func _clear_runtime_events_before_load() -> void:` | Clears active runtime events before save data is applied. |
+| `func _create_save_data() -> Dictionary:` | Builds the top-level save dictionary. |
+| `func _apply_save_data(save_data: Dictionary) -> void:` | Applies the top-level save dictionary to runtime managers. |
+| `func _apply_time_data(time_data: Dictionary) -> void:` | Restores date and time state. |
+| `func _create_inventory_save_data() -> Array:` | Serializes non-empty player inventory slots. |
+| `func _apply_inventory_save_data(inventory_data: Array) -> void:` | Restores player inventory slots by item ID and slot index. |
+| `func _create_hotbar_save_data() -> Dictionary:` | Serializes hotbar slot mapping and selected slot state. |
+| `func _apply_hotbar_save_data(hotbar_save_data: Dictionary) -> void:` | Restores hotbar mapping, selected slot, and related UI signals. |
+| `func _create_storage_save_data() -> Dictionary:` | Serializes silo storage contents. |
+| `func _apply_storage_save_data(storage_data: Dictionary) -> void:` | Restores silo storage contents and refreshes dependent panels. |
+| `func _create_weather_save_data() -> Dictionary:` | Serializes current weather and forecast entries. |
+| `func _apply_weather_save_data(weather_data: Dictionary) -> void:` | Restores current weather, forecast, and weather signals. |
+| `func _create_market_save_data() -> Dictionary:` | Serializes commodity market prices, trends, volatility, and history. |
+| `func _apply_market_save_data(market_data: Dictionary) -> void:` | Restores commodity market state. |
+| `func _create_events_save_data() -> Array:` | Serializes active market events and remaining duration. |
+| `func _apply_events_save_data(events_data: Array, emit_change: bool = true) -> void:` | Restores active market events and optionally emits event-change signals. |
+| `func _create_news_save_data() -> Array:` | Serializes the latest saved news entries, capped to `MAX_NEWS_SAVE_COUNT`. |
+| `func _apply_news_save_data(news_data: Array) -> void:` | Restores saved news history and refreshes the news panel. |
+| `func _get_crop_by_id(crop_id: String) -> CropData:` | Finds a crop resource by crop ID for world restoration. |
+| `func _create_world_save_data() -> Dictionary:` | Serializes farm tile state, planted crop IDs, and crop growth. |
+| `func _apply_world_save_data(world_data: Dictionary) -> void:` | Restores farm tile state through `WorldManager` tile IDs. |
+| `func _create_player_position_save_data() -> Dictionary:` | Serializes player world position. |
+| `func _apply_player_position_save_data(position_data: Dictionary) -> void:` | Restores player world position. |
+| `func get_save_path(slot: int = current_save_slot) -> String:` | Resolves a save slot to its `user://save_slot_%d.json` path. |
+| `func set_current_save_slot(slot: int) -> void:` | Selects the active save slot, clamped to the valid slot range. |
+| `func has_save(slot: int) -> bool:` | Returns whether the given save slot file exists. |
+| `func delete_save(slot: int) -> void:` | Deletes the given save slot file if it exists. |
 
 ## `Scripts/GameManagers/TimeManager.gd`
 
@@ -209,6 +252,7 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _generate_initial_forecast() -> void:` | Handles generate initial forecast behavior. |
 | `func _generate_forecast_entry() -> Dictionary:` | Handles generate forecast entry behavior. |
 | `func get_forecast() -> Array[Dictionary]:` | Returns the current forecast. |
+| `func get_weather_by_name(weather_name: String) -> WeatherData:` | Finds configured weather data by display name for save loading. |
 
 ## `Scripts/GameManagers/WorldManager.gd`
 
