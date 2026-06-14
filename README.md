@@ -5,6 +5,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 ## Documentation
 
 - [Architecture notes](Docs/architecture.md)
+- [Function reference](Docs/function-reference.md)
 
 ## Current Gameplay Scope
 
@@ -14,11 +15,64 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Tool use through the selected hotbar item.
 - Farm tiles with grass, plowed, and watered states.
 - Crop planting, daily growth, and harvesting.
+- Seasonal crop restrictions based on the current in-game season.
+- Temporary HUD event messages for gameplay feedback, such as planting blocked by season.
 - Watering can capacity, refill at the well, and water-fill bars in inventory/hotbar UI.
 - Day/night and date progression.
+- Four-season calendar: Spring, Summer, Autumn, and Winter.
+- Money, buy prices, sell prices, and commodity-backed dynamic crop prices.
+- Commodity market updates during market hours with price history.
+- Market events that affect commodity trends and generate news entries.
+- Weather system with current weather, temperature, forecast, and rain/storm field watering.
+- Phone menu with sell, shop, stock market, weather, and news apps.
+- Save/load persistence with three save slots stored under `user://save_slot_%d.json`.
+- New game and load game menus for choosing the active save slot.
+- Pause menu save actions for saving the current slot, saving and returning to the main menu, or saving and quitting to desktop.
 - Basic interactables for well, house, and silo prompts.
 
 ## Changelog
+
+### Version 0.3
+- Restructured the world
+- Implemented WorldManager
+- Implemented Game Economy
+  - Implemented MoneyManager
+  - Implemented PriceData
+  - Implemented EconomyManager
+- Implemented storage and selling mechanics
+  - Implemented StorageData
+  - Implemented SiloInteractive
+  - Implemented StorageUI
+  - Implemented functionality to move between inventory and storage
+  - Implemented sell interface
+  - Implemented buy interface
+- Implemented stock market
+  - Implemented commodity module
+  - Made it update every market hour
+  - Integrated it into UI
+- Implemented Weather system
+  - Implemented temperature into game
+  - Implemented rain into game
+- Implemented event system
+- Implemented seasons
+  - Added Spring, Summer, Autumn, and Winter calendar flow
+  - Added per-crop allowed season configuration
+  - Blocked planting when the selected crop cannot grow in the current season
+  - Added temporary HUD feedback for blocked seasonal planting
+- Implemented apps for phone menu
+  - Implemented sell app
+  - Implemented shop app
+  - Implemented stock market app
+  - Implement weather app
+  - Implemented news app
+- Implemented save game / load game functionality
+  - Added three save slots.
+  - Persisted player inventory, hotbar, position, time, weather, storage, market prices, active events, news history, and farm tile state.
+- Implemented basic menus
+  - Implemented new game menu
+  - Implemented load game menu
+  - Integrated load game into the pause menu with inherited pause blur background.
+  - Added pause menu save, save-and-quit-to-menu, and save-and-quit-to-desktop actions for the current save slot.
 
 ### Version 0.2
 
@@ -37,93 +91,6 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Improved inventory and hotbar.
 - Implemented day/night cycle.
 - Added terrain, building, tool, and crop assets.
-
-### Version 0.1.1.28
-
-- Added `use_tool` support to controls and settings.
-- Added mouse-button serialization for control rebinding.
-- Fixed controls reset so mouse binds are preserved and restored.
-- Added seed-item planting: wheat seeds act as the wheat seed bag.
-- Added scalable crop lookup through `ToolManager.all_crops`.
-- Added watering-can water indicators in inventory and hotbar UI.
-- Added well refill integration for the watering can.
-- Cleaned up gameplay scripts and updated architecture documentation.
-
-
-### Version 0.1.1.27
-
-- Implemented watering-can fill/refill state.
-
-### Version 0.1.1.26
-
-- Implemented crop system.
-
-### Version 0.1.1.23
-
-- Implemented functionality for hoe.
-- Implemented functionality for watering can.
-- Implemented functionality for scythe.
-- Implemented functionality for seed bag.
-
-### Version 0.1.1.21
-
-- Implemented tile system.
-
-### Version 0.1.1.20
-
-- Implemented day/night cycle.
-
-### Version 0.1.1.18
-
-- Improved hotbar.
-
-### Version 0.1.1.15
-
-- Improved inventory.
-
-### Version 0.1.1.11
-
-- Implemented item category for resources.
-
-### Version 0.1.1.10
-
-- Implemented item category for tools.
-
-### Version 0.1.1.9
-
-- Implemented item category for seeds.
-
-### Version 0.1.1.8
-
-- Implemented item category for crops.
-
-### Version 0.1.1.7
-
-- Implemented item structure.
-
-### Version 0.1.1.6
-
-- Implemented wheat assets.
-
-### Version 0.1.1.5
-
-- Implemented watered block asset.
-
-### Version 0.1.1.4
-
-- Implemented seed bag model.
-
-### Version 0.1.1.3
-
-- Implemented scythe model.
-
-### Version 0.1.1.2
-
-- Implemented watering can model.
-
-### Version 0.1.1.1
-
-- Implemented hoe model.
 
 ### Version 0.1
 

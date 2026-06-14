@@ -5,7 +5,7 @@
 [sub_resource type="LabelSettings" id="LabelSettings_s25uk"]
 font_size = 63
 
-[node name="MainMenu" type="Control" unique_id=176163149 node_paths=PackedStringArray("versionLabel", "startButton", "loadButton", "optionsButton", "creditsButton", "exitButton")]
+[node name="MainMenu" type="Control" unique_id=176163149 node_paths=PackedStringArray("versionLabel", "startButton", "loadButton", "optionsButton", "creditsButton", "exitButton") groups=["mainMenu"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

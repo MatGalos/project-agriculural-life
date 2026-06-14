@@ -79,13 +79,13 @@ func get_time_string() -> String:
 func get_season_name() -> String:
 	match current_month:
 		1:
-			return "Spring"
+			return get_current_season_display_name()
 		2:
-			return "Summer"
+			return get_current_season_display_name()
 		3:
-			return "Autumn"
+			return get_current_season_display_name()
 		4:
-			return "Winter"
+			return get_current_season_display_name()
 		_:
 			return "Unknown"
 
@@ -100,9 +100,13 @@ func get_day_progress() -> float:
 	return float(current_minute_of_day) / float(GAME_MINUTES_PER_DAY)
 
 func skip_to_morning() -> void:
+	var previous_day := current_day
+	var previous_hour := get_hour()
+
 	if get_hour() < 6:
 		current_minute_of_day = 6 * 60
 	else:
+		CommodityMarketManager.simulate_skipped_market_hours(previous_day, previous_hour, previous_day, 17)
 		_advance_day()
 		current_minute_of_day = 6 * 60
 
@@ -121,3 +125,29 @@ func get_ordinal_day() -> String:
 				suffix = "rd"
 
 	return "%d%s" % [current_day, suffix]
+
+func get_current_season() -> SeasonData.Season:
+	match current_month:
+		1:
+			return SeasonData.Season.SPRING
+		2:
+			return SeasonData.Season.SUMMER
+		3:
+			return SeasonData.Season.AUTUMN
+		4:
+			return SeasonData.Season.WINTER
+		_:
+			return SeasonData.Season.SPRING
+
+func get_current_season_display_name() -> String:
+	match get_current_season():
+		SeasonData.Season.SPRING:
+			return "Spring"
+		SeasonData.Season.SUMMER:
+			return "Summer"
+		SeasonData.Season.AUTUMN:
+			return "Autumn"
+		SeasonData.Season.WINTER:
+			return "Winter"
+		_:
+			return "Unknown"

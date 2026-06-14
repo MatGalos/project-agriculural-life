@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://cpaiyaqvr2mmn"]
+
+[ext_resource type="Script" uid="uid://blkvdl0l8rekt" path="res://Scripts/Storage/StorageItemRow.gd" id="1_r6aaa"]
+
+[node name="StorageItemRow" type="HBoxContainer" unique_id=1366321532]
+custom_minimum_size = Vector2(0, 40)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("1_r6aaa")
+
+[node name="IconRect" type="TextureRect" parent="." unique_id=785379400]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="." unique_id=2051929225]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="AmountLabel" type="Label" parent="." unique_id=252329279]
+layout_mode = 2
+mouse_filter = 2

@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://beet0aeil50xy"]
+
+[ext_resource type="Script" uid="uid://d7moeitt6m54" path="res://Scripts/PhoneApps/WeatherApp/WeatherForecastRow.gd" id="1_u6y55"]
+
+[node name="WeatherForecastRow" type="HBoxContainer" unique_id=161124623]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_u6y55")
+
+[node name="DayLabel" type="Label" parent="." unique_id=493260984]
+layout_mode = 2
+
+[node name="WeatherLabel" type="Label" parent="." unique_id=1487925750]
+layout_mode = 2
+
+[node name="TemperatureLabel" type="Label" parent="." unique_id=1259574678]
+layout_mode = 2

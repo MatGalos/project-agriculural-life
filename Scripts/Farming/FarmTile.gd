@@ -33,6 +33,7 @@ enum TileState {
 		call_deferred("update_visuals")
 	get:
 		return _watered_model
+@export var tile_id: String = ""
 
 var crop_data: CropData = null
 var crop_growth_days: int = 0
@@ -48,6 +49,7 @@ func _ready() -> void:
 	call_deferred("update_visuals")
 
 	if not Engine.is_editor_hint():
+		add_to_group("farm_tile")
 		CropGrowthManager.register_tile(self)
 
 
@@ -165,6 +167,8 @@ func harvest_crop() -> ItemData:
 
 	return harvest_item
 
+func clear_crop() -> void:
+	_clear_crop()
 
 func _spawn_crop_visual(scene: PackedScene) -> void:
 	_clear_crop_visual()
@@ -194,3 +198,11 @@ func _clear_crop_visual() -> void:
 
 	crop_instance.queue_free()
 	crop_instance = null
+
+func load_crop(new_crop_data: CropData, growth_days: int) -> void:
+	if new_crop_data == null:
+		return
+
+	crop_data = new_crop_data
+	crop_growth_days = maxi(growth_days, 0)
+	update_crop_visual()

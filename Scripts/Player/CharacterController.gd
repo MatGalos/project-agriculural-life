@@ -15,6 +15,7 @@ var pitch: float = 0.0
 
 
 func _ready() -> void:
+	add_to_group("player")
 	camera_pivot.position = Vector3(0, 1.4, 0)
 	camera_pivot.rotation = Vector3.ZERO
 
@@ -39,11 +40,21 @@ func _input(event: InputEvent) -> void:
 		player_hud.toggle_phone()
 		return
 
-	if _is_inventory_open() or _is_phone_open():
+	if _is_any_game_menu_open():
 		return
 
 	if InputManager.is_use_tool_pressed():
 		_use_selected_tool()
+		return
+	
+	if event.is_action_pressed("save_debug"):
+		SaveManager.save_game()
+
+	if event.is_action_pressed("load_debug"):
+		SaveManager.load_game()
+	
+	if event.is_action_pressed("new_debug"):
+		SaveManager.start_new_game(1)
 		return
 
 	if event is InputEventMouseMotion:
@@ -53,7 +64,7 @@ func _input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	_ensure_player_hud()
 
-	if gamemanager.is_paused or _is_inventory_open() or _is_phone_open():
+	if gamemanager.is_paused or _is_any_game_menu_open():
 		velocity.x = 0
 		velocity.z = 0
 		move_and_slide()
@@ -111,6 +122,20 @@ func _is_phone_open() -> bool:
 		return false
 
 	return player_hud.is_phone_open()
+
+
+func _is_storage_open() -> bool:
+	if not player_hud or not player_hud.has_method("is_storage_open"):
+		return false
+
+	return player_hud.is_storage_open()
+
+
+func _is_any_game_menu_open() -> bool:
+	if player_hud and player_hud.has_method("is_any_game_menu_open"):
+		return player_hud.is_any_game_menu_open()
+
+	return _is_inventory_open() or _is_phone_open() or _is_storage_open()
 
 
 func _ensure_player_hud() -> void:

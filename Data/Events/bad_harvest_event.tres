@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MarketEventData" format=3 uid="uid://bpdyqhv35up50"]
+
+[ext_resource type="Script" uid="uid://dy0h10ql6luky" path="res://Scripts/Events/MarketEventData.gd" id="1_5ncdp"]
+[ext_resource type="Resource" uid="uid://bwm4y7o4y40ew" path="res://Data/Items/Crops/wheat_item.tres" id="2_s4bsu"]
+
+[resource]
+script = ExtResource("1_5ncdp")
+event_id = "bad_harvest"
+display_name = "Bad Harvest"
+description = "Poor harvest conditions reduce supply and increase crop prices."
+duration_days = 3
+trigger_chance = 0.1
+target_item = ExtResource("2_s4bsu")
+trend_effect = 2
+trend_strength_modifier = 0.03
+volatility_modifier = 0.04
+metadata/_custom_type_script = "uid://dy0h10ql6luky"

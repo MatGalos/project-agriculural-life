@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://c0i15p4b8nfb2"]
+
+[ext_resource type="Script" uid="uid://ctwebibic6v60" path="res://Scripts/PhoneApps/SellApp/SellingItemRow.gd" id="1_sxjky"]
+
+[node name="SellingItemRow" type="HBoxContainer" unique_id=1541392515]
+custom_minimum_size = Vector2(0, 40)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("1_sxjky")
+
+[node name="IconRect" type="TextureRect" parent="." unique_id=339563447]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="." unique_id=1204312885]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="AmountLabel" type="Label" parent="." unique_id=978941708]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PriceLabel" type="Label" parent="." unique_id=1214003219]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="SellOneButton" type="Button" parent="." unique_id=1330634637]
+layout_mode = 2
+text = "Sell 1"
+
+[node name="SellAllButton" type="Button" parent="." unique_id=1857469429]
+layout_mode = 2
+text = "Sell All"

@@ -9,8 +9,11 @@ signal pauseChanged(paused: bool)
 var pauseMenu: PauseMenu
 var optionsMenu: OptionsMenu
 var mainMenu: MainMenu
+var newGamePanel: NewGamePanel
+var loadGamePanel: LoadGamePanel
 var globalUIInstance: CanvasLayer
 var optionsContext: int = 0
+var loadGameContext: int = 0
 
 var isPaused: bool = false
 var is_paused: bool:
@@ -43,12 +46,16 @@ func _ready() -> void:
 	pauseMenu = globalUIInstance.get_node_or_null("PauseMenu") as PauseMenu
 	optionsMenu = globalUIInstance.get_node_or_null("OptionsMenu") as OptionsMenu
 	mainMenu = globalUIInstance.get_node_or_null("MainMenu") as MainMenu
+	newGamePanel = globalUIInstance.get_node_or_null("NewGamePanel") as NewGamePanel
+	loadGamePanel = globalUIInstance.get_node_or_null("LoadGamePanel") as LoadGamePanel
 
-	if pauseMenu == null or optionsMenu == null or mainMenu == null:
+	if pauseMenu == null or optionsMenu == null or mainMenu == null or newGamePanel == null or loadGamePanel == null:
 		push_error("Global UI is missing one or more required menus.")
 		return
 
 	mainMenu.visible = true
+	newGamePanel.visible = false
+	loadGamePanel.visible = false
 	pauseMenu.setMenuVisible(false)
 	optionsMenu.visible = false
 	_updateMouseMode()
@@ -82,6 +89,8 @@ func startGame() -> void:
 	isInGame = true
 	setPaused(false)
 	mainMenu.visible = false
+	newGamePanel.visible = false
+	loadGamePanel.visible = false
 	_updateMouseMode()
 
 
@@ -89,6 +98,62 @@ func returnToMenu() -> void:
 	isInGame = false
 	setPaused(false)
 	mainMenu.visible = true
+	newGamePanel.visible = false
+	loadGamePanel.visible = false
+	pauseMenu.setMenuVisible(false)
+	optionsMenu.visible = false
+	_updateMouseMode()
+
+
+func openNewGamePanel() -> void:
+	isInGame = false
+	setPaused(false)
+	mainMenu.visible = false
+	newGamePanel.visible = true
+	loadGamePanel.visible = false
+	pauseMenu.setMenuVisible(false)
+	optionsMenu.visible = false
+	_updateMouseMode()
+
+
+func openLoadGamePanel(from_context: int) -> void:
+	loadGameContext = from_context
+
+	if from_context == menuContext.Pause_Menu:
+		pauseMenu.showBlurOnly()
+	else:
+		isInGame = false
+		setPaused(false)
+		pauseMenu.setMenuVisible(false)
+
+	mainMenu.visible = false
+	newGamePanel.visible = false
+	loadGamePanel.setContext(from_context)
+	loadGamePanel.visible = true
+	loadGamePanel.move_to_front()
+	loadGamePanel.refresh()
+	optionsMenu.visible = false
+	_updateMouseMode()
+
+
+func closeLoadGamePanel() -> void:
+	loadGamePanel.visible = false
+
+	match loadGameContext:
+		menuContext.Pause_Menu:
+			pauseMenu.setMenuVisible(true)
+		_:
+			showMainMenu()
+
+	_updateMouseMode()
+
+
+func showMainMenu() -> void:
+	isInGame = false
+	setPaused(false)
+	mainMenu.visible = true
+	newGamePanel.visible = false
+	loadGamePanel.visible = false
 	pauseMenu.setMenuVisible(false)
 	optionsMenu.visible = false
 	_updateMouseMode()
@@ -103,8 +168,11 @@ func openOptions(from_context: int) -> void:
 		pauseMenu.setMenuVisible(false)
 
 	mainMenu.visible = false
+	newGamePanel.visible = false
+	loadGamePanel.visible = false
 	optionsMenu.setContext(from_context)
 	optionsMenu.visible = true
+	optionsMenu.move_to_front()
 	_updateMouseMode()
 
 
@@ -116,6 +184,10 @@ func showGlobalUI() -> void:
 
 	if mainMenu:
 		mainMenu.visible = true
+	if newGamePanel:
+		newGamePanel.visible = false
+	if loadGamePanel:
+		loadGamePanel.visible = false
 	if pauseMenu:
 		pauseMenu.setMenuVisible(false)
 	if optionsMenu:
@@ -130,10 +202,19 @@ func _handle_pause_action() -> void:
 		get_viewport().set_input_as_handled()
 		return
 
+	if loadGamePanel and loadGamePanel.visible:
+		get_viewport().set_input_as_handled()
+		return
+
 	var player_hud: PlayerHUD = get_tree().get_first_node_in_group("player_hud") as PlayerHUD
 
 	if player_hud and player_hud.is_inventory_open():
 		player_hud.close_inventory()
+		get_viewport().set_input_as_handled()
+		return
+
+	if player_hud and player_hud.is_storage_open():
+		player_hud.close_storage()
 		get_viewport().set_input_as_handled()
 		return
 
@@ -147,8 +228,9 @@ func _handle_pause_action() -> void:
 
 func _updateMouseMode() -> void:
 	var options_visible: bool = optionsMenu != null and optionsMenu.visible
+	var load_visible: bool = loadGamePanel != null and loadGamePanel.visible
 
-	if isInGame and not isPaused and not options_visible:
+	if isInGame and not isPaused and not options_visible and not load_visible:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
