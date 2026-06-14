@@ -97,7 +97,7 @@ func _rotate_camera(mouse_motion: InputEventMouseMotion) -> void:
 	camera_pivot.rotate_y(-mouse_motion.relative.x * mouse_sensitivity)
 
 	pitch -= mouse_motion.relative.y * mouse_sensitivity
-	pitch = clamp(pitch, deg_to_rad(-45), deg_to_rad(35))
+	pitch = clamp(pitch, deg_to_rad(-75), deg_to_rad(35))
 	camera_pivot.rotation.x = pitch
 
 
