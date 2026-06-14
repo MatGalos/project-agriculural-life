@@ -32,6 +32,9 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 
 ## Changelog
 
+### Version 0.4
+- Fixed the camera controls
+
 ### Version 0.3
 - Restructured the world
 - Implemented WorldManager
