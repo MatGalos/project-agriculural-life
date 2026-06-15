@@ -163,7 +163,11 @@ func harvest_crop() -> ItemData:
 
 	var harvest_item: ItemData = crop_data.harvest_item
 	_clear_crop()
-	set_state(TileState.PLOWED)
+
+	if WeatherManager.is_current_weather_watering_fields():
+		set_state(TileState.WATERED)
+	else:
+		set_state(TileState.PLOWED)
 
 	return harvest_item
 

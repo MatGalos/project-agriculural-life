@@ -127,3 +127,9 @@ func get_weather_by_name(weather_name: String) -> WeatherData:
 			return weather
 
 	return null
+
+func is_current_weather_watering_fields() -> bool:
+	if current_weather == null:
+		return false
+
+	return current_weather.waters_fields
