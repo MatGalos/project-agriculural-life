@@ -13,3 +13,7 @@ class_name MarketEventData
 @export var trend_effect: CommodityData.MarketTrend = CommodityData.MarketTrend.NEUTRAL
 @export var trend_strength_modifier: float = 0.0
 @export var volatility_modifier: float = 0.0
+
+@export var requires_recent_sales: bool = false
+@export var recent_sales_threshold: int = 0
+@export var recent_sales_days: int = 7

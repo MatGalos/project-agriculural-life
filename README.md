@@ -35,6 +35,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 ### Version 0.4
 - Fixed the camera controls
 - Harvest during rain keeps soil watered
+- upgrade events for overproducing crops
 
 ### Version 0.3
 - Restructured the world
