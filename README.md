@@ -6,6 +6,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 
 - [Architecture notes](Docs/architecture.md)
 - [Function reference](Docs/function-reference.md)
+- [Testing documentation](Docs/testing.md)
 
 ## Current Gameplay Scope
 
