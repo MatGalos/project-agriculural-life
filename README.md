@@ -41,6 +41,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Added recent sales statistics for sales-driven market event requirements
 - Persisted sales statistics in save files
 - Documented world tile registration and editor farm-grid generation
+- Implemented unit testing for the game
 
 ### Version 0.3
 - Restructured the world
