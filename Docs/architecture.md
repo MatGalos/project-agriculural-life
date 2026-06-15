@@ -19,9 +19,27 @@ The project uses these gameplay autoloads:
 - `EventManager` starts and expires market events that modify commodity behavior.
 - `NewsManager` converts market events into phone news entries.
 - `SaveManager` serializes and restores persistent game state across three save slots.
+- `SalesStatsManager` tracks recent sold item amounts for sales-driven market events.
 - `UI` is the player HUD scene autoload.
 
 Keep cross-system state in autoloads only when multiple unrelated scenes need it. Scene-local display logic should stay in UI controllers.
+
+## World Registration
+
+`WorldManager` is attached to the gameplay scene and joins the `world_manager` group. It is not an autoload.
+
+Important behavior:
+
+- `register_farm_tiles()` scans `farm_tiles_root` for `FarmTile` children and stores them by `tile_id`.
+- `get_tile_by_id(tile_id)` is used by save loading to restore farm tiles by stable IDs.
+- `get_all_farm_tiles()` exposes registered farm tiles for systems that need world-wide tile data.
+- Farm tile IDs must remain stable between scene edits, otherwise saved crop and tile state cannot be restored correctly.
+
+`FarmGridGeneration` is an editor tool script for generating farm tile grids:
+
+- `tile_scene` must instantiate a `FarmTile`.
+- Generated tiles are named `Tile_x_z`.
+- Generated tile IDs use `grid_prefix_x_z`, for example `small_0_0`.
 
 ## Input And Controls
 
@@ -176,6 +194,9 @@ Important behavior:
 - `possible_market_events` contains the market event resources that can start.
 - Each active event tracks remaining days through `ActiveMarketEvent`.
 - Duplicate active events are skipped.
+- `_does_event_meet_requirements()` checks event-specific requirements before rolling trigger chance.
+- `MarketEventData.requires_recent_sales` gates events by recent sold item amount.
+- Sales-gated events use `target_item`, `recent_sales_threshold`, and `recent_sales_days`.
 - Started events emit `market_event_started`.
 - Expired events emit `market_event_ended`.
 - `market_events_changed` is emitted after daily event processing.
@@ -189,6 +210,19 @@ Important behavior:
 - `news_added` lets the phone news panel refresh immediately.
 - `news_cleared` lets the phone news panel clear itself during save loading.
 - Loading a save replaces current news history with the saved news list, then rebuilds announced event IDs from active saved events.
+
+## Sales Stats
+
+`SalesStatsManager` records sold item amounts and keeps a short rolling history for market-event requirements.
+
+Important behavior:
+
+- `record_sale(item_data, amount)` is called by the sell phone app after money is awarded.
+- `current_day_sales` stores totals for the active day.
+- `sales_history` stores previous day dictionaries and is capped by `HISTORY_DAYS`.
+- `get_recent_sales_amount(item_id, days)` returns current-day sales plus up to `days - 1` previous days.
+- `sales_stats_changed` is emitted after sales are recorded, day rollover occurs, or save data is loaded.
+- Save data persists both `current_day_sales` and `sales_history`.
 
 ## Save System
 
@@ -216,6 +250,7 @@ Saved data:
 - Active market events and their remaining duration.
 - News history, capped to the latest 20 entries.
 - Farm tile state, planted crop IDs, and crop growth days.
+- Sales statistics for the current day and recent sales history.
 
 Load behavior:
 
@@ -269,7 +304,7 @@ Watering-can bars are created under each slot icon at runtime. They are intentio
 - Phone cannot open while inventory is open.
 - Closing either panel restores mouse capture only if the game is active and not paused.
 
-The current starting inventory is initialized in `PlayerHUD._setup_starting_inventory()`. Replace this with save-game loading when persistence is implemented.
+The current starting inventory is initialized in `PlayerHUD._setup_starting_inventory()` for new sessions. Save loading replaces inventory and hotbar state through `SaveManager`.
 
 HUD event messages:
 
@@ -299,6 +334,8 @@ Before adding new inventory, crop, tool, or UI behavior:
 - Add new crop resources to `ToolManager.all_crops` before adding special-case code.
 - Configure `CropData.allowed_seasons` for every new crop.
 - Register commodity-backed items in `CommodityMarketManager.commodities` and provide price data where needed.
+- Keep generated `FarmTile.tile_id` values stable after saves exist.
+- For sales-driven events, configure `MarketEventData.target_item`, `requires_recent_sales`, `recent_sales_threshold`, and `recent_sales_days`.
 - Use `PlayerHUD.show_event_message()` for short-lived gameplay feedback instead of leaving placeholder UI visible.
 - For phone apps, expose row scenes with `@export var row_scene: PackedScene` and refresh from manager signals.
 - Do not add debug `print()` calls in runtime paths unless they are temporary and removed before commit.
