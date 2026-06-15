@@ -103,5 +103,6 @@ func _sell_item(item_data: ItemData, amount: int) -> void:
 		return
 
 	MoneyManager.add_money(total_value)
+	SalesStatsManager.record_sale(item_data, amount)
 
 	refresh()

@@ -42,6 +42,9 @@ func _try_trigger_market_event() -> void:
 
 		if _is_event_already_active(event_data):
 			continue
+		
+		if not _does_event_meet_requirements(event_data):
+			continue
 
 		if randf() <= event_data.trigger_chance:
 			var active_event := ActiveMarketEvent.new()
@@ -86,3 +89,29 @@ func get_event_by_id(event_id: String) -> MarketEventData:
 			return event_data
 
 	return null
+
+func _does_event_meet_requirements(event_data: MarketEventData) -> bool:
+	if event_data == null:
+		return false
+
+	if event_data.requires_recent_sales:
+		if event_data.target_item == null:
+			return false
+
+		var recent_sales := SalesStatsManager.get_recent_sales_amount(
+			event_data.target_item.id,
+			event_data.recent_sales_days
+		)
+		print(
+			"[EventManager] ",
+			event_data.display_name,
+			" recent sales=",
+			recent_sales,
+			"/",
+			event_data.recent_sales_threshold
+		)
+
+		if recent_sales < event_data.recent_sales_threshold:
+			return false
+
+	return true
