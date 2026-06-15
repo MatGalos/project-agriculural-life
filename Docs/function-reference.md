@@ -86,6 +86,7 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _apply_market_event_effects() -> void:` | Applies apply market event effects to current state. |
 | `func get_active_market_events() -> Array[ActiveMarketEvent]:` | Returns the current active market events. |
 | `func get_event_by_id(event_id: String) -> MarketEventData:` | Finds a configured market event resource by save-game event ID. |
+| `func _does_event_meet_requirements(event_data: MarketEventData) -> bool:` | Checks sales and other event requirements before trigger chance is rolled. |
 
 ## `Scripts/GameManagers/gameManager.gd`
 
@@ -149,6 +150,17 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func can_afford(amount: int) -> bool:` | Returns whether afford is allowed in the current state. |
 | `func spend_money(amount: int) -> bool:` | Attempts to spend money if the player can afford it. |
 
+## `Scripts/GameManagers/SalesStatsManager.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Connects daily rollover handling to `TimeManager.day_changed`. |
+| `func record_sale(item_data: ItemData, amount: int) -> void:` | Adds sold amount to the current day's item total and emits `sales_stats_changed`. |
+| `func get_recent_sales_amount(item_id: String, days: int = HISTORY_DAYS) -> int:` | Returns sales for an item across the current day and recent history. |
+| `func _on_day_changed() -> void:` | Moves current-day sales into rolling history, trims old entries, and emits `sales_stats_changed`. |
+| `func create_save_data() -> Dictionary:` | Serializes current-day sales and recent sales history. |
+| `func apply_save_data(save_data: Dictionary) -> void:` | Restores sales statistics from save data and emits `sales_stats_changed`. |
+
 ## `Scripts/GameManagers/NewsManager.gd`
 
 | Function | Description |
@@ -195,6 +207,8 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _apply_world_save_data(world_data: Dictionary) -> void:` | Restores farm tile state through `WorldManager` tile IDs. |
 | `func _create_player_position_save_data() -> Dictionary:` | Serializes player world position. |
 | `func _apply_player_position_save_data(position_data: Dictionary) -> void:` | Restores player world position. |
+| `func _create_sales_stats_save_data() -> Dictionary:` | Serializes sales statistics through `SalesStatsManager`. |
+| `func _apply_sales_stats_save_data(sales_data: Dictionary) -> void:` | Restores sales statistics through `SalesStatsManager`. |
 | `func get_save_path(slot: int = current_save_slot) -> String:` | Resolves a save slot to its `user://save_slot_%d.json` path. |
 | `func set_current_save_slot(slot: int) -> void:` | Selects the active save slot, clamped to the valid slot range. |
 | `func has_save(slot: int) -> bool:` | Returns whether the given save slot file exists. |
@@ -540,6 +554,14 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _on_back_pressed() -> void:` | Returns to the correct previous menu through `gamemanager.closeLoadGamePanel()`. |
 | `func _load_game_deferred() -> void:` | Waits for the game scene to initialize before applying save data. |
 
+## `Scripts/UIs/Menus/LaunchMenu/AdditionalMenus/NewGamePanel.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Connects slot buttons and the back button to panel actions. |
+| `func _start_slot(slot: int) -> void:` | Starts a new game in the selected save slot, resets that slot, and changes to the gameplay scene. |
+| `func _on_back_pressed() -> void:` | Returns from the new game slot picker to the main menu. |
+
 ## `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/control_bind_row.gd`
 
 | Function | Description |
@@ -696,4 +718,3 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
 | `func update_lighting() -> void:` | Updates lighting from current gameplay data. |
 | `func _update_environment(sky_color: Color, ambient_color: Color) -> void:` | Updates update environment from current data. |
-
