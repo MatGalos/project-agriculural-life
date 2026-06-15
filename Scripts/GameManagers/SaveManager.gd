@@ -141,9 +141,7 @@ func _create_save_data() -> Dictionary:
 
 		"news": _create_news_save_data(),
 
-		"world": _create_world_save_data(),
-		
-		"sales_stats": _create_sales_stats_save_data(),
+		"world": _create_world_save_data()
 	}
 
 
@@ -177,9 +175,6 @@ func _apply_save_data(save_data: Dictionary) -> void:
 	
 	if save_data.has("market") and save_data["market"] is Dictionary:
 		_apply_market_save_data(save_data["market"] as Dictionary)
-	
-	if save_data.has("sales_stats") and save_data["sales_stats"] is Dictionary:
-		_apply_sales_stats_save_data(save_data["sales_stats"] as Dictionary)
 	
 	var has_saved_news := save_data.has("news") and save_data["news"] is Array
 
@@ -814,9 +809,3 @@ func get_season_name_from_month(month: int) -> String:
 			return "Winter"
 		_:
 			return "Unknown"
-
-func _create_sales_stats_save_data() -> Dictionary:
-	return SalesStatsManager.create_save_data()
-
-func _apply_sales_stats_save_data(sales_data: Dictionary) -> void:
-	SalesStatsManager.apply_save_data(sales_data)
