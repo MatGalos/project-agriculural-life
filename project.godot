@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Project_Agricultural_life"
-config/version="0.3.1.2"
+config/version="0.3.1.3"
 run/main_scene="uid://bg2wnf0pafkqt"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://Assets/Icons/AppIcons/icon.svg"
@@ -32,6 +32,7 @@ WeatherManager="*uid://b3qxamtdw5lss"
 EventManager="*uid://cv522ilya0b0f"
 NewsManager="*uid://cwr650hesrdt5"
 SaveManager="*uid://d078pyjylr6e"
+SalesStatsManager="*uid://c0fuxcijbhuq3"
 
 [dotnet]
 
