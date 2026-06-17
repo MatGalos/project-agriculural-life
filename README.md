@@ -43,6 +43,8 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Persisted sales statistics in save files
 - Documented world tile registration and editor farm-grid generation
 - Implemented unit testing for the game
+- Implemented more products
+  - Implemented carrot
 
 ### Version 0.3
 - Restructured the world

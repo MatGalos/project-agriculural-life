@@ -6,10 +6,16 @@
 [ext_resource type="Script" uid="uid://xh3wntssccmq" path="res://Scripts/Interactions/HouseInteractable.gd" id="4_ojop3"]
 [ext_resource type="PackedScene" uid="uid://4f4mbabd4bie" path="res://Assets/Models/Buildings/Silo.glb" id="5_g7nqd"]
 [ext_resource type="Script" uid="uid://da7ceqybaem4i" path="res://Scripts/Interactions/SiloInteractable.gd" id="6_6y6xk"]
+[ext_resource type="PackedScene" uid="uid://e0txou2qyc0l" path="res://Assets/Models/Terrain/plowed_block.glb" id="7_0e11a"]
 [ext_resource type="Script" uid="uid://b4bcklim2bhpc" path="res://Scripts/Generation/FarmGridGeneration.gd" id="7_j8hn3"]
 [ext_resource type="PackedScene" uid="uid://cxxr0r1e8i1bj" path="res://Assets/Models/Terrain/grass_block.glb" id="7_xvcwp"]
+[ext_resource type="PackedScene" uid="uid://dbctyorhltef2" path="res://Assets/Models/Plants/Carrot/carrot_ready.glb" id="8_oqugm"]
 [ext_resource type="PackedScene" uid="uid://bpc10uol4byfo" path="res://Scenes/Game/Farming/farm_tile.tscn" id="8_xvcwp"]
+[ext_resource type="PackedScene" uid="uid://ivbspaokouif" path="res://Assets/Models/Plants/Carrot/carrot_seeded.glb" id="9_5ori0"]
 [ext_resource type="Script" uid="uid://epxguj1ev7ej" path="res://Scripts/GameManagers/WorldManager.gd" id="10_6y6xk"]
+[ext_resource type="PackedScene" uid="uid://cmrs2piyitn5d" path="res://Assets/Models/Plants/Carrot/carrot_stage_1.glb" id="10_oqugm"]
+[ext_resource type="PackedScene" uid="uid://c2yq7uaskhbfl" path="res://Assets/Models/Plants/Carrot/carrot_stage_2.glb" id="15_5ori0"]
+[ext_resource type="PackedScene" uid="uid://ck4olv0cavb3f" path="res://Assets/Models/Plants/Carrot/carrot_stage_3.glb" id="16_gidhl"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_home_ground"]
 size = Vector3(10, 0.5, 21)
@@ -67,6 +73,45 @@ prompt_text = "E - Check stock"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HomeArea/Silo/StaticBody3D" unique_id=710056272]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
 shape = SubResource("CylinderShape3D_j8hn3")
+
+[node name="plowed_block" parent="HomeArea/Silo" unique_id=1858799274 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.00151, 0, 16.998238)
+
+[node name="plowed_block2" parent="HomeArea/Silo" unique_id=2014079809 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.00151, 0, 15.998238)
+
+[node name="plowed_block3" parent="HomeArea/Silo" unique_id=2070074592 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.00151, 0, 14.998238)
+
+[node name="plowed_block4" parent="HomeArea/Silo" unique_id=303513617 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.00151, 0, 13.998238)
+
+[node name="plowed_block5" parent="HomeArea/Silo" unique_id=1131261016 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.00151, 0, 12.998238)
+
+[node name="plowed_block6" parent="HomeArea/Silo" unique_id=1168022569 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.00151, 0, 16.998238)
+
+[node name="plowed_block7" parent="HomeArea/Silo" unique_id=1709645114 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.00151, 0, 15.998238)
+
+[node name="plowed_block8" parent="HomeArea/Silo" unique_id=1809312957 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.00151, 0, 14.998238)
+
+[node name="plowed_block9" parent="HomeArea/Silo" unique_id=372473974 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.00151, 0, 13.998238)
+
+[node name="plowed_block10" parent="HomeArea/Silo" unique_id=733430806 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.00151, 0, 12.998238)
+
+[node name="carrot_ready" parent="HomeArea/Silo" unique_id=830592561 instance=ExtResource("8_oqugm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.00151, 0, 12.998238)
+
+[node name="carrot_seeded" parent="HomeArea/Silo" unique_id=274214607 instance=ExtResource("9_5ori0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.00151, 0, 16.998238)
+
+[node name="carrot_stage_1" parent="HomeArea/Silo" unique_id=526597880 instance=ExtResource("10_oqugm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.00151, 0, 15.998238)
 
 [node name="Grass" type="Node3D" parent="HomeArea" unique_id=225793907]
 
@@ -2126,3 +2171,9 @@ world_root = NodePath("..")
 home_area = NodePath("../HomeArea")
 farm_root = NodePath("../Farm")
 farm_tiles_root = NodePath("../Farm/FarmGridGenerator")
+
+[node name="carrot_stage_2" parent="." unique_id=856792577 instance=ExtResource("15_5ori0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 8)
+
+[node name="carrot_stage_3" parent="." unique_id=786990763 instance=ExtResource("16_gidhl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 7)
