@@ -45,6 +45,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Implemented unit testing for the game
 - Implemented more products
   - Implemented carrot
+  - Implemented lettuce
 
 ### Version 0.3
 - Restructured the world

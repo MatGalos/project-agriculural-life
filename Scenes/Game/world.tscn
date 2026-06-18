@@ -16,6 +16,11 @@
 [ext_resource type="PackedScene" uid="uid://cmrs2piyitn5d" path="res://Assets/Models/Plants/Carrot/carrot_stage_1.glb" id="10_oqugm"]
 [ext_resource type="PackedScene" uid="uid://c2yq7uaskhbfl" path="res://Assets/Models/Plants/Carrot/carrot_stage_2.glb" id="15_5ori0"]
 [ext_resource type="PackedScene" uid="uid://ck4olv0cavb3f" path="res://Assets/Models/Plants/Carrot/carrot_stage_3.glb" id="16_gidhl"]
+[ext_resource type="PackedScene" uid="uid://cq5sve80s0b24" path="res://Assets/Models/Plants/Lettuce/lettuce_ready.glb" id="17_bkwxq"]
+[ext_resource type="PackedScene" uid="uid://b6qcq26jxe72k" path="res://Assets/Models/Plants/Lettuce/lettuce_seeded.glb" id="18_10r2p"]
+[ext_resource type="PackedScene" uid="uid://c8t3c31rptjqj" path="res://Assets/Models/Plants/Lettuce/lettuce_stage_1.glb" id="19_6b0cl"]
+[ext_resource type="PackedScene" uid="uid://cnrjuetnjbqr3" path="res://Assets/Models/Plants/Lettuce/lettuce_stage_2.glb" id="20_ijchs"]
+[ext_resource type="PackedScene" uid="uid://5imnvwsuaetq" path="res://Assets/Models/Plants/Lettuce/lettuce_stage_3.glb" id="21_sbgov"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_home_ground"]
 size = Vector3(10, 0.5, 21)
@@ -2177,3 +2182,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 8)
 
 [node name="carrot_stage_3" parent="." unique_id=786990763 instance=ExtResource("16_gidhl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 7)
+
+[node name="lettuce_ready" parent="." unique_id=117794024 instance=ExtResource("17_bkwxq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 6)
+
+[node name="lettuce_seeded" parent="." unique_id=1865418961 instance=ExtResource("18_10r2p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 10)
+
+[node name="lettuce_stage_1" parent="." unique_id=25088436 instance=ExtResource("19_6b0cl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 9)
+
+[node name="lettuce_stage_2" parent="." unique_id=947612033 instance=ExtResource("20_ijchs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 8)
+
+[node name="lettuce_stage_3" parent="." unique_id=765013974 instance=ExtResource("21_sbgov")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 7)
