@@ -14,6 +14,8 @@
 [ext_resource type="PackedScene" uid="uid://ivbspaokouif" path="res://Assets/Models/Plants/Carrot/carrot_seeded.glb" id="9_5ori0"]
 [ext_resource type="Script" uid="uid://epxguj1ev7ej" path="res://Scripts/GameManagers/WorldManager.gd" id="10_6y6xk"]
 [ext_resource type="PackedScene" uid="uid://cmrs2piyitn5d" path="res://Assets/Models/Plants/Carrot/carrot_stage_1.glb" id="10_oqugm"]
+[ext_resource type="PackedScene" uid="uid://hwi6cr2h50ik" path="res://Assets/Models/Plants/Potatoe/potatoe_stage_1.glb" id="14_mmxw5"]
+[ext_resource type="PackedScene" uid="uid://b3gns5hmbubw0" path="res://Assets/Models/Plants/Potatoe/potatoe_seeded.glb" id="15_3hmev"]
 [ext_resource type="PackedScene" uid="uid://c2yq7uaskhbfl" path="res://Assets/Models/Plants/Carrot/carrot_stage_2.glb" id="15_5ori0"]
 [ext_resource type="PackedScene" uid="uid://ck4olv0cavb3f" path="res://Assets/Models/Plants/Carrot/carrot_stage_3.glb" id="16_gidhl"]
 [ext_resource type="PackedScene" uid="uid://cq5sve80s0b24" path="res://Assets/Models/Plants/Lettuce/lettuce_ready.glb" id="17_bkwxq"]
@@ -21,6 +23,9 @@
 [ext_resource type="PackedScene" uid="uid://c8t3c31rptjqj" path="res://Assets/Models/Plants/Lettuce/lettuce_stage_1.glb" id="19_6b0cl"]
 [ext_resource type="PackedScene" uid="uid://cnrjuetnjbqr3" path="res://Assets/Models/Plants/Lettuce/lettuce_stage_2.glb" id="20_ijchs"]
 [ext_resource type="PackedScene" uid="uid://5imnvwsuaetq" path="res://Assets/Models/Plants/Lettuce/lettuce_stage_3.glb" id="21_sbgov"]
+[ext_resource type="PackedScene" uid="uid://c1kannbic5j5k" path="res://Assets/Models/Plants/Potatoe/potatoe_ready.glb" id="22_0uxfd"]
+[ext_resource type="PackedScene" uid="uid://1xtoih7s1rxp" path="res://Assets/Models/Plants/Potatoe/potatoe_stage_3.glb" id="23_sjl7i"]
+[ext_resource type="PackedScene" uid="uid://bbeub8rlg3of1" path="res://Assets/Models/Plants/Potatoe/potatoe_stage_2.glb" id="24_0ky0p"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_home_ground"]
 size = Vector3(10, 0.5, 21)
@@ -110,13 +115,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.00151, 0, 13.998238)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.00151, 0, 12.998238)
 
 [node name="carrot_ready" parent="HomeArea/Silo" unique_id=830592561 instance=ExtResource("8_oqugm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.00151, 0, 12.998238)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.00151, 0, 12.998238)
 
 [node name="carrot_seeded" parent="HomeArea/Silo" unique_id=274214607 instance=ExtResource("9_5ori0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.00151, 0, 16.998238)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.00151, 0, 16.998238)
 
 [node name="carrot_stage_1" parent="HomeArea/Silo" unique_id=526597880 instance=ExtResource("10_oqugm")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.00151, 0, 15.998238)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.00151, 0, 15.998238)
 
 [node name="Grass" type="Node3D" parent="HomeArea" unique_id=225793907]
 
@@ -2170,6 +2175,12 @@ tile_id = "small_18_19"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 19)
 tile_id = "small_19_19"
 
+[node name="potatoe_stage_1" parent="Farm/FarmGridGenerator" unique_id=1698080546 instance=ExtResource("14_mmxw5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 18)
+
+[node name="potatoe_seeded" parent="Farm/FarmGridGenerator" unique_id=1900401744 instance=ExtResource("15_3hmev")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 19)
+
 [node name="WorldManager" type="Node" parent="." unique_id=2136268591 node_paths=PackedStringArray("world_root", "home_area", "farm_root", "farm_tiles_root")]
 script = ExtResource("10_6y6xk")
 world_root = NodePath("..")
@@ -2178,22 +2189,136 @@ farm_root = NodePath("../Farm")
 farm_tiles_root = NodePath("../Farm/FarmGridGenerator")
 
 [node name="carrot_stage_2" parent="." unique_id=856792577 instance=ExtResource("15_5ori0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 8)
 
 [node name="carrot_stage_3" parent="." unique_id=786990763 instance=ExtResource("16_gidhl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 7)
 
 [node name="lettuce_ready" parent="." unique_id=117794024 instance=ExtResource("17_bkwxq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0, 6)
 
 [node name="lettuce_seeded" parent="." unique_id=1865418961 instance=ExtResource("18_10r2p")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0, 10)
 
 [node name="lettuce_stage_1" parent="." unique_id=25088436 instance=ExtResource("19_6b0cl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0, 9)
 
 [node name="lettuce_stage_2" parent="." unique_id=947612033 instance=ExtResource("20_ijchs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0, 8)
 
 [node name="lettuce_stage_3" parent="." unique_id=765013974 instance=ExtResource("21_sbgov")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0, 7)
+
+[node name="plowed_block" parent="." unique_id=1130184508 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 10)
+
+[node name="plowed_block2" parent="." unique_id=894226996 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 10)
+
+[node name="plowed_block3" parent="." unique_id=1779718625 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 10)
+
+[node name="plowed_block4" parent="." unique_id=2011190000 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, 10)
+
+[node name="plowed_block5" parent="." unique_id=491583235 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, 10)
+
+[node name="plowed_block6" parent="." unique_id=721376144 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0, 10)
+
+[node name="plowed_block7" parent="." unique_id=1207096732 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 10)
+
+[node name="plowed_block8" parent="." unique_id=1765552116 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 9)
+
+[node name="plowed_block9" parent="." unique_id=1385495636 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 9)
+
+[node name="plowed_block10" parent="." unique_id=1643448663 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 9)
+
+[node name="plowed_block11" parent="." unique_id=1716996967 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, 9)
+
+[node name="plowed_block12" parent="." unique_id=1005078934 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, 9)
+
+[node name="plowed_block13" parent="." unique_id=1011114744 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0, 9)
+
+[node name="plowed_block14" parent="." unique_id=1598978386 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 9)
+
+[node name="plowed_block15" parent="." unique_id=276707761 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 8)
+
+[node name="plowed_block16" parent="." unique_id=1387424932 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 8)
+
+[node name="plowed_block17" parent="." unique_id=1055781429 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 8)
+
+[node name="plowed_block18" parent="." unique_id=13710034 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, 8)
+
+[node name="plowed_block19" parent="." unique_id=1011531140 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, 8)
+
+[node name="plowed_block20" parent="." unique_id=992179411 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0, 8)
+
+[node name="plowed_block21" parent="." unique_id=865185985 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 8)
+
+[node name="plowed_block22" parent="." unique_id=1896614125 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 7)
+
+[node name="plowed_block23" parent="." unique_id=1954859467 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 7)
+
+[node name="plowed_block24" parent="." unique_id=1746547229 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 7)
+
+[node name="plowed_block25" parent="." unique_id=2010350162 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, 7)
+
+[node name="plowed_block26" parent="." unique_id=1407932217 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, 7)
+
+[node name="plowed_block27" parent="." unique_id=552968066 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0, 7)
+
+[node name="plowed_block28" parent="." unique_id=301420328 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 7)
+
+[node name="plowed_block29" parent="." unique_id=1510889337 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 6)
+
+[node name="plowed_block30" parent="." unique_id=1613673876 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 6)
+
+[node name="plowed_block31" parent="." unique_id=1902759688 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 6)
+
+[node name="plowed_block32" parent="." unique_id=550076757 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, 6)
+
+[node name="plowed_block33" parent="." unique_id=384093230 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, 6)
+
+[node name="plowed_block34" parent="." unique_id=444657121 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0, 6)
+
+[node name="plowed_block35" parent="." unique_id=712298225 instance=ExtResource("7_0e11a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 6)
+
+[node name="potatoe_ready" parent="." unique_id=758988462 instance=ExtResource("22_0uxfd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, 6)
+
+[node name="potatoe_stage_3" parent="." unique_id=1408288928 instance=ExtResource("23_sjl7i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, 7)
+
+[node name="potatoe_stage_2" parent="." unique_id=1946058713 instance=ExtResource("24_0ky0p")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, 8)
