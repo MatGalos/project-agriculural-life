@@ -46,7 +46,8 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Implemented more products
   - Implemented carrot
   - Implemented lettuce
-
+  - Implemented potatoe
+  
 ### Version 0.3
 - Restructured the world
 - Implemented WorldManager
