@@ -26,6 +26,11 @@
 [ext_resource type="PackedScene" uid="uid://c1kannbic5j5k" path="res://Assets/Models/Plants/Potatoe/potatoe_ready.glb" id="22_0uxfd"]
 [ext_resource type="PackedScene" uid="uid://1xtoih7s1rxp" path="res://Assets/Models/Plants/Potatoe/potatoe_stage_3.glb" id="23_sjl7i"]
 [ext_resource type="PackedScene" uid="uid://bbeub8rlg3of1" path="res://Assets/Models/Plants/Potatoe/potatoe_stage_2.glb" id="24_0ky0p"]
+[ext_resource type="PackedScene" uid="uid://1ob6b8gyek0" path="res://Assets/Models/Plants/Beetroot/beetroot_ready.glb" id="27_3hmev"]
+[ext_resource type="PackedScene" uid="uid://bmx210v8bf1sy" path="res://Assets/Models/Plants/Beetroot/beetroot_seeded.glb" id="28_ioj5j"]
+[ext_resource type="PackedScene" uid="uid://yq5va2l7m5yq" path="res://Assets/Models/Plants/Beetroot/beetroot_stage_1.glb" id="29_ox2gh"]
+[ext_resource type="PackedScene" uid="uid://daposvl58ngv1" path="res://Assets/Models/Plants/Beetroot/beetroot_stage_2.glb" id="30_d4bvx"]
+[ext_resource type="PackedScene" uid="uid://cxnypucsh4vhf" path="res://Assets/Models/Plants/Beetroot/beetroot_stage_3.glb" id="31_ctrdi"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_home_ground"]
 size = Vector3(10, 0.5, 21)
@@ -2322,3 +2327,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, 7)
 
 [node name="potatoe_stage_2" parent="." unique_id=1946058713 instance=ExtResource("24_0ky0p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, 8)
+
+[node name="beetroot_ready" parent="." unique_id=1901216910 instance=ExtResource("27_3hmev")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, 6)
+
+[node name="beetroot_seeded" parent="." unique_id=2043880760 instance=ExtResource("28_ioj5j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, 10)
+
+[node name="beetroot_stage_1" parent="." unique_id=687860515 instance=ExtResource("29_ox2gh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, 9)
+
+[node name="beetroot_stage_2" parent="." unique_id=729014967 instance=ExtResource("30_d4bvx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, 8)
+
+[node name="beetroot_stage_3" parent="." unique_id=660214238 instance=ExtResource("31_ctrdi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, 7)
