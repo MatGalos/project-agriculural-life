@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://b3gns5hmbubw0" path="res://Assets/Models/Plants/Potatoe/potatoe_seeded.glb" id="15_3hmev"]
 [ext_resource type="PackedScene" uid="uid://c2yq7uaskhbfl" path="res://Assets/Models/Plants/Carrot/carrot_stage_2.glb" id="15_5ori0"]
 [ext_resource type="PackedScene" uid="uid://ck4olv0cavb3f" path="res://Assets/Models/Plants/Carrot/carrot_stage_3.glb" id="16_gidhl"]
+[ext_resource type="PackedScene" uid="uid://cm8ymkyy4xioa" path="res://Assets/Models/Plants/Pumpkin/pumpkin_seeded.glb" id="16_l3pgf"]
 [ext_resource type="PackedScene" uid="uid://cq5sve80s0b24" path="res://Assets/Models/Plants/Lettuce/lettuce_ready.glb" id="17_bkwxq"]
 [ext_resource type="PackedScene" uid="uid://b6qcq26jxe72k" path="res://Assets/Models/Plants/Lettuce/lettuce_seeded.glb" id="18_10r2p"]
 [ext_resource type="PackedScene" uid="uid://c8t3c31rptjqj" path="res://Assets/Models/Plants/Lettuce/lettuce_stage_1.glb" id="19_6b0cl"]
@@ -36,6 +37,10 @@
 [ext_resource type="PackedScene" uid="uid://c6u4wtv1mcihu" path="res://Assets/Models/Plants/Cabbage/cabbage_stage_1.glb" id="34_tfe8q"]
 [ext_resource type="PackedScene" uid="uid://dya756yal3sud" path="res://Assets/Models/Plants/Cabbage/cabbage_stage_2.glb" id="35_gastr"]
 [ext_resource type="PackedScene" uid="uid://c4xtocjcl68km" path="res://Assets/Models/Plants/Cabbage/cabbage_stage_3.glb" id="36_i4s5b"]
+[ext_resource type="PackedScene" uid="uid://u2nr3uqqnwc8" path="res://Assets/Models/Plants/Pumpkin/pumpkin_ready.glb" id="37_i4s5b"]
+[ext_resource type="PackedScene" uid="uid://cki856lbgpony" path="res://Assets/Models/Plants/Pumpkin/pumpkin_stage_3.glb" id="38_ikpq5"]
+[ext_resource type="PackedScene" uid="uid://btlbcx3d6rwgd" path="res://Assets/Models/Plants/Pumpkin/pumpkin_stage_2.glb" id="39_jbbp1"]
+[ext_resource type="PackedScene" uid="uid://b2xy5j3ee2c5t" path="res://Assets/Models/Plants/Pumpkin/pumpkin_stage_1.glb" id="41_xrgru"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_home_ground"]
 size = Vector3(10, 0.5, 21)
@@ -2191,6 +2196,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 18)
 [node name="potatoe_seeded" parent="Farm/FarmGridGenerator" unique_id=1900401744 instance=ExtResource("15_3hmev")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 19)
 
+[node name="pumpkin_seeded" parent="Farm/FarmGridGenerator" unique_id=850348510 instance=ExtResource("16_l3pgf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 19)
+
 [node name="WorldManager" type="Node" parent="." unique_id=2136268591 node_paths=PackedStringArray("world_root", "home_area", "farm_root", "farm_tiles_root")]
 script = ExtResource("10_6y6xk")
 world_root = NodePath("..")
@@ -2362,3 +2370,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 8)
 
 [node name="cabbage_stage_3" parent="." unique_id=1633156016 instance=ExtResource("36_i4s5b")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 7)
+
+[node name="pumpkin_stage_3" parent="." unique_id=1907384889 instance=ExtResource("38_ikpq5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 7)
+
+[node name="pumpkin_stage_2" parent="." unique_id=1844469874 instance=ExtResource("39_jbbp1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 8)
+
+[node name="pumpkin_ready" parent="." unique_id=1898462076 instance=ExtResource("37_i4s5b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 6)
+
+[node name="pumpkin_stage_1" parent="." unique_id=2034713162 instance=ExtResource("41_xrgru")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 9)
