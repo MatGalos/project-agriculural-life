@@ -31,6 +31,11 @@
 [ext_resource type="PackedScene" uid="uid://yq5va2l7m5yq" path="res://Assets/Models/Plants/Beetroot/beetroot_stage_1.glb" id="29_ox2gh"]
 [ext_resource type="PackedScene" uid="uid://daposvl58ngv1" path="res://Assets/Models/Plants/Beetroot/beetroot_stage_2.glb" id="30_d4bvx"]
 [ext_resource type="PackedScene" uid="uid://cxnypucsh4vhf" path="res://Assets/Models/Plants/Beetroot/beetroot_stage_3.glb" id="31_ctrdi"]
+[ext_resource type="PackedScene" uid="uid://cgyo8m5wpvlmr" path="res://Assets/Models/Plants/Cabbage/cabbage_ready.glb" id="32_d4bvx"]
+[ext_resource type="PackedScene" uid="uid://6npfdh5vr08r" path="res://Assets/Models/Plants/Cabbage/cabbage_seeded.glb" id="33_atrk3"]
+[ext_resource type="PackedScene" uid="uid://c6u4wtv1mcihu" path="res://Assets/Models/Plants/Cabbage/cabbage_stage_1.glb" id="34_tfe8q"]
+[ext_resource type="PackedScene" uid="uid://dya756yal3sud" path="res://Assets/Models/Plants/Cabbage/cabbage_stage_2.glb" id="35_gastr"]
+[ext_resource type="PackedScene" uid="uid://c4xtocjcl68km" path="res://Assets/Models/Plants/Cabbage/cabbage_stage_3.glb" id="36_i4s5b"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_home_ground"]
 size = Vector3(10, 0.5, 21)
@@ -2342,3 +2347,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, 8)
 
 [node name="beetroot_stage_3" parent="." unique_id=660214238 instance=ExtResource("31_ctrdi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0, 7)
+
+[node name="cabbage_ready" parent="." unique_id=661729353 instance=ExtResource("32_d4bvx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 6)
+
+[node name="cabbage_seeded" parent="." unique_id=658712573 instance=ExtResource("33_atrk3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 10)
+
+[node name="cabbage_stage_1" parent="." unique_id=305319312 instance=ExtResource("34_tfe8q")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 9)
+
+[node name="cabbage_stage_2" parent="." unique_id=1749827264 instance=ExtResource("35_gastr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 8)
+
+[node name="cabbage_stage_3" parent="." unique_id=1633156016 instance=ExtResource("36_i4s5b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 0, 7)
