@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="CropData" format=3 uid="uid://dgvwgf7bp2v81"]
+
+[ext_resource type="Script" uid="uid://cbipb3o5yusrn" path="res://Scripts/Farming/CropData.gd" id="1_o7e2i"]
+[ext_resource type="Resource" uid="uid://c20mkdc0joxyt" path="res://Data/Items/Crops/beetroot_item.tres" id="1_prox0"]
+[ext_resource type="PackedScene" uid="uid://1ob6b8gyek0" path="res://Assets/Models/Plants/Beetroot/beetroot_ready.glb" id="2_l30d6"]
+[ext_resource type="Resource" uid="uid://biwfgquesqkfs" path="res://Data/Items/Seeds/beetroot_seed_item.tres" id="4_wjd47"]
+[ext_resource type="PackedScene" uid="uid://bmx210v8bf1sy" path="res://Assets/Models/Plants/Beetroot/beetroot_seeded.glb" id="5_6c0ba"]
+[ext_resource type="PackedScene" uid="uid://yq5va2l7m5yq" path="res://Assets/Models/Plants/Beetroot/beetroot_stage_1.glb" id="6_xl0o1"]
+[ext_resource type="PackedScene" uid="uid://daposvl58ngv1" path="res://Assets/Models/Plants/Beetroot/beetroot_stage_2.glb" id="7_fla1x"]
+[ext_resource type="PackedScene" uid="uid://cxnypucsh4vhf" path="res://Assets/Models/Plants/Beetroot/beetroot_stage_3.glb" id="8_cra8y"]
+
+[resource]
+script = ExtResource("1_o7e2i")
+crop_id = "beetroot"
+display_name = "Beetroot"
+seed_item = ExtResource("4_wjd47")
+harvest_item = ExtResource("1_prox0")
+seeded_scene = ExtResource("5_6c0ba")
+stage_1_scene = ExtResource("6_xl0o1")
+stage_2_scene = ExtResource("7_fla1x")
+stage_3_scene = ExtResource("8_cra8y")
+ready_scene = ExtResource("2_l30d6")
+days_to_stage_2 = 4
+days_to_stage_3 = 7
+days_to_ready = 10
+allowed_seasons = Array[int]([2])
+metadata/_custom_type_script = "uid://cbipb3o5yusrn"

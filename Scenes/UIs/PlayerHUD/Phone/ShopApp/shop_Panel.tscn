@@ -12,6 +12,7 @@ grow_vertical = 2
 script = ExtResource("1_qt4o2")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1150998685]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,10 +25,19 @@ layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=322683863]
 layout_mode = 2
+theme_override_constants/separation = 4
 
 [node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1974218168]
 layout_mode = 2
 text = "Shop"
 
-[node name="ItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=598493140]
+[node name="ItemsScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 1
+
+[node name="ItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ItemsScroll" unique_id=598493140]
+layout_mode = 2
+size_flags_horizontal = 3

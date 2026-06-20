@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SeedItemData" format=3 uid="uid://b8f4qapt4whqt"]
+
+[ext_resource type="Script" uid="uid://cm2wggbancy40" path="res://Scripts/Items/SeedItemData.gd" id="1_qv4lj"]
+[ext_resource type="Texture2D" path="res://Assets/Icons/Items/SeedBags/TomatoeSeedBag.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_qv4lj")
+crop_id = "tomatoe"
+id = "tomatoe_seed"
+display_name = "Tomatoe seeds"
+description = "Seeds used to grow tomatoe."
+icon = ExtResource("2_icon")
+base_price = 5
+category = 1
+growth_days = 7
+metadata/_custom_type_script = "uid://cm2wggbancy40"

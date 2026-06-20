@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="CropData" format=3 uid="uid://dwmpiuu8se5lc"]
+
+[ext_resource type="Resource" uid="uid://dot1i26lmo2ui" path="res://Data/Items/Crops/lettuce_item.tres" id="1_4dmrl"]
+[ext_resource type="Script" uid="uid://cbipb3o5yusrn" path="res://Scripts/Farming/CropData.gd" id="1_ry4ht"]
+[ext_resource type="PackedScene" uid="uid://cq5sve80s0b24" path="res://Assets/Models/Plants/Lettuce/lettuce_ready.glb" id="2_lq8md"]
+[ext_resource type="Resource" uid="uid://deoufmv2a1vr" path="res://Data/Items/Seeds/lettuce_seed_item.tres" id="4_h6tae"]
+[ext_resource type="PackedScene" uid="uid://b6qcq26jxe72k" path="res://Assets/Models/Plants/Lettuce/lettuce_seeded.glb" id="5_vng2d"]
+[ext_resource type="PackedScene" uid="uid://c8t3c31rptjqj" path="res://Assets/Models/Plants/Lettuce/lettuce_stage_1.glb" id="6_dka6f"]
+[ext_resource type="PackedScene" uid="uid://cnrjuetnjbqr3" path="res://Assets/Models/Plants/Lettuce/lettuce_stage_2.glb" id="7_gi8hq"]
+[ext_resource type="PackedScene" uid="uid://5imnvwsuaetq" path="res://Assets/Models/Plants/Lettuce/lettuce_stage_3.glb" id="8_wvq48"]
+
+[resource]
+script = ExtResource("1_ry4ht")
+crop_id = "lettuce"
+display_name = "Lettuce"
+seed_item = ExtResource("4_h6tae")
+harvest_item = ExtResource("1_4dmrl")
+seeded_scene = ExtResource("5_vng2d")
+stage_1_scene = ExtResource("6_dka6f")
+stage_2_scene = ExtResource("7_gi8hq")
+stage_3_scene = ExtResource("8_wvq48")
+ready_scene = ExtResource("2_lq8md")
+days_to_stage_1 = 2
+days_to_stage_2 = 5
+days_to_stage_3 = 7
+days_to_ready = 10
+metadata/_custom_type_script = "uid://cbipb3o5yusrn"

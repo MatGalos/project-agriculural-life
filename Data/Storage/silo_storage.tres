@@ -1,11 +1,29 @@
 [gd_resource type="Resource" script_class="StorageData" format=3 uid="uid://c46mxpfymbli4"]
 
 [ext_resource type="Script" uid="uid://dg7x75hhwwedu" path="res://Scripts/Items/ItemData.gd" id="1_eywhy"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/beetroot_item.tres" id="2_beetroot"]
 [ext_resource type="Resource" uid="uid://bwm4y7o4y40ew" path="res://Data/Items/Crops/wheat_item.tres" id="2_hbh8h"]
 [ext_resource type="Script" uid="uid://d0wxl62w3dcwv" path="res://Scripts/Storage/StorageData.gd" id="2_lh4ti"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/cabbage_item.tres" id="3_cabbage"]
 [ext_resource type="Resource" uid="uid://cct5ygvjvokag" path="res://Data/Items/Seeds/wheat_seed_item.tres" id="3_1pwc1"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/carrot_item.tres" id="4_carrot"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/corn_item.tres" id="5_corn"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/lettuce_item.tres" id="6_lettuce"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/potatoe_item.tres" id="7_potatoe"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/pumpkin_item.tres" id="8_pumpkin"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/strawberry_item.tres" id="9_strawberry"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/tomatoe_item.tres" id="10_tomatoe"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/beetroot_seed_item.tres" id="11_beetroot_seed"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/cabbage_seed_item.tres" id="12_cabbage_seed"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/carrot_seed_item.tres" id="13_carrot_seed"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/corn_seed_item.tres" id="14_corn_seed"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/lettuce_seed_item.tres" id="15_lettuce_seed"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/potatoe_seed_item.tres" id="16_potatoe_seed"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/pumpkin_seed_item.tres" id="17_pumpkin_seed"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/strawberry_seed_item.tres" id="18_strawberry_seed"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/tomatoe_seed_item.tres" id="19_tomatoe_seed"]
 
 [resource]
 script = ExtResource("2_lh4ti")
-item_database = Array[ExtResource("1_eywhy")]([ExtResource("2_hbh8h"), ExtResource("3_1pwc1")])
+item_database = Array[ExtResource("1_eywhy")]([ExtResource("2_beetroot"), ExtResource("3_cabbage"), ExtResource("4_carrot"), ExtResource("5_corn"), ExtResource("6_lettuce"), ExtResource("7_potatoe"), ExtResource("8_pumpkin"), ExtResource("9_strawberry"), ExtResource("10_tomatoe"), ExtResource("2_hbh8h"), ExtResource("11_beetroot_seed"), ExtResource("12_cabbage_seed"), ExtResource("13_carrot_seed"), ExtResource("14_corn_seed"), ExtResource("15_lettuce_seed"), ExtResource("16_potatoe_seed"), ExtResource("17_pumpkin_seed"), ExtResource("18_strawberry_seed"), ExtResource("19_tomatoe_seed"), ExtResource("3_1pwc1")])
 metadata/_custom_type_script = "uid://d0wxl62w3dcwv"

@@ -6,6 +6,15 @@ var wheat_crop_data: CropData = preload("res://Data/Crops/wheat_crop.tres")
 var wheat_seed_item: SeedItemData = preload("res://Data/Items/Seeds/wheat_seed_item.tres")
 var player_inventory: InventoryData = preload("res://Data/Inventory/player_inventory.tres")
 var all_crops: Array[CropData] = [
+	preload("res://Data/Crops/beetroot_crop.tres"),
+	preload("res://Data/Crops/cabbage_crop.tres"),
+	preload("res://Data/Crops/carrot_crop.tres"),
+	preload("res://Data/Crops/corn_crop.tres"),
+	preload("res://Data/Crops/lettuce_crop.tres"),
+	preload("res://Data/Crops/potatoe_crop.tres"),
+	preload("res://Data/Crops/pumpkin_crop.tres"),
+	preload("res://Data/Crops/strawberry_crop.tres"),
+	preload("res://Data/Crops/tomatoe_crop.tres"),
 	wheat_crop_data
 ]
 var watering_can_water := 0

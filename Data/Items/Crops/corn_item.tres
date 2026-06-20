@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CropItemData" format=3 uid="uid://bdayqx2dpvlhm"]
+
+[ext_resource type="Script" uid="uid://c3smts8jy3m4p" path="res://Scripts/Items/CropItemData.gd" id="1_hpumc"]
+[ext_resource type="Texture2D" path="res://Assets/Icons/Items/Plants/Corn.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_hpumc")
+crop_id = "corn"
+id = "corn"
+display_name = "Corn"
+description = "Harvested corn crop"
+icon = ExtResource("2_icon")
+base_price = 15
+category = 0
+metadata/_custom_type_script = "uid://c3smts8jy3m4p"

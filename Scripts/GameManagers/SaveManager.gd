@@ -7,7 +7,25 @@ var current_save_slot: int = 1
 const MAX_NEWS_SAVE_COUNT := 20
 
 var item_database: Array[ItemData] = [
+	preload("res://Data/Items/Crops/beetroot_item.tres"),
+	preload("res://Data/Items/Crops/cabbage_item.tres"),
+	preload("res://Data/Items/Crops/carrot_item.tres"),
+	preload("res://Data/Items/Crops/corn_item.tres"),
+	preload("res://Data/Items/Crops/lettuce_item.tres"),
+	preload("res://Data/Items/Crops/potatoe_item.tres"),
+	preload("res://Data/Items/Crops/pumpkin_item.tres"),
+	preload("res://Data/Items/Crops/strawberry_item.tres"),
+	preload("res://Data/Items/Crops/tomatoe_item.tres"),
 	preload("res://Data/Items/Crops/wheat_item.tres"),
+	preload("res://Data/Items/Seeds/beetroot_seed_item.tres"),
+	preload("res://Data/Items/Seeds/cabbage_seed_item.tres"),
+	preload("res://Data/Items/Seeds/carrot_seed_item.tres"),
+	preload("res://Data/Items/Seeds/corn_seed_item.tres"),
+	preload("res://Data/Items/Seeds/lettuce_seed_item.tres"),
+	preload("res://Data/Items/Seeds/potatoe_seed_item.tres"),
+	preload("res://Data/Items/Seeds/pumpkin_seed_item.tres"),
+	preload("res://Data/Items/Seeds/strawberry_seed_item.tres"),
+	preload("res://Data/Items/Seeds/tomatoe_seed_item.tres"),
 	preload("res://Data/Items/Seeds/wheat_seed_item.tres"),
 	preload("res://Data/Items/Tools/hoe_item.tres"),
 	preload("res://Data/Items/Tools/watering_can_item.tres"),
@@ -16,6 +34,15 @@ var item_database: Array[ItemData] = [
 ]
 
 var crop_database: Array[CropData] = [
+	preload("res://Data/Crops/beetroot_crop.tres"),
+	preload("res://Data/Crops/cabbage_crop.tres"),
+	preload("res://Data/Crops/carrot_crop.tres"),
+	preload("res://Data/Crops/corn_crop.tres"),
+	preload("res://Data/Crops/lettuce_crop.tres"),
+	preload("res://Data/Crops/potatoe_crop.tres"),
+	preload("res://Data/Crops/pumpkin_crop.tres"),
+	preload("res://Data/Crops/strawberry_crop.tres"),
+	preload("res://Data/Crops/tomatoe_crop.tres"),
 	preload("res://Data/Crops/wheat_crop.tres")
 ]
 
@@ -175,16 +202,17 @@ func _apply_save_data(save_data: Dictionary) -> void:
 	if save_data.has("weather") and save_data["weather"] is Dictionary:
 		_apply_weather_save_data(save_data["weather"] as Dictionary)
 	
-	if save_data.has("market") and save_data["market"] is Dictionary:
-		_apply_market_save_data(save_data["market"] as Dictionary)
-	
 	if save_data.has("sales_stats") and save_data["sales_stats"] is Dictionary:
 		_apply_sales_stats_save_data(save_data["sales_stats"] as Dictionary)
 	
 	var has_saved_news := save_data.has("news") and save_data["news"] is Array
+	var has_saved_market := save_data.has("market") and save_data["market"] is Dictionary
 
 	if save_data.has("events") and save_data["events"] is Array:
 		_apply_events_save_data(save_data["events"] as Array, not has_saved_news)
+
+	if has_saved_market:
+		_apply_market_save_data(save_data["market"] as Dictionary)
 	
 	if save_data.has("world") and save_data["world"] is Dictionary:
 		_apply_world_save_data(save_data["world"] as Dictionary)

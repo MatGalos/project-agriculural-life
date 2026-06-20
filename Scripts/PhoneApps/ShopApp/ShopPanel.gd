@@ -5,7 +5,7 @@ class_name ShopPanel
 @export var row_scene: PackedScene
 @export var player_inventory: InventoryData
 
-@onready var items_container: VBoxContainer = $PanelContainer/MarginContainer/VBoxContainer/ItemsContainer
+@onready var items_container: VBoxContainer = $PanelContainer/MarginContainer/VBoxContainer/ItemsScroll/ItemsContainer
 
 
 func _ready() -> void:

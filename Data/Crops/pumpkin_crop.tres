@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CropData" format=3 uid="uid://cglynux5abiwb"]
+
+[ext_resource type="Script" uid="uid://cbipb3o5yusrn" path="res://Scripts/Farming/CropData.gd" id="1_6vxay"]
+[ext_resource type="Resource" uid="uid://dlt6hdpk41dgi" path="res://Data/Items/Crops/pumpkin_item.tres" id="1_dd4ko"]
+[ext_resource type="PackedScene" uid="uid://u2nr3uqqnwc8" path="res://Assets/Models/Plants/Pumpkin/pumpkin_ready.glb" id="2_xt73v"]
+[ext_resource type="Resource" uid="uid://cv8tfbv5hijug" path="res://Data/Items/Seeds/pumpkin_seed_item.tres" id="4_hcabv"]
+[ext_resource type="PackedScene" uid="uid://cm8ymkyy4xioa" path="res://Assets/Models/Plants/Pumpkin/pumpkin_seeded.glb" id="5_djwgc"]
+[ext_resource type="PackedScene" uid="uid://b2xy5j3ee2c5t" path="res://Assets/Models/Plants/Pumpkin/pumpkin_stage_1.glb" id="6_prd8p"]
+[ext_resource type="PackedScene" uid="uid://btlbcx3d6rwgd" path="res://Assets/Models/Plants/Pumpkin/pumpkin_stage_2.glb" id="7_xnha8"]
+[ext_resource type="PackedScene" uid="uid://cki856lbgpony" path="res://Assets/Models/Plants/Pumpkin/pumpkin_stage_3.glb" id="8_a5pmi"]
+
+[resource]
+script = ExtResource("1_6vxay")
+crop_id = "pumpkin"
+display_name = "Pumpkin"
+seed_item = ExtResource("4_hcabv")
+harvest_item = ExtResource("1_dd4ko")
+seeded_scene = ExtResource("5_djwgc")
+stage_1_scene = ExtResource("6_prd8p")
+stage_2_scene = ExtResource("7_xnha8")
+stage_3_scene = ExtResource("8_a5pmi")
+ready_scene = ExtResource("2_xt73v")
+days_to_stage_1 = 3
+days_to_stage_2 = 7
+days_to_stage_3 = 11
+days_to_ready = 15
+allowed_seasons = Array[int]([2])
+metadata/_custom_type_script = "uid://cbipb3o5yusrn"

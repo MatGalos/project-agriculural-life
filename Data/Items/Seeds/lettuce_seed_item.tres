@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SeedItemData" format=3 uid="uid://deoufmv2a1vr"]
+
+[ext_resource type="Script" uid="uid://cm2wggbancy40" path="res://Scripts/Items/SeedItemData.gd" id="1_ireye"]
+[ext_resource type="Texture2D" path="res://Assets/Icons/Items/SeedBags/LettuceSeedBag.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_ireye")
+crop_id = "lettuce"
+id = "lettuce_seed"
+display_name = "Lettuce seeds"
+description = "Seeds used to grow lettuce."
+icon = ExtResource("2_icon")
+base_price = 5
+category = 1
+growth_days = 10
+metadata/_custom_type_script = "uid://cm2wggbancy40"

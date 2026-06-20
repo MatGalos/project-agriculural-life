@@ -4,9 +4,9 @@ class_name CommodityExchangePanel
 @export var row_scene: PackedScene
 
 @onready var status_label: Label = $PanelContainer/MarginContainer/VBoxContainer/StatusLabel
-@onready var items_container: VBoxContainer = $PanelContainer/MarginContainer/VBoxContainer/ItemsContainer
-@onready var history_title_label: Label = $PanelContainer/MarginContainer/VBoxContainer/HistoryTitleLabel
-@onready var history_label: Label = $PanelContainer/MarginContainer/VBoxContainer/HistoryLabel
+@onready var items_container: VBoxContainer = $PanelContainer/MarginContainer/VBoxContainer/ContentScroll/ContentContainer/ItemsContainer
+@onready var history_title_label: Label = $PanelContainer/MarginContainer/VBoxContainer/ContentScroll/ContentContainer/HistoryTitleLabel
+@onready var history_label: Label = $PanelContainer/MarginContainer/VBoxContainer/ContentScroll/ContentContainer/HistoryLabel
 
 var selected_commodity: CommodityData = null
 

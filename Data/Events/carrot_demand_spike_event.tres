@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MarketEventData" format=3 uid="uid://bs0mkdc0joxpg"]
+
+[ext_resource type="Script" uid="uid://dy0h10ql6luky" path="res://Scripts/Events/MarketEventData.gd" id="1_script"]
+[ext_resource type="Resource" uid="uid://23o5ycp5vrdb" path="res://Data/Items/Crops/carrot_item.tres" id="2_item"]
+
+[resource]
+script = ExtResource("1_script")
+event_id = "carrot_demand_spike"
+display_name = "Carrot Demand Spike"
+description = "Increased demand for carrot pushes prices upward."
+duration_days = 2
+trigger_chance = 0.2
+target_item = ExtResource("2_item")
+trend_effect = 2
+trend_strength_modifier = 0.02
+volatility_modifier = 0.03
+metadata/_custom_type_script = "uid://dy0h10ql6luky"

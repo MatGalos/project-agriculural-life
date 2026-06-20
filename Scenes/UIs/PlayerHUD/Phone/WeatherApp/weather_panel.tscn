@@ -12,15 +12,20 @@ grow_vertical = 2
 script = ExtResource("1_fa7d6")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=536580729]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=359916078]
 layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=1467291478]
 layout_mode = 2
+theme_override_constants/separation = 4
 
 [node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1918302909]
 layout_mode = 2
@@ -34,5 +39,13 @@ text = "7-Day Forecast"
 layout_mode = 2
 text = "Today: -"
 
-[node name="ForecastContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=2079540814]
+[node name="ForecastScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 1
+
+[node name="ForecastContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ForecastScroll" unique_id=2079540814]
+layout_mode = 2
+size_flags_horizontal = 3

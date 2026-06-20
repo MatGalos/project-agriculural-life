@@ -3,6 +3,15 @@ extends Node
 signal commodity_prices_updated
 
 var commodities: Array[CommodityData] = [
+	preload("res://Data/Economy/Commodities/beetroot_commodity.tres"),
+	preload("res://Data/Economy/Commodities/cabbage_commodity.tres"),
+	preload("res://Data/Economy/Commodities/carrot_commodity.tres"),
+	preload("res://Data/Economy/Commodities/corn_commodity.tres"),
+	preload("res://Data/Economy/Commodities/lettuce_commodity.tres"),
+	preload("res://Data/Economy/Commodities/potatoe_commodity.tres"),
+	preload("res://Data/Economy/Commodities/pumpkin_commodity.tres"),
+	preload("res://Data/Economy/Commodities/strawberry_commodity.tres"),
+	preload("res://Data/Economy/Commodities/tomatoe_commodity.tres"),
 	preload("res://Data/Economy/Commodities/wheat_commodity.tres")
 ]
 

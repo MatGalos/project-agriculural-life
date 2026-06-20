@@ -20,6 +20,7 @@ mouse_filter = 0
 script = ExtResource("1_cnyto")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1008370134]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -41,6 +42,7 @@ theme_override_constants/separation = 24
 [node name="StorageColumn" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=537507186]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 mouse_filter = 0
 theme_override_constants/separation = 10
 script = ExtResource("2_j7flx")
@@ -52,15 +54,24 @@ mouse_filter = 2
 text = "Silo Storage"
 horizontal_alignment = 1
 
-[node name="StorageItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer/StorageColumn" unique_id=1195032089]
+[node name="StorageScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/HBoxContainer/StorageColumn"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 1
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 1
+
+[node name="StorageItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer/StorageColumn/StorageScroll" unique_id=1195032089]
+layout_mode = 2
+size_flags_horizontal = 3
 mouse_filter = 1
 theme_override_constants/separation = 6
 
 [node name="InventoryColumn" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=1850153269]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 mouse_filter = 0
 theme_override_constants/separation = 10
 script = ExtResource("2_j7flx")
@@ -72,8 +83,16 @@ mouse_filter = 2
 text = "Player Inventory"
 horizontal_alignment = 1
 
-[node name="InventoryItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer/InventoryColumn" unique_id=1614566925]
+[node name="InventoryScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/HBoxContainer/InventoryColumn"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 1
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 1
+
+[node name="InventoryItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer/InventoryColumn/InventoryScroll" unique_id=1614566925]
+layout_mode = 2
+size_flags_horizontal = 3
 mouse_filter = 1
 theme_override_constants/separation = 6

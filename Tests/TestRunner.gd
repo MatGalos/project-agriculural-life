@@ -25,6 +25,7 @@ func run_all_tests() -> void:
 	_run_test_script(preload("res://Tests/Save/NewsSaveTest.gd").new())
 	_run_test_script(preload("res://Tests/Save/MarketSaveTest.gd").new())
 	_run_test_script(preload("res://Tests/Save/EventSaveTest.gd").new())
+	_run_test_script(preload("res://Tests/Save/CropProductIntegrationTest.gd").new())
 	_run_test_script(preload("res://Tests/Save/FarmTileLogicTest.gd").new())
 	_run_test_script(preload("res://Tests/Save/TileCropSaveTest.gd").new())
 

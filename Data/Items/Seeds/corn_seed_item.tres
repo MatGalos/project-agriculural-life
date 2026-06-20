@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SeedItemData" format=3 uid="uid://toxl27oy8mxl"]
+
+[ext_resource type="Script" uid="uid://cm2wggbancy40" path="res://Scripts/Items/SeedItemData.gd" id="1_fvg42"]
+[ext_resource type="Texture2D" path="res://Assets/Icons/Items/SeedBags/CornSeedBag.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_fvg42")
+crop_id = "corn"
+id = "corn_seed"
+display_name = "Corn seeds"
+description = "Seeds used to grow corn."
+icon = ExtResource("2_icon")
+base_price = 5
+category = 1
+growth_days = 9
+metadata/_custom_type_script = "uid://cm2wggbancy40"
