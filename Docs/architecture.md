@@ -278,6 +278,8 @@ Rules:
 - Each app owns its own `refresh()` method.
 - App panels should connect to relevant manager signals only once.
 - App row scenes should be passed through exported `row_scene` fields, not hardcoded in scripts.
+- Phone app content that can grow beyond the phone frame should sit inside a vertical `ScrollContainer`.
+- Current scrollable phone areas are news entries, shop items, sellable silo items, commodity list/history, and weather forecast rows.
 
 ## Inventory UI
 
@@ -303,6 +305,8 @@ Watering-can bars are created under each slot icon at runtime. They are intentio
 - Inventory cannot open while phone is open.
 - Phone cannot open while inventory is open.
 - Closing either panel restores mouse capture only if the game is active and not paused.
+- Storage/silo UI uses a fixed-size panel with separate vertical scroll areas for silo contents and player inventory contents.
+- Storage item rows are added under the scroll content containers; drag-and-drop still targets the storage and inventory columns.
 
 The current starting inventory is initialized in `PlayerHUD._setup_starting_inventory()` for new sessions. Save loading replaces inventory and hotbar state through `SaveManager`.
 
@@ -338,4 +342,5 @@ Before adding new inventory, crop, tool, or UI behavior:
 - For sales-driven events, configure `MarketEventData.target_item`, `requires_recent_sales`, `recent_sales_threshold`, and `recent_sales_days`.
 - Use `PlayerHUD.show_event_message()` for short-lived gameplay feedback instead of leaving placeholder UI visible.
 - For phone apps, expose row scenes with `@export var row_scene: PackedScene` and refresh from manager signals.
+- For growing UI lists, prefer a fixed outer panel with inner `ScrollContainer` nodes over allowing rows to resize the panel.
 - Do not add debug `print()` calls in runtime paths unless they are temporary and removed before commit.

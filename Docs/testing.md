@@ -53,8 +53,25 @@ Save tests:
 - `NewsSaveTest.gd`: news history serialization and restoration.
 - `MarketSaveTest.gd`: commodity market prices, trends, volatility, and history.
 - `EventSaveTest.gd`: active market event persistence.
+- `CropProductIntegrationTest.gd`: integration coverage for added crop products, seeds, crop data, commodity data, market events, shop items, storage registration, and save-manager lookup.
 - `FarmTileLogicTest.gd`: farm tile state transitions, planting, growth, and crop clearing.
 - `TileCropSaveTest.gd`: farm tile crop data in world save/load flow.
+
+Current crop-product integration coverage:
+
+- All added crop items and seed items load and have matching `id` / `crop_id` values.
+- Each added seed links to its crop and has `growth_days` equal to `CropData.days_to_ready`.
+- Each added crop has a matching commodity registered in `CommodityMarketManager`.
+- Each added crop has matching market events registered in `EventManager`.
+- Each added seed has a matching shop item registered in `Data/Shop/basic_shop.tres`.
+- Each added crop and seed is reachable through `SaveManager` item/crop lookup.
+- Each added crop and seed is registered in silo storage.
+- Inventory save/load restores the added crop and seed items.
+- Storage save/load restores the added crop items.
+
+Known crop-product test gap:
+
+- The full gameplay loop for every added crop is not yet tested. `FarmTileLogicTest.gd` currently verifies planting, growth, readiness, and harvesting with wheat. A future test should iterate over all `CropData` resources and verify `plant_crop()`, growth to `days_to_ready`, `is_crop_ready()`, and `harvest_crop()` for each crop.
 
 ## Adding A Test
 
@@ -110,6 +127,7 @@ Recommended rules:
 Good next targets:
 
 - `ToolManager` planting restrictions, watering-can usage, and harvest behavior.
+- Full crop gameplay loop coverage for all crop products, not only wheat.
 - `EventManager._does_event_meet_requirements()` for sales-gated events.
 - `CommodityMarketManager.simulate_skipped_market_hours()` for time skips.
 - `WeatherManager._water_fields_if_needed()` for rain and storm field watering.

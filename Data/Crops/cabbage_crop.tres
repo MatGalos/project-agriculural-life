@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CropData" format=3 uid="uid://bt7hogkiwieva"]
+
+[ext_resource type="Resource" uid="uid://cfqfe88uluog5" path="res://Data/Items/Crops/cabbage_item.tres" id="1_k1kr1"]
+[ext_resource type="Script" uid="uid://cbipb3o5yusrn" path="res://Scripts/Farming/CropData.gd" id="1_xjewn"]
+[ext_resource type="PackedScene" uid="uid://cgyo8m5wpvlmr" path="res://Assets/Models/Plants/Cabbage/cabbage_ready.glb" id="2_yj00c"]
+[ext_resource type="Resource" uid="uid://1qstpr4bi11x" path="res://Data/Items/Seeds/cabbage_seed_item.tres" id="4_mcovl"]
+[ext_resource type="PackedScene" uid="uid://6npfdh5vr08r" path="res://Assets/Models/Plants/Cabbage/cabbage_seeded.glb" id="5_w15m1"]
+[ext_resource type="PackedScene" uid="uid://c6u4wtv1mcihu" path="res://Assets/Models/Plants/Cabbage/cabbage_stage_1.glb" id="6_3d48g"]
+[ext_resource type="PackedScene" uid="uid://dya756yal3sud" path="res://Assets/Models/Plants/Cabbage/cabbage_stage_2.glb" id="7_d1h63"]
+[ext_resource type="PackedScene" uid="uid://c4xtocjcl68km" path="res://Assets/Models/Plants/Cabbage/cabbage_stage_3.glb" id="8_m83on"]
+
+[resource]
+script = ExtResource("1_xjewn")
+crop_id = "cabbage"
+display_name = "Cabbage"
+seed_item = ExtResource("4_mcovl")
+harvest_item = ExtResource("1_k1kr1")
+seeded_scene = ExtResource("5_w15m1")
+stage_1_scene = ExtResource("6_3d48g")
+stage_2_scene = ExtResource("7_d1h63")
+stage_3_scene = ExtResource("8_m83on")
+ready_scene = ExtResource("2_yj00c")
+days_to_stage_1 = 2
+days_to_stage_2 = 6
+days_to_stage_3 = 11
+days_to_ready = 15
+allowed_seasons = Array[int]([3])
+metadata/_custom_type_script = "uid://cbipb3o5yusrn"

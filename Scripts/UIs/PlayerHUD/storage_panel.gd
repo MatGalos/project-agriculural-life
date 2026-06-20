@@ -5,8 +5,8 @@ class_name StoragePanel
 @export var row_scene: PackedScene
 @export var player_inventory: InventoryData
 
-@onready var storage_items_container: VBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/StorageColumn/StorageItemsContainer
-@onready var inventory_items_container: VBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/InventoryColumn/InventoryItemsContainer
+@onready var storage_items_container: VBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/StorageColumn/StorageScroll/StorageItemsContainer
+@onready var inventory_items_container: VBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/InventoryColumn/InventoryScroll/InventoryItemsContainer
 
 
 func _ready() -> void:

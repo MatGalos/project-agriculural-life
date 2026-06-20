@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CropData" format=3 uid="uid://cxej4npw4copi"]
+
+[ext_resource type="Script" uid="uid://cbipb3o5yusrn" path="res://Scripts/Farming/CropData.gd" id="1_mlvj6"]
+[ext_resource type="Resource" uid="uid://xcjyppu24dod" path="res://Data/Items/Crops/strawberry_item.tres" id="1_wu0wc"]
+[ext_resource type="PackedScene" uid="uid://cceq4qf54m7y4" path="res://Assets/Models/Plants/Strawberry/strawberry_ready.glb" id="2_r6k63"]
+[ext_resource type="Resource" uid="uid://b8sc6k5go55o1" path="res://Data/Items/Seeds/strawberry_seed_item.tres" id="4_6am1o"]
+[ext_resource type="PackedScene" uid="uid://6gi42phs3nxh" path="res://Assets/Models/Plants/Strawberry/strawberry_seeded.glb" id="5_gsy05"]
+[ext_resource type="PackedScene" uid="uid://5lpj1dtbm36q" path="res://Assets/Models/Plants/Strawberry/strawberry_stage_1.glb" id="6_st11n"]
+[ext_resource type="PackedScene" uid="uid://c0tj2n1t2ejym" path="res://Assets/Models/Plants/Strawberry/strawberry_stage_2.glb" id="7_cqwth"]
+[ext_resource type="PackedScene" uid="uid://b6ys4y0k5nx3s" path="res://Assets/Models/Plants/Strawberry/strawberry_stage_3.glb" id="8_2igbp"]
+
+[resource]
+script = ExtResource("1_mlvj6")
+crop_id = "strawberry"
+display_name = "Strawberry"
+seed_item = ExtResource("4_6am1o")
+harvest_item = ExtResource("1_wu0wc")
+seeded_scene = ExtResource("5_gsy05")
+stage_1_scene = ExtResource("6_st11n")
+stage_2_scene = ExtResource("7_cqwth")
+stage_3_scene = ExtResource("8_2igbp")
+ready_scene = ExtResource("2_r6k63")
+days_to_stage_2 = 3
+days_to_stage_3 = 5
+days_to_ready = 8
+harvest_amount = 3
+allowed_seasons = Array[int]([1])
+metadata/_custom_type_script = "uid://cbipb3o5yusrn"

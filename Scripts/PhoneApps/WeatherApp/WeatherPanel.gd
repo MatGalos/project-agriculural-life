@@ -4,7 +4,7 @@ class_name WeatherPanel
 @export var row_scene: PackedScene
 
 @onready var today_label: Label = $PanelContainer/MarginContainer/VBoxContainer/TodayLabel
-@onready var forecast_container: VBoxContainer = $PanelContainer/MarginContainer/VBoxContainer/ForecastContainer
+@onready var forecast_container: VBoxContainer = $PanelContainer/MarginContainer/VBoxContainer/ForecastScroll/ForecastContainer
 
 func _ready() -> void:
 	visible = false

@@ -1,6 +1,24 @@
 extends Node
 
 var price_data_list: Array[ItemPriceData] = [
+	preload("res://Data/Economy/Prices/beetroot_price.tres"),
+	preload("res://Data/Economy/Prices/beetroot_seed_price.tres"),
+	preload("res://Data/Economy/Prices/cabbage_price.tres"),
+	preload("res://Data/Economy/Prices/cabbage_seed_price.tres"),
+	preload("res://Data/Economy/Prices/carrot_price.tres"),
+	preload("res://Data/Economy/Prices/carrot_seed_price.tres"),
+	preload("res://Data/Economy/Prices/corn_price.tres"),
+	preload("res://Data/Economy/Prices/corn_seed_price.tres"),
+	preload("res://Data/Economy/Prices/lettuce_price.tres"),
+	preload("res://Data/Economy/Prices/lettuce_seed_price.tres"),
+	preload("res://Data/Economy/Prices/potatoe_price.tres"),
+	preload("res://Data/Economy/Prices/potatoe_seed_price.tres"),
+	preload("res://Data/Economy/Prices/pumpkin_price.tres"),
+	preload("res://Data/Economy/Prices/pumpkin_seed_price.tres"),
+	preload("res://Data/Economy/Prices/strawberry_price.tres"),
+	preload("res://Data/Economy/Prices/strawberry_seed_price.tres"),
+	preload("res://Data/Economy/Prices/tomatoe_price.tres"),
+	preload("res://Data/Economy/Prices/tomatoe_seed_price.tres"),
 	preload("res://Data/Economy/Prices/wheat_price.tres"),
 	preload("res://Data/Economy/Prices/wheat_seed_price.tres")
 ]
