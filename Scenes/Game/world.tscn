@@ -41,6 +41,11 @@
 [ext_resource type="PackedScene" uid="uid://cki856lbgpony" path="res://Assets/Models/Plants/Pumpkin/pumpkin_stage_3.glb" id="38_ikpq5"]
 [ext_resource type="PackedScene" uid="uid://btlbcx3d6rwgd" path="res://Assets/Models/Plants/Pumpkin/pumpkin_stage_2.glb" id="39_jbbp1"]
 [ext_resource type="PackedScene" uid="uid://b2xy5j3ee2c5t" path="res://Assets/Models/Plants/Pumpkin/pumpkin_stage_1.glb" id="41_xrgru"]
+[ext_resource type="PackedScene" uid="uid://dq34e5625yaw1" path="res://Assets/Models/Plants/Tomatoe/tomatoe_seeded.glb" id="42_nt5g8"]
+[ext_resource type="PackedScene" uid="uid://btm2ih813x0wp" path="res://Assets/Models/Plants/Tomatoe/tomatoe_stage_1.glb" id="43_v2sja"]
+[ext_resource type="PackedScene" uid="uid://cee5ktjdgwypv" path="res://Assets/Models/Plants/Tomatoe/tomatoe_stage_2.glb" id="44_1r3oe"]
+[ext_resource type="PackedScene" uid="uid://cpsg2mavxkgqn" path="res://Assets/Models/Plants/Tomatoe/tomatoe_stage_3.glb" id="45_kgj8o"]
+[ext_resource type="PackedScene" uid="uid://cdtbyweuak4o0" path="res://Assets/Models/Plants/Tomatoe/tomatoe_ready.glb" id="46_tiikv"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_home_ground"]
 size = Vector3(10, 0.5, 21)
@@ -2382,3 +2387,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 6)
 
 [node name="pumpkin_stage_1" parent="." unique_id=2034713162 instance=ExtResource("41_xrgru")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 9)
+
+[node name="tomatoe_seeded" parent="." unique_id=1872374913 instance=ExtResource("42_nt5g8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 10)
+
+[node name="tomatoe_stage_1" parent="." unique_id=1574945914 instance=ExtResource("43_v2sja")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 9)
+
+[node name="tomatoe_stage_2" parent="." unique_id=494460198 instance=ExtResource("44_1r3oe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 8)
+
+[node name="tomatoe_stage_3" parent="." unique_id=1346491835 instance=ExtResource("45_kgj8o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 7)
+
+[node name="tomatoe_ready" parent="." unique_id=1388410253 instance=ExtResource("46_tiikv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 6)

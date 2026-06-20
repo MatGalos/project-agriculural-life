@@ -49,8 +49,9 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Implemented potatoe
   - Implemented beetroot
   - Implemented cabbage
-  = Implemented pumpkin
-  
+  - Implemented pumpkin
+  - Implemented tomatoe
+
 ### Version 0.3
 - Restructured the world
 - Implemented WorldManager
