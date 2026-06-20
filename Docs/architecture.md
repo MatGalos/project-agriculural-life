@@ -20,6 +20,7 @@ The project uses these gameplay autoloads:
 - `NewsManager` converts market events into phone news entries.
 - `SaveManager` serializes and restores persistent game state across three save slots.
 - `SalesStatsManager` tracks recent sold item amounts for sales-driven market events.
+- `GraphicsSettingsManager` persists and applies resolution, fullscreen mode, and interface scale.
 - `UI` is the player HUD scene autoload.
 
 Keep cross-system state in autoloads only when multiple unrelated scenes need it. Scene-local display logic should stay in UI controllers.
@@ -51,6 +52,18 @@ Important behavior:
 - Empty legacy config entries are ignored so default project binds are not erased.
 - `reset_to_defaults()` recreates all known actions before assigning default binds.
 - `use_tool` defaults to left mouse button and is routed through `CharacterController` to `ToolManager`.
+
+## Graphics Options
+
+`GraphicsSettingsManager` stores graphics settings in `user://graphics.cfg` and applies them at startup and when options change.
+
+Current settings:
+
+- Resolution: selected from common presets, including 480p, 720p, 1080p, 1440p, 4K/2160p, 4:3, 16:10, MacBook-style, and 21:9 ultrawide resolutions.
+- Interface scale: `Small`, `Medium`, or `Big`, applied through the root window content scale factor.
+- Fullscreen: toggles the game window between windowed and fullscreen mode.
+
+The Graphics tab in options owns only UI controls. Runtime application and persistence stay in `GraphicsSettingsManager`.
 
 ## Pause And Mouse Capture
 
@@ -343,4 +356,5 @@ Before adding new inventory, crop, tool, or UI behavior:
 - Use `PlayerHUD.show_event_message()` for short-lived gameplay feedback instead of leaving placeholder UI visible.
 - For phone apps, expose row scenes with `@export var row_scene: PackedScene` and refresh from manager signals.
 - For growing UI lists, prefer a fixed outer panel with inner `ScrollContainer` nodes over allowing rows to resize the panel.
+- Keep display/window settings in `GraphicsSettingsManager` rather than applying them directly from individual menu controls.
 - Do not add debug `print()` calls in runtime paths unless they are temporary and removed before commit.

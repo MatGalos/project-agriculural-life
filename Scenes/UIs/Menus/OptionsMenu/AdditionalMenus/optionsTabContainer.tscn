@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://dgsmyf268o2ys"]
+[gd_scene load_steps=4 format=3 uid="uid://dgsmyf268o2ys"]
 
 [ext_resource type="Script" uid="uid://bx5vomsf7vvdj" path="res://Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/controls.gd" id="1_5aoxo"]
+[ext_resource type="Script" path="res://Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/graphics.gd" id="2_56lq4"]
 [ext_resource type="PackedScene" uid="uid://cu5gkeiyqhxjq" path="res://Scenes/UIs/Menus/OptionsMenu/AdditionalMenus/ControlBindRow.tscn" id="2_i8lp4"]
 
 [node name="optionsTabContainer" type="Control" unique_id=1539039912]
@@ -91,6 +92,7 @@ text = "Reset to default"
 [node name="Graphics" type="TabBar" parent="TabContainer" unique_id=1796361035]
 visible = false
 layout_mode = 2
+script = ExtResource("2_56lq4")
 metadata/_tab_index = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="TabContainer/Graphics" unique_id=432711136]
@@ -107,8 +109,44 @@ theme_override_constants/margin_bottom = 24
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Graphics/MarginContainer" unique_id=2013950163]
 layout_mode = 2
-theme_override_constants/separation = 64
+theme_override_constants/separation = 28
 alignment = 1
+
+[node name="ResolutionSection" type="VBoxContainer" parent="TabContainer/Graphics/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ResolutionLabel" type="Label" parent="TabContainer/Graphics/MarginContainer/VBoxContainer/ResolutionSection"]
+layout_mode = 2
+text = "Resolution"
+
+[node name="ResolutionOption" type="OptionButton" parent="TabContainer/Graphics/MarginContainer/VBoxContainer/ResolutionSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="InterfaceScaleSection" type="VBoxContainer" parent="TabContainer/Graphics/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="InterfaceScaleLabel" type="Label" parent="TabContainer/Graphics/MarginContainer/VBoxContainer/InterfaceScaleSection"]
+layout_mode = 2
+text = "Interface scale"
+
+[node name="InterfaceScaleOption" type="OptionButton" parent="TabContainer/Graphics/MarginContainer/VBoxContainer/InterfaceScaleSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FullscreenSection" type="VBoxContainer" parent="TabContainer/Graphics/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="FullscreenLabel" type="Label" parent="TabContainer/Graphics/MarginContainer/VBoxContainer/FullscreenSection"]
+layout_mode = 2
+text = "Fullscreen"
+
+[node name="FullscreenCheck" type="CheckButton" parent="TabContainer/Graphics/MarginContainer/VBoxContainer/FullscreenSection"]
+layout_mode = 2
+text = "Enabled"
 
 [node name="Feedback" type="TabBar" parent="TabContainer" unique_id=1083088513]
 visible = false
