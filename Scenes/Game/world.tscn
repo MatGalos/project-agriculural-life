@@ -46,6 +46,11 @@
 [ext_resource type="PackedScene" uid="uid://cee5ktjdgwypv" path="res://Assets/Models/Plants/Tomatoe/tomatoe_stage_2.glb" id="44_1r3oe"]
 [ext_resource type="PackedScene" uid="uid://cpsg2mavxkgqn" path="res://Assets/Models/Plants/Tomatoe/tomatoe_stage_3.glb" id="45_kgj8o"]
 [ext_resource type="PackedScene" uid="uid://cdtbyweuak4o0" path="res://Assets/Models/Plants/Tomatoe/tomatoe_ready.glb" id="46_tiikv"]
+[ext_resource type="PackedScene" uid="uid://egnqq30r247e" path="res://Assets/Models/Plants/Corn/Corn_seeded.glb" id="47_m7bxv"]
+[ext_resource type="PackedScene" uid="uid://cr6maapmnbrv6" path="res://Assets/Models/Plants/Corn/Corn_statge_1.glb" id="48_1lbea"]
+[ext_resource type="PackedScene" uid="uid://dwsae7s6s8gxw" path="res://Assets/Models/Plants/Corn/Corn_statge_2.glb" id="49_hbkff"]
+[ext_resource type="PackedScene" uid="uid://gkcewmwko6t6" path="res://Assets/Models/Plants/Corn/Corn_statge_3.glb" id="50_olabh"]
+[ext_resource type="PackedScene" uid="uid://b0ij1y1nip5or" path="res://Assets/Models/Plants/Corn/Corn_ready.glb" id="51_l1kib"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_home_ground"]
 size = Vector3(10, 0.5, 21)
@@ -2389,16 +2394,31 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 6)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 9)
 
 [node name="tomatoe_seeded" parent="." unique_id=1872374913 instance=ExtResource("42_nt5g8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 10)
 
 [node name="tomatoe_stage_1" parent="." unique_id=1574945914 instance=ExtResource("43_v2sja")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 9)
 
 [node name="tomatoe_stage_2" parent="." unique_id=494460198 instance=ExtResource("44_1r3oe")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 8)
 
 [node name="tomatoe_stage_3" parent="." unique_id=1346491835 instance=ExtResource("45_kgj8o")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 7)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 7)
 
 [node name="tomatoe_ready" parent="." unique_id=1388410253 instance=ExtResource("46_tiikv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, 6)
+
+[node name="Corn_seeded" parent="." unique_id=384614590 instance=ExtResource("47_m7bxv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 10)
+
+[node name="Corn_statge_1" parent="." unique_id=896586376 instance=ExtResource("48_1lbea")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 9)
+
+[node name="Corn_statge_2" parent="." unique_id=666401171 instance=ExtResource("49_hbkff")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 8)
+
+[node name="Corn_statge_3" parent="." unique_id=1337568836 instance=ExtResource("50_olabh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 7)
+
+[node name="Corn_ready" parent="." unique_id=566534535 instance=ExtResource("51_l1kib")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 0, 6)
