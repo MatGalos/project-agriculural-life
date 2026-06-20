@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Project_Agricultural_life"
-config/version="0.3.1.13"
+config/version="0.3.1.14"
 run/main_scene="uid://bg2wnf0pafkqt"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://Assets/Icons/AppIcons/icon.svg"
@@ -33,6 +33,7 @@ EventManager="*uid://cv522ilya0b0f"
 NewsManager="*uid://cwr650hesrdt5"
 SaveManager="*uid://d078pyjylr6e"
 SalesStatsManager="*uid://c0fuxcijbhuq3"
+GraphicsSettingsManager="*res://Scripts/GameManagers/GraphicsSettingsManager.gd"
 DebugManager="*uid://v4uibwiagewl"
 
 [dotnet]

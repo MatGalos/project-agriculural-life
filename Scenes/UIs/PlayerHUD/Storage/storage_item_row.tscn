@@ -27,3 +27,8 @@ mouse_filter = 2
 [node name="AmountLabel" type="Label" parent="." unique_id=252329279]
 layout_mode = 2
 mouse_filter = 2
+
+[node name="RightPadding" type="Control" parent="."]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+mouse_filter = 2

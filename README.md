@@ -53,6 +53,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Implemented tomatoe
   - Implemented corn
   - Implemented strawberry
+- Added settings for the resolutions
 
 ### Version 0.3
 - Restructured the world

@@ -1,8 +1,8 @@
 extends Control
 
 const ICON_SIZE := Vector2(48, 48)
-const WATER_BAR_OFFSET := Vector2(2, 42)
-const WATER_BAR_SIZE := Vector2(44, 4)
+const WATER_BAR_MARGIN := 6.0
+const WATER_BAR_HEIGHT := 4.0
 
 @onready var slots := [
 	$PanelContainer/HBoxContainer/Slot1,
@@ -13,6 +13,10 @@ const WATER_BAR_SIZE := Vector2(44, 4)
 ]
 
 func _ready() -> void:
+	for slot_node: Control in slots:
+		if not slot_node.resized.is_connected(_on_slot_resized):
+			slot_node.resized.connect(_on_slot_resized)
+
 	if HotbarManager.inventory_data and not HotbarManager.inventory_data.inventory_changed.is_connected(refresh):
 		HotbarManager.inventory_data.inventory_changed.connect(refresh)
 
@@ -70,6 +74,22 @@ func _on_selected_slot_changed(slot_index: int) -> void:
 	_update_highlight(slot_index)
 
 
+func _on_slot_resized() -> void:
+	if HotbarManager.inventory_data == null or HotbarManager.hotbar_data == null:
+		return
+
+	for i in range(slots.size()):
+		var slot_node: Control = slots[i]
+		var inventory_index := HotbarManager.hotbar_data.get_inventory_slot_index(i)
+		var inventory_slot := HotbarManager.inventory_data.get_slot(inventory_index)
+		var item_data: ItemData = null
+
+		if inventory_slot != null and not inventory_slot.is_empty():
+			item_data = inventory_slot.item_data
+
+		_update_watering_can_bar(slot_node, item_data)
+
+
 func _update_highlight(active_slot: int) -> void:
 	for i in range(slots.size()):
 		var slot = slots[i]
@@ -89,11 +109,15 @@ func _setup_slot_ui(icon_rect: TextureRect, amount_label: Label) -> void:
 	amount_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func _update_watering_can_bar(slot_node: Control, item_data: ItemData) -> void:
-	var icon_rect := slot_node.get_node_or_null("IconRect") as TextureRect
-	if icon_rect == null:
+	var water_bar_layer := slot_node.get_node_or_null("WaterBarLayer") as Control
+	if water_bar_layer == null:
 		return
 
-	var water_bar_background := icon_rect.get_node_or_null("WaterBarBackground") as ColorRect
+	water_bar_layer.position = Vector2.ZERO
+	water_bar_layer.size = slot_node.size
+	water_bar_layer.move_to_front()
+
+	var water_bar_background := water_bar_layer.get_node_or_null("WaterBarBackground") as ColorRect
 	if water_bar_background == null:
 		return
 
@@ -120,33 +144,53 @@ func _update_watering_can_bar(slot_node: Control, item_data: ItemData) -> void:
 
 	ratio = clampf(ratio, 0.0, 1.0)
 
-	water_bar_background.position = WATER_BAR_OFFSET
-	water_bar_background.size = WATER_BAR_SIZE
+	var layer_size := water_bar_layer.size
+	var bar_width := maxf(layer_size.x - (WATER_BAR_MARGIN * 2.0), 0.0)
+	var bar_size := Vector2(bar_width, WATER_BAR_HEIGHT)
+	water_bar_background.position = Vector2(
+		WATER_BAR_MARGIN,
+		maxf(layer_size.y - WATER_BAR_MARGIN - WATER_BAR_HEIGHT, 0.0)
+	)
+	water_bar_background.size = bar_size
 	water_bar_fill.position = Vector2.ZERO
-	water_bar_fill.size = Vector2(WATER_BAR_SIZE.x * ratio, WATER_BAR_SIZE.y)
+	water_bar_fill.size = Vector2(bar_size.x * ratio, bar_size.y)
 
 func _ensure_watering_can_bar(slot_node: Control) -> void:
-	var icon_rect := slot_node.get_node_or_null("IconRect") as TextureRect
-	if icon_rect == null:
-		return
+	var legacy_water_bar := slot_node.get_node_or_null("WaterBarBackground")
+	if legacy_water_bar != null:
+		legacy_water_bar.queue_free()
 
-	if icon_rect.get_node_or_null("WaterBarBackground") != null:
+	var water_bar_layer := slot_node.get_node_or_null("WaterBarLayer") as Control
+	if water_bar_layer == null:
+		water_bar_layer = Control.new()
+		water_bar_layer.name = "WaterBarLayer"
+		water_bar_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		water_bar_layer.custom_minimum_size = Vector2.ZERO
+		water_bar_layer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		water_bar_layer.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		slot_node.add_child(water_bar_layer)
+
+	water_bar_layer.position = Vector2.ZERO
+	water_bar_layer.size = slot_node.size
+	water_bar_layer.move_to_front()
+
+	if water_bar_layer.get_node_or_null("WaterBarBackground") != null:
 		return
 
 	var water_bar_background := ColorRect.new()
 	water_bar_background.name = "WaterBarBackground"
 	water_bar_background.color = Color(0.55, 0.55, 0.55, 1.0)
 	water_bar_background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	water_bar_background.position = WATER_BAR_OFFSET
-	water_bar_background.size = WATER_BAR_SIZE
+	water_bar_background.position = Vector2.ZERO
+	water_bar_background.size = Vector2.ZERO
 	water_bar_background.visible = false
-	icon_rect.add_child(water_bar_background)
+	water_bar_layer.add_child(water_bar_background)
 
 	var water_bar_fill := ColorRect.new()
 	water_bar_fill.name = "WaterBarFill"
 	water_bar_fill.color = Color(0.06, 0.33, 0.70, 1.0)
 	water_bar_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	water_bar_fill.position = Vector2.ZERO
-	water_bar_fill.size = WATER_BAR_SIZE
+	water_bar_fill.size = Vector2.ZERO
 	water_bar_fill.visible = false
 	water_bar_background.add_child(water_bar_fill)
