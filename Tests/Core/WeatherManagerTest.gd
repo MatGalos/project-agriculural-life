@@ -7,6 +7,7 @@ func run() -> void:
 	print("\n--- WeatherManagerTest ---")
 
 	var saved_minute_of_day := TimeManager.current_minute_of_day
+	var saved_current_month := TimeManager.current_month
 	var saved_current_day_phase := WeatherManager.current_day_phase
 	var saved_today_phase_forecast := WeatherManager.today_phase_forecast.duplicate()
 	var saved_current_phase_weather := WeatherManager.current_phase_weather
@@ -14,6 +15,7 @@ func run() -> void:
 	var saved_current_temperature := WeatherManager.current_temperature
 	var saved_current_day_pattern := WeatherManager.current_day_pattern
 	var saved_current_day_base_temperature := WeatherManager.current_day_base_temperature
+	var saved_season_weather_profiles := WeatherManager.season_weather_profiles.duplicate()
 
 	WeatherManager.today_phase_forecast.clear()
 
@@ -22,8 +24,12 @@ func run() -> void:
 	_test_phase_temperatures_use_one_day_base_temperature()
 	_test_phase_forecast_text_format()
 	_test_forecast_entry_contains_pattern_and_rain_chance()
+	_set_test_season_weather_profiles()
+	_test_season_temperature_modifier_changes_day_base_temperature()
+	_test_season_weather_profile_modifies_pattern_weights()
 
 	TimeManager.current_minute_of_day = saved_minute_of_day
+	TimeManager.current_month = saved_current_month
 	WeatherManager.current_day_phase = saved_current_day_phase
 	WeatherManager.today_phase_forecast.clear()
 	for phase_data in saved_today_phase_forecast:
@@ -33,6 +39,7 @@ func run() -> void:
 	WeatherManager.current_temperature = saved_current_temperature
 	WeatherManager.current_day_pattern = saved_current_day_pattern
 	WeatherManager.current_day_base_temperature = saved_current_day_base_temperature
+	WeatherManager.season_weather_profiles = saved_season_weather_profiles
 
 
 func _test_day_phase_boundaries() -> void:
@@ -175,6 +182,72 @@ func _test_forecast_entry_contains_pattern_and_rain_chance() -> void:
 		rain_chance >= 0 and rain_chance <= 100,
 		"Weather forecast entry rain chance is in percent range"
 	)
+
+
+func _test_season_temperature_modifier_changes_day_base_temperature() -> void:
+	var pattern := WeatherDayPatternData.new()
+	pattern.base_temperature_min = 20
+	pattern.base_temperature_max = 20
+
+	TimeManager.current_month = 2
+	runner.assert_eq(
+		WeatherManager._roll_day_base_temperature(pattern),
+		28,
+		"Summer weather profile adds temperature modifier to day base temperature"
+	)
+
+	TimeManager.current_month = 4
+	runner.assert_eq(
+		WeatherManager._roll_day_base_temperature(pattern),
+		10,
+		"Winter weather profile subtracts temperature modifier from day base temperature"
+	)
+
+
+func _test_season_weather_profile_modifies_pattern_weights() -> void:
+	var rainy_pattern := WeatherDayPatternData.new()
+	rainy_pattern.pattern_id = "rainy_day"
+	rainy_pattern.summer_weight = 10
+
+	var stormy_pattern := WeatherDayPatternData.new()
+	stormy_pattern.pattern_id = "stormy_day"
+	stormy_pattern.summer_weight = 10
+	stormy_pattern.winter_weight = 10
+
+	TimeManager.current_month = 2
+	runner.assert_eq(
+		WeatherManager._get_pattern_weight_for_current_season(rainy_pattern),
+		5,
+		"Summer weather profile lowers rainy day pattern weight"
+	)
+	runner.assert_eq(
+		WeatherManager._get_pattern_weight_for_current_season(stormy_pattern),
+		25,
+		"Summer weather profile raises stormy day pattern weight"
+	)
+
+	TimeManager.current_month = 4
+	runner.assert_eq(
+		WeatherManager._get_pattern_weight_for_current_season(stormy_pattern),
+		0,
+		"Season weather profile clamps negative pattern weight to zero"
+	)
+
+
+func _set_test_season_weather_profiles() -> void:
+	var summer_profile := SeasonWeatherData.new()
+	summer_profile.temperature_modifier = 8
+	summer_profile.rain_weight_modifier = -5
+	summer_profile.storm_weight_modifier = 15
+
+	var winter_profile := SeasonWeatherData.new()
+	winter_profile.temperature_modifier = -10
+	winter_profile.storm_weight_modifier = -20
+
+	WeatherManager.season_weather_profiles = {
+		SeasonData.Season.SUMMER: summer_profile,
+		SeasonData.Season.WINTER: winter_profile
+	}
 
 
 func _set_hour(hour: int) -> void:

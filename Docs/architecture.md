@@ -197,6 +197,7 @@ Important behavior:
 - Day phases are Dawn from 05:00, Morning from 09:00, Afternoon from 14:00, and Night from 20:00 through 04:59.
 - `WeatherPhaseData` stores phase-specific weather, temperature, and rain chance.
 - `WeatherDayPatternData` controls season-weighted day patterns, phase weather options, base temperature ranges, and phase temperature offsets.
+- `SeasonWeatherData` applies season-specific weather balancing: `temperature_modifier` shifts the daily base temperature, while `rain_weight_modifier` and `storm_weight_modifier` adjust rainy/stormy day pattern weights.
 - `current_day_base_temperature` is rolled once per generated day pattern; each phase temperature is that shared base plus the pattern's phase offset.
 - The current phase forecast is applied through `_apply_current_phase_weather()` and emits `weather_changed`.
 - The forecast stores dictionaries containing `weather`, `temperature`, `pattern`, `base_temperature`, and `rain_chance`.

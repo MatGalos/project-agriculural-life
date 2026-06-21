@@ -57,6 +57,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Improvements to weather
   - Implemented weather phase system
   - Added cached day phase updates from in-game time changes
+  - Implemented seasonal weather balancing for temperature and rainy/stormy pattern weights
 - Improvements to apps
   - Improve weather app
   - Weather forecast now labels the next day as Tomorrow and shows pattern, temperature, and rain chance

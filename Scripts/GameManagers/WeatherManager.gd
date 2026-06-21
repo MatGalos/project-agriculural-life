@@ -16,6 +16,14 @@ var weather_day_patterns: Array[WeatherDayPatternData] = [
 	preload("res://Data/Weather/Patterns/mixed_day_pattern.tres"),
 	preload("res://Data/Weather/Patterns/stormy_day_pattern.tres")
 ]
+
+var season_weather_profiles := {
+	SeasonData.Season.SPRING: preload("res://Data/Seasons/spring_weather.tres"),
+	SeasonData.Season.SUMMER: preload("res://Data/Seasons/summer_weather.tres"),
+	SeasonData.Season.AUTUMN: preload("res://Data/Seasons/autumn_weather.tres"),
+	SeasonData.Season.WINTER: preload("res://Data/Seasons/winter_weather.tres")
+}
+
 var current_day_pattern: WeatherDayPatternData = null
 var current_day_base_temperature: int = 20
 
@@ -328,17 +336,30 @@ func _get_pattern_weight_for_current_season(pattern: WeatherDayPatternData) -> i
 	if pattern == null:
 		return 0
 
+	var weight := 0
+
 	match TimeManager.get_current_season():
 		SeasonData.Season.SPRING:
-			return pattern.spring_weight
+			weight = pattern.spring_weight
 		SeasonData.Season.SUMMER:
-			return pattern.summer_weight
+			weight = pattern.summer_weight
 		SeasonData.Season.AUTUMN:
-			return pattern.autumn_weight
+			weight = pattern.autumn_weight
 		SeasonData.Season.WINTER:
-			return pattern.winter_weight
+			weight = pattern.winter_weight
 		_:
-			return 0
+			weight = 0
+
+	var season_profile := get_current_season_weather_profile()
+
+	if season_profile != null:
+		if pattern.pattern_id == "rainy_day":
+			weight += season_profile.rain_weight_modifier
+
+		if pattern.pattern_id == "stormy_day":
+			weight += season_profile.storm_weight_modifier
+
+	return maxi(weight, 0)
 
 func _roll_day_pattern() -> WeatherDayPatternData:
 	var total_weight := 0
@@ -364,10 +385,16 @@ func _roll_day_base_temperature(pattern: WeatherDayPatternData) -> int:
 	if pattern == null:
 		return 20
 
-	return randi_range(
+	var base_temperature := randi_range(
 		pattern.base_temperature_min,
 		pattern.base_temperature_max
 	)
+	var season_profile := get_current_season_weather_profile()
+
+	if season_profile == null:
+		return base_temperature
+
+	return base_temperature + season_profile.temperature_modifier
 
 func get_day_pattern_by_id(pattern_id: String) -> WeatherDayPatternData:
 	for pattern in weather_day_patterns:
@@ -444,3 +471,9 @@ func print_today_forecast() -> void:
 
 	for phase_data in today_phase_forecast:
 		print(get_phase_forecast_text(phase_data))
+
+func get_current_season_weather_profile() -> SeasonWeatherData:
+	return season_weather_profiles.get(
+		TimeManager.get_current_season(),
+		null
+	) as SeasonWeatherData

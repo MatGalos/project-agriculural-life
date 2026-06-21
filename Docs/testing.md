@@ -41,7 +41,7 @@ Core tests:
 - `HotbarDataTest.gd`: hotbar setup, slot mapping, and selected slot behavior.
 - `SalesStatsManagerTest.gd`: sales recording, recent sales totals, and day rollover.
 - `InventoryDataTest.gd`: inventory setup, stacking, removal, and slot movement behavior.
-- `WeatherManagerTest.gd`: day phase hour boundaries, cached phase updates from time changes, phase temperatures derived from one daily base temperature, and expanded daily forecast entry fields.
+- `WeatherManagerTest.gd`: day phase hour boundaries, cached phase updates from time changes, phase temperatures derived from one daily base temperature, expanded daily forecast entry fields, and season weather profile modifiers for temperature and rainy/stormy pattern weights.
 
 Save tests:
 

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SeasonWeatherData" format=3 uid="uid://c7v1uv3mec7j5"]
+
+[ext_resource type="Script" uid="uid://bsa0kkmehs1wh" path="res://Scripts/Seasons/SeasonWeatherData.gd" id="1_p43lg"]
+
+[resource]
+script = ExtResource("1_p43lg")
+season = 2
+temperature_modifier = -3
+rain_chance_modifier = 20
+storm_chance_modifier = -5
+rain_weight_modifier = 20
+storm_weight_modifier = -5
+metadata/_custom_type_script = "uid://bsa0kkmehs1wh"
