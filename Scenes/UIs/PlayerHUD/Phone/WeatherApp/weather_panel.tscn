@@ -35,16 +35,11 @@ text = "Weather"
 layout_mode = 2
 text = "7-Day Forecast"
 
-[node name="ForecastTitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1472588973]
-layout_mode = 2
-text = "Today: -"
-
-[node name="ForecastScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ForecastScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=239440847]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
-vertical_scroll_mode = 1
 
 [node name="ForecastContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ForecastScroll" unique_id=2079540814]
 layout_mode = 2

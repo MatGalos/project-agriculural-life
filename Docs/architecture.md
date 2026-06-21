@@ -197,12 +197,14 @@ Important behavior:
 - Day phases are Dawn from 05:00, Morning from 09:00, Afternoon from 14:00, and Night from 20:00 through 04:59.
 - `WeatherPhaseData` stores phase-specific weather, temperature, and rain chance.
 - `WeatherDayPatternData` controls season-weighted day patterns, phase weather options, base temperature ranges, and phase temperature offsets.
+- `current_day_base_temperature` is rolled once per generated day pattern; each phase temperature is that shared base plus the pattern's phase offset.
 - The current phase forecast is applied through `_apply_current_phase_weather()` and emits `weather_changed`.
-- The forecast stores dictionaries containing `weather` and `temperature`.
+- The forecast stores dictionaries containing `weather`, `temperature`, `pattern`, `base_temperature`, and `rain_chance`.
 - `FORECAST_DAYS` controls forecast length.
 - Weather resources can set `waters_fields`.
 - Rain and storm currently water plowed farm tiles automatically.
-- The weather phone app listens to `weather_changed` and rebuilds the forecast list.
+- The weather phone app listens to `weather_changed` and rebuilds current phase rows plus next-day forecast rows.
+- Next-day forecast rows show the pattern display name, representative temperature, and rain chance; the first future row is labeled `Tomorrow`, then later rows use `Day +N`.
 
 ## Market Events And News
 
@@ -288,7 +290,7 @@ Current apps:
 - Sell app: sells storage items and uses dynamic commodity prices where available.
 - Shop app: buys items through configured shop data and `MoneyManager`.
 - Stock market app: displays commodity prices, market status, and recent history.
-- Weather app: displays current weather and forecast rows.
+- Weather app: displays current weather, current-day phase rows, and next-day forecast rows.
 - News app: displays latest `NewsManager` entries in a vertical scroll list.
 
 Rules:

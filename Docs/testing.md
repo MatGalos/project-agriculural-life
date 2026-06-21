@@ -41,7 +41,7 @@ Core tests:
 - `HotbarDataTest.gd`: hotbar setup, slot mapping, and selected slot behavior.
 - `SalesStatsManagerTest.gd`: sales recording, recent sales totals, and day rollover.
 - `InventoryDataTest.gd`: inventory setup, stacking, removal, and slot movement behavior.
-- `WeatherManagerTest.gd`: day phase hour boundaries and cached phase updates from time changes.
+- `WeatherManagerTest.gd`: day phase hour boundaries, cached phase updates from time changes, phase temperatures derived from one daily base temperature, and expanded daily forecast entry fields.
 
 Save tests:
 
@@ -50,7 +50,7 @@ Save tests:
 - `SalesStatsSaveTest.gd`: sales stats serialization and restoration.
 - `InventorySaveTest.gd`: inventory serialization and restoration.
 - `StorageSaveTest.gd`: silo storage serialization and restoration.
-- `WeatherSaveTest.gd`: current weather, temperature, and forecast save data.
+- `WeatherSaveTest.gd`: current weather, temperature, forecast save data, forecast pattern, and forecast rain chance.
 - `NewsSaveTest.gd`: news history serialization and restoration.
 - `MarketSaveTest.gd`: commodity market prices, trends, volatility, and history.
 - `EventSaveTest.gd`: active market event persistence.

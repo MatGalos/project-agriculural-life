@@ -4,14 +4,27 @@ class_name WeatherForecastRow
 @onready var day_label: Label = $DayLabel
 @onready var weather_label: Label = $WeatherLabel
 @onready var temperature_label: Label = $TemperatureLabel
+@onready var rain_label: Label = $RainLabel
 
 
-func setup(day_offset: int, weather: WeatherData, temperature: int) -> void:
-	day_label.text = "Day +%d" % day_offset
+func setup(
+	day_offset: int,
+	weather: WeatherData,
+	temperature: int,
+	pattern: WeatherDayPatternData = null,
+	rain_chance: int = 0
+) -> void:
+	if day_offset == 1:
+		day_label.text = "Tomorrow"
+	else:
+		day_label.text = "Day +%d" % day_offset
 
-	if weather == null:
+	if pattern != null:
+		weather_label.text = pattern.display_name
+	elif weather == null:
 		weather_label.text = "Unknown"
 	else:
 		weather_label.text = weather.display_name
 
 	temperature_label.text = "%d°C" % temperature
+	rain_label.text = "Rain: %d%%" % rain_chance
