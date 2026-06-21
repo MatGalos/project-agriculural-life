@@ -9,7 +9,7 @@ class_name WeatherPanel
 func _ready() -> void:
 	visible = false
 
-	if not WeatherManager.weather_changed.is_connected(refresh):
+	if not WeatherManager.weather_changed.is_connected(_on_weather_changed):
 		WeatherManager.weather_changed.connect(_on_weather_changed)
 
 	refresh()

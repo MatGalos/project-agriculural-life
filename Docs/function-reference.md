@@ -287,6 +287,7 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _get_pattern_weight_for_current_season(pattern: WeatherDayPatternData) -> int:` | Returns a day pattern's weight for the active season. |
 | `func _roll_day_pattern() -> WeatherDayPatternData:` | Picks a season-weighted weather day pattern. |
 | `func _roll_day_base_temperature(pattern: WeatherDayPatternData) -> int:` | Rolls one base temperature for all phase temperatures in the current day pattern. |
+| `func get_current_season_weather_profile() -> SeasonWeatherData:` | Returns the weather balancing profile for the active season. |
 | `func _get_weather_options_for_phase(pattern: WeatherDayPatternData, phase: WeatherPhaseData.DayPhase) -> Array[WeatherData]:` | Returns weather options configured for a pattern and phase. |
 | `func _get_temperature_offset_for_phase(pattern: WeatherDayPatternData, phase: WeatherPhaseData.DayPhase) -> int:` | Returns the temperature offset configured for a pattern and phase. |
 | `func get_today_phase_forecast() -> Array[WeatherPhaseData]:` | Returns the generated phase forecast for the current day. |
@@ -484,6 +485,10 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func refresh() -> void:` | Rebuilds or updates this UI from current backing data. |
 | `func _update_today() -> void:` | Updates the current day pattern and current weather summary. |
 | `func _update_forecast() -> void:` | Rebuilds current-day phase rows and next-day forecast rows from `WeatherManager`. |
+
+## `Scripts/Seasons/SeasonWeatherData.gd`
+
+Resource only. Stores the season enum plus weather balancing fields: `temperature_modifier`, `rain_chance_modifier`, `storm_chance_modifier`, `rain_weight_modifier`, and `storm_weight_modifier`.
 
 ## `Scripts/Player/CharacterController.gd`
 
