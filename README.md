@@ -25,7 +25,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Commodity market updates during market hours with price history.
 - Market events that affect commodity trends and generate news entries.
 - Sales-volume market events based on recent crop sales history.
-- Weather system with current weather, temperature, forecast, and rain/storm field watering.
+- Weather system with current weather, temperature, daily and phase forecasts, and rain/storm field watering.
 - Phone menu with sell, shop, stock market, weather, and news apps.
 - Save/load persistence with three save slots stored under `user://save_slot_%d.json`.
 - New game and load game menus for choosing the active save slot.
@@ -54,6 +54,9 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Implemented corn
   - Implemented strawberry
 - Added settings for the resolutions
+- Improvements to weather
+  - Implemented weather phase system
+  - Added cached day phase updates from in-game time changes
 
 ### Version 0.3
 - Restructured the world

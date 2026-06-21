@@ -15,7 +15,7 @@ The project uses these gameplay autoloads:
 - `MoneyManager` owns the current player money amount and emits money change signals.
 - `EconomyManager` resolves buy and sell prices, using commodity prices when an item is market-backed.
 - `CommodityMarketManager` updates commodity prices during market hours and stores price history.
-- `WeatherManager` owns current weather, temperature, forecast data, and rain/storm watering effects.
+- `WeatherManager` owns current weather, temperature, daily forecast data, cached day phase state, phase forecast data, and rain/storm watering effects.
 - `EventManager` starts and expires market events that modify commodity behavior.
 - `NewsManager` converts market events into phone news entries.
 - `SaveManager` serializes and restores persistent game state across three save slots.
@@ -187,11 +187,17 @@ Event modifiers:
 
 ## Weather
 
-`WeatherManager` owns current weather, tomorrow weather, temperature, and a rolling forecast.
+`WeatherManager` owns current weather, tomorrow weather, temperature, a rolling daily forecast, and the active weather phase.
 
 Important behavior:
 
-- Weather changes on `TimeManager.day_changed`.
+- The rolling daily forecast advances on `TimeManager.day_changed`.
+- `current_day_phase` caches the active `WeatherPhaseData.DayPhase`.
+- `TimeManager.time_changed` is connected to `_on_time_changed()`, which updates the cached phase only when the phase boundary is crossed.
+- Day phases are Dawn from 05:00, Morning from 09:00, Afternoon from 14:00, and Night from 20:00 through 04:59.
+- `WeatherPhaseData` stores phase-specific weather, temperature, and rain chance.
+- `WeatherDayPatternData` controls season-weighted day patterns, phase weather options, base temperature ranges, and phase temperature offsets.
+- The current phase forecast is applied through `_apply_current_phase_weather()` and emits `weather_changed`.
 - The forecast stores dictionaries containing `weather` and `temperature`.
 - `FORECAST_DAYS` controls forecast length.
 - Weather resources can set `waters_fields`.

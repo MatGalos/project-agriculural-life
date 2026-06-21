@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WeatherDayPatternData" format=3 uid="uid://bm1bmeyhfj2dv"]
+
+[ext_resource type="Script" uid="uid://clu6qgm5qqwm2" path="res://Scripts/Weather/WeatherData.gd" id="1_32t1p"]
+[ext_resource type="Resource" uid="uid://c7yejsmobd4xl" path="res://Data/Weather/rain_weather.tres" id="2_4tc0e"]
+[ext_resource type="Script" uid="uid://dba45k5t01a5n" path="res://Scripts/Weather/WeatherDayPatternData.gd" id="2_xo1hf"]
+[ext_resource type="Resource" uid="uid://f86jhoifbyhe" path="res://Data/Weather/cloudy_weather.tres" id="3_brwkq"]
+
+[resource]
+script = ExtResource("2_xo1hf")
+pattern_id = "rainy_day"
+display_name = "Rainy Day"
+summer_weight = 15
+autumn_weight = 35
+winter_weight = 15
+dawn_weather_options = Array[ExtResource("1_32t1p")]([ExtResource("3_brwkq")])
+morning_weather_options = Array[ExtResource("1_32t1p")]([ExtResource("2_4tc0e"), ExtResource("3_brwkq")])
+afternoon_weather_options = Array[ExtResource("1_32t1p")]([ExtResource("2_4tc0e"), ExtResource("3_brwkq")])
+night_weather_options = Array[ExtResource("1_32t1p")]([ExtResource("2_4tc0e"), ExtResource("3_brwkq")])
+base_temperature_max = 18
+dawn_temperature_offset = -1
+afternoon_temperature_offset = 1
+night_temperature_offset = -3
+metadata/_custom_type_script = "uid://dba45k5t01a5n"
