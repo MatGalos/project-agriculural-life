@@ -260,20 +260,34 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 
 | Function | Description |
 | --- | --- |
-| `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func _on_day_changed() -> void:` | Handles the 'on day changed' signal callback. |
-| `func _apply_new_day_weather() -> void:` | Applies apply new day weather to current state. |
-| `func _roll_weather() -> WeatherData:` | Handles roll weather behavior. |
-| `func _roll_temperature(weather: WeatherData) -> int:` | Handles roll temperature behavior. |
+| `func _ready() -> void:` | Connects weather to time/day signals, builds initial forecasts, applies the current phase weather, and logs the starting phase. |
+| `func _on_day_changed() -> void:` | Applies the next daily weather entry when the calendar day changes. |
+| `func _on_time_changed() -> void:` | Updates cached day phase state after `TimeManager.time_changed`. |
+| `func _apply_new_day_weather() -> void:` | Advances the rolling daily forecast and emits `weather_changed` for daily weather data. |
+| `func _roll_weather() -> WeatherData:` | Picks one configured weather resource for daily forecast data. |
+| `func _roll_temperature(weather: WeatherData) -> int:` | Rolls a temperature within the selected weather resource range. |
 | `func get_current_weather_name() -> String:` | Returns the current current weather name. |
 | `func get_tomorrow_weather_name() -> String:` | Returns the current tomorrow weather name. |
 | `func get_current_temperature_string() -> String:` | Returns the current current temperature string. |
 | `func get_tomorrow_temperature_string() -> String:` | Returns the current tomorrow temperature string. |
-| `func _water_fields_if_needed() -> void:` | Handles water fields if needed behavior. |
-| `func _generate_initial_forecast() -> void:` | Handles generate initial forecast behavior. |
-| `func _generate_forecast_entry() -> Dictionary:` | Handles generate forecast entry behavior. |
+| `func _water_fields_if_needed() -> void:` | Waters plowed farm tiles when the active weather resource has `waters_fields`. |
+| `func _generate_initial_forecast() -> void:` | Rebuilds the rolling daily forecast to `FORECAST_DAYS` entries. |
+| `func _generate_forecast_entry() -> Dictionary:` | Creates one daily forecast dictionary containing weather and temperature. |
 | `func get_forecast() -> Array[Dictionary]:` | Returns the current forecast. |
 | `func get_weather_by_name(weather_name: String) -> WeatherData:` | Finds configured weather data by display name for save loading. |
+| `func is_current_weather_watering_fields() -> bool:` | Returns whether the current weather automatically waters fields. |
+| `func get_day_phase_name(phase: WeatherPhaseData.DayPhase) -> String:` | Converts a day phase enum to a display/log name. |
+| `func _update_day_phase() -> void:` | Recomputes the current day phase, updates `current_day_phase` only on change, logs the transition, and applies phase weather. |
+| `func get_current_day_phase() -> WeatherPhaseData.DayPhase:` | Maps `TimeManager.get_hour()` to Dawn, Morning, Afternoon, or Night. |
+| `func _generate_phase_forecast(phase: WeatherPhaseData.DayPhase) -> WeatherPhaseData:` | Creates phase-specific weather data from the current day pattern. |
+| `func _roll_rain_chance(weather: WeatherData) -> int:` | Rolls rain chance based on weather type and watering behavior. |
+| `func _generate_today_phase_forecast() -> void:` | Rolls the current day pattern and builds Dawn, Morning, Afternoon, and Night phase forecasts. |
+| `func _get_phase_forecast(phase: WeatherPhaseData.DayPhase) -> WeatherPhaseData:` | Finds the generated phase forecast for a specific day phase. |
+| `func _apply_current_phase_weather() -> void:` | Applies weather and temperature from the cached current phase and emits `weather_changed`. |
+| `func _get_pattern_weight_for_current_season(pattern: WeatherDayPatternData) -> int:` | Returns a day pattern's weight for the active season. |
+| `func _roll_day_pattern() -> WeatherDayPatternData:` | Picks a season-weighted weather day pattern. |
+| `func _get_weather_options_for_phase(pattern: WeatherDayPatternData, phase: WeatherPhaseData.DayPhase) -> Array[WeatherData]:` | Returns weather options configured for a pattern and phase. |
+| `func _get_temperature_offset_for_phase(pattern: WeatherDayPatternData, phase: WeatherPhaseData.DayPhase) -> int:` | Returns the temperature offset configured for a pattern and phase. |
 
 ## `Scripts/GameManagers/WorldManager.gd`
 

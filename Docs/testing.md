@@ -41,6 +41,7 @@ Core tests:
 - `HotbarDataTest.gd`: hotbar setup, slot mapping, and selected slot behavior.
 - `SalesStatsManagerTest.gd`: sales recording, recent sales totals, and day rollover.
 - `InventoryDataTest.gd`: inventory setup, stacking, removal, and slot movement behavior.
+- `WeatherManagerTest.gd`: day phase hour boundaries and cached phase updates from time changes.
 
 Save tests:
 
@@ -131,6 +132,7 @@ Good next targets:
 - `EventManager._does_event_meet_requirements()` for sales-gated events.
 - `CommodityMarketManager.simulate_skipped_market_hours()` for time skips.
 - `WeatherManager._water_fields_if_needed()` for rain and storm field watering.
+- `WeatherManager` phase forecast generation with real `WeatherDayPatternData` resources.
 - Menu and HUD panel exclusivity rules in `PlayerHUD`.
 
 For UI-heavy behavior, prefer small logic tests around panel state and signal connections before adding full scene interaction tests.
