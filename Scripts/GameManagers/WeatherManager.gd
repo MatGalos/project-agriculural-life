@@ -17,6 +17,7 @@ var weather_day_patterns: Array[WeatherDayPatternData] = [
 	preload("res://Data/Weather/Patterns/stormy_day_pattern.tres")
 ]
 var current_day_pattern: WeatherDayPatternData = null
+var current_day_base_temperature: int = 20
 
 var current_weather: WeatherData
 var tomorrow_weather: WeatherData
@@ -38,14 +39,17 @@ func _ready() -> void:
 	_generate_initial_forecast()
 	_apply_new_day_weather()
 	_generate_today_phase_forecast()
+	print_today_forecast()
 	current_day_phase = get_current_day_phase()
 	_apply_current_phase_weather()
 
-	current_day_phase = get_current_day_phase()
 	print("Current weather phase: ", get_day_phase_name(current_day_phase))
 
 func _on_day_changed() -> void:
 	_apply_new_day_weather()
+	_generate_today_phase_forecast()
+	print_today_forecast()
+	_apply_current_phase_weather()
 
 func _on_time_changed() -> void:
 	_update_day_phase()
@@ -58,6 +62,8 @@ func _apply_new_day_weather() -> void:
 
 	current_weather = today["weather"] as WeatherData
 	current_temperature = int(today["temperature"])
+	current_day_pattern = today.get("pattern", null) as WeatherDayPatternData
+	current_day_base_temperature = int(today.get("base_temperature", current_temperature))
 
 	_water_fields_if_needed()
 
@@ -133,12 +139,20 @@ func _generate_initial_forecast() -> void:
 		forecast.append(_generate_forecast_entry())
 
 func _generate_forecast_entry() -> Dictionary:
-	var weather: WeatherData = _roll_weather()
-	var temperature: int = _roll_temperature(weather)
+	var pattern := _roll_day_pattern()
+	var base_temperature := _roll_day_base_temperature(pattern)
+	var phase_data := _generate_phase_forecast_for_pattern(
+		pattern,
+		WeatherPhaseData.DayPhase.AFTERNOON,
+		base_temperature
+	)
 
 	return {
-		"weather": weather,
-		"temperature": temperature
+		"weather": phase_data.weather,
+		"temperature": phase_data.temperature,
+		"pattern": pattern,
+		"base_temperature": base_temperature,
+		"rain_chance": phase_data.rain_chance
 	}
 
 func get_forecast() -> Array[Dictionary]:
@@ -199,28 +213,34 @@ func get_current_day_phase() -> WeatherPhaseData.DayPhase:
 
 	return WeatherPhaseData.DayPhase.NIGHT
 
-func _generate_phase_forecast(phase: WeatherPhaseData.DayPhase) -> WeatherPhaseData:
+func _generate_phase_forecast(
+	phase: WeatherPhaseData.DayPhase,
+	day_base_temperature: int
+) -> WeatherPhaseData:
+	return _generate_phase_forecast_for_pattern(
+		current_day_pattern,
+		phase,
+		day_base_temperature
+	)
+
+func _generate_phase_forecast_for_pattern(
+	pattern: WeatherDayPatternData,
+	phase: WeatherPhaseData.DayPhase,
+	day_base_temperature: int
+) -> WeatherPhaseData:
 	var phase_data := WeatherPhaseData.new()
 
 	phase_data.phase = phase
 
-	var options := _get_weather_options_for_phase(current_day_pattern, phase)
+	var options := _get_weather_options_for_phase(pattern, phase)
 
 	if options.is_empty():
 		options = weather_options
 
 	phase_data.weather = options.pick_random()
 
-	var base_temperature := 20
-
-	if current_day_pattern != null:
-		base_temperature = randi_range(
-			current_day_pattern.base_temperature_min,
-			current_day_pattern.base_temperature_max
-		)
-
-	phase_data.temperature = base_temperature + _get_temperature_offset_for_phase(
-		current_day_pattern,
+	phase_data.temperature = day_base_temperature + _get_temperature_offset_for_phase(
+		pattern,
 		phase
 	)
 
@@ -243,15 +263,35 @@ func _roll_rain_chance(weather: WeatherData) -> int:
 func _generate_today_phase_forecast() -> void:
 	today_phase_forecast.clear()
 
-	current_day_pattern = _roll_day_pattern()
+	if current_day_pattern == null:
+		current_day_pattern = _roll_day_pattern()
+		current_day_base_temperature = _roll_day_base_temperature(current_day_pattern)
 
 	if current_day_pattern:
-		print("Weather day pattern: ", current_day_pattern.display_name)
+		print(
+			"Weather day pattern: ",
+			current_day_pattern.display_name,
+			" | Base temp: ",
+			current_day_base_temperature,
+			"Â°C"
+		)
 
-	today_phase_forecast.append(_generate_phase_forecast(WeatherPhaseData.DayPhase.DAWN))
-	today_phase_forecast.append(_generate_phase_forecast(WeatherPhaseData.DayPhase.MORNING))
-	today_phase_forecast.append(_generate_phase_forecast(WeatherPhaseData.DayPhase.AFTERNOON))
-	today_phase_forecast.append(_generate_phase_forecast(WeatherPhaseData.DayPhase.NIGHT))
+	today_phase_forecast.append(_generate_phase_forecast(
+		WeatherPhaseData.DayPhase.DAWN,
+		current_day_base_temperature
+	))
+	today_phase_forecast.append(_generate_phase_forecast(
+		WeatherPhaseData.DayPhase.MORNING,
+		current_day_base_temperature
+	))
+	today_phase_forecast.append(_generate_phase_forecast(
+		WeatherPhaseData.DayPhase.AFTERNOON,
+		current_day_base_temperature
+	))
+	today_phase_forecast.append(_generate_phase_forecast(
+		WeatherPhaseData.DayPhase.NIGHT,
+		current_day_base_temperature
+	))
 
 func _get_phase_forecast(phase: WeatherPhaseData.DayPhase) -> WeatherPhaseData:
 	for phase_data in today_phase_forecast:
@@ -320,6 +360,22 @@ func _roll_day_pattern() -> WeatherDayPatternData:
 
 	return weather_day_patterns[0]
 
+func _roll_day_base_temperature(pattern: WeatherDayPatternData) -> int:
+	if pattern == null:
+		return 20
+
+	return randi_range(
+		pattern.base_temperature_min,
+		pattern.base_temperature_max
+	)
+
+func get_day_pattern_by_id(pattern_id: String) -> WeatherDayPatternData:
+	for pattern in weather_day_patterns:
+		if pattern != null and pattern.pattern_id == pattern_id:
+			return pattern
+
+	return null
+
 func _get_weather_options_for_phase(
 	pattern: WeatherDayPatternData,
 	phase: WeatherPhaseData.DayPhase
@@ -357,3 +413,34 @@ func _get_temperature_offset_for_phase(
 			return pattern.night_temperature_offset
 		_:
 			return 0
+
+func get_today_phase_forecast() -> Array[WeatherPhaseData]:
+	return today_phase_forecast
+
+
+func get_current_phase_weather() -> WeatherPhaseData:
+	return current_phase_weather
+
+
+func get_current_day_pattern_name() -> String:
+	if current_day_pattern == null:
+		return "Unknown"
+
+	return current_day_pattern.display_name
+
+func get_phase_forecast_text(phase_data: WeatherPhaseData) -> String:
+	if phase_data == null or phase_data.weather == null:
+		return "Unknown"
+
+	return "%s: %s, %d°C, Rain: %d%%" % [
+		get_day_phase_name(phase_data.phase),
+		phase_data.weather.display_name,
+		phase_data.temperature,
+		phase_data.rain_chance
+	]
+
+func print_today_forecast() -> void:
+	print("Today pattern: ", get_current_day_pattern_name())
+
+	for phase_data in today_phase_forecast:
+		print(get_phase_forecast_text(phase_data))

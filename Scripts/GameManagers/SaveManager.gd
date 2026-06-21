@@ -395,13 +395,19 @@ func _create_weather_save_data() -> Dictionary:
 		var forecast_entry := entry as Dictionary
 		var weather: WeatherData = forecast_entry.get("weather", null)
 		var temperature := int(forecast_entry.get("temperature", 20))
+		var pattern := forecast_entry.get("pattern", null) as WeatherDayPatternData
+		var base_temperature := int(forecast_entry.get("base_temperature", temperature))
+		var rain_chance := int(forecast_entry.get("rain_chance", 0))
 
 		if weather == null:
 			continue
 
 		forecast_data.append({
 			"weather_name": weather.display_name,
-			"temperature": temperature
+			"temperature": temperature,
+			"pattern_id": pattern.pattern_id if pattern != null else "",
+			"base_temperature": base_temperature,
+			"rain_chance": rain_chance
 		})
 
 	return {
@@ -438,13 +444,20 @@ func _apply_weather_save_data(weather_data: Dictionary) -> void:
 		var weather_name := String(forecast_entry.get("weather_name", "Sunny"))
 		var weather := WeatherManager.get_weather_by_name(weather_name)
 		var temperature := int(forecast_entry.get("temperature", 20))
+		var pattern_id := String(forecast_entry.get("pattern_id", ""))
+		var pattern := WeatherManager.get_day_pattern_by_id(pattern_id)
+		var base_temperature := int(forecast_entry.get("base_temperature", temperature))
+		var rain_chance := int(forecast_entry.get("rain_chance", 0))
 
 		if weather == null:
 			continue
 
 		WeatherManager.forecast.append({
 			"weather": weather,
-			"temperature": temperature
+			"temperature": temperature,
+			"pattern": pattern,
+			"base_temperature": base_temperature,
+			"rain_chance": rain_chance
 		})
 
 	if WeatherManager.forecast.size() > 0:

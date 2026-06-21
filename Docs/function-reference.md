@@ -272,22 +272,28 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func get_tomorrow_temperature_string() -> String:` | Returns the current tomorrow temperature string. |
 | `func _water_fields_if_needed() -> void:` | Waters plowed farm tiles when the active weather resource has `waters_fields`. |
 | `func _generate_initial_forecast() -> void:` | Rebuilds the rolling daily forecast to `FORECAST_DAYS` entries. |
-| `func _generate_forecast_entry() -> Dictionary:` | Creates one daily forecast dictionary containing weather and temperature. |
+| `func _generate_forecast_entry() -> Dictionary:` | Creates one daily forecast dictionary containing weather, temperature, day pattern, base temperature, and rain chance. |
 | `func get_forecast() -> Array[Dictionary]:` | Returns the current forecast. |
 | `func get_weather_by_name(weather_name: String) -> WeatherData:` | Finds configured weather data by display name for save loading. |
 | `func is_current_weather_watering_fields() -> bool:` | Returns whether the current weather automatically waters fields. |
 | `func get_day_phase_name(phase: WeatherPhaseData.DayPhase) -> String:` | Converts a day phase enum to a display/log name. |
 | `func _update_day_phase() -> void:` | Recomputes the current day phase, updates `current_day_phase` only on change, logs the transition, and applies phase weather. |
 | `func get_current_day_phase() -> WeatherPhaseData.DayPhase:` | Maps `TimeManager.get_hour()` to Dawn, Morning, Afternoon, or Night. |
-| `func _generate_phase_forecast(phase: WeatherPhaseData.DayPhase) -> WeatherPhaseData:` | Creates phase-specific weather data from the current day pattern. |
+| `func _generate_phase_forecast(phase: WeatherPhaseData.DayPhase, day_base_temperature: int) -> WeatherPhaseData:` | Creates phase-specific weather data from the current day pattern and shared daily base temperature. |
 | `func _roll_rain_chance(weather: WeatherData) -> int:` | Rolls rain chance based on weather type and watering behavior. |
-| `func _generate_today_phase_forecast() -> void:` | Rolls the current day pattern and builds Dawn, Morning, Afternoon, and Night phase forecasts. |
+| `func _generate_today_phase_forecast() -> void:` | Rolls the current day pattern and one daily base temperature, then builds Dawn, Morning, Afternoon, and Night phase forecasts. |
 | `func _get_phase_forecast(phase: WeatherPhaseData.DayPhase) -> WeatherPhaseData:` | Finds the generated phase forecast for a specific day phase. |
 | `func _apply_current_phase_weather() -> void:` | Applies weather and temperature from the cached current phase and emits `weather_changed`. |
 | `func _get_pattern_weight_for_current_season(pattern: WeatherDayPatternData) -> int:` | Returns a day pattern's weight for the active season. |
 | `func _roll_day_pattern() -> WeatherDayPatternData:` | Picks a season-weighted weather day pattern. |
+| `func _roll_day_base_temperature(pattern: WeatherDayPatternData) -> int:` | Rolls one base temperature for all phase temperatures in the current day pattern. |
 | `func _get_weather_options_for_phase(pattern: WeatherDayPatternData, phase: WeatherPhaseData.DayPhase) -> Array[WeatherData]:` | Returns weather options configured for a pattern and phase. |
 | `func _get_temperature_offset_for_phase(pattern: WeatherDayPatternData, phase: WeatherPhaseData.DayPhase) -> int:` | Returns the temperature offset configured for a pattern and phase. |
+| `func get_today_phase_forecast() -> Array[WeatherPhaseData]:` | Returns the generated phase forecast for the current day. |
+| `func get_current_phase_weather() -> WeatherPhaseData:` | Returns the active phase weather data. |
+| `func get_current_day_pattern_name() -> String:` | Returns the active day pattern display name. |
+| `func get_phase_forecast_text(phase_data: WeatherPhaseData) -> String:` | Formats one phase forecast for debug output. |
+| `func print_today_forecast() -> void:` | Prints the current day pattern and all phase forecast rows. |
 
 ## `Scripts/GameManagers/WorldManager.gd`
 
@@ -467,7 +473,7 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 
 | Function | Description |
 | --- | --- |
-| `func setup(day_offset: int, weather: WeatherData, temperature: int) -> void:` | Initializes this object or row from provided data. |
+| `func setup(day_offset: int, weather: WeatherData, temperature: int, pattern: WeatherDayPatternData = null, rain_chance: int = 0) -> void:` | Displays one next-day forecast row; `day_offset == 1` is labeled `Tomorrow`, later rows use `Day +N`, and the row shows pattern name, temperature, and rain chance. |
 
 ## `Scripts/PhoneApps/WeatherApp/WeatherPanel.gd`
 
@@ -476,8 +482,8 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
 | `func _on_weather_changed(_current_weather: WeatherData, _temperature: int) -> void:` | Handles the 'on weather changed' signal callback. |
 | `func refresh() -> void:` | Rebuilds or updates this UI from current backing data. |
-| `func _update_today() -> void:` | Updates update today from current data. |
-| `func _update_forecast() -> void:` | Updates update forecast from current data. |
+| `func _update_today() -> void:` | Updates the current day pattern and current weather summary. |
+| `func _update_forecast() -> void:` | Rebuilds current-day phase rows and next-day forecast rows from `WeatherManager`. |
 
 ## `Scripts/Player/CharacterController.gd`
 

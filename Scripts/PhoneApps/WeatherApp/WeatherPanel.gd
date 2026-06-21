@@ -22,17 +22,27 @@ func refresh() -> void:
 	_update_forecast()
 
 func _update_today() -> void:
-	today_label.text = "Today: %s, %s" % [
+	today_label.text = "Today - %s\nCurrent: %s, %s\n" % [
+		WeatherManager.get_current_day_pattern_name(),
 		WeatherManager.get_current_weather_name(),
 		WeatherManager.get_current_temperature_string()
 	]
 
 func _update_forecast() -> void:
-	if row_scene == null:
-		return
-
 	for child in forecast_container.get_children():
 		child.queue_free()
+
+	for phase_data in WeatherManager.get_today_phase_forecast():
+		var label := Label.new()
+		label.text = WeatherManager.get_phase_forecast_text(phase_data)
+		forecast_container.add_child(label)
+
+	var weekly_title := Label.new()
+	weekly_title.text = "\nNext Days"
+	forecast_container.add_child(weekly_title)
+
+	if row_scene == null:
+		return
 
 	var forecast := WeatherManager.get_forecast()
 
@@ -47,5 +57,7 @@ func _update_forecast() -> void:
 
 		var weather := entry["weather"] as WeatherData
 		var temperature := int(entry["temperature"])
+		var pattern := entry.get("pattern", null) as WeatherDayPatternData
+		var rain_chance := int(entry.get("rain_chance", 0))
 
-		row.setup(i + 1, weather, temperature)
+		row.setup(i + 1, weather, temperature, pattern, rain_chance)
