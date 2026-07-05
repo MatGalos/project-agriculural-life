@@ -10,6 +10,7 @@ display_name = "Potatoe Oversupply"
 description = "Too much potatoe on the market causes prices to fall."
 duration_days = 2
 trigger_chance = 0.35
+trigger_mode = 1
 target_item = ExtResource("2_item")
 trend_effect = 0
 trend_strength_modifier = 0.02

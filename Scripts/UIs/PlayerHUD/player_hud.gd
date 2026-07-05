@@ -34,6 +34,8 @@ const EVENT_MESSAGE_DURATION := 7.0
 @onready var storage_panel: StoragePanel = $Root/StoragePanel
 
 var _event_message_version := 0
+var _event_messages: Dictionary = {}
+var _next_event_message_id := 0
 
 func _ready() -> void:
 	_setup_starting_inventory()
@@ -234,17 +236,33 @@ func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATIO
 		return
 
 	_event_message_version += 1
-	var current_version := _event_message_version
+	_next_event_message_id += 1
+	var message_id := _next_event_message_id
 
-	event_label.text = message
-	event_controller.visible = true
+	_event_messages[message_id] = message
+	_refresh_event_messages()
 
 	await get_tree().create_timer(duration).timeout
 
-	if current_version == _event_message_version:
+	_event_messages.erase(message_id)
+	_refresh_event_messages()
+
+
+func _refresh_event_messages() -> void:
+	if _event_messages.is_empty():
 		_hide_event_message()
+		return
+
+	var messages: Array[String] = []
+
+	for message_id in _event_messages.keys():
+		messages.append(String(_event_messages[message_id]))
+
+	event_label.text = "\n".join(messages)
+	event_controller.visible = true
 
 func _hide_event_message() -> void:
+	_event_messages.clear()
 	event_controller.visible = false
 	event_label.text = ""
 

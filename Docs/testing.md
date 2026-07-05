@@ -9,7 +9,7 @@ The project uses a lightweight custom test runner instead of an external Godot t
 Main files:
 
 - `Tests/TestRunner.gd` owns test execution and assertion counting.
-- `Scripts/GameManagers/DebugManager.gd` listens for the debug input action that runs all tests.
+- `Scripts/GameManagers/DebugManager.gd` listens for the debug input action and the `--run-tests` command-line flag that run all tests.
 - `Tests/Core/` contains focused tests for data resources and manager logic.
 - `Tests/Save/` contains tests for save data structure and save/load restoration helpers.
 
@@ -23,6 +23,14 @@ Tests are run in-game through the debug input action:
 - Action name: `run_tests_debug`
 - Current default key: `F6`
 - Runtime path: `DebugManager._input()` creates `TestRunner`, adds it to the scene tree, runs all tests, then frees it.
+
+Tests can also be run headless by launching the project with the `--run-tests` argument:
+
+```powershell
+& 'C:\Program Files (x86)\Steam\steamapps\common\Godot Engine\godot.windows.opt.tools.64.exe' --headless --path . --run-tests
+```
+
+`DebugManager` exits with code `1` when any test fails and `0` when all tests pass.
 
 When the action is pressed, results are printed to the Godot output console:
 
@@ -42,6 +50,7 @@ Core tests:
 - `SalesStatsManagerTest.gd`: sales recording, recent sales totals, and day rollover.
 - `InventoryDataTest.gd`: inventory setup, stacking, removal, and slot movement behavior.
 - `WeatherManagerTest.gd`: day phase hour boundaries, cached phase updates from time changes, phase temperatures derived from one daily base temperature, expanded daily forecast entry fields, and season weather profile modifiers for temperature and rainy/stormy pattern weights.
+- `EventSystemTest.gd`: event data compatibility, multi-product modifiers, deterministic trend stacking, volatility reset behavior, season/day/weather/temperature requirements, calendar-event locks, daily event start limits, seed buy-price modifiers, save/load event state, duplicate-news protection, bad-harvest crop-season restrictions, and configured trigger chances for Demand Spike, Export Contract, and Market Panic.
 
 Save tests:
 
@@ -73,6 +82,10 @@ Current crop-product integration coverage:
 Known crop-product test gap:
 
 - The full gameplay loop for every added crop is not yet tested. `FarmTileLogicTest.gd` currently verifies planting, growth, readiness, and harvesting with wheat. A future test should iterate over all `CropData` resources and verify `plant_crop()`, growth to `days_to_ready`, `is_crop_ready()`, and `harvest_crop()` for each crop.
+
+Known headless test limitation:
+
+- `TileCropSaveTest.gd` currently expects a gameplay scene `WorldManager`. In the current headless runner setup this can fail with `WorldManager exists for tile save test` even when Event System tests pass. Treat that as a scene-fixture issue unless the world save/load flow was changed.
 
 ## Adding A Test
 
@@ -129,10 +142,10 @@ Good next targets:
 
 - `ToolManager` planting restrictions, watering-can usage, and harvest behavior.
 - Full crop gameplay loop coverage for all crop products, not only wheat.
-- `EventManager._does_event_meet_requirements()` for sales-gated events.
 - `CommodityMarketManager.simulate_skipped_market_hours()` for time skips.
 - `WeatherManager._water_fields_if_needed()` for rain and storm field watering.
 - `WeatherManager` phase forecast generation with real `WeatherDayPatternData` resources.
 - Menu and HUD panel exclusivity rules in `PlayerHUD`.
+- Visual/UI verification for stacked bottom-left HUD event/news alerts.
 
 For UI-heavy behavior, prefer small logic tests around panel state and signal connections before adding full scene interaction tests.

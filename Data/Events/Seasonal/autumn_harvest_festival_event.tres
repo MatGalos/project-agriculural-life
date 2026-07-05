@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="MarketEventData" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Events/MarketEventData.gd" id="1"]
+[ext_resource type="Script" path="res://Scripts/Items/ItemData.gd" id="2"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/beetroot_item.tres" id="3"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/potatoe_item.tres" id="4"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/pumpkin_item.tres" id="5"]
+
+[resource]
+script = ExtResource("1")
+event_id = "autumn_harvest_festival"
+display_name = "Autumn Harvest Festival"
+description = "A late autumn festival increases demand for seasonal produce."
+duration_days = 5
+trigger_chance = 1.0
+event_category = 2
+trigger_mode = 2
+affected_items = Array[ExtResource("2")]([ExtResource("3"), ExtResource("4"), ExtResource("5")])
+trend_effect = 2
+trend_strength_modifier = 0.03
+volatility_modifier = 0.025
+requires_season = true
+required_seasons = Array[int]([2])
+requires_day_range = true
+start_day = 17
+end_day = 21

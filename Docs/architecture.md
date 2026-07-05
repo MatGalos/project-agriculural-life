@@ -13,11 +13,11 @@ The project uses these gameplay autoloads:
 - `CropGrowthManager` advances registered farm tiles when the day changes.
 - `TimeManager` owns in-game time, date, seasons, and day/month/year signals.
 - `MoneyManager` owns the current player money amount and emits money change signals.
-- `EconomyManager` resolves buy and sell prices, using commodity prices when an item is market-backed.
-- `CommodityMarketManager` updates commodity prices during market hours and stores price history.
-- `WeatherManager` owns current weather, temperature, daily forecast data, cached day phase state, phase forecast data, and rain/storm watering effects.
-- `EventManager` starts and expires market events that modify commodity behavior.
-- `NewsManager` converts market events into phone news entries.
+- `EconomyManager` resolves buy and sell prices, using commodity prices when an item is market-backed, and applies runtime buy-price event multipliers.
+- `CommodityMarketManager` updates commodity prices during market hours, stores price history, and applies runtime market-event modifiers without mutating base market data.
+- `WeatherManager` owns current weather, temperature, daily forecast data, cached day phase state, phase forecast data, rain/storm watering effects, and completed-day weather history.
+- `EventManager` starts and expires market, weather, seasonal, and fixed-date events that modify commodity behavior or buy prices.
+- `NewsManager` converts market events into phone news entries and HUD news alerts.
 - `SaveManager` serializes and restores persistent game state across three save slots.
 - `SalesStatsManager` tracks recent sold item amounts for sales-driven market events.
 - `GraphicsSettingsManager` persists and applies resolution, fullscreen mode, and interface scale.
@@ -167,6 +167,9 @@ Important behavior:
 `EconomyManager` resolves item prices:
 
 - `get_buy_price()` uses `ItemPriceData.buy_price` when configured, otherwise falls back to `ItemData.base_price`.
+- Active event buy-price multipliers are applied at runtime and are multiplied together per item.
+- Runtime buy-price modifiers never mutate `ItemPriceData.buy_price`; removing the active events returns prices to their configured base values.
+- `buy_prices_changed` is emitted when buy-price modifiers are reset or reapplied so shop UI can refresh immediately.
 - `get_sell_price()` uses `CommodityMarketManager.get_current_price()` for commodity-backed items.
 - Non-commodity sell prices use `ItemPriceData.sell_price` or `ItemData.base_price` as fallback.
 
@@ -182,7 +185,11 @@ Important behavior:
 Event modifiers:
 
 - `EventManager` resets commodity modifiers before applying currently active events.
-- `MarketEventData.trend_effect`, `trend_strength_modifier`, and `volatility_modifier` modify the target commodity.
+- `MarketEventData.get_affected_items()` supports both legacy `target_item` events and multi-product `affected_items` events.
+- `MarketEventData.trend_effect`, `trend_strength_modifier`, and `volatility_modifier` modify all affected commodities.
+- Runtime market modifiers are rebuilt from active events after day changes and save loads.
+- Commodity volatility is restored from captured base values before event modifiers are reapplied, preventing permanent accumulation.
+- Multiple events on the same commodity are combined deterministically: trend direction is summed, positive values become bullish, negative values become bearish, and near-zero values become neutral.
 - New commodity-backed crops need a `CommodityData` resource and registration in `CommodityMarketManager.commodities`.
 
 ## Weather
@@ -204,24 +211,42 @@ Important behavior:
 - `FORECAST_DAYS` controls forecast length.
 - Weather resources can set `waters_fields`.
 - Rain and storm currently water plowed farm tiles automatically.
+- `daily_weather_history` stores completed-day records capped to the latest 30 days.
+- Weather history entries include year, season, day, whether the day was rainy, daily base temperature, and day-pattern identifiers.
+- Event requirements use completed-day history, not the current in-progress phase.
+- A rainy day is evaluated from the representative day pattern or watering weather options; a dry day is any completed day that is not rainy.
+- `get_consecutive_recent_dry_days()`, `get_rainy_days_in_recent_days(days)`, and `get_current_day_base_temperature()` are used by weather/temperature event requirements.
 - The weather phone app listens to `weather_changed` and rebuilds current phase rows plus next-day forecast rows.
 - Next-day forecast rows show the pattern display name, representative temperature, and rain chance; the first future row is labeled `Tomorrow`, then later rows use `Day +N`.
 
 ## Market Events And News
 
-`EventManager` rolls possible market events once per day.
+`EventManager` rolls possible market events once per day after active-event duration is processed. Daily event triggering is deferred after `day_changed` so weather and sales history can update deterministically before requirements are evaluated.
 
 Important behavior:
 
-- `possible_market_events` contains the market event resources that can start.
+- Events are grouped in `market_events`, `weather_events`, and `seasonal_events`, then combined into `possible_market_events` for lookup and save/load.
+- Dynamic filesystem scanning is avoided; event resources are preloaded explicitly so exported builds remain deterministic.
 - Each active event tracks remaining days through `ActiveMarketEvent`.
 - Duplicate active events are skipped.
-- `_does_event_meet_requirements()` checks event-specific requirements before rolling trigger chance.
+- At most `MAX_EVENTS_STARTED_PER_DAY` new events can start on one in-game day. The current value is `2`.
+- Daily event-limit state is saved and loaded so saving mid-day cannot bypass the cap.
+- `_does_event_meet_requirements()` delegates to focused requirement helpers for sales, season, day range, weather history, and temperature.
+- `RANDOM` and `CONDITION_BASED` events check requirements and then roll `trigger_chance`.
+- `FIXED_DATE` events check requirements and start without trigger-chance rolling.
+- Fixed-date events are protected by a saved `event_id:year` key so they do not restart repeatedly in the same year.
+- If a fixed-date event is blocked by the daily cap, it is not marked as triggered and can still run on a later day in its configured range.
 - `MarketEventData.requires_recent_sales` gates events by recent sold item amount.
 - Sales-gated events use `target_item`, `recent_sales_threshold`, and `recent_sales_days`.
+- Bad harvest events are season-gated to the affected crop season.
+- Current per-crop random tuning:
+  - Demand Spike: `0.04`.
+  - Export Contract: `0.005`.
+  - Market Panic: `0.02`.
 - Started events emit `market_event_started`.
 - Expired events emit `market_event_ended`.
 - `market_events_changed` is emitted after daily event processing.
+- `trigger_event_by_id(event_id)` is available for tests and debug flows; it is safe against duplicate active events and respects the daily event cap.
 
 `NewsManager` listens for `EventManager.market_event_started`:
 
@@ -232,6 +257,8 @@ Important behavior:
 - `news_added` lets the phone news panel refresh immediately.
 - `news_cleared` lets the phone news panel clear itself during save loading.
 - Loading a save replaces current news history with the saved news list, then rebuilds announced event IDs from active saved events.
+- New event news also calls `PlayerHUD.show_event_message("News alert: <event name>")`.
+- `sync_active_market_event_news()` can recreate missing news for active events but does not show duplicate HUD alerts.
 
 ## Sales Stats
 
@@ -266,10 +293,11 @@ Saved data:
 
 - Player money, position, inventory slots, hotbar mapping, and selected hotbar slot.
 - Time/date state.
-- Current weather and forecast.
+- Current weather, forecast, and completed-day weather history.
 - Silo storage contents.
 - Commodity market state, including current prices, trends, volatility, and price history.
 - Active market events and their remaining duration.
+- Event runtime state needed for calendar locks and the daily event cap.
 - News history, capped to the latest 20 entries.
 - Farm tile state, planted crop IDs, and crop growth days.
 - Sales statistics for the current day and recent sales history.
@@ -278,6 +306,8 @@ Load behavior:
 
 - Runtime active events are cleared before applying save data so old-session events do not create stale news.
 - News are cleared before applying save data.
+- Runtime commodity and buy-price event modifiers are reset and rebuilt from restored active events.
+- Derived runtime modifiers are not stored when they can be reconstructed from active event resources.
 - If the save contains a `news` array, it replaces the current news list atomically.
 - If the save has active events but no saved news array, news are rebuilt from the active saved events.
 - Farm tile state is restored through `WorldManager` tile IDs, so farm tiles must have stable `tile_id` values.
@@ -337,8 +367,9 @@ HUD event messages:
 - `EventController` is hidden by default.
 - `show_event_message(message, duration)` displays temporary feedback in the bottom-left event area.
 - Empty messages hide the panel immediately.
-- `_event_message_version` prevents an older timer from hiding a newer message.
-- Current seasonal planting feedback uses this path; future news/event notifications can reuse it.
+- The HUD stores active messages by local ID, so multiple simultaneous messages can be displayed as stacked lines.
+- Each message removes only itself when its timer expires.
+- Current seasonal planting feedback and market-event news alerts use this path.
 
 ## Interaction UI
 
@@ -360,8 +391,12 @@ Before adding new inventory, crop, tool, or UI behavior:
 - Add new crop resources to `ToolManager.all_crops` before adding special-case code.
 - Configure `CropData.allowed_seasons` for every new crop.
 - Register commodity-backed items in `CommodityMarketManager.commodities` and provide price data where needed.
+- Configure market events through `MarketEventData` resources rather than hardcoding event logic in managers.
+- Keep per-crop random event chances low enough to account for all product variants being rolled each day.
 - Keep generated `FarmTile.tile_id` values stable after saves exist.
 - For sales-driven events, configure `MarketEventData.target_item`, `requires_recent_sales`, `recent_sales_threshold`, and `recent_sales_days`.
+- For season-driven or calendar events, configure `requires_season`, `required_seasons`, `requires_day_range`, `start_day`, `end_day`, and the appropriate `trigger_mode`.
+- For weather-driven events, use `requires_weather_history`, `required_dry_days`, `required_rain_days`, or `requires_temperature`; do not inspect transient phase weather directly.
 - Use `PlayerHUD.show_event_message()` for short-lived gameplay feedback instead of leaving placeholder UI visible.
 - For phone apps, expose row scenes with `@export var row_scene: PackedScene` and refresh from manager signals.
 - For growing UI lists, prefer a fixed outer panel with inner `ScrollContainer` nodes over allowing rows to resize the panel.

@@ -10,7 +10,6 @@ const DEFAULT_ROW_SCENE := preload("res://Scenes/UIs/PlayerHUD/Phone/NewsApp/new
 func _ready() -> void:
 	visible = false
 	add_to_group("news_panel")
-	print("[NewsDebug][NewsPanel] ready row_scene=", row_scene)
 
 	if not NewsManager.news_added.is_connected(_on_news_added):
 		NewsManager.news_added.connect(_on_news_added)
@@ -21,11 +20,9 @@ func _ready() -> void:
 	refresh()
 
 func _on_news_added(_news_item: NewsItem) -> void:
-	print("[NewsDebug][NewsPanel] news_added signal received")
 	refresh()
 
 func _on_news_cleared() -> void:
-	print("[NewsDebug][NewsPanel] news_cleared signal received")
 	refresh()
 
 func refresh() -> void:
@@ -33,7 +30,6 @@ func refresh() -> void:
 
 	if resolved_row_scene == null:
 		resolved_row_scene = DEFAULT_ROW_SCENE
-		print("[NewsDebug][NewsPanel] row_scene was null, using fallback")
 
 	NewsManager.sync_active_market_event_news()
 
@@ -42,40 +38,24 @@ func refresh() -> void:
 		child.free()
 
 	var news_items := _get_news_items_to_display()
-	print(
-		"[NewsDebug][NewsPanel] refresh visible=",
-		visible,
-		", manager_news_count=",
-		NewsManager.get_latest_news().size(),
-		", display_count=",
-		news_items.size()
-	)
 
 	for news_item in news_items:
 		var row := resolved_row_scene.instantiate() as NewsItemRow
 
 		if row == null:
-			print("[NewsDebug][NewsPanel] failed to instantiate NewsItemRow")
+			push_warning("NewsPanel: failed to instantiate NewsItemRow")
 			continue
 
 		news_container.add_child(row)
 		row.setup(news_item)
-		print("[NewsDebug][NewsPanel] row added title=", news_item.title)
-
-	print("[NewsDebug][NewsPanel] final row count=", news_container.get_child_count())
 
 func _get_news_items_to_display() -> Array[NewsItem]:
 	var news_items := NewsManager.get_latest_news()
 
 	if not news_items.is_empty():
-		print("[NewsDebug][NewsPanel] using NewsManager items")
 		return news_items
 
 	var active_event_news: Array[NewsItem] = []
-	print(
-		"[NewsDebug][NewsPanel] NewsManager empty, active events count=",
-		EventManager.get_active_market_events().size()
-	)
 
 	for active_event in EventManager.get_active_market_events():
 		if active_event == null or active_event.event_data == null:

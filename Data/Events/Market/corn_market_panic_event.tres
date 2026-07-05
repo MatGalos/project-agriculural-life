@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MarketEventData" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Events/MarketEventData.gd" id="1"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/corn_item.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+event_id = "corn_market_panic"
+display_name = "Corn Market Panic"
+description = "Uncertainty around corn trading pushes the market downward."
+duration_days = 1
+trigger_chance = 0.02
+target_item = ExtResource("2")
+trend_effect = 0
+trend_strength_modifier = 0.025
+volatility_modifier = 0.08

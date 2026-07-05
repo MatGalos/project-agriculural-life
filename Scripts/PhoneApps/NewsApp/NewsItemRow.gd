@@ -32,15 +32,6 @@ func setup(news_item: NewsItem) -> void:
 	]
 	body_label.text = news_item.body
 
-	print(
-		"[NewsDebug][NewsItemRow] setup title=",
-		title_label.text,
-		", visible=",
-		visible,
-		", min_size=",
-		custom_minimum_size
-	)
-
 func _setup_label(label: Label, color: Color, font_size: int) -> void:
 	label.visible = true
 	label.modulate = Color.WHITE

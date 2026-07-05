@@ -38,6 +38,8 @@ var current_day_phase: WeatherPhaseData.DayPhase = WeatherPhaseData.DayPhase.DAW
 const FORECAST_DAYS := 7
 
 var forecast: Array[Dictionary] = []
+const WEATHER_HISTORY_DAYS := 30
+var daily_weather_history: Array[Dictionary] = []
 
 func _ready() -> void:
 	TimeManager.day_changed.connect(_on_day_changed)
@@ -54,10 +56,92 @@ func _ready() -> void:
 	print("Current weather phase: ", get_day_phase_name(current_day_phase))
 
 func _on_day_changed() -> void:
+	_record_completed_day_weather()
 	_apply_new_day_weather()
 	_generate_today_phase_forecast()
 	print_today_forecast()
 	_apply_current_phase_weather()
+
+
+func _record_completed_day_weather() -> void:
+	var completed_date := _get_completed_day_date()
+	var pattern_id := ""
+	var pattern_name := ""
+
+	if current_day_pattern != null:
+		pattern_id = current_day_pattern.pattern_id
+		pattern_name = current_day_pattern.display_name
+
+	daily_weather_history.append({
+		"year": completed_date["year"],
+		"season": int(completed_date["season"]),
+		"day": completed_date["day"],
+		"is_rainy": _is_representative_day_rainy(current_day_pattern),
+		"base_temperature": current_day_base_temperature,
+		"pattern_id": pattern_id,
+		"pattern_name": pattern_name
+	})
+
+	while daily_weather_history.size() > WEATHER_HISTORY_DAYS:
+		daily_weather_history.pop_front()
+
+
+func _get_completed_day_date() -> Dictionary:
+	var day := TimeManager.current_day - 1
+	var month := TimeManager.current_month
+	var year := TimeManager.current_year
+
+	if day < 1:
+		day = TimeManager.DAYS_PER_MONTH
+		month -= 1
+
+		if month < 1:
+			month = TimeManager.MONTHS_PER_YEAR
+			year -= 1
+
+	return {
+		"year": maxi(year, 1),
+		"season": _get_season_for_month(month),
+		"day": day
+	}
+
+
+func _get_season_for_month(month: int) -> SeasonData.Season:
+	match month:
+		1:
+			return SeasonData.Season.SPRING
+		2:
+			return SeasonData.Season.SUMMER
+		3:
+			return SeasonData.Season.AUTUMN
+		4:
+			return SeasonData.Season.WINTER
+		_:
+			return SeasonData.Season.SPRING
+
+
+func _is_representative_day_rainy(pattern: WeatherDayPatternData) -> bool:
+	# Market events use the whole-day pattern as the representative completed-day weather,
+	# so phase changes during the current day cannot change event requirements retroactively.
+	if pattern == null:
+		return is_current_weather_watering_fields()
+
+	if pattern.pattern_id == "rainy_day" or pattern.pattern_id == "stormy_day":
+		return true
+
+	var phase_options: Array[Array] = [
+		pattern.dawn_weather_options,
+		pattern.morning_weather_options,
+		pattern.afternoon_weather_options,
+		pattern.night_weather_options
+	]
+
+	for options in phase_options:
+		for weather in options:
+			if weather != null and weather.waters_fields:
+				return true
+
+	return false
 
 func _on_time_changed() -> void:
 	_update_day_phase()
@@ -477,3 +561,61 @@ func get_current_season_weather_profile() -> SeasonWeatherData:
 		TimeManager.get_current_season(),
 		null
 	) as SeasonWeatherData
+
+
+func get_consecutive_recent_dry_days() -> int:
+	var count := 0
+
+	for i in range(daily_weather_history.size() - 1, -1, -1):
+		var entry := daily_weather_history[i]
+
+		if bool(entry.get("is_rainy", false)):
+			break
+
+		count += 1
+
+	return count
+
+
+func get_rainy_days_in_recent_days(days: int) -> int:
+	var count := 0
+	var checked_days := mini(maxi(days, 0), daily_weather_history.size())
+
+	for i in range(checked_days):
+		var index := daily_weather_history.size() - 1 - i
+		var entry := daily_weather_history[index]
+
+		if bool(entry.get("is_rainy", false)):
+			count += 1
+
+	return count
+
+
+func get_current_day_base_temperature() -> float:
+	return float(current_day_base_temperature)
+
+
+func create_weather_history_save_data() -> Array:
+	return daily_weather_history.duplicate(true)
+
+
+func apply_weather_history_save_data(history_data: Array) -> void:
+	daily_weather_history.clear()
+
+	for entry in history_data:
+		if not (entry is Dictionary):
+			continue
+
+		var saved_entry := entry as Dictionary
+		daily_weather_history.append({
+			"year": int(saved_entry.get("year", 1)),
+			"season": int(saved_entry.get("season", SeasonData.Season.SPRING)),
+			"day": clampi(int(saved_entry.get("day", 1)), 1, TimeManager.DAYS_PER_MONTH),
+			"is_rainy": bool(saved_entry.get("is_rainy", false)),
+			"base_temperature": float(saved_entry.get("base_temperature", 20.0)),
+			"pattern_id": String(saved_entry.get("pattern_id", "")),
+			"pattern_name": String(saved_entry.get("pattern_name", ""))
+		})
+
+	while daily_weather_history.size() > WEATHER_HISTORY_DAYS:
+		daily_weather_history.pop_front()
