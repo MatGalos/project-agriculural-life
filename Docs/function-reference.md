@@ -8,6 +8,15 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | --- | --- |
 | `func setup(data: MarketEventData) -> void:` | Initializes this object or row from provided data. |
 
+## `Scripts/Events/MarketEventData.gd`
+
+Resource only plus helper functions. Stores event identity, category, trigger mode, affected products, commodity effects, buy-price effects, and optional sales/season/day-range/weather/temperature requirements.
+
+| Function | Description |
+| --- | --- |
+| `func get_affected_items() -> Array[ItemData]:` | Returns unique non-null commodity items affected by the event, using `affected_items` or legacy `target_item`. |
+| `func get_affected_buy_price_items() -> Array[ItemData]:` | Returns unique non-null items whose buy prices are affected by the event. |
+
 ## `Scripts/Farming/CropData.gd`
 
 | Function | Description |
@@ -47,14 +56,17 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _simulate_day_hours(day: int, start_hour: int, end_hour: int) -> void:` | Handles simulate day hours behavior. |
 | `func _update_commodity_price(commodity: CommodityData, log_time: String) -> void:` | Updates update commodity price from current data. |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
+| `func _capture_base_market_values() -> void:` | Captures base volatility and trend strength values used when rebuilding runtime event modifiers. |
+| `func _ensure_base_market_values() -> void:` | Ensures base commodity modifier values are available before applying event effects. |
 | `func _initialize_price_history() -> void:` | Handles initialize price history behavior. |
 | `func _on_time_changed() -> void:` | Handles the 'on time changed' signal callback. |
 | `func get_commodity_for_item(item_data: ItemData) -> CommodityData:` | Returns the current commodity for item. |
 | `func has_commodity(item_data: ItemData) -> bool:` | Returns whether commodity exists or is available. |
 | `func get_current_price(item_data: ItemData) -> int:` | Returns the current current price. |
 | `func _get_history_label(time_string: String) -> String:` | Builds or returns get history label for internal use. |
-| `func reset_event_modifiers() -> void:` | Resets event modifiers to its default state. |
-| `func apply_event_modifier(event_data: MarketEventData) -> void:` | Applies event modifier to current gameplay state. |
+| `func reset_event_modifiers() -> void:` | Restores commodity trend, trend strength, and volatility to base runtime values before active events are reapplied. |
+| `func apply_event_modifier(event_data: MarketEventData) -> void:` | Applies one event's commodity modifiers to every affected item. |
+| `func _apply_runtime_values_to_commodity(commodity: CommodityData) -> void:` | Resolves summed trend direction, trend strength, and volatility for one commodity. |
 
 ## `Scripts/GameManagers/CropGrowthManager.gd`
 
@@ -71,22 +83,44 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
 | `func _register_prices() -> void:` | Handles register prices behavior. |
-| `func get_buy_price(item_data: ItemData) -> int:` | Returns the current buy price. |
+| `func get_buy_price(item_data: ItemData) -> int:` | Returns the current buy price after applying active runtime event multipliers. |
 | `func get_sell_price(item_data: ItemData) -> int:` | Returns the current sell price. |
+| `func reset_buy_price_modifiers() -> void:` | Clears all runtime buy-price multipliers and emits `buy_prices_changed`. |
+| `func apply_buy_price_event_modifier(event_data: MarketEventData) -> void:` | Applies one event's buy-price multiplier to all affected buy-price items. |
 
 ## `Scripts/GameManagers/EventManager.gd`
 
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
+| `func _rebuild_possible_market_events() -> void:` | Rebuilds the combined event list from market, weather, and seasonal event arrays. |
 | `func _on_day_changed() -> void:` | Handles the 'on day changed' signal callback. |
+| `func _finish_day_event_processing() -> void:` | Deferred day-end event processing after dependent managers have updated daily state. |
 | `func _process_active_events() -> void:` | Processes process active events for current game state. |
-| `func _try_trigger_market_event() -> void:` | Attempts to try trigger market event when rules allow it. |
+| `func _try_trigger_market_events() -> void:` | Attempts to start eligible daily events until the daily start cap is reached. |
+| `func _try_trigger_fixed_date_events_for_current_day() -> void:` | Attempts fixed-date events for the current date, used on startup/new day. |
 | `func _is_event_already_active(event_data: MarketEventData) -> bool:` | Checks whether is event already active is true for internal flow. |
+| `func trigger_event_by_id(event_id: String) -> bool:` | Safely starts a configured event directly by ID for tests/debug use. |
+| `func _start_market_event(event_data: MarketEventData, emit_started_signal: bool = true) -> bool:` | Creates an active event if it is not duplicate and the daily cap allows it. |
+| `func _update_daily_event_limit_key() -> void:` | Resets the daily start counter when the date changes. |
+| `func _can_start_event_today() -> bool:` | Returns whether the daily event-start cap still allows another event. |
 | `func _apply_market_event_effects() -> void:` | Applies apply market event effects to current state. |
 | `func get_active_market_events() -> Array[ActiveMarketEvent]:` | Returns the current active market events. |
 | `func get_event_by_id(event_id: String) -> MarketEventData:` | Finds a configured market event resource by save-game event ID. |
 | `func _does_event_meet_requirements(event_data: MarketEventData) -> bool:` | Checks sales and other event requirements before trigger chance is rolled. |
+| `func _meets_sales_requirements(event_data: MarketEventData) -> bool:` | Checks recent sales requirements through `SalesStatsManager`. |
+| `func _meets_season_requirements(event_data: MarketEventData) -> bool:` | Checks whether the current season is in the event's required season list. |
+| `func _meets_day_range_requirements(event_data: MarketEventData) -> bool:` | Checks inclusive current-season day ranges from 1 to 30. |
+| `func _meets_weather_requirements(event_data: MarketEventData) -> bool:` | Checks completed-day dry/rain history requirements. |
+| `func _meets_temperature_requirements(event_data: MarketEventData) -> bool:` | Checks the current day's stable base temperature against event min/max values. |
+| `func _can_trigger_fixed_date_event(event_data: MarketEventData) -> bool:` | Checks saved fixed-date event lock state. |
+| `func _mark_fixed_date_event_triggered(event_data: MarketEventData) -> void:` | Stores the fixed-date event lock key for the current year. |
+| `func _get_fixed_date_event_key(event_data: MarketEventData) -> String:` | Builds the `event_id:year` lock key. |
+| `func create_calendar_event_state_save_data() -> Dictionary:` | Serializes fixed-date event lock state. |
+| `func apply_calendar_event_state_save_data(save_data: Dictionary) -> void:` | Restores fixed-date event lock state. |
+| `func create_daily_event_limit_save_data() -> Dictionary:` | Serializes the current date key and number of events started today. |
+| `func apply_daily_event_limit_save_data(save_data: Dictionary) -> void:` | Restores the daily event-start counter. |
+| `func _validate_possible_market_events() -> void:` | Validates event resources for duplicate IDs, nulls, invalid ranges, and missing required data. |
 
 ## `Scripts/GameManagers/gameManager.gd`
 
@@ -166,10 +200,11 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func _on_market_event_started(event_data: MarketEventData) -> void:` | Handles the 'on market event started' signal callback. |
+| `func _on_market_event_started(event_data: MarketEventData) -> void:` | Creates news for a newly started market event and shows a HUD news alert when the news is new. |
 | `func _on_market_event_ended(event_data: MarketEventData) -> void:` | Clears the announced-event marker when an active market event expires. |
 | `func sync_active_market_event_news() -> void:` | Ensures every currently active market event has a corresponding news entry when no saved news list overrides it. |
-| `func add_market_event_news(event_data: MarketEventData) -> void:` | Creates a news entry for a market event unless that event was already announced. |
+| `func add_market_event_news(event_data: MarketEventData) -> bool:` | Creates a news entry for a market event unless that event was already announced; returns whether a new item was added. |
+| `func _show_market_event_news_alert(event_data: MarketEventData) -> void:` | Displays a bottom-left HUD alert for newly generated market-event news. |
 | `func add_news(news_item: NewsItem) -> void:` | Adds news and emits related updates when needed. |
 | `func clear_news() -> void:` | Clears current news and announced-event tracking, then emits `news_cleared`. |
 | `func replace_news_items(saved_news_items: Array[NewsItem]) -> void:` | Replaces current news with the loaded save-game news list, capped to `MAX_NEWS_COUNT`. |
@@ -194,12 +229,14 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _apply_hotbar_save_data(hotbar_save_data: Dictionary) -> void:` | Restores hotbar mapping, selected slot, and related UI signals. |
 | `func _create_storage_save_data() -> Dictionary:` | Serializes silo storage contents. |
 | `func _apply_storage_save_data(storage_data: Dictionary) -> void:` | Restores silo storage contents and refreshes dependent panels. |
-| `func _create_weather_save_data() -> Dictionary:` | Serializes current weather and forecast entries. |
-| `func _apply_weather_save_data(weather_data: Dictionary) -> void:` | Restores current weather, forecast, and weather signals. |
+| `func _create_weather_save_data() -> Dictionary:` | Serializes current weather, forecast entries, and completed-day weather history. |
+| `func _apply_weather_save_data(weather_data: Dictionary) -> void:` | Restores current weather, forecast, weather history, and weather signals. |
 | `func _create_market_save_data() -> Dictionary:` | Serializes commodity market prices, trends, volatility, and history. |
 | `func _apply_market_save_data(market_data: Dictionary) -> void:` | Restores commodity market state. |
 | `func _create_events_save_data() -> Array:` | Serializes active market events and remaining duration. |
 | `func _apply_events_save_data(events_data: Array, emit_change: bool = true) -> void:` | Restores active market events and optionally emits event-change signals. |
+| `func _create_event_state_save_data() -> Dictionary:` | Serializes event runtime state that cannot be derived from active events, including calendar locks and daily start limits. |
+| `func _apply_event_state_save_data(event_state_data: Dictionary) -> void:` | Restores event runtime state such as fixed-date locks and daily start counters. |
 | `func _create_news_save_data() -> Array:` | Serializes the latest saved news entries, capped to `MAX_NEWS_SAVE_COUNT`. |
 | `func _apply_news_save_data(news_data: Array) -> void:` | Restores saved news history and refreshes the news panel. |
 | `func _get_crop_by_id(crop_id: String) -> CropData:` | Finds a crop resource by crop ID for world restoration. |
@@ -261,8 +298,12 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Connects weather to time/day signals, builds initial forecasts, applies the current phase weather, and logs the starting phase. |
-| `func _on_day_changed() -> void:` | Applies the next daily weather entry when the calendar day changes. |
+| `func _on_day_changed() -> void:` | Records the completed day, applies the next daily weather entry, rebuilds phase forecast data, and applies the current phase. |
 | `func _on_time_changed() -> void:` | Updates cached day phase state after `TimeManager.time_changed`. |
+| `func _record_completed_day_weather() -> void:` | Adds the completed day to the capped weather-history list used by event requirements. |
+| `func _get_completed_day_date() -> Dictionary:` | Builds the year, season, and day values for the day that just ended. |
+| `func _get_season_for_month(month: int) -> SeasonData.Season:` | Converts a month number into the corresponding season enum. |
+| `func _is_representative_day_rainy(pattern: WeatherDayPatternData) -> bool:` | Determines whether a completed day should count as rainy for event history. |
 | `func _apply_new_day_weather() -> void:` | Advances the rolling daily forecast and emits `weather_changed` for daily weather data. |
 | `func _roll_weather() -> WeatherData:` | Picks one configured weather resource for daily forecast data. |
 | `func _roll_temperature(weather: WeatherData) -> int:` | Rolls a temperature within the selected weather resource range. |
@@ -288,6 +329,11 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _roll_day_pattern() -> WeatherDayPatternData:` | Picks a season-weighted weather day pattern. |
 | `func _roll_day_base_temperature(pattern: WeatherDayPatternData) -> int:` | Rolls one base temperature for all phase temperatures in the current day pattern. |
 | `func get_current_season_weather_profile() -> SeasonWeatherData:` | Returns the weather balancing profile for the active season. |
+| `func get_consecutive_recent_dry_days() -> int:` | Returns the number of consecutive non-rainy completed days at the end of history. |
+| `func get_rainy_days_in_recent_days(days: int) -> int:` | Counts rainy completed days in the requested recent-history window. |
+| `func get_current_day_base_temperature() -> float:` | Returns the stable daily base temperature for temperature-gated events. |
+| `func create_weather_history_save_data() -> Array:` | Serializes completed-day weather history. |
+| `func apply_weather_history_save_data(history_data: Array) -> void:` | Restores completed-day weather history from save data. |
 | `func _get_weather_options_for_phase(pattern: WeatherDayPatternData, phase: WeatherPhaseData.DayPhase) -> Array[WeatherData]:` | Returns weather options configured for a pattern and phase. |
 | `func _get_temperature_offset_for_phase(pattern: WeatherDayPatternData, phase: WeatherPhaseData.DayPhase) -> int:` | Returns the temperature offset configured for a pattern and phase. |
 | `func get_today_phase_forecast() -> Array[WeatherPhaseData]:` | Returns the generated phase forecast for the current day. |
@@ -468,6 +514,7 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
 | `func refresh() -> void:` | Rebuilds or updates this UI from current backing data. |
 | `func _on_buy_requested(shop_item: ShopItemData) -> void:` | Handles the 'on buy requested' signal callback. |
+| `func _on_buy_prices_changed() -> void:` | Refreshes shop rows when event-driven buy-price modifiers change. |
 | `func _refresh_game_ui() -> void:` | Refreshes refresh game ui from current data. |
 
 ## `Scripts/PhoneApps/WeatherApp/WeatherForecastRow.gd`
@@ -691,8 +738,9 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 | `func toggle_storage() -> void:` | Toggles storage between active and inactive states. |
 | `func is_storage_open() -> bool:` | Returns whether storage open is true. |
 | `func is_any_game_menu_open() -> bool:` | Returns whether any game menu open is true. |
-| `func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATION) -> void:` | Shows event message. |
-| `func _hide_event_message() -> void:` | Handles hide event message behavior. |
+| `func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATION) -> void:` | Shows a temporary bottom-left HUD message; multiple active messages stack as separate lines. |
+| `func _refresh_event_messages() -> void:` | Rebuilds the stacked HUD message label from active timed messages. |
+| `func _hide_event_message() -> void:` | Clears all active HUD messages and hides the event message panel. |
 | `func _on_time_changed() -> void:` | Handles the 'on time changed' signal callback. |
 | `func _update_time_ui() -> void:` | Updates update time ui from current data. |
 | `func _on_money_changed(_new_amount: int) -> void:` | Handles the 'on money changed' signal callback. |

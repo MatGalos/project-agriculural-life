@@ -20,6 +20,11 @@ const MARKET_CLOSE_HOUR := 17
 
 var last_processed_day := -1
 var last_processed_hour := -1
+var _base_volatility_by_item_id: Dictionary = {}
+var _base_trend_strength_by_item_id: Dictionary = {}
+var _event_direction_by_item_id: Dictionary = {}
+var _event_trend_strength_by_item_id: Dictionary = {}
+var _event_volatility_by_item_id: Dictionary = {}
 
 func update_market(log_time: String = "") -> void:
 	if log_time.is_empty():
@@ -116,8 +121,26 @@ func _update_commodity_price(commodity: CommodityData, log_time: String) -> void
 			commodity.price_history_labels.pop_front()
 
 func _ready() -> void:
+	_capture_base_market_values()
 	_initialize_price_history()
 	TimeManager.time_changed.connect(_on_time_changed)
+
+
+func _capture_base_market_values() -> void:
+	_base_volatility_by_item_id.clear()
+	_base_trend_strength_by_item_id.clear()
+
+	for commodity in commodities:
+		if commodity == null or commodity.item_data == null:
+			continue
+
+		_base_volatility_by_item_id[commodity.item_data.id] = commodity.volatility
+		_base_trend_strength_by_item_id[commodity.item_data.id] = commodity.trend_strength
+
+
+func _ensure_base_market_values() -> void:
+	if _base_volatility_by_item_id.is_empty() or _base_trend_strength_by_item_id.is_empty():
+		_capture_base_market_values()
 
 
 func _initialize_price_history() -> void:
@@ -182,22 +205,77 @@ func _get_history_label(time_string: String) -> String:
 	return "%s %s" % [TimeManager.get_date_string(), time_string]
 
 func reset_event_modifiers() -> void:
+	_ensure_base_market_values()
+	_event_direction_by_item_id.clear()
+	_event_trend_strength_by_item_id.clear()
+	_event_volatility_by_item_id.clear()
+
 	for commodity in commodities:
 		if commodity == null:
 			continue
 
 		commodity.trend = CommodityData.MarketTrend.NEUTRAL
-		commodity.trend_strength = 0.01
+		if commodity.item_data != null:
+			commodity.trend_strength = float(_base_trend_strength_by_item_id.get(
+				commodity.item_data.id,
+				commodity.trend_strength
+			))
+			commodity.volatility = float(_base_volatility_by_item_id.get(
+				commodity.item_data.id,
+				commodity.volatility
+			))
 
 func apply_event_modifier(event_data: MarketEventData) -> void:
-	if event_data == null or event_data.target_item == null:
+	if event_data == null:
 		return
 
-	var commodity := get_commodity_for_item(event_data.target_item)
+	_ensure_base_market_values()
 
-	if commodity == null:
+	for item in event_data.get_affected_items():
+		var commodity := get_commodity_for_item(item)
+
+		if commodity == null or commodity.item_data == null:
+			continue
+
+		var item_id := commodity.item_data.id
+		var direction := float(_event_direction_by_item_id.get(item_id, 0.0))
+
+		match event_data.trend_effect:
+			CommodityData.MarketTrend.BULLISH:
+				direction += event_data.trend_strength_modifier
+			CommodityData.MarketTrend.BEARISH:
+				direction -= event_data.trend_strength_modifier
+			CommodityData.MarketTrend.NEUTRAL:
+				pass
+
+		_event_direction_by_item_id[item_id] = direction
+		_event_trend_strength_by_item_id[item_id] = (
+			float(_event_trend_strength_by_item_id.get(item_id, 0.0))
+			+ event_data.trend_strength_modifier
+		)
+		_event_volatility_by_item_id[item_id] = (
+			float(_event_volatility_by_item_id.get(item_id, 0.0))
+			+ event_data.volatility_modifier
+		)
+
+		_apply_runtime_values_to_commodity(commodity)
+
+
+func _apply_runtime_values_to_commodity(commodity: CommodityData) -> void:
+	if commodity == null or commodity.item_data == null:
 		return
 
-	commodity.trend = event_data.trend_effect
-	commodity.trend_strength += event_data.trend_strength_modifier
-	commodity.volatility += event_data.volatility_modifier
+	var item_id := commodity.item_data.id
+	var direction := float(_event_direction_by_item_id.get(item_id, 0.0))
+	var base_strength := float(_base_trend_strength_by_item_id.get(item_id, commodity.trend_strength))
+	var base_volatility := float(_base_volatility_by_item_id.get(item_id, commodity.volatility))
+
+	if direction > 0.0001:
+		commodity.trend = CommodityData.MarketTrend.BULLISH
+	elif direction < -0.0001:
+		commodity.trend = CommodityData.MarketTrend.BEARISH
+	else:
+		commodity.trend = CommodityData.MarketTrend.NEUTRAL
+
+	commodity.trend_strength = base_strength + float(_event_trend_strength_by_item_id.get(item_id, 0.0))
+	commodity.volatility = maxf(0.0, base_volatility + float(_event_volatility_by_item_id.get(item_id, 0.0)))

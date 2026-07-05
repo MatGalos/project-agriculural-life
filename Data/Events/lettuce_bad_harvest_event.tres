@@ -14,4 +14,6 @@ target_item = ExtResource("2_item")
 trend_effect = 2
 trend_strength_modifier = 0.03
 volatility_modifier = 0.04
+requires_season = true
+required_seasons = Array[int]([0])
 metadata/_custom_type_script = "uid://dy0h10ql6luky"

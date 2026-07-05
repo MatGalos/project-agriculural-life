@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MarketEventData" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Events/MarketEventData.gd" id="1"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/corn_item.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+event_id = "corn_export_contract"
+display_name = "Corn Export Contract"
+description = "A regional buyer signs an export contract for corn."
+duration_days = 3
+trigger_chance = 0.005
+target_item = ExtResource("2")
+trend_effect = 2
+trend_strength_modifier = 0.035
+volatility_modifier = 0.025

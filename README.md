@@ -23,10 +23,14 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Four-season calendar: Spring, Summer, Autumn, and Winter.
 - Money, buy prices, sell prices, and commodity-backed dynamic crop prices.
 - Commodity market updates during market hours with price history.
-- Market events that affect commodity trends and generate news entries.
+- Market, weather, seasonal, and calendar events that affect one or more commodities and generate news entries.
+- Daily event generation is capped to two newly started events per day.
 - Sales-volume market events based on recent crop sales history.
+- Event-driven seed buy price modifiers, for example Spring Planting Boom.
 - Weather system with current weather, temperature, daily and phase forecasts, and rain/storm field watering.
+- Weather history tracks completed days for event requirements such as drought, heavy rain, and heatwave checks.
 - Phone menu with sell, shop, stock market, weather, and news apps.
+- Bottom-left HUD news alerts show newly generated market-event news; multiple alerts can stack at once.
 - Save/load persistence with three save slots stored under `user://save_slot_%d.json`.
 - New game and load game menus for choosing the active save slot.
 - Pause menu save actions for saving the current slot, saving and returning to the main menu, or saving and quitting to desktop.
@@ -34,6 +38,27 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Editor farm-grid generator with stable tile IDs for save restoration.
 
 ## Changelog
+
+### Version 0.5
+- Expanded the market event system:
+  - Added market, weather, and seasonal event categories.
+  - Added random, condition-based, and fixed-date trigger modes.
+  - Added multi-product market events through explicit affected item lists.
+  - Added season, day-range, weather-history, temperature, and recent-sales requirements.
+  - Added fixed-date calendar-event protection so events such as Halloween Pumpkin Demand run once per year.
+  - Limited new event starts to two events per in-game day.
+- Added runtime buy-price event modifiers for seed prices without mutating `ItemPriceData`.
+- Reworked commodity event modifiers so trend strength and volatility do not permanently accumulate.
+- Added completed-day weather history used by Drought, Heavy Rain, and Summer Heatwave.
+- Added Spring Planting Boom, Autumn Harvest Festival, Halloween Pumpkin Demand, Winter Shortage, Drought, Heavy Rain, Summer Heatwave, Export Contract, and Market Panic events.
+- Restricted bad harvest events to the matching crop season.
+- Reduced high-volume random market event chances:
+  - Demand Spike: `0.04` per crop event.
+  - Export Contract: `0.005` per crop event.
+  - Market Panic: `0.02` per crop event.
+- Added bottom-left HUD news alerts for newly started market events, including stacked alerts when multiple events start together.
+- Extended save/load with calendar-event lock state, daily event limit state, and weather history.
+- Added EventSystem tests covering multi-product events, event conditions, seed price modifiers, calendar locks, weather requirements, deterministic stacking, event chance configuration, and save/load behavior.
 
 ### Version 0.4
 - Fixed the camera controls

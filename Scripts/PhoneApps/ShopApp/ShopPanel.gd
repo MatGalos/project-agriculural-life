@@ -10,6 +10,9 @@ class_name ShopPanel
 
 func _ready() -> void:
 	visible = false
+	if not EconomyManager.buy_prices_changed.is_connected(_on_buy_prices_changed):
+		EconomyManager.buy_prices_changed.connect(_on_buy_prices_changed)
+
 	refresh()
 
 
@@ -54,6 +57,10 @@ func _on_buy_requested(shop_item: ShopItemData) -> void:
 		return
 
 	_refresh_game_ui()
+	refresh()
+
+
+func _on_buy_prices_changed() -> void:
 	refresh()
 
 

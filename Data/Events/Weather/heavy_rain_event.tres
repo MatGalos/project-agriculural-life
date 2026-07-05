@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="MarketEventData" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Events/MarketEventData.gd" id="1"]
+[ext_resource type="Script" path="res://Scripts/Items/ItemData.gd" id="2"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/carrot_item.tres" id="3"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/lettuce_item.tres" id="4"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/wheat_item.tres" id="5"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/corn_item.tres" id="6"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/strawberry_item.tres" id="7"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/tomatoe_item.tres" id="8"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/beetroot_item.tres" id="9"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/potatoe_item.tres" id="10"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/pumpkin_item.tres" id="11"]
+
+[resource]
+script = ExtResource("1")
+event_id = "heavy_rain"
+display_name = "Heavy Rain"
+description = "Repeated rainy days slow field work and raise crop prices."
+duration_days = 3
+trigger_chance = 0.65
+event_category = 1
+trigger_mode = 1
+affected_items = Array[ExtResource("2")]([ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11")])
+trend_effect = 2
+trend_strength_modifier = 0.02
+volatility_modifier = 0.035
+requires_season = true
+required_seasons = Array[int]([0, 1, 2])
+requires_weather_history = true
+required_rain_days = 3
