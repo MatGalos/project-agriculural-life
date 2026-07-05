@@ -59,7 +59,7 @@ Core tests:
 - `SalesStatsManagerTest.gd`: sales recording, recent sales totals, and day rollover.
 - `InventoryDataTest.gd`: inventory setup, stacking, removal, and slot movement behavior.
 - `WeatherManagerTest.gd`: day phase hour boundaries, cached phase updates from time changes, phase temperatures derived from one daily base temperature, expanded daily forecast entry fields, and season weather profile modifiers for temperature and rainy/stormy pattern weights.
-- `EventSystemTest.gd`: event data compatibility, multi-product modifiers, deterministic trend stacking, volatility reset behavior, season/day/weather/temperature requirements, calendar-event locks, daily event start limits, seed buy-price modifiers, save/load event state, duplicate-news protection, bad-harvest crop-season restrictions, and configured trigger chances for Demand Spike, Export Contract, and Market Panic.
+- `EventSystemTest.gd`: event data compatibility, multi-product modifiers, deterministic trend stacking, volatility reset behavior, season/day/weather/temperature requirements, calendar-event locks, cooldowns, once-per-season rules, daily event start limits, seed buy-price modifiers, save/load event state, duplicate-news protection, bad-harvest crop-season restrictions, and configured trigger chances for Demand Spike, Export Contract, and Market Panic.
 
 Save tests:
 
@@ -78,19 +78,28 @@ Save tests:
 
 Simulation tests:
 
-- `FullYearSimulationTest.gd`: deterministic 120-day market/event/weather simulation using seed `123456`. The test advances calendar days directly through `TimeManager.advance_day_for_test()` and must not wait for the normal in-game clock, timers, process frames, physics frames, or per-minute/per-hour playback.
+- `FullYearSimulationTest.gd`: deterministic multi-seed 120-day market/event/weather simulation. Each run simulates exactly five seeds: `123456`, `234567`, `345678`, `456789`, and `567890`.
+- Each seed reports exactly one calendar year: `Year 1 Spring 1` through `Year 1 Winter 30`.
+- Total reported coverage is `5 seeds * 120 days = 600 days`.
+- The test advances calendar days directly through `TimeManager.advance_day_for_test()` and must not wait for the normal in-game clock, timers, process frames, physics frames, or per-minute/per-hour playback.
 
 Full-year simulation reports:
 
 - CSV output is written after the 120-day loop completes, not once per simulated day.
-- Daily report: `user://simulation_reports/full_year_daily.csv`.
-- Event report: `user://simulation_reports/full_year_events.csv`.
+- Daily report per seed: `user://simulation_reports/full_year_daily_seed_<seed>.csv`.
+- Event report per seed: `user://simulation_reports/full_year_events_seed_<seed>.csv`.
+- Validation report per seed: `user://simulation_reports/full_year_validation_seed_<seed>.csv`.
+- Multi-seed summary: `user://simulation_reports/full_year_multi_seed_summary.csv`.
+- Multi-seed aggregate: `user://simulation_reports/full_year_multi_seed_aggregate.csv`.
 - On Windows, `user://` usually resolves to `C:\Users\<user>\AppData\Roaming\Godot\app_userdata\Project_Agricultural_life\`.
-- The test prints progress every 10 simulated days: `Simulation progress: 10/120`, `20/120`, and so on.
-- The summary prints the number of collected rows, executed day advances, total simulation time in milliseconds, and slowest simulated day in milliseconds.
+- The test prints progress every 10 simulated days per seed, for example `Simulation progress seed 123456: 10/120`.
+- The summary prints completed seeds, passed/failed seeds, total reported days, per-seed validation errors, total simulation time in milliseconds, and slowest simulated day in milliseconds.
+- Balance warnings are reported as warnings. Technical issues such as invalid prices, invalid volatility, wrong date range, duplicate fixed-date events, cooldown errors, or incorrect event counts remain validation failures.
 
 Full-year simulation day advancement:
 
+- The first reported row is collected before the first day advance, after the `Year 1 Spring 1` state and fixed-date events are prepared.
+- The simulation then performs 119 direct day advances and collects the remaining rows, ending on `Year 1 Winter 30`.
 - `TimeManager.advance_day_for_test()` performs one direct market update for the completed day through `CommodityMarketManager.update_market_for_test_day()`.
 - It enables `EventManager.process_day_synchronously_for_test`, advances the calendar once, then disables the flag.
 - `day_changed` drives weather preparation, crop growth, sales rollover, and event processing.
@@ -100,9 +109,20 @@ Full-year simulation day advancement:
 
 Full-year simulation performance expectations:
 
-- The default 120-day test should be measured with `Measure-Command` or the printed `Total simulation time`.
+- The default five-seed 600-reported-day test should be measured with `Measure-Command` or the printed `Total simulation time`.
 - A healthy run is expected to finish in seconds, not minutes.
 - If it exceeds 10 seconds, inspect the Godot output for repeated `Simulation progress` lines, excessive production logs, duplicated `day_changed` handling, or blocked/deferred event processing.
+
+Current balance values covered by tests or simulation reports:
+
+- Demand Spike trigger chance: `0.032`.
+- Export Contract trigger chance: `0.01`.
+- Market Panic trigger chance: `0.02`.
+- Summer Heatwave trigger chance: `0.56`.
+- Heavy Rain trigger chance: `0.25`, cooldown `7` days.
+- Bad Harvest cooldown: `5` days.
+- `beetroot_bad_harvest` trend strength modifier: `0.024`.
+- Other Bad Harvest trend strength modifier: `0.03`.
 
 Current crop-product integration coverage:
 

@@ -6,6 +6,7 @@ signal market_events_changed
 
 const WEATHER_RAIN_LOOKBACK_DAYS := 7
 const MAX_EVENTS_STARTED_PER_DAY := 2
+const MAX_MARKET_EVENTS_STARTED_PER_DAY := 1
 
 var market_events: Array[MarketEventData] = [
 	preload("res://Data/Events/beetroot_demand_spike_event.tres"),
@@ -76,7 +77,11 @@ var seasonal_events: Array[MarketEventData] = [
 var possible_market_events: Array[MarketEventData] = []
 var active_market_events: Array[ActiveMarketEvent] = []
 var triggered_fixed_event_keys: Dictionary = {}
+var event_last_activation_day_keys: Dictionary = {}
+var triggered_once_per_season_keys: Dictionary = {}
+var triggered_once_per_year_keys: Dictionary = {}
 var _events_started_today := 0
+var _market_events_started_today := 0
 var _events_started_today_key := ""
 var process_day_synchronously_for_test := false
 var suppress_logs := false
@@ -131,9 +136,6 @@ func _try_trigger_market_events() -> void:
 	_update_daily_event_limit_key()
 
 	for event_data in possible_market_events:
-		if not _can_start_event_today():
-			break
-
 		if event_data == null:
 			continue
 
@@ -160,9 +162,6 @@ func _try_trigger_fixed_date_events_for_current_day() -> void:
 	_update_daily_event_limit_key()
 
 	for event_data in possible_market_events:
-		if not _can_start_event_today():
-			break
-
 		if event_data == null:
 			continue
 
@@ -211,17 +210,20 @@ func _start_market_event(event_data: MarketEventData, emit_started_signal: bool 
 
 	_update_daily_event_limit_key()
 
-	if not _can_start_event_today():
+	if not _can_start_event_today(event_data):
 		return false
 
 	if _is_event_already_active(event_data):
+		return false
+
+	if not _can_start_event_by_history(event_data):
 		return false
 
 	var active_event := ActiveMarketEvent.new()
 	active_event.setup(event_data)
 
 	active_market_events.append(active_event)
-	_events_started_today += 1
+	_record_event_started(event_data)
 
 	if emit_started_signal:
 		market_event_started.emit(event_data)
@@ -243,10 +245,60 @@ func _update_daily_event_limit_key() -> void:
 
 	_events_started_today_key = current_key
 	_events_started_today = 0
+	_market_events_started_today = 0
 
 
-func _can_start_event_today() -> bool:
+func _can_start_event_today(event_data: MarketEventData) -> bool:
+	if event_data == null:
+		return false
+
+	if event_data.trigger_mode == MarketEventData.TriggerMode.FIXED_DATE:
+		return true
+
+	if event_data.event_category == MarketEventData.EventCategory.MARKET:
+		return _market_events_started_today < MAX_MARKET_EVENTS_STARTED_PER_DAY
+
 	return _events_started_today < MAX_EVENTS_STARTED_PER_DAY
+
+
+func _record_event_started(event_data: MarketEventData) -> void:
+	if event_data == null:
+		return
+
+	event_last_activation_day_keys[event_data.event_id] = _get_current_absolute_day()
+
+	if event_data.trigger_mode != MarketEventData.TriggerMode.FIXED_DATE:
+		_events_started_today += 1
+
+		if event_data.event_category == MarketEventData.EventCategory.MARKET:
+			_market_events_started_today += 1
+
+	if event_data.once_per_season:
+		triggered_once_per_season_keys[_get_once_per_season_key(event_data)] = true
+
+	if event_data.once_per_year:
+		triggered_once_per_year_keys[_get_once_per_year_key(event_data)] = true
+
+
+func _can_start_event_by_history(event_data: MarketEventData) -> bool:
+	if event_data == null:
+		return false
+
+	if event_data.once_per_season and triggered_once_per_season_keys.has(_get_once_per_season_key(event_data)):
+		return false
+
+	if event_data.once_per_year and triggered_once_per_year_keys.has(_get_once_per_year_key(event_data)):
+		return false
+
+	if event_data.cooldown_days <= 0:
+		return true
+
+	var last_activation_day := int(event_last_activation_day_keys.get(event_data.event_id, -1))
+	if last_activation_day < 0:
+		return true
+
+	var min_days_between_starts := event_data.duration_days + event_data.cooldown_days
+	return _get_current_absolute_day() - last_activation_day >= min_days_between_starts
 
 func _apply_market_event_effects() -> void:
 	CommodityMarketManager.reset_event_modifiers()
@@ -267,8 +319,10 @@ func get_active_market_events() -> Array[ActiveMarketEvent]:
 	return active_market_events
 
 func get_event_by_id(event_id: String) -> MarketEventData:
+	var normalized_event_id := _normalize_event_id(event_id)
+
 	for event_data in possible_market_events:
-		if event_data != null and event_data.event_id == event_id:
+		if event_data != null and event_data.event_id == normalized_event_id:
 			return event_data
 
 	return null
@@ -277,8 +331,12 @@ func _does_event_meet_requirements(event_data: MarketEventData) -> bool:
 	if event_data == null:
 		return false
 
+	_update_daily_event_limit_key()
+
 	return (
-		_meets_sales_requirements(event_data)
+		_can_start_event_today(event_data)
+		and _can_start_event_by_history(event_data)
+		and _meets_sales_requirements(event_data)
 		and _meets_season_requirements(event_data)
 		and _meets_day_range_requirements(event_data)
 		and _meets_weather_requirements(event_data)
@@ -376,7 +434,34 @@ func _mark_fixed_date_event_triggered(event_data: MarketEventData) -> void:
 
 
 func _get_fixed_date_event_key(event_data: MarketEventData) -> String:
+	return _get_once_per_year_key(event_data)
+
+
+func _get_once_per_season_key(event_data: MarketEventData) -> String:
+	return "%s:%d:%d" % [
+		event_data.event_id,
+		TimeManager.current_year,
+		int(TimeManager.get_current_season())
+	]
+
+
+func _get_once_per_year_key(event_data: MarketEventData) -> String:
 	return "%s:%d" % [event_data.event_id, TimeManager.current_year]
+
+
+func _get_current_absolute_day() -> int:
+	return (
+		(TimeManager.current_year - 1) * TimeManager.MONTHS_PER_YEAR * TimeManager.DAYS_PER_MONTH
+		+ (TimeManager.current_month - 1) * TimeManager.DAYS_PER_MONTH
+		+ TimeManager.current_day
+	)
+
+
+func _normalize_event_id(event_id: String) -> String:
+	if event_id == "bad_harvest":
+		return "wheat_bad_harvest"
+
+	return event_id
 
 
 func create_calendar_event_state_save_data() -> Dictionary:
@@ -390,12 +475,46 @@ func apply_calendar_event_state_save_data(save_data: Dictionary) -> void:
 		triggered_fixed_event_keys[String(key)] = bool(save_data[key])
 
 
+func create_event_activation_history_save_data() -> Dictionary:
+	return event_last_activation_day_keys.duplicate(true)
+
+
+func apply_event_activation_history_save_data(save_data: Dictionary) -> void:
+	event_last_activation_day_keys.clear()
+
+	for key in save_data.keys():
+		event_last_activation_day_keys[_normalize_event_id(String(key))] = int(save_data[key])
+
+
+func create_once_per_season_state_save_data() -> Dictionary:
+	return triggered_once_per_season_keys.duplicate(true)
+
+
+func apply_once_per_season_state_save_data(save_data: Dictionary) -> void:
+	triggered_once_per_season_keys.clear()
+
+	for key in save_data.keys():
+		triggered_once_per_season_keys[String(key)] = bool(save_data[key])
+
+
+func create_once_per_year_state_save_data() -> Dictionary:
+	return triggered_once_per_year_keys.duplicate(true)
+
+
+func apply_once_per_year_state_save_data(save_data: Dictionary) -> void:
+	triggered_once_per_year_keys.clear()
+
+	for key in save_data.keys():
+		triggered_once_per_year_keys[String(key)] = bool(save_data[key])
+
+
 func create_daily_event_limit_save_data() -> Dictionary:
 	_update_daily_event_limit_key()
 
 	return {
 		"date_key": _events_started_today_key,
-		"started_count": _events_started_today
+		"started_count": _events_started_today,
+		"market_started_count": _market_events_started_today
 	}
 
 
@@ -405,6 +524,11 @@ func apply_daily_event_limit_save_data(save_data: Dictionary) -> void:
 		int(save_data.get("started_count", 0)),
 		0,
 		MAX_EVENTS_STARTED_PER_DAY
+	)
+	_market_events_started_today = clampi(
+		int(save_data.get("market_started_count", 0)),
+		0,
+		MAX_MARKET_EVENTS_STARTED_PER_DAY
 	)
 	_update_daily_event_limit_key()
 

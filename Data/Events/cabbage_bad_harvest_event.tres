@@ -10,6 +10,7 @@ display_name = "Cabbage Bad Harvest"
 description = "Poor harvest conditions reduce cabbage supply and increase prices."
 duration_days = 3
 trigger_chance = 0.1
+cooldown_days = 5
 target_item = ExtResource("2_item")
 trend_effect = 2
 trend_strength_modifier = 0.03

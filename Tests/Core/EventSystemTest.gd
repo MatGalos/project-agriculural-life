@@ -22,6 +22,9 @@ func run() -> void:
 	_test_bad_harvest_season_requirements()
 	_test_halloween_once_per_year()
 	_test_calendar_events_can_trigger_again_next_year()
+	_test_event_cooldown_blocks_restart()
+	_test_event_cooldown_survives_save_load()
+	_test_once_per_season_blocks_same_season_restart()
 	_test_weather_requirements()
 	_test_temperature_requirement()
 	_test_seed_buy_price_modifier()
@@ -40,7 +43,12 @@ func run() -> void:
 func _reset_event_state() -> void:
 	EventManager.active_market_events.clear()
 	EventManager.apply_calendar_event_state_save_data({})
+	EventManager.apply_event_activation_history_save_data({})
+	EventManager.apply_once_per_season_state_save_data({})
+	EventManager.apply_once_per_year_state_save_data({})
+	EventManager.apply_daily_event_limit_save_data({})
 	EventManager._events_started_today = 0
+	EventManager._market_events_started_today = 0
 	EventManager._events_started_today_key = ""
 	EventManager._apply_market_event_effects()
 	SalesStatsManager.current_day_sales.clear()
@@ -104,7 +112,7 @@ func _test_market_event_generation_chances() -> void:
 		runner.assert_true(market_panic != null, "%s market panic event exists" % product_id)
 
 		if export_contract != null:
-			runner.assert_eq(export_contract.trigger_chance, 0.005, "%s export contract trigger chance" % product_id)
+			runner.assert_eq(export_contract.trigger_chance, 0.01, "%s export contract trigger chance" % product_id)
 
 		if market_panic != null:
 			runner.assert_eq(market_panic.trigger_chance, 0.02, "%s market panic trigger chance" % product_id)
@@ -168,7 +176,7 @@ func _test_season_and_day_requirements() -> void:
 
 func _test_bad_harvest_season_requirements() -> void:
 	var cases := {
-		"bad_harvest": 1,
+		"wheat_bad_harvest": 1,
 		"carrot_bad_harvest": 1,
 		"lettuce_bad_harvest": 1,
 		"corn_bad_harvest": 2,
@@ -241,6 +249,74 @@ func _test_calendar_events_can_trigger_again_next_year() -> void:
 	runner.assert_eq(_count_active_event("halloween_pumpkin_demand"), 1, "Halloween can start again in next year")
 
 
+func _test_event_cooldown_blocks_restart() -> void:
+	_reset_event_state()
+	TimeManager.current_year = 1
+	TimeManager.current_month = 1
+	TimeManager.current_day = 10
+
+	var event_data := MarketEventData.new()
+	event_data.event_id = "test_cooldown"
+	event_data.duration_days = 2
+	event_data.cooldown_days = 3
+	event_data.event_category = MarketEventData.EventCategory.WEATHER
+
+	runner.assert_true(EventManager._start_market_event(event_data, false), "Cooldown test event starts")
+
+	EventManager.active_market_events.clear()
+	TimeManager.current_day = 14
+	runner.assert_true(not EventManager._start_market_event(event_data, false), "Cooldown blocks restart before enough days pass")
+
+	TimeManager.current_day = 15
+	runner.assert_true(EventManager._start_market_event(event_data, false), "Cooldown allows restart after enough days pass")
+
+
+func _test_event_cooldown_survives_save_load() -> void:
+	_reset_event_state()
+	TimeManager.current_year = 1
+	TimeManager.current_month = 1
+	TimeManager.current_day = 10
+
+	var event_data := MarketEventData.new()
+	event_data.event_id = "test_cooldown_save"
+	event_data.duration_days = 2
+	event_data.cooldown_days = 3
+	event_data.event_category = MarketEventData.EventCategory.WEATHER
+
+	runner.assert_true(EventManager._start_market_event(event_data, false), "Cooldown save test event starts")
+	var state_save := SaveManager._create_event_state_save_data()
+
+	_reset_event_state()
+	SaveManager._apply_event_state_save_data(state_save)
+	TimeManager.current_year = 1
+	TimeManager.current_month = 1
+	TimeManager.current_day = 14
+
+	runner.assert_true(not EventManager._start_market_event(event_data, false), "Save/load preserves cooldown activation day")
+
+
+func _test_once_per_season_blocks_same_season_restart() -> void:
+	_reset_event_state()
+	TimeManager.current_year = 1
+	TimeManager.current_month = 4
+	TimeManager.current_day = 5
+
+	var event_data := MarketEventData.new()
+	event_data.event_id = "test_once_per_season"
+	event_data.once_per_season = true
+	event_data.event_category = MarketEventData.EventCategory.SEASONAL
+
+	runner.assert_true(EventManager._start_market_event(event_data, false), "Once-per-season event starts")
+
+	EventManager.active_market_events.clear()
+	TimeManager.current_day = 12
+	runner.assert_true(not EventManager._start_market_event(event_data, false), "Once-per-season blocks second start in same season")
+
+	TimeManager.current_year = 2
+	TimeManager.current_day = 5
+	runner.assert_true(EventManager._start_market_event(event_data, false), "Once-per-season allows start in next year's season")
+
+
 func _test_weather_requirements() -> void:
 	var drought := EventManager.get_event_by_id("drought")
 	TimeManager.current_month = 2
@@ -263,6 +339,8 @@ func _test_weather_requirements() -> void:
 	var heavy_rain := EventManager.get_event_by_id("heavy_rain")
 	TimeManager.current_month = 1
 	WeatherManager.apply_weather_history_save_data([
+		{"is_rainy": true},
+		{"is_rainy": true},
 		{"is_rainy": true},
 		{"is_rainy": false},
 		{"is_rainy": true},
@@ -311,12 +389,10 @@ func _test_daily_event_start_limit() -> void:
 
 	var first := EventManager.trigger_event_by_id("wheat_export_contract")
 	var second := EventManager.trigger_event_by_id("corn_export_contract")
-	var third := EventManager.trigger_event_by_id("tomatoe_export_contract")
 
 	runner.assert_true(first, "Daily event limit allows first event")
-	runner.assert_true(second, "Daily event limit allows second event")
-	runner.assert_true(not third, "Daily event limit rejects third event")
-	runner.assert_eq(EventManager.active_market_events.size(), 2, "Daily event limit keeps max two new events")
+	runner.assert_true(not second, "Daily market event limit rejects second product event")
+	runner.assert_eq(EventManager.active_market_events.size(), 1, "Daily market event limit keeps max one new product event")
 
 
 func _test_active_events_expire() -> void:

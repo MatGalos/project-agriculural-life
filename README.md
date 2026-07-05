@@ -25,7 +25,9 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Commodity market updates during market hours with price history.
 - Market, weather, seasonal, and calendar events that affect one or more commodities and generate news entries.
 - Daily event generation is capped to two newly started events per day.
+- Random product market events are further capped to one newly started product event per day.
 - Sales-volume market events based on recent crop sales history.
+- Event cooldowns and once-per-season/year activation locks are persisted through save/load.
 - Event-driven seed buy price modifiers, for example Spring Planting Boom.
 - Weather system with current weather, temperature, daily and phase forecasts, and rain/storm field watering.
 - Weather history tracks completed days for event requirements such as drought, heavy rain, and heatwave checks.
@@ -53,13 +55,21 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Added Spring Planting Boom, Autumn Harvest Festival, Halloween Pumpkin Demand, Winter Shortage, Drought, Heavy Rain, Summer Heatwave, Export Contract, and Market Panic events.
 - Restricted bad harvest events to the matching crop season.
 - Reduced high-volume random market event chances:
-  - Demand Spike: `0.04` per crop event.
-  - Export Contract: `0.005` per crop event.
+  - Demand Spike: `0.032` per crop event.
+  - Export Contract: `0.01` per crop event.
   - Market Panic: `0.02` per crop event.
 - Added bottom-left HUD news alerts for newly started market events, including stacked alerts when multiple events start together.
 - Extended save/load with calendar-event lock state, daily event limit state, and weather history.
 - Added EventSystem tests covering multi-product events, event conditions, seed price modifiers, calendar locks, weather requirements, deterministic stacking, event chance configuration, and save/load behavior.
 - Added a deterministic full-year simulation test with CSV reports for daily market/weather/event data and event activation summaries.
+- Updated the full-year simulation into a five-seed run that reports `600` total days, per-seed daily/event/validation CSV files, a multi-seed summary, and an aggregate report.
+- Rebalanced selected event parameters after multi-seed simulation:
+  - Demand Spike trigger chance is `0.032`.
+  - Export Contract trigger chance is `0.01`.
+  - Summer Heatwave trigger chance is `0.56`.
+  - Heavy Rain uses `cooldown_days = 7`.
+  - Bad Harvest events use `cooldown_days = 5`.
+  - `beetroot_bad_harvest` trend strength modifier is `0.024`.
 
 ### Version 0.4
 - Fixed the camera controls
