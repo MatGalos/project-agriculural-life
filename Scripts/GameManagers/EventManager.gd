@@ -78,6 +78,8 @@ var active_market_events: Array[ActiveMarketEvent] = []
 var triggered_fixed_event_keys: Dictionary = {}
 var _events_started_today := 0
 var _events_started_today_key := ""
+var process_day_synchronously_for_test := false
+var suppress_logs := false
 
 func _ready() -> void:
 	_rebuild_possible_market_events()
@@ -95,7 +97,11 @@ func _rebuild_possible_market_events() -> void:
 func _on_day_changed() -> void:
 	_update_daily_event_limit_key()
 	_process_active_events()
-	_finish_day_event_processing.call_deferred()
+
+	if process_day_synchronously_for_test:
+		_finish_day_event_processing()
+	else:
+		_finish_day_event_processing.call_deferred()
 
 
 func _finish_day_event_processing() -> void:
@@ -103,6 +109,10 @@ func _finish_day_event_processing() -> void:
 	_apply_market_event_effects()
 
 	market_events_changed.emit()
+
+
+func finish_day_event_processing_for_test() -> void:
+	_finish_day_event_processing()
 
 func _process_active_events() -> void:
 	var ended_events: Array[ActiveMarketEvent] = []
@@ -215,7 +225,8 @@ func _start_market_event(event_data: MarketEventData, emit_started_signal: bool 
 
 	if emit_started_signal:
 		market_event_started.emit(event_data)
-		print("Market event started: ", event_data.display_name)
+		if not suppress_logs:
+			print("Market event started: ", event_data.display_name)
 
 	return true
 

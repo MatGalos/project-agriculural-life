@@ -112,6 +112,17 @@ func skip_to_morning() -> void:
 
 	time_changed.emit()
 
+
+func advance_day_for_test() -> void:
+	var previous_day := current_day
+
+	CommodityMarketManager.update_market_for_test_day(previous_day)
+	EventManager.process_day_synchronously_for_test = true
+	_advance_day()
+	EventManager.process_day_synchronously_for_test = false
+	current_minute_of_day = 6 * 60
+	time_changed.emit()
+
 func get_ordinal_day() -> String:
 	var suffix := "th"
 

@@ -40,6 +40,7 @@ const FORECAST_DAYS := 7
 var forecast: Array[Dictionary] = []
 const WEATHER_HISTORY_DAYS := 30
 var daily_weather_history: Array[Dictionary] = []
+var suppress_logs := false
 
 func _ready() -> void:
 	TimeManager.day_changed.connect(_on_day_changed)
@@ -49,17 +50,20 @@ func _ready() -> void:
 	_generate_initial_forecast()
 	_apply_new_day_weather()
 	_generate_today_phase_forecast()
-	print_today_forecast()
+	if not suppress_logs:
+		print_today_forecast()
 	current_day_phase = get_current_day_phase()
 	_apply_current_phase_weather()
 
-	print("Current weather phase: ", get_day_phase_name(current_day_phase))
+	if not suppress_logs:
+		print("Current weather phase: ", get_day_phase_name(current_day_phase))
 
 func _on_day_changed() -> void:
 	_record_completed_day_weather()
 	_apply_new_day_weather()
 	_generate_today_phase_forecast()
-	print_today_forecast()
+	if not suppress_logs:
+		print_today_forecast()
 	_apply_current_phase_weather()
 
 
@@ -167,7 +171,7 @@ func _apply_new_day_weather() -> void:
 
 	weather_changed.emit(current_weather, current_temperature)
 
-	print(
+	_log(
 		"Weather today: ",
 		current_weather.display_name,
 		" ",
@@ -222,7 +226,7 @@ func _water_fields_if_needed() -> void:
 		if tile is FarmTile and tile.current_state == FarmTile.TileState.PLOWED:
 			tile.water()
 
-	print("Weather watered fields: ", current_weather.display_name)
+	_log("Weather watered fields: ", current_weather.display_name)
 
 func _generate_initial_forecast() -> void:
 	forecast.clear()
@@ -284,7 +288,7 @@ func _update_day_phase() -> void:
 
 	current_day_phase = new_phase
 
-	print(
+	_log(
 		"Weather phase changed to: ",
 		get_day_phase_name(current_day_phase)
 	)
@@ -360,7 +364,7 @@ func _generate_today_phase_forecast() -> void:
 		current_day_base_temperature = _roll_day_base_temperature(current_day_pattern)
 
 	if current_day_pattern:
-		print(
+		_log(
 			"Weather day pattern: ",
 			current_day_pattern.display_name,
 			" | Base temp: ",
@@ -404,7 +408,7 @@ func _apply_current_phase_weather() -> void:
 
 	weather_changed.emit(current_weather, current_temperature)
 
-	print(
+	_log(
 		"Weather phase applied: ",
 		get_day_phase_name(current_day_phase),
 		" | ",
@@ -551,10 +555,10 @@ func get_phase_forecast_text(phase_data: WeatherPhaseData) -> String:
 	]
 
 func print_today_forecast() -> void:
-	print("Today pattern: ", get_current_day_pattern_name())
+	_log("Today pattern: ", get_current_day_pattern_name())
 
 	for phase_data in today_phase_forecast:
-		print(get_phase_forecast_text(phase_data))
+		_log(get_phase_forecast_text(phase_data))
 
 func get_current_season_weather_profile() -> SeasonWeatherData:
 	return season_weather_profiles.get(
@@ -619,3 +623,10 @@ func apply_weather_history_save_data(history_data: Array) -> void:
 
 	while daily_weather_history.size() > WEATHER_HISTORY_DAYS:
 		daily_weather_history.pop_front()
+
+
+func _log(arg1 = "", arg2 = "", arg3 = "", arg4 = "", arg5 = "", arg6 = "", arg7 = "", arg8 = "", arg9 = "") -> void:
+	if suppress_logs:
+		return
+
+	print(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)

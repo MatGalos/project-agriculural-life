@@ -25,6 +25,7 @@ var _base_trend_strength_by_item_id: Dictionary = {}
 var _event_direction_by_item_id: Dictionary = {}
 var _event_trend_strength_by_item_id: Dictionary = {}
 var _event_volatility_by_item_id: Dictionary = {}
+var suppress_logs := false
 
 func update_market(log_time: String = "") -> void:
 	if log_time.is_empty():
@@ -34,7 +35,18 @@ func update_market(log_time: String = "") -> void:
 		_update_commodity_price(commodity, log_time)
 
 	commodity_prices_updated.emit()
-	print("[CommodityMarket] Prices updated signal emitted at %s" % log_time)
+	_log("[CommodityMarket] Prices updated signal emitted at %s" % log_time)
+
+
+func update_market_for_test_day(day: int, hour: int = MARKET_CLOSE_HOUR) -> void:
+	var log_time := "%02d:00" % hour
+
+	if last_processed_day == day and last_processed_hour == hour:
+		return
+
+	last_processed_day = day
+	last_processed_hour = hour
+	update_market(log_time)
 
 func simulate_skipped_market_hours(from_day: int, from_hour: int, to_day: int, to_hour: int) -> void:
 	if from_day != to_day:
@@ -53,7 +65,7 @@ func _simulate_day_hours(day: int, start_hour: int, end_hour: int) -> void:
 		last_processed_hour = hour
 
 		var log_time := "%02d:00" % hour
-		print("[CommodityMarket] Simulating skipped market update for day %d at %s" % [day, log_time])
+		_log("[CommodityMarket] Simulating skipped market update for day %d at %s" % [day, log_time])
 		update_market(log_time)
 
 
@@ -98,7 +110,7 @@ func _update_commodity_price(commodity: CommodityData, log_time: String) -> void
 		item_name = commodity.item_data.display_name
 		item_id = commodity.item_data.id
 
-	print(
+	_log(
 		"[CommodityMarket] %s %s (%s): %.2f -> %.2f, displayed sell price: %d, change: %.2f%%" % [
 			log_time,
 			item_name,
@@ -174,7 +186,7 @@ func _on_time_changed() -> void:
 	last_processed_hour = current_hour
 
 	var log_time := TimeManager.get_time_string()
-	print("[CommodityMarket] Updating market for day %d at %s" % [current_day, log_time])
+	_log("[CommodityMarket] Updating market for day %d at %s" % [current_day, log_time])
 	update_market(log_time)
 
 func get_commodity_for_item(item_data: ItemData) -> CommodityData:
@@ -279,3 +291,10 @@ func _apply_runtime_values_to_commodity(commodity: CommodityData) -> void:
 
 	commodity.trend_strength = base_strength + float(_event_trend_strength_by_item_id.get(item_id, 0.0))
 	commodity.volatility = maxf(0.0, base_volatility + float(_event_volatility_by_item_id.get(item_id, 0.0)))
+
+
+func _log(message: String) -> void:
+	if suppress_logs:
+		return
+
+	print(message)
