@@ -138,6 +138,9 @@ func _clear_runtime_events_before_load() -> void:
 	EventManager.active_market_events.clear()
 	EventManager.apply_calendar_event_state_save_data({})
 	EventManager.apply_daily_event_limit_save_data({})
+	EventManager.apply_event_activation_history_save_data({})
+	EventManager.apply_once_per_season_state_save_data({})
+	EventManager.apply_once_per_year_state_save_data({})
 	EventManager._apply_market_event_effects()
 	EventManager.market_events_changed.emit()
 
@@ -586,7 +589,10 @@ func _apply_events_save_data(events_data: Array, emit_change: bool = true) -> vo
 func _create_event_state_save_data() -> Dictionary:
 	return {
 		"triggered_fixed_events": EventManager.create_calendar_event_state_save_data(),
-		"daily_event_limit": EventManager.create_daily_event_limit_save_data()
+		"daily_event_limit": EventManager.create_daily_event_limit_save_data(),
+		"event_activation_history": EventManager.create_event_activation_history_save_data(),
+		"once_per_season_events": EventManager.create_once_per_season_state_save_data(),
+		"once_per_year_events": EventManager.create_once_per_year_state_save_data()
 	}
 
 
@@ -600,6 +606,21 @@ func _apply_event_state_save_data(event_state_data: Dictionary) -> void:
 		EventManager.apply_daily_event_limit_save_data(event_state_data["daily_event_limit"] as Dictionary)
 	else:
 		EventManager.apply_daily_event_limit_save_data({})
+
+	if event_state_data.has("event_activation_history") and event_state_data["event_activation_history"] is Dictionary:
+		EventManager.apply_event_activation_history_save_data(event_state_data["event_activation_history"] as Dictionary)
+	else:
+		EventManager.apply_event_activation_history_save_data({})
+
+	if event_state_data.has("once_per_season_events") and event_state_data["once_per_season_events"] is Dictionary:
+		EventManager.apply_once_per_season_state_save_data(event_state_data["once_per_season_events"] as Dictionary)
+	else:
+		EventManager.apply_once_per_season_state_save_data({})
+
+	if event_state_data.has("once_per_year_events") and event_state_data["once_per_year_events"] is Dictionary:
+		EventManager.apply_once_per_year_state_save_data(event_state_data["once_per_year_events"] as Dictionary)
+	else:
+		EventManager.apply_once_per_year_state_save_data({})
 
 
 func _create_news_save_data() -> Array:
@@ -796,6 +817,9 @@ func _reset_runtime_state_for_new_game() -> void:
 	EventManager.active_market_events.clear()
 	EventManager.apply_calendar_event_state_save_data({})
 	EventManager.apply_daily_event_limit_save_data({})
+	EventManager.apply_event_activation_history_save_data({})
+	EventManager.apply_once_per_season_state_save_data({})
+	EventManager.apply_once_per_year_state_save_data({})
 	EventManager._apply_market_event_effects()
 	EventManager.market_events_changed.emit()
 

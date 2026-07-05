@@ -5,11 +5,12 @@
 
 [resource]
 script = ExtResource("1_5ncdp")
-event_id = "bad_harvest"
-display_name = "Bad Harvest"
-description = "Poor harvest conditions reduce supply and increase crop prices."
+event_id = "wheat_bad_harvest"
+display_name = "Wheat Bad Harvest"
+description = "Poor wheat harvest conditions reduce supply and increase wheat prices."
 duration_days = 3
 trigger_chance = 0.1
+cooldown_days = 5
 target_item = ExtResource("2_s4bsu")
 trend_effect = 2
 trend_strength_modifier = 0.03

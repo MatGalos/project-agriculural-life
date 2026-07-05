@@ -230,19 +230,30 @@ Important behavior:
 - Each active event tracks remaining days through `ActiveMarketEvent`.
 - Duplicate active events are skipped.
 - At most `MAX_EVENTS_STARTED_PER_DAY` new events can start on one in-game day. The current value is `2`.
+- Product market events are further limited by `MAX_MARKET_EVENTS_STARTED_PER_DAY`. The current value is `1`, so random product events do not flood the market in a single day.
 - Daily event-limit state is saved and loaded so saving mid-day cannot bypass the cap.
+- Event activation history is saved and loaded. It is used by cooldowns, once-per-season rules, and once-per-year rules.
 - `_does_event_meet_requirements()` delegates to focused requirement helpers for sales, season, day range, weather history, and temperature.
 - `RANDOM` and `CONDITION_BASED` events check requirements and then roll `trigger_chance`.
 - `FIXED_DATE` events check requirements and start without trigger-chance rolling.
 - Fixed-date events are protected by a saved `event_id:year` key so they do not restart repeatedly in the same year.
 - If a fixed-date event is blocked by the daily cap, it is not marked as triggered and can still run on a later day in its configured range.
+- `MarketEventData.cooldown_days` blocks an event from restarting until its active duration plus cooldown have elapsed.
+- `MarketEventData.once_per_season` and `MarketEventData.once_per_year` prevent repeated seasonal or yearly activations while still allowing future valid seasons/years.
 - `MarketEventData.requires_recent_sales` gates events by recent sold item amount.
 - Sales-gated events use `target_item`, `recent_sales_threshold`, and `recent_sales_days`.
 - Bad harvest events are season-gated to the affected crop season.
+- `Winter Shortage` is once per season.
+- Fixed-date events such as `Spring Planting Boom`, `Halloween Pumpkin Demand`, and `Autumn Harvest Festival` keep their configured calendar behavior.
 - Current per-crop random tuning:
-  - Demand Spike: `0.04`.
-  - Export Contract: `0.005`.
+  - Demand Spike: `0.032`.
+  - Export Contract: `0.01`.
   - Market Panic: `0.02`.
+- Current selected balance tuning:
+  - `Summer Heatwave` trigger chance is `0.56`.
+  - `Heavy Rain` trigger chance is `0.25` with `cooldown_days = 7`.
+  - Bad Harvest events have `cooldown_days = 5`.
+  - `beetroot_bad_harvest` uses `trend_strength_modifier = 0.024`; other Bad Harvest variants use `0.03`.
 - Started events emit `market_event_started`.
 - Expired events emit `market_event_ended`.
 - `market_events_changed` is emitted after daily event processing.

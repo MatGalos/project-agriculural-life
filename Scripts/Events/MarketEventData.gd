@@ -19,8 +19,11 @@ enum TriggerMode {
 @export_multiline var description: String = ""
 @export var duration_days: int = 1
 @export_range(0.0, 1.0, 0.01) var trigger_chance: float = 0.15
+@export_range(0, 30, 1) var cooldown_days: int = 0
 @export var event_category: EventCategory = EventCategory.MARKET
 @export var trigger_mode: TriggerMode = TriggerMode.RANDOM
+@export var once_per_season: bool = false
+@export var once_per_year: bool = false
 
 @export_group("Affected Products")
 @export var target_item: ItemData

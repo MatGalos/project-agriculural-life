@@ -22,6 +22,7 @@ duration_days = 5
 trigger_chance = 0.5
 event_category = 2
 trigger_mode = 1
+once_per_season = true
 affected_items = Array[ExtResource("2")]([ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11"), ExtResource("12")])
 trend_effect = 2
 trend_strength_modifier = 0.025
