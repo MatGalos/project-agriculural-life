@@ -59,6 +59,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Added bottom-left HUD news alerts for newly started market events, including stacked alerts when multiple events start together.
 - Extended save/load with calendar-event lock state, daily event limit state, and weather history.
 - Added EventSystem tests covering multi-product events, event conditions, seed price modifiers, calendar locks, weather requirements, deterministic stacking, event chance configuration, and save/load behavior.
+- Added a deterministic full-year simulation test with CSV reports for daily market/weather/event data and event activation summaries.
 
 ### Version 0.4
 - Fixed the camera controls

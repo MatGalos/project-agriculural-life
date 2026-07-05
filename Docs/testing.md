@@ -27,7 +27,16 @@ Tests are run in-game through the debug input action:
 Tests can also be run headless by launching the project with the `--run-tests` argument:
 
 ```powershell
-& 'C:\Program Files (x86)\Steam\steamapps\common\Godot Engine\godot.windows.opt.tools.64.exe' --headless --path . --run-tests
+& 'C:\Program Files (x86)\Steam\steamapps\common\Godot Engine\godot.windows.opt.tools.64.exe' --headless --path . -- --run-tests
+```
+
+Use the full path to the Godot executable if `godot` is not available in `PATH`:
+
+```powershell
+cd D:\project-agriculural-life
+Measure-Command {
+	& 'C:\Path\To\Godot_v4.6-stable_win64.exe' --headless --path . -- --run-tests
+}
 ```
 
 `DebugManager` exits with code `1` when any test fails and `0` when all tests pass.
@@ -66,6 +75,34 @@ Save tests:
 - `CropProductIntegrationTest.gd`: integration coverage for added crop products, seeds, crop data, commodity data, market events, shop items, storage registration, and save-manager lookup.
 - `FarmTileLogicTest.gd`: farm tile state transitions, planting, growth, and crop clearing.
 - `TileCropSaveTest.gd`: farm tile crop data in world save/load flow.
+
+Simulation tests:
+
+- `FullYearSimulationTest.gd`: deterministic 120-day market/event/weather simulation using seed `123456`. The test advances calendar days directly through `TimeManager.advance_day_for_test()` and must not wait for the normal in-game clock, timers, process frames, physics frames, or per-minute/per-hour playback.
+
+Full-year simulation reports:
+
+- CSV output is written after the 120-day loop completes, not once per simulated day.
+- Daily report: `user://simulation_reports/full_year_daily.csv`.
+- Event report: `user://simulation_reports/full_year_events.csv`.
+- On Windows, `user://` usually resolves to `C:\Users\<user>\AppData\Roaming\Godot\app_userdata\Project_Agricultural_life\`.
+- The test prints progress every 10 simulated days: `Simulation progress: 10/120`, `20/120`, and so on.
+- The summary prints the number of collected rows, executed day advances, total simulation time in milliseconds, and slowest simulated day in milliseconds.
+
+Full-year simulation day advancement:
+
+- `TimeManager.advance_day_for_test()` performs one direct market update for the completed day through `CommodityMarketManager.update_market_for_test_day()`.
+- It enables `EventManager.process_day_synchronously_for_test`, advances the calendar once, then disables the flag.
+- `day_changed` drives weather preparation, crop growth, sales rollover, and event processing.
+- The event manager finishes day processing synchronously in this test mode instead of scheduling `_finish_day_event_processing()` with `call_deferred()`.
+- The time of day is reset to `06:00`, and `time_changed` is emitted once after the direct day change.
+- The test path intentionally avoids `CommodityMarketManager.simulate_skipped_market_hours()`, which remains available for production time skips.
+
+Full-year simulation performance expectations:
+
+- The default 120-day test should be measured with `Measure-Command` or the printed `Total simulation time`.
+- A healthy run is expected to finish in seconds, not minutes.
+- If it exceeds 10 seconds, inspect the Godot output for repeated `Simulation progress` lines, excessive production logs, duplicated `day_changed` handling, or blocked/deferred event processing.
 
 Current crop-product integration coverage:
 

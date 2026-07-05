@@ -30,6 +30,7 @@ func run_all_tests() -> void:
 	_run_test_script(preload("res://Tests/Save/CropProductIntegrationTest.gd").new())
 	_run_test_script(preload("res://Tests/Save/FarmTileLogicTest.gd").new())
 	_run_test_script(preload("res://Tests/Save/TileCropSaveTest.gd").new())
+	_run_test_script(preload("res://Tests/Simulation/FullYearSimulationTest.gd").new())
 
 	print("========== TEST RESULTS ==========")
 	print("Passed: ", passed)
