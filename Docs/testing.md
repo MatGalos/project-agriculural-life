@@ -80,6 +80,7 @@ Simulation tests:
 
 - `FullYearSimulationTest.gd`: deterministic multi-seed 120-day market/event/weather simulation. Each run simulates exactly five seeds: `123456`, `234567`, `345678`, `456789`, and `567890`.
 - `OversupplySalesSimulationTest.gd`: deterministic integration test for sales-driven Oversupply events across all 10 crop products.
+- `CropProfitabilityAnalysisTest.gd`: static crop-economy analyzer for product prices, seed prices, growth time, yield, seasonal profitability, ROI, role classification, market scenarios, Oversupply risk, and recommendation diagnostics.
 - Each seed reports exactly one calendar year: `Year 1 Spring 1` through `Year 1 Winter 30`.
 - Total reported coverage is `5 seeds * 120 days = 600 days`.
 - The test advances calendar days directly through `TimeManager.advance_day_for_test()` and must not wait for the normal in-game clock, timers, process frames, physics frames, or per-minute/per-hour playback.
@@ -107,6 +108,17 @@ Oversupply sales simulation reports:
 - Technical validation covers sales-window summing, `>=` threshold semantics, product isolation, bearish trend, volatility modifier application, no volatility accumulation, modifier reset after event end, save/load restoration, cooldown behavior, news duplication, event duration, and price min/max bounds.
 - `condition_met` in the detailed CSV is kept as a compatibility alias for `condition_ever_met`; use `condition_met_at_end` when inspecting the final state of long-running scenarios.
 - `save_load_status` is `passed`, `failed`, or `not_tested`; only Wheat currently runs the active Oversupply save/load scenario.
+
+Crop profitability analysis reports:
+
+- Main profitability report: `user://simulation_reports/crop_profitability/crop_profitability_report.csv`.
+- Product/seed suggestion report: `user://simulation_reports/crop_profitability/crop_profitability_suggestions.csv`.
+- Summary report: `user://simulation_reports/crop_profitability/crop_profitability_summary.csv`.
+- Seed-price balance report: `user://simulation_reports/crop_profitability/seed_price_balance_report.csv`.
+- Seed-price balance summary: `user://simulation_reports/crop_profitability/seed_price_balance_summary.csv`.
+- The analyzer reads real `CropData`, `SeedItemData`, `ItemPriceData`, and `CommodityData` resources.
+- It does not mutate production resources. Balance changes are applied manually to `.tres` files after reviewing the reports.
+- Balance warnings such as high ROI, large price changes, or Oversupply risk do not fail the test. Missing data, invalid prices, invalid yield/growth time, NaN, infinity, or CSV write failures remain validation failures.
 
 Full-year simulation day advancement:
 
@@ -137,6 +149,12 @@ Current balance values covered by tests or simulation reports:
 - Other Bad Harvest trend strength modifier: `0.03`.
 - Oversupply cooldown: `5` days.
 - Oversupply thresholds: `200` for yield-1 crops and `600` for yield-3 crops.
+- Crop product base sell prices:
+  - Wheat `15`, Carrot `23`, Beetroot `33`, Lettuce `33`, Cabbage `50`, Pumpkin `39`.
+  - Potatoe `16`, Corn `15`, Strawberry `15`, Tomatoe `13`.
+- Seed buy prices:
+  - Wheat `5`, Carrot `5`, Beetroot `8`, Lettuce `8`, Cabbage `12`, Pumpkin `8`.
+  - Potatoe `8`, Corn `9`, Strawberry `11`, Tomatoe `10`.
 
 Current crop-product integration coverage:
 

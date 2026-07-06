@@ -167,11 +167,30 @@ Important behavior:
 `EconomyManager` resolves item prices:
 
 - `get_buy_price()` uses `ItemPriceData.buy_price` when configured, otherwise falls back to `ItemData.base_price`.
+- Seed shop prices are stored in `Data/Economy/Prices/*_seed_price.tres` as `buy_price`.
+- Seed item `base_price` values in `Data/Items/Seeds/*_seed_item.tres` are kept in sync as fallback data.
 - Active event buy-price multipliers are applied at runtime and are multiplied together per item.
 - Runtime buy-price modifiers never mutate `ItemPriceData.buy_price`; removing the active events returns prices to their configured base values.
 - `buy_prices_changed` is emitted when buy-price modifiers are reset or reapplied so shop UI can refresh immediately.
 - `get_sell_price()` uses `CommodityMarketManager.get_current_price()` for commodity-backed items.
 - Non-commodity sell prices use `ItemPriceData.sell_price` or `ItemData.base_price` as fallback.
+
+Current crop economy baseline:
+
+| Crop id | Product base sell price | Seed buy price | Yield |
+|---|---:|---:|---:|
+| `wheat` | 15 | 5 | 1 |
+| `carrot` | 23 | 5 | 1 |
+| `beetroot` | 33 | 8 | 1 |
+| `lettuce` | 33 | 8 | 1 |
+| `cabbage` | 50 | 12 | 1 |
+| `pumpkin` | 39 | 8 | 1 |
+| `potatoe` | 16 | 8 | 3 |
+| `corn` | 15 | 9 | 3 |
+| `strawberry` | 15 | 11 | 3 |
+| `tomatoe` | 13 | 10 | 3 |
+
+The crop profitability analyzer owns diagnostic recommendations and reports. Production balance changes still happen through the data resources above, not by mutating runtime manager state.
 
 `CommodityMarketManager` owns commodity price updates:
 

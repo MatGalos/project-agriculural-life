@@ -10,6 +10,6 @@ id = "beetroot"
 display_name = "Beetroot"
 description = "Harvested beetroot crop"
 icon = ExtResource("2_icon")
-base_price = 15
+base_price = 33
 category = 0
 metadata/_custom_type_script = "uid://c3smts8jy3m4p"
