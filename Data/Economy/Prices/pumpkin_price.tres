@@ -6,5 +6,5 @@
 [resource]
 script = ExtResource("1_script")
 item_data = ExtResource("1_item")
-sell_price = 15
+sell_price = 39
 metadata/_custom_type_script = "uid://b7gcud8aoyqm4"

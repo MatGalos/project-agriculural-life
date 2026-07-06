@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1_script")
 item_data = ExtResource("1_item")
-base_price = 15.0
+base_price = 13.0
 volatility = 0.1
-current_price = 15.0
+current_price = 13.0
 trend = 2
 metadata/_custom_type_script = "uid://dni6fmdxm31w8"

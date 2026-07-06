@@ -76,6 +76,13 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - All Oversupply events use `cooldown_days = 5`.
   - Yield-1 crops use `recent_sales_threshold = 200`.
   - Yield-3 crops use `recent_sales_threshold = 600`.
+- Added crop profitability analysis reports for product price, seed price, seasonal profitability, ROI, market scenarios, and Oversupply risk.
+- Rebalanced crop product base sell prices:
+  - Wheat `15`, Carrot `23`, Beetroot `33`, Lettuce `33`, Cabbage `50`, Pumpkin `39`.
+  - Potatoe `16`, Corn `15`, Strawberry `15`, Tomatoe `13`.
+- Rebalanced seed buy prices:
+  - Wheat `5`, Carrot `5`, Beetroot `8`, Lettuce `8`, Cabbage `12`, Pumpkin `8`.
+  - Potatoe `8`, Corn `9`, Strawberry `11`, Tomatoe `10`.
 
 ### Version 0.4
 - Fixed the camera controls
