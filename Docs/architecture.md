@@ -254,6 +254,10 @@ Important behavior:
   - `Heavy Rain` trigger chance is `0.25` with `cooldown_days = 7`.
   - Bad Harvest events have `cooldown_days = 5`.
   - `beetroot_bad_harvest` uses `trend_strength_modifier = 0.024`; other Bad Harvest variants use `0.03`.
+  - Oversupply events have `duration_days = 2`, `cooldown_days = 5`, `trigger_chance = 0.35`, `trend_strength_modifier = 0.02`, and `volatility_modifier = 0.02`.
+  - Oversupply sales thresholds are balanced by crop yield over a 7-day recent-sales window:
+    - Yield `1`: threshold `200` for beetroot, cabbage, carrot, lettuce, pumpkin, and wheat.
+    - Yield `3`: threshold `600` for corn, potatoe, strawberry, and tomatoe.
 - Started events emit `market_event_started`.
 - Expired events emit `market_event_ended`.
 - `market_events_changed` is emitted after daily event processing.

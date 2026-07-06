@@ -27,6 +27,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Daily event generation is capped to two newly started events per day.
 - Random product market events are further capped to one newly started product event per day.
 - Sales-volume market events based on recent crop sales history.
+- Oversupply events use crop-yield-adjusted sales thresholds and a cooldown to limit repeated market crashes.
 - Event cooldowns and once-per-season/year activation locks are persisted through save/load.
 - Event-driven seed buy price modifiers, for example Spring Planting Boom.
 - Weather system with current weather, temperature, daily and phase forecasts, and rain/storm field watering.
@@ -63,6 +64,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Added EventSystem tests covering multi-product events, event conditions, seed price modifiers, calendar locks, weather requirements, deterministic stacking, event chance configuration, and save/load behavior.
 - Added a deterministic full-year simulation test with CSV reports for daily market/weather/event data and event activation summaries.
 - Updated the full-year simulation into a five-seed run that reports `600` total days, per-seed daily/event/validation CSV files, a multi-seed summary, and an aggregate report.
+- Added an Oversupply sales simulation report covering all crop products, sales thresholds, cooldown behavior, product isolation, price impact, and save/load diagnostics.
 - Rebalanced selected event parameters after multi-seed simulation:
   - Demand Spike trigger chance is `0.032`.
   - Export Contract trigger chance is `0.01`.
@@ -70,6 +72,10 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Heavy Rain uses `cooldown_days = 7`.
   - Bad Harvest events use `cooldown_days = 5`.
   - `beetroot_bad_harvest` trend strength modifier is `0.024`.
+- Rebalanced Oversupply events:
+  - All Oversupply events use `cooldown_days = 5`.
+  - Yield-1 crops use `recent_sales_threshold = 200`.
+  - Yield-3 crops use `recent_sales_threshold = 600`.
 
 ### Version 0.4
 - Fixed the camera controls
