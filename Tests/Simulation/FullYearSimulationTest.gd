@@ -10,7 +10,7 @@ const SIMULATION_SEEDS: Array[int] = [
 	456789,
 	567890
 ]
-const OUTPUT_DIRECTORY: String = "user://simulation_reports/"
+const OUTPUT_DIRECTORY: String = "user://simulation_reports/full_year/"
 const DAILY_REPORT_TEMPLATE: String = "full_year_daily_seed_%d.csv"
 const EVENTS_REPORT_TEMPLATE: String = "full_year_events_seed_%d.csv"
 const VALIDATION_REPORT_TEMPLATE: String = "full_year_validation_seed_%d.csv"

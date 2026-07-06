@@ -79,6 +79,7 @@ Save tests:
 Simulation tests:
 
 - `FullYearSimulationTest.gd`: deterministic multi-seed 120-day market/event/weather simulation. Each run simulates exactly five seeds: `123456`, `234567`, `345678`, `456789`, and `567890`.
+- `OversupplySalesSimulationTest.gd`: deterministic integration test for sales-driven Oversupply events across all 10 crop products.
 - Each seed reports exactly one calendar year: `Year 1 Spring 1` through `Year 1 Winter 30`.
 - Total reported coverage is `5 seeds * 120 days = 600 days`.
 - The test advances calendar days directly through `TimeManager.advance_day_for_test()` and must not wait for the normal in-game clock, timers, process frames, physics frames, or per-minute/per-hour playback.
@@ -86,15 +87,26 @@ Simulation tests:
 Full-year simulation reports:
 
 - CSV output is written after the 120-day loop completes, not once per simulated day.
-- Daily report per seed: `user://simulation_reports/full_year_daily_seed_<seed>.csv`.
-- Event report per seed: `user://simulation_reports/full_year_events_seed_<seed>.csv`.
-- Validation report per seed: `user://simulation_reports/full_year_validation_seed_<seed>.csv`.
-- Multi-seed summary: `user://simulation_reports/full_year_multi_seed_summary.csv`.
-- Multi-seed aggregate: `user://simulation_reports/full_year_multi_seed_aggregate.csv`.
+- Daily report per seed: `user://simulation_reports/full_year/full_year_daily_seed_<seed>.csv`.
+- Event report per seed: `user://simulation_reports/full_year/full_year_events_seed_<seed>.csv`.
+- Validation report per seed: `user://simulation_reports/full_year/full_year_validation_seed_<seed>.csv`.
+- Multi-seed summary: `user://simulation_reports/full_year/full_year_multi_seed_summary.csv`.
+- Multi-seed aggregate: `user://simulation_reports/full_year/full_year_multi_seed_aggregate.csv`.
 - On Windows, `user://` usually resolves to `C:\Users\<user>\AppData\Roaming\Godot\app_userdata\Project_Agricultural_life\`.
 - The test prints progress every 10 simulated days per seed, for example `Simulation progress seed 123456: 10/120`.
 - The summary prints completed seeds, passed/failed seeds, total reported days, per-seed validation errors, total simulation time in milliseconds, and slowest simulated day in milliseconds.
 - Balance warnings are reported as warnings. Technical issues such as invalid prices, invalid volatility, wrong date range, duplicate fixed-date events, cooldown errors, or incorrect event counts remain validation failures.
+
+Oversupply sales simulation reports:
+
+- Detailed report: `user://simulation_reports/oversupply/oversupply_sales_simulation.csv`.
+- Summary report: `user://simulation_reports/oversupply/oversupply_sales_summary.csv`.
+- Threshold analysis: `user://simulation_reports/oversupply/oversupply_threshold_analysis.csv`.
+- The test uses `SalesStatsManager.record_sale()` and the production event requirement checks.
+- It covers no sales, below threshold, exact threshold, above threshold, distributed sales, product isolation, small regular sales, mass regular sales, and Wheat save/load.
+- Technical validation covers sales-window summing, `>=` threshold semantics, product isolation, bearish trend, volatility modifier application, no volatility accumulation, modifier reset after event end, save/load restoration, cooldown behavior, news duplication, event duration, and price min/max bounds.
+- `condition_met` in the detailed CSV is kept as a compatibility alias for `condition_ever_met`; use `condition_met_at_end` when inspecting the final state of long-running scenarios.
+- `save_load_status` is `passed`, `failed`, or `not_tested`; only Wheat currently runs the active Oversupply save/load scenario.
 
 Full-year simulation day advancement:
 
@@ -123,6 +135,8 @@ Current balance values covered by tests or simulation reports:
 - Bad Harvest cooldown: `5` days.
 - `beetroot_bad_harvest` trend strength modifier: `0.024`.
 - Other Bad Harvest trend strength modifier: `0.03`.
+- Oversupply cooldown: `5` days.
+- Oversupply thresholds: `200` for yield-1 crops and `600` for yield-3 crops.
 
 Current crop-product integration coverage:
 
