@@ -15,6 +15,7 @@ script = ExtResource("1_kb5vx")
 [node name="TitleLabel" type="Label" parent="." unique_id=573093706]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
 autowrap_mode = 2
 clip_text = true
 

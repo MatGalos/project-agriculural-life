@@ -55,8 +55,8 @@ func _apply_values() -> void:
 		return
 
 	icon_rect.texture = item_data.icon
-	name_label.text = item_data.display_name
-	amount_label.text = str(amount)
+	name_label.text = UIFormatHelper.display_product_name(item_data)
+	amount_label.text = "%dx" % amount
 
 
 func _gui_input(event: InputEvent) -> void:

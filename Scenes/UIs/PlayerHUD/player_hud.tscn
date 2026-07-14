@@ -17,6 +17,20 @@
 [sub_resource type="LabelSettings" id="LabelSettings_334lg"]
 font_size = 32
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hotbar_panel"]
+bg_color = Color(0.06, 0.07, 0.06, 0.88)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hotbar_slot"]
+bg_color = Color(0.08, 0.10, 0.08, 0.9)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [node name="PlayerHUD" type="CanvasLayer" unique_id=76956586 groups=["player_hud"]]
 script = ExtResource("1_p5k4q")
 player_inventory = ExtResource("2_ktytg")
@@ -58,7 +72,7 @@ offset_bottom = 44.0
 
 [node name="DateLabel" type="Label" parent="Root/DateTimeController/DateTimeContainer" unique_id=1312538155]
 layout_mode = 2
-text = "30th of Winter"
+text = "Winter 30, Year 1"
 horizontal_alignment = 1
 
 [node name="TimeLabel" type="Label" parent="Root/DateTimeController/DateTimeContainer" unique_id=1239664169]
@@ -86,7 +100,7 @@ color = Color(0.153, 0.153, 0.153, 1)
 layout_mode = 0
 offset_right = 112.0
 offset_bottom = 20.0
-text = "100$"
+text = "$100"
 horizontal_alignment = 2
 metadata/_edit_use_anchors_ = true
 
@@ -121,6 +135,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="MapController" type="Control" parent="Root" unique_id=3203391]
+visible = false
 anchors_preset = 0
 offset_right = 147.0
 offset_bottom = 153.0
@@ -155,6 +170,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hotbar_panel")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Root/QuickInventoryController/PanelContainer" unique_id=497413186]
 layout_mode = 2
@@ -162,6 +178,7 @@ layout_mode = 2
 [node name="Slot1" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=482116249]
 custom_minimum_size = Vector2(96, 64)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hotbar_slot")
 
 [node name="AmountLabel" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot1" unique_id=1036302836]
 layout_mode = 2
@@ -175,6 +192,7 @@ layout_mode = 2
 [node name="Slot2" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=768597355]
 custom_minimum_size = Vector2(96, 64)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hotbar_slot")
 
 [node name="AmountLabel" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot2" unique_id=1025412621]
 layout_mode = 2
@@ -188,6 +206,7 @@ layout_mode = 2
 [node name="Slot3" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=711113282]
 custom_minimum_size = Vector2(96, 64)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hotbar_slot")
 
 [node name="AmountLabel" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot3" unique_id=2024014200]
 layout_mode = 2
@@ -201,6 +220,7 @@ layout_mode = 2
 [node name="Slot4" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=141672993]
 custom_minimum_size = Vector2(96, 64)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hotbar_slot")
 
 [node name="AmountLabel" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot4" unique_id=1430704183]
 layout_mode = 2
@@ -214,6 +234,7 @@ layout_mode = 2
 [node name="Slot5" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=2027116879]
 custom_minimum_size = Vector2(96, 64)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hotbar_slot")
 
 [node name="AmountLabel" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot5" unique_id=1150460589]
 layout_mode = 2

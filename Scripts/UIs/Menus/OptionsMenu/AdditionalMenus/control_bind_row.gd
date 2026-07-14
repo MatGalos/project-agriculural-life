@@ -21,7 +21,7 @@ func refresh() -> void:
 		bind_button.text = "Unassigned"
 		return
 
-	bind_button.text = events[0].as_text()
+	bind_button.text = UIFormatHelper.input_event_text(events[0])
 
 
 func _ready() -> void:

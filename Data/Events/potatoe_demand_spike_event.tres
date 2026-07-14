@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1_script")
 event_id = "potatoe_demand_spike"
-display_name = "Potatoe Demand Spike"
-description = "Increased demand for potatoe pushes prices upward."
+display_name = "Potato Demand Spike"
+description = "Increased demand for potato pushes prices upward."
 duration_days = 2
 trigger_chance = 0.032
 target_item = ExtResource("2_item")

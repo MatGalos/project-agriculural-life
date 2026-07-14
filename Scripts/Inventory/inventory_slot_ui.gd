@@ -47,7 +47,7 @@ func set_slot(index: int, slot: InventorySlot) -> void:
 		icon_rect.visible = slot.item_data.icon != null
 
 	if amount_label and slot.amount > 1:
-		amount_label.text = str(slot.amount)
+		amount_label.text = "%dx" % slot.amount
 		amount_label.visible = true
 	elif amount_label:
 		amount_label.visible = false

@@ -1,10 +1,17 @@
-[gd_scene format=3 uid="uid://du4mrea3xpemq"]
+[gd_scene load_steps=5 format=3 uid="uid://du4mrea3xpemq"]
 
 [ext_resource type="Script" uid="uid://dxkmocsxsko1a" path="res://Scripts/UIs/Menus/OptionsMenu/optionsMenu.gd" id="1_4k0nn"]
 [ext_resource type="PackedScene" uid="uid://dgsmyf268o2ys" path="res://Scenes/UIs/Menus/OptionsMenu/AdditionalMenus/optionsTabContainer.tscn" id="2_euvqn"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4k0nn"]
 font_size = 63
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_options_panel"]
+bg_color = Color(0.06, 0.07, 0.06, 0.92)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="OptionsMenu" type="Control" unique_id=430597010 node_paths=PackedStringArray("button")]
 layout_mode = 3
@@ -32,6 +39,16 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="PanelBackdrop" type="PanelContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_options_panel")
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=415866341]
 layout_mode = 1

@@ -7,7 +7,7 @@
 script = ExtResource("1_ireye")
 crop_id = "lettuce"
 id = "lettuce_seed"
-display_name = "Lettuce seeds"
+display_name = "Lettuce Seeds"
 description = "Seeds used to grow lettuce."
 icon = ExtResource("2_icon")
 base_price = 8

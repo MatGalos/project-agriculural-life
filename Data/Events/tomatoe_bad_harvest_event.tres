@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1_script")
 event_id = "tomatoe_bad_harvest"
-display_name = "Tomatoe Bad Harvest"
-description = "Poor harvest conditions reduce tomatoe supply and increase prices."
+display_name = "Tomato Bad Harvest"
+description = "Poor harvest conditions reduce tomato supply and increase prices."
 duration_days = 3
 trigger_chance = 0.1
 cooldown_days = 5

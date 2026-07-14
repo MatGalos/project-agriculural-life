@@ -1,9 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqbytrpe2qhn3"]
+[gd_scene load_steps=4 format=3 uid="uid://bqbytrpe2qhn3"]
 
 [ext_resource type="Script" uid="uid://cgrci17feihj1" path="res://Scripts/UIs/Menus/LaunchMenu/AdditionalMenus/NewGamePanel.gd" id="1_swicm"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_new_game_title"]
 font_size = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_new_game_panel"]
+bg_color = Color(0.06, 0.07, 0.06, 0.94)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="NewGamePanel" type="Control" unique_id=535509941]
 layout_mode = 3
@@ -36,6 +43,7 @@ offset_right = 210.0
 offset_bottom = 190.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_new_game_panel")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=601806433]
 layout_mode = 2
@@ -82,4 +90,4 @@ custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 22
-text = "Back to menu"
+text = "Back to Menu"

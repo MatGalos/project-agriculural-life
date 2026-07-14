@@ -70,7 +70,7 @@ layout_mode = 2
 [node name="StartButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=657587983]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "Start the game"
+text = "Start Game"
 
 [node name="Separator3" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1793404344]
 layout_mode = 2
@@ -78,7 +78,7 @@ layout_mode = 2
 [node name="LoadButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=795951830]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "Load the game"
+text = "Load Game"
 
 [node name="Separator4" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=859619643]
 layout_mode = 2

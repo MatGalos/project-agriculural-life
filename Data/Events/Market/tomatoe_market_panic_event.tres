@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1")
 event_id = "tomatoe_market_panic"
-display_name = "Tomatoe Market Panic"
-description = "Uncertainty around tomatoe trading pushes the market downward."
+display_name = "Tomato Market Panic"
+description = "Uncertainty around tomato trading pushes the market downward."
 duration_days = 1
 trigger_chance = 0.02
 target_item = ExtResource("2")

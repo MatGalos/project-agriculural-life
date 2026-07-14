@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://datulgagyqbol" path="res://Scenes/UIs/PlayerHUD/Phone/WeatherApp/weather_panel.tscn" id="11_se1to"]
 [ext_resource type="PackedScene" uid="uid://beet0aeil50xy" path="res://Scenes/UIs/PlayerHUD/Phone/WeatherApp/weather_forecast_row.tscn" id="12_5upr8"]
 [ext_resource type="PackedScene" uid="uid://br8ir85avtkfg" path="res://Scenes/UIs/PlayerHUD/Phone/NewsApp/news_panel.tscn" id="13_0jn3t"]
+[ext_resource type="Theme" path="res://Scenes/UIs/PlayerHUD/Phone/FarmPhoneTheme.tres" id="14_theme"]
 
 [node name="PhonePanel" type="Control" unique_id=270439995]
 layout_mode = 3
@@ -28,6 +29,7 @@ offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
+theme = ExtResource("14_theme")
 script = ExtResource("1_hrd0b")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=229916539]
@@ -55,6 +57,7 @@ anchor_right = 1.0
 offset_top = 4.0
 offset_bottom = 17.0
 grow_horizontal = 2
+theme_type_variation = &"HeaderLabel"
 text = "FarmPhone"
 horizontal_alignment = 1
 
@@ -114,29 +117,34 @@ offset_bottom = 40.0
 [node name="News" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1519948762]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "news"
+theme_type_variation = &"HeaderButton"
+text = "News"
 
 [node name="StockMarket" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1428452633]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Stock app"
+theme_type_variation = &"HeaderButton"
+text = "Market"
 
 [node name="Shop" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1483380714]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "shop"
+theme_type_variation = &"HeaderButton"
+text = "Shop"
 
 [node name="Weather" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=688998947]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "weather"
+theme_type_variation = &"HeaderButton"
+text = "Weather"
 
 [node name="Storage" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=107771774]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"HeaderButton"
 text = "Storage"
 
 [node name="Sell" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1371647034]
 layout_mode = 2
-text = "Stock
-"
+theme_type_variation = &"HeaderButton"
+text = "Sell"

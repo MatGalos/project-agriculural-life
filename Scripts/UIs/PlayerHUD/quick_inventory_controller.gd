@@ -61,7 +61,7 @@ func refresh() -> void:
 			icon_rect.visible = inventory_slot.item_data.icon != null
 
 			if inventory_slot.amount > 1:
-				amount_label.text = str(inventory_slot.amount)
+				amount_label.text = "%dx" % inventory_slot.amount
 				amount_label.visible = true
 			else:
 				amount_label.visible = false

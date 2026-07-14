@@ -1,0 +1,29 @@
+[gd_resource type="Theme" load_steps=5 format=3]
+
+[ext_resource type="FontFile" path="res://Assets/Fonts/Lato/Lato-Regular.ttf" id="1_regular"]
+[ext_resource type="FontFile" path="res://Assets/Fonts/Lato/Lato-Bold.ttf" id="2_bold"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_farm_phone_panel"]
+bg_color = Color(0.06, 0.07, 0.06, 0.92)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_farm_phone_button"]
+bg_color = Color(0.08, 0.10, 0.08, 0.9)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[resource]
+default_font = ExtResource("1_regular")
+Label/fonts/font = ExtResource("1_regular")
+Button/fonts/font = ExtResource("1_regular")
+Button/styles/normal = SubResource("StyleBoxFlat_farm_phone_button")
+HeaderLabel/base_type = &"Label"
+HeaderLabel/fonts/font = ExtResource("2_bold")
+HeaderButton/base_type = &"Button"
+HeaderButton/fonts/font = ExtResource("2_bold")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_farm_phone_panel")

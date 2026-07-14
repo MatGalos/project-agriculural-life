@@ -55,17 +55,19 @@ func _update_slot_button(button: Button, slot: int) -> void:
 	var info := SaveManager.get_save_slot_info(slot)
 
 	if not bool(info.get("exists", false)):
-		button.text = "Slot %d\nEmpty" % slot
+		button.text = "Slot %d\nEmpty Slot" % slot
 		button.disabled = true
 		return
 
 	button.disabled = false
-	button.text = "Slot %d\n%s %d, Year %d\nMoney: %d$" % [
+	button.text = "Slot %d\n%s\nMoney: %s" % [
 		slot,
-		SaveManager.get_season_name_from_month(int(info["month"])),
-		int(info["day"]),
-		int(info["year"]),
-		int(info["money"])
+		UIFormatHelper.season_date(
+			SaveManager.get_season_name_from_month(int(info["month"])),
+			int(info["day"]),
+			int(info["year"])
+		),
+		UIFormatHelper.money_int(int(info["money"]))
 	]
 
 

@@ -15,7 +15,7 @@ extends Control
 func _ready() -> void:
 	add_to_group("main_menu")
 	var version = ProjectSettings.get_setting("application/config/version")
-	versionLabel.text = "version " + str(version)
+	versionLabel.text = "Version " + str(version)
 	startButton.button_down.connect(onStartButtonPressed)
 	loadButton.button_down.connect(onLoadButtonPressed)
 	optionsButton.button_down.connect(onOptionsButtonPressed)

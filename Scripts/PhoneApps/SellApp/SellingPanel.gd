@@ -71,9 +71,9 @@ func _on_commodity_prices_updated() -> void:
 
 			if item_data and CommodityMarketManager.has_commodity(item_data):
 				print(
-					"[SellingPanel] Refreshing %s sell price to %d$ at %s" % [
+					"[SellingPanel] Refreshing %s sell price to %s at %s" % [
 						item_data.display_name,
-						EconomyManager.get_sell_price(item_data),
+						UIFormatHelper.money_int(EconomyManager.get_sell_price(item_data)),
 						TimeManager.get_time_string()
 					]
 				)

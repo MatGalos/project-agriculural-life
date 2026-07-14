@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1_script")
 event_id = "potatoe_oversupply"
-display_name = "Potatoe Oversupply"
-description = "Too much potatoe on the market causes prices to fall."
+display_name = "Potato Oversupply"
+description = "Too much potato on the market causes prices to fall."
 duration_days = 2
 trigger_chance = 0.35
 cooldown_days = 5

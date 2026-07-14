@@ -41,7 +41,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5139036, 0, 5.5457916)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="HomeArea/well" unique_id=1719168196]
 script = ExtResource("2_8tr08")
-prompt_text = "E - Fill up water"
+prompt_text = "Press E to fill watering can."
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HomeArea/well/StaticBody3D" unique_id=559540065]
 shape = SubResource("CylinderShape3D_huwqc")
@@ -51,7 +51,7 @@ transform = Transform3D(1, 0, -1.7484555e-07, 0, 1, 0, 1.7484555e-07, 0, 1, 1.99
 
 [node name="StaticBody3D" type="StaticBody3D" parent="HomeArea/house" unique_id=1424777898]
 script = ExtResource("4_ojop3")
-prompt_text = "E - Enter house"
+prompt_text = "Press E to enter house."
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HomeArea/house/StaticBody3D" unique_id=1471593994]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -62,7 +62,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0015109, 0, -6.998237)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="HomeArea/Silo" unique_id=1857743202]
 script = ExtResource("6_6y6xk")
-prompt_text = "E - Check stock"
+prompt_text = "Press E to open Silo."
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HomeArea/Silo/StaticBody3D" unique_id=710056272]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)

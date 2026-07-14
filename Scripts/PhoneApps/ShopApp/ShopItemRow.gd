@@ -54,8 +54,8 @@ func _apply_values() -> void:
 	var price := EconomyManager.get_buy_price(item) * shop_item_data.amount_per_purchase
 
 	icon_rect.texture = item.icon
-	name_label.text = item.display_name
-	price_label.text = "%d$" % price
+	name_label.text = UIFormatHelper.display_seed_name(item)
+	price_label.text = UIFormatHelper.money_int(price)
 
 
 func _on_buy_pressed() -> void:

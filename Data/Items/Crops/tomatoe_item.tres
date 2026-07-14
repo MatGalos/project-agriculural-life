@@ -7,8 +7,8 @@
 script = ExtResource("1_h27up")
 crop_id = "tomatoe"
 id = "tomatoe"
-display_name = "Tomatoe"
-description = "Harvested tomatoe crop"
+display_name = "Tomato"
+description = "Harvested tomato crop"
 icon = ExtResource("2_icon")
 base_price = 13
 category = 0

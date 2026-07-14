@@ -32,7 +32,9 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Event-driven seed buy price modifiers, for example Spring Planting Boom.
 - Weather system with current weather, temperature, daily and phase forecasts, and rain/storm field watering.
 - Weather history tracks completed days for event requirements such as drought, heavy rain, and heatwave checks.
-- Phone menu with sell, shop, stock market, weather, and news apps.
+- Phone menu with sell, shop, market, weather, storage, and news apps.
+- Unified UI display formatting for money, season dates, market trends, weather names, product names, seed names, and interaction prompts.
+- Central HUD visibility modes hide crosshair, hotbar, prompts, status HUD, and notifications while blocking menus are open.
 - Bottom-left HUD news alerts show newly generated market-event news; multiple alerts can stack at once.
 - Save/load persistence with three save slots stored under `user://save_slot_%d.json`.
 - New game and load game menus for choosing the active save slot.
@@ -41,6 +43,17 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Editor farm-grid generator with stable tile IDs for save restoration.
 
 ## Changelog
+
+### Version 0.6
+- UI polish pass:
+  - Added `UIFormatHelper` for visible UI formatting, including money, market percentages, season dates, product/seed display names, market trends, weather names, news categories, and cleaned input labels.
+  - Unified visible FarmPhone app names to News, Market, Shop, Weather, Storage, and Sell.
+  - Standardized UI money, date, percentage, market status, product, seed, weather, and interaction prompt text formats.
+  - Added Lato typography to FarmPhone, phone apps, bottom-left notifications, and interaction prompts.
+  - Added centralized gameplay HUD visibility modes so pause, phone, inventory, and storage UI hide crosshair and unrelated HUD elements consistently.
+  - Kept the pause-menu blur effect, reduced its sampling offset, and added a subtle dark overlay plus clearer button states.
+  - Increased panel and card background opacity for FarmPhone, inventory, storage/silo, hotbar, options, new game, and load game UI.
+- Removed the old minimap placeholder behavior from visible gameplay HUD; no minimap has been reintroduced.
 
 ### Version 0.5
 - Expanded the market event system:

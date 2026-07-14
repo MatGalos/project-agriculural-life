@@ -5,7 +5,35 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_05kyi"]
 shader = ExtResource("2_lx4i1")
-shader_parameter/blurAmount = 3.0
+shader_parameter/blurAmount = 1.6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pause_button_normal"]
+bg_color = Color(0.08, 0.09, 0.105, 0.92)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pause_button_hover"]
+bg_color = Color(0.16, 0.18, 0.21, 0.96)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pause_button_pressed"]
+bg_color = Color(0.035, 0.04, 0.05, 0.98)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pause_button_disabled"]
+bg_color = Color(0.04, 0.045, 0.05, 0.7)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="PauseMenu" type="Control" unique_id=1779250105 node_paths=PackedStringArray("continueButton", "saveButton", "loadButton", "optionsButton", "saveAndQuitToMenu", "saveAndQuitToDesktop", "blurBg", "panel")]
 layout_mode = 3
@@ -33,6 +61,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.42)
 
 [node name="Panel" type="Control" parent="." unique_id=837144493]
 layout_mode = 1
@@ -63,6 +100,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=663459965]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
 theme_override_font_sizes/font_size = 60
 text = "Paused"
 horizontal_alignment = 1
@@ -81,46 +119,88 @@ alignment = 1
 layout_mode = 2
 
 [node name="ContinueButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1884860041]
+custom_minimum_size = Vector2(320, 44)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_pause_button_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pause_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pause_button_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pause_button_disabled")
 text = "Continue"
 
 [node name="Separator2" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=29916341]
 layout_mode = 2
 
 [node name="SaveButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=408290562]
+custom_minimum_size = Vector2(320, 44)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_pause_button_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pause_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pause_button_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pause_button_disabled")
 text = "Save"
 
 [node name="Separator3" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=34013420]
 layout_mode = 2
 
 [node name="LoadButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1294670980]
+custom_minimum_size = Vector2(320, 44)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_pause_button_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pause_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pause_button_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pause_button_disabled")
 text = "Load"
 
 [node name="Separator4" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=899424875]
 layout_mode = 2
 
 [node name="OptionsButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=335253849]
+custom_minimum_size = Vector2(320, 44)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_pause_button_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pause_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pause_button_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pause_button_disabled")
 text = "Options"
 
 [node name="Separator5" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=131647439]
 layout_mode = 2
 
 [node name="SaveAndQuitToMenuButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1935920013]
+custom_minimum_size = Vector2(320, 44)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 24
-text = "Save and quit to menu"
+theme_override_styles/normal = SubResource("StyleBoxFlat_pause_button_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pause_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pause_button_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pause_button_disabled")
+text = "Save and Quit to Menu"
 
 [node name="Separator6" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=170501703]
 layout_mode = 2
 
 [node name="SaveAndQuitToDesktopMenu" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=900244190]
+custom_minimum_size = Vector2(320, 44)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 24
-text = "Save and quit to desktop"
+theme_override_styles/normal = SubResource("StyleBoxFlat_pause_button_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pause_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pause_button_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_pause_button_disabled")
+text = "Save and Quit to Desktop"

@@ -1,7 +1,7 @@
 extends StaticBody3D
 class_name Interactable
 
-@export var prompt_text := "E - Interact"
+@export var prompt_text := "Press E to interact."
 
 func interact() -> void:
 	return
