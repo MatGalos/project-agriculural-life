@@ -98,14 +98,16 @@ func _update_prompt_label() -> void:
 	if not prompt_label:
 		return
 
+	var can_show_prompt := _can_show_gameplay_prompt()
+
 	if current_tool_prompt != "":
 		prompt_label.text = current_tool_prompt
-		prompt_label.visible = true
+		prompt_label.visible = can_show_prompt
 		return
 
 	if current_interactable:
 		prompt_label.text = current_interactable.get_prompt_text()
-		prompt_label.visible = true
+		prompt_label.visible = can_show_prompt
 	else:
 		prompt_label.text = ""
 		prompt_label.visible = false
@@ -137,3 +139,18 @@ func _is_storage_open() -> bool:
 func _is_any_game_menu_open() -> bool:
 	var player_hud := get_tree().get_first_node_in_group("player_hud") as PlayerHUD
 	return player_hud != null and player_hud.is_any_game_menu_open()
+
+
+func _can_show_gameplay_prompt() -> bool:
+	if gamemanager.isPaused:
+		return false
+
+	var player_hud := get_tree().get_first_node_in_group("player_hud") as PlayerHUD
+
+	if player_hud == null:
+		return true
+
+	if player_hud.has_method("is_gameplay_hud_visible"):
+		return player_hud.is_gameplay_hud_visible()
+
+	return not player_hud.is_any_game_menu_open()

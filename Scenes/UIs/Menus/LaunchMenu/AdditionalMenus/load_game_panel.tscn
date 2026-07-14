@@ -1,9 +1,16 @@
-[gd_scene format=3 uid="uid://dnd8qaa681pbk"]
+[gd_scene load_steps=4 format=3 uid="uid://dnd8qaa681pbk"]
 
 [ext_resource type="Script" uid="uid://cghq0a27cyv1m" path="res://Scripts/UIs/Menus/LaunchMenu/AdditionalMenus/LoadGamePanel.gd" id="1_load"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_load_game_title"]
 font_size = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_load_game_panel"]
+bg_color = Color(0.06, 0.07, 0.06, 0.94)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="LoadGamePanel" type="Control" unique_id=189585165]
 layout_mode = 3
@@ -36,6 +43,7 @@ offset_right = 230.0
 offset_bottom = 220.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_load_game_panel")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1519720826]
 layout_mode = 2
@@ -82,4 +90,4 @@ custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 22
-text = "Back to menu"
+text = "Back to Menu"

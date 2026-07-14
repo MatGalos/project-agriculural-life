@@ -29,7 +29,8 @@ theme_override_constants/separation = 4
 
 [node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=241651815]
 layout_mode = 2
-text = "Commodity Exchange"
+theme_type_variation = &"HeaderLabel"
+text = "Market"
 
 [node name="StatusLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=996340973]
 layout_mode = 2
@@ -53,6 +54,7 @@ size_flags_horizontal = 3
 
 [node name="HistoryTitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ContentScroll/ContentContainer" unique_id=2062424749]
 layout_mode = 2
+theme_type_variation = &"HeaderLabel"
 text = "Price History"
 
 [node name="HistoryLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/ContentScroll/ContentContainer" unique_id=816168539]

@@ -29,6 +29,7 @@ theme_override_constants/separation = 4
 
 [node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=730179946]
 layout_mode = 2
+theme_type_variation = &"HeaderLabel"
 text = "Sell from Silo"
 
 [node name="ItemsScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]

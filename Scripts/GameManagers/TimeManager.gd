@@ -90,11 +90,11 @@ func get_season_name() -> String:
 			return "Unknown"
 
 func get_date_string() -> String:
-	return "%s of %s, Year %d" % [
-		get_ordinal_day(),
+	return UIFormatHelper.season_date(
 		get_season_name(),
+		current_day,
 		current_year
-	]
+	)
 
 func get_day_progress() -> float:
 	return float(current_minute_of_day) / float(GAME_MINUTES_PER_DAY)

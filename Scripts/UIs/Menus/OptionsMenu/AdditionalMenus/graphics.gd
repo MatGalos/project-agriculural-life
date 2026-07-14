@@ -63,6 +63,7 @@ func _load_values_from_settings() -> void:
 	resolution_option.select(_find_resolution_index(GraphicsSettingsManager.resolution))
 	interface_scale_option.select(_find_interface_scale_index(GraphicsSettingsManager.interface_scale))
 	fullscreen_check.button_pressed = GraphicsSettingsManager.fullscreen
+	_update_fullscreen_text(GraphicsSettingsManager.fullscreen)
 	_is_loading_values = false
 
 
@@ -103,7 +104,13 @@ func _on_interface_scale_selected(index: int) -> void:
 
 
 func _on_fullscreen_toggled(is_fullscreen: bool) -> void:
+	_update_fullscreen_text(is_fullscreen)
+
 	if _is_loading_values:
 		return
 
 	GraphicsSettingsManager.set_fullscreen(is_fullscreen)
+
+
+func _update_fullscreen_text(is_fullscreen: bool) -> void:
+	fullscreen_check.text = "Enabled" if is_fullscreen else "Disabled"

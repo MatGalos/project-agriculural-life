@@ -7,7 +7,7 @@
 script = ExtResource("1_l6ore")
 crop_id = "wheat"
 id = "wheat_seed"
-display_name = "Wheat seeds"
+display_name = "Wheat Seeds"
 description = "Seeds used to grow wheat."
 icon = ExtResource("1_ocsbe")
 base_price = 5

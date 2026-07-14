@@ -1,7 +1,14 @@
-[gd_scene format=3 uid="uid://cb3qefv5afyy6"]
+[gd_scene load_steps=4 format=3 uid="uid://cb3qefv5afyy6"]
 
 [ext_resource type="Script" uid="uid://djx0ewvdb4b3d" path="res://Scripts/UIs/PlayerHUD/storage_panel.gd" id="1_cnyto"]
 [ext_resource type="Script" path="res://Scripts/Storage/StorageTransferDropTarget.gd" id="2_j7flx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_storage_panel"]
+bg_color = Color(0.06, 0.07, 0.06, 0.93)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="StoragePanel" type="Control" unique_id=758351012]
 layout_mode = 3
@@ -27,6 +34,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_storage_panel")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1082354511]
 layout_mode = 2

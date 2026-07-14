@@ -3,7 +3,7 @@ class_name HouseInteractable
 
 
 func get_prompt_text() -> String:
-	return "E - Sleep"
+	return "Press E to sleep."
 
 
 func interact() -> void:

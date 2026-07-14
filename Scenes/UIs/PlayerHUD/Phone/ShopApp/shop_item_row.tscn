@@ -22,6 +22,7 @@ stretch_mode = 5
 [node name="NameLabel" type="Label" parent="." unique_id=1535635075]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
 mouse_filter = 2
 
 [node name="PriceLabel" type="Label" parent="." unique_id=1091071158]

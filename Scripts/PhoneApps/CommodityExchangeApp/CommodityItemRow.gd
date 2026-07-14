@@ -55,38 +55,29 @@ func _apply_values() -> void:
 		return
 
 	icon_rect.texture = commodity_data.item_data.icon
-	name_label.text = commodity_data.item_data.display_name
-	price_label.text = "%d$" % int(round(commodity_data.current_price))
-	trend_label.text = _get_trend_text(commodity_data)
+	name_label.text = UIFormatHelper.display_product_name(commodity_data.item_data)
+	price_label.text = UIFormatHelper.money_float(commodity_data.current_price)
+	trend_label.text = UIFormatHelper.display_market_trend(commodity_data.trend)
 	change_label.text = _get_change_text(commodity_data)
 
 
 func _get_trend_text(commodity: CommodityData) -> String:
-	match commodity.trend:
-		CommodityData.MarketTrend.BEARISH:
-			return "Bearish"
-		CommodityData.MarketTrend.BULLISH:
-			return "Bullish"
-		_:
-			return "Neutral"
+	return UIFormatHelper.display_market_trend(commodity.trend)
 
 
 func _get_change_text(commodity: CommodityData) -> String:
 	if commodity.price_history.size() < 2:
-		return "0%"
+		return UIFormatHelper.percent(0.0)
 
 	var previous_price := commodity.price_history[commodity.price_history.size() - 2]
 	var current_price := commodity.current_price
 
 	if previous_price <= 0:
-		return "0%"
+		return UIFormatHelper.percent(0.0)
 
 	var change := ((current_price - previous_price) / previous_price) * 100.0
 
-	if change >= 0:
-		return "+%.2f%%" % change
-
-	return "%.2f%%" % change
+	return UIFormatHelper.percent(change)
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:

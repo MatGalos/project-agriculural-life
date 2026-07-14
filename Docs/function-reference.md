@@ -746,6 +746,24 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 | `func _on_money_changed(_new_amount: int) -> void:` | Handles the 'on money changed' signal callback. |
 | `func _update_money_ui() -> void:` | Updates update money ui from current data. |
 
+## `Scripts/UIs/UIFormatHelper.gd`
+
+RefCounted static helper only. It formats visible UI text without changing gameplay IDs, save data, market data, or economy values.
+
+| Function | Description |
+| --- | --- |
+| `static func money_int(amount: int) -> String:` | Formats whole-money UI values as `$110`. |
+| `static func money_float(amount: float) -> String:` | Formats market/history prices with two decimals, for example `$33.00`. |
+| `static func money_each(amount: int) -> String:` | Formats per-item prices, for example `$12 each`. |
+| `static func percent(value: float) -> String:` | Formats already-percent values as `+7.04%`, `-2.51%`, or `0.00%`. |
+| `static func season_date(season: Variant, day: int, year: int) -> String:` | Formats seasonal dates as `Spring 3, Year 1`. |
+| `static func display_product_name(value: Variant) -> String:` | Converts item resources or technical product IDs to visible product names. |
+| `static func display_seed_name(value: Variant) -> String:` | Converts seed resources or seed IDs to visible seed names. |
+| `static func display_market_trend(trend: Variant) -> String:` | Converts trend enums or strings to `Bullish`, `Bearish`, or `Neutral`. |
+| `static func display_weather_name(value: Variant) -> String:` | Converts weather resources, patterns, or IDs to visible weather names. |
+| `static func display_news_category(category: String) -> String:` | Converts news category IDs to display labels. |
+| `static func input_event_text(event: InputEvent) -> String:` | Converts input event text to friendlier labels, including removing ` - Physical`. |
+
 ## `Scripts/UIs/PlayerHUD/quick_inventory_controller.gd`
 
 | Function | Description |

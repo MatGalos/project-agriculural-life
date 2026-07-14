@@ -57,9 +57,9 @@ func _apply_values() -> void:
 		return
 
 	icon_rect.texture = item_data.icon
-	name_label.text = item_data.display_name
-	amount_label.text = "x%d" % amount
-	price_label.text = "%d$ each" % EconomyManager.get_sell_price(item_data)
+	name_label.text = UIFormatHelper.display_product_name(item_data)
+	amount_label.text = "Quantity: %d" % amount
+	price_label.text = "Price: %s" % UIFormatHelper.money_each(EconomyManager.get_sell_price(item_data))
 
 
 func _on_sell_one_pressed() -> void:

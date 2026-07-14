@@ -7,8 +7,8 @@
 script = ExtResource("1_qv4lj")
 crop_id = "tomatoe"
 id = "tomatoe_seed"
-display_name = "Tomatoe seeds"
-description = "Seeds used to grow tomatoe."
+display_name = "Tomato Seeds"
+description = "Seeds used to grow tomato."
 icon = ExtResource("2_icon")
 base_price = 10
 category = 1

@@ -87,7 +87,7 @@ theme_override_constants/separation = 8
 
 [node name="ResetToDefault" type="Button" parent="TabContainer/Controls/MarginContainer/VBoxContainer" unique_id=1834789366]
 layout_mode = 2
-text = "Reset to default"
+text = "Reset to Defaults"
 
 [node name="Graphics" type="TabBar" parent="TabContainer" unique_id=1796361035]
 visible = false
@@ -130,7 +130,7 @@ theme_override_constants/separation = 8
 
 [node name="InterfaceScaleLabel" type="Label" parent="TabContainer/Graphics/MarginContainer/VBoxContainer/InterfaceScaleSection"]
 layout_mode = 2
-text = "Interface scale"
+text = "Interface Scale"
 
 [node name="InterfaceScaleOption" type="OptionButton" parent="TabContainer/Graphics/MarginContainer/VBoxContainer/InterfaceScaleSection"]
 layout_mode = 2

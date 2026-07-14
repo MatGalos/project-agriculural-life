@@ -23,12 +23,14 @@ func setup(news_item: NewsItem) -> void:
 	if not is_node_ready():
 		await ready
 
-	title_label.text = news_item.title
-	date_label.text = "Day %d, Month %d, Year %d | %s" % [
-		news_item.day,
-		news_item.month,
-		news_item.year,
-		news_item.category
+	title_label.text = UIFormatHelper.display_product_name(news_item.title)
+	date_label.text = "%s — %s" % [
+		UIFormatHelper.season_date(
+			SaveManager.get_season_name_from_month(news_item.month),
+			news_item.day,
+			news_item.year
+		),
+		UIFormatHelper.display_news_category(news_item.category)
 	]
 	body_label.text = news_item.body
 

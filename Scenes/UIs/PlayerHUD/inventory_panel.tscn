@@ -1,8 +1,15 @@
-[gd_scene format=3 uid="uid://6ki8w20olwhc"]
+[gd_scene load_steps=5 format=3 uid="uid://6ki8w20olwhc"]
 
 [ext_resource type="Script" uid="uid://bhwxedvl3euva" path="res://Scripts/UIs/PlayerHUD/inventory_panel.gd" id="1_yn2sk"]
 [ext_resource type="PackedScene" uid="uid://ccego0c5l0tuu" path="res://Scenes/UIs/PlayerHUD/Inventory/inventory_slot_ui.tscn" id="2_cslww"]
 [ext_resource type="Resource" uid="uid://exkyhl0jf7gm" path="res://Data/Inventory/player_inventory.tres" id="3_n3at5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inventory_panel"]
+bg_color = Color(0.06, 0.07, 0.06, 0.92)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="InventoryPanel" type="Control" unique_id=1308746992]
 layout_mode = 3
@@ -30,6 +37,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_inventory_panel")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=711844938]
 layout_mode = 2
@@ -44,7 +52,7 @@ theme_override_constants/separation = 12
 
 [node name="Inventory" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=310859338]
 layout_mode = 2
-text = "Inventory"
+text = "Player Inventory"
 
 [node name="SlotsGrid" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1974687077]
 layout_mode = 2

@@ -3,7 +3,7 @@ class_name SiloInteractable
 
 
 func get_prompt_text() -> String:
-	return "E - Open Silo"
+	return "Press E to open Silo."
 
 
 func interact() -> void:

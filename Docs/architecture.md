@@ -78,6 +78,13 @@ Rules:
 - Options and load game opened from pause keep the pause blur visible and hide the pause button panel.
 - Load game is moved to the front when opened so the pause blur remains behind it and cannot block slot buttons.
 
+Pause menu visuals are intentionally local to `Scenes/UIs/Menus/PauseMenu/pauseMenu.tscn` and `Shaders/UIs/Menus/PauseMenu/pauseMenu.gdshader`:
+
+- The game world remains visible behind pause through a screen-texture blur.
+- The blur should stay subtle enough to avoid a doubled-image effect.
+- A full-screen dark overlay may improve contrast, but large opaque foreground blocks should be avoided unless they are part of the actual menu controls.
+- Save/load button behavior belongs to `pauseMenu.gd` and should not be changed when tuning blur or panel styling.
+
 ## Inventory Data
 
 `InventoryData` is a `Resource` containing an array of `InventorySlot` resources.
@@ -354,18 +361,43 @@ Current apps:
 
 - Sell app: sells storage items and uses dynamic commodity prices where available.
 - Shop app: buys items through configured shop data and `MoneyManager`.
-- Stock market app: displays commodity prices, market status, and recent history.
+- Market app: displays commodity prices, market status, trends, percentage changes, and recent history. Internal scene and script names may still use stock/commodity terminology.
+- Storage app: displays stored items when present in the phone flow.
 - Weather app: displays current weather, current-day phase rows, and next-day forecast rows.
 - News app: displays latest `NewsManager` entries in a vertical scroll list.
 
 Rules:
 
 - Phone, inventory, and storage panels are mutually exclusive from `PlayerHUD`.
+- Visible phone app labels should use `News`, `Market`, `Shop`, `Weather`, `Storage`, and `Sell`.
 - Each app owns its own `refresh()` method.
 - App panels should connect to relevant manager signals only once.
 - App row scenes should be passed through exported `row_scene` fields, not hardcoded in scripts.
 - Phone app content that can grow beyond the phone frame should sit inside a vertical `ScrollContainer`.
 - Current scrollable phone areas are news entries, shop items, sellable silo items, commodity list/history, and weather forecast rows.
+- FarmPhone typography and basic panel styles are centralized in `Scenes/UIs/PlayerHUD/Phone/FarmPhoneTheme.tres`. Keep this theme small; do not migrate unrelated game menus into it.
+
+## UI Formatting And Panel Styling
+
+`Scripts/UIs/UIFormatHelper.gd` owns visible formatting helpers for UI text. It does not change gameplay IDs, save data, prices, market state, or economy logic.
+
+Use it for:
+
+- Money: `$110`, `$33.00`, `$12 each`.
+- Market percentages: `+7.04%`, `-2.51%`, `0.00%`.
+- Season dates: `Spring 3, Year 1`.
+- Display names for product and seed IDs such as `potatoe`, `tomatoe`, and `wheat_seed`.
+- Market trends: `Bullish`, `Bearish`, `Neutral`.
+- Weather display names: `Sunny`, `Cloudy`, `Rainy`, `Stormy`, `Mixed`, `Snowy`, `Foggy`.
+- News categories and cleaned input labels such as removing ` - Physical`.
+
+Panel styling rules:
+
+- Main gameplay UI panels should use dark farm-themed `StyleBoxFlat` backgrounds with alpha around `0.88-0.95`.
+- Inner cards, slots, and rows should stay in the `0.85-0.95` alpha range when they need a stable reading surface.
+- Modal overlays should remain lower opacity, generally `0.45-0.65`.
+- Avoid pure low-alpha black debug-looking panels. Prefer dark green/brown/black tones such as `Color(0.06, 0.07, 0.06, 0.92)`.
+- Do not use panel-opacity polish as a reason to change anchors, layout, app logic, inventory logic, storage logic, save/load behavior, or economy values.
 
 ## Inventory UI
 
@@ -377,12 +409,15 @@ Rules:
 - Drag payloads use `{ "type": "inventory_slot", "slot_index": index }` to avoid accepting unrelated UI drags.
 - Icons are displayed at a fixed UI size and do not resize slots based on source texture size.
 - Watering-can slots show a water-fill bar and refresh from `ToolManager.watering_can_changed`.
+- Inventory panel and slot opacity are local scene styles. Keep future inventory visual changes independent from inventory data and drag/drop behavior.
 
 ## Hotbar UI
 
 `QuickInventoryController` renders the mapped inventory slots and refreshes when inventory data changes. It also refreshes after inventory drag and drop to keep hotbar icons synchronized with slot movement.
 
 Watering-can bars are created under each slot icon at runtime. They are intentionally attached to `IconRect`, not the slot `PanelContainer`, so the bar does not resize or darken the whole hotbar slot.
+
+Hotbar panel and slot backgrounds are local scene styles in `player_hud.tscn`. Changing their opacity must not affect `HotbarData`, selected-slot state, or inventory mapping.
 
 ## Player HUD
 
@@ -393,6 +428,14 @@ Watering-can bars are created under each slot icon at runtime. They are intentio
 - Closing either panel restores mouse capture only if the game is active and not paused.
 - Storage/silo UI uses a fixed-size panel with separate vertical scroll areas for silo contents and player inventory contents.
 - Storage item rows are added under the scroll content containers; drag-and-drop still targets the storage and inventory columns.
+
+HUD visibility modes:
+
+- Gameplay shows crosshair, hotbar, date/time, money, prompts when valid, and gameplay notifications.
+- Pause hides crosshair, prompt, hotbar, date/time, money, and notifications.
+- Phone hides crosshair, prompt, hotbar, date/time, and money.
+- Inventory hides crosshair, prompt, hotbar, date/time, money, and notifications.
+- Storage hides crosshair, prompt, hotbar, date/time, money, and notifications.
 
 The current starting inventory is initialized in `PlayerHUD._setup_starting_inventory()` for new sessions. Save loading replaces inventory and hotbar state through `SaveManager`.
 

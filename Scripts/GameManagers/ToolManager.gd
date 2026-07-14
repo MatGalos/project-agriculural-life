@@ -66,7 +66,7 @@ func get_tool_prompt_for_target(target: Node) -> String:
 
 	if item is SeedItemData:
 		if tile.can_plant():
-			return "LPM - Plant " + item.display_name
+			return "Press Left Mouse Button to plant %s." % UIFormatHelper.display_seed_name(item)
 		return ""
 
 	if item is ToolItemData:
@@ -189,13 +189,13 @@ func _get_tool_item_prompt(tile: FarmTile, tool: ToolItemData) -> String:
 	match tool.tool_type:
 		ToolItemData.ToolType.HOE:
 			if tile.current_state == FarmTile.TileState.GRASS:
-				return "LPM - Plow"
+				return "Press Left Mouse Button to plow."
 		ToolItemData.ToolType.WATERING_CAN:
 			if tile.current_state == FarmTile.TileState.PLOWED and watering_can_water > 0:
-				return "LPM - Water"
+				return "Press Left Mouse Button to water."
 		ToolItemData.ToolType.SCYTHE:
 			if tile.is_crop_ready():
-				return "LPM - Harvest " + tile.get_crop_display_name()
+				return "Press Left Mouse Button to harvest %s." % UIFormatHelper.display_product_name(tile.get_crop_display_name())
 
 	return ""
 

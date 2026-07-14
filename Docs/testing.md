@@ -236,5 +236,20 @@ Good next targets:
 - `WeatherManager` phase forecast generation with real `WeatherDayPatternData` resources.
 - Menu and HUD panel exclusivity rules in `PlayerHUD`.
 - Visual/UI verification for stacked bottom-left HUD event/news alerts.
+- Visual verification for UI panel opacity in Inventory, FarmPhone apps, Storage/Silo, Options, New Game, Load Game, and Pause Menu.
+- Manual regression pass for HUD visibility modes: gameplay, pause, phone, inventory, and storage.
+- Manual pass for UI formatting consistency in money, dates, market percentages, product/seed names, weather names, input labels, and interaction prompts.
 
 For UI-heavy behavior, prefer small logic tests around panel state and signal connections before adding full scene interaction tests.
+
+## Manual UI Polish Checklist
+
+Run this checklist in Godot after UI polish changes, especially when no screenshot-based test exists:
+
+1. Start gameplay and verify that crosshair, hotbar, date/time, money, interaction prompts, and gameplay notifications appear only in normal gameplay.
+2. Open Pause Menu. Confirm the world remains visible behind the blur, the blur is not doubled, the dark overlay disappears after closing, and the HUD is hidden.
+3. Open FarmPhone and each app: News, Market, Shop, Weather, Storage, and Sell. Confirm labels use the display formatting helpers and panel backgrounds keep text readable.
+4. Open Inventory and Storage/Silo. Confirm panels and slots are readable against bright and dark world backgrounds.
+5. Open Options, New Game, and Load Game from their supported contexts. Confirm the panel background remains readable when the full-screen background is transparent behind pause.
+6. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting.
+7. Repeat the UI pass at 1280x720, 1920x1080, and 2560x1440.

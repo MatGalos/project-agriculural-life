@@ -49,9 +49,9 @@ func _update_status() -> void:
 	var hour := TimeManager.get_hour()
 
 	if hour >= 9 and hour <= 17:
-		status_label.text = "Market: OPEN"
+		status_label.text = "Market: Open"
 	else:
-		status_label.text = "Market: CLOSED"
+		status_label.text = "Market: Closed"
 
 func _on_commodity_selected(commodity: CommodityData) -> void:
 	selected_commodity = commodity
@@ -64,7 +64,7 @@ func _update_history(commodity: CommodityData) -> void:
 		history_label.text = "No data"
 		return
 
-	history_title_label.text = "%s Price History" % commodity.item_data.display_name
+	history_title_label.text = "%s Price History" % UIFormatHelper.display_product_name(commodity.item_data)
 
 	if commodity.price_history.is_empty():
 		history_label.text = "No data"
@@ -81,9 +81,9 @@ func _update_history(commodity: CommodityData) -> void:
 		if i < commodity.price_history_labels.size():
 			label = commodity.price_history_labels[i]
 
-		lines.append("%s - %.2f$" % [
+		lines.append("%s - %s" % [
 			label,
-			float(history[i])
+			UIFormatHelper.money_float(float(history[i]))
 		])
 
 	history_label.text = "\n".join(lines)

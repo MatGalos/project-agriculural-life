@@ -29,6 +29,7 @@ theme_override_constants/separation = 4
 
 [node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1918302909]
 layout_mode = 2
+theme_type_variation = &"HeaderLabel"
 text = "Weather"
 
 [node name="TodayLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1402723343]

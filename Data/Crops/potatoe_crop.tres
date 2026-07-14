@@ -12,7 +12,7 @@
 [resource]
 script = ExtResource("1_yshcl")
 crop_id = "potatoe"
-display_name = "Potatoe"
+display_name = "Potato"
 seed_item = ExtResource("4_qp81e")
 harvest_item = ExtResource("1_h7w6y")
 seeded_scene = ExtResource("5_v4ck7")

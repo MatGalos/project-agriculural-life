@@ -23,8 +23,8 @@ func refresh() -> void:
 
 func _update_today() -> void:
 	today_label.text = "Today - %s\nCurrent: %s, %s\n" % [
-		WeatherManager.get_current_day_pattern_name(),
-		WeatherManager.get_current_weather_name(),
+		UIFormatHelper.display_weather_name(WeatherManager.get_current_day_pattern_name()),
+		UIFormatHelper.display_weather_name(WeatherManager.get_current_weather_name()),
 		WeatherManager.get_current_temperature_string()
 	]
 
@@ -39,6 +39,7 @@ func _update_forecast() -> void:
 
 	var weekly_title := Label.new()
 	weekly_title.text = "\nNext Days"
+	weekly_title.theme_type_variation = &"HeaderLabel"
 	forecast_container.add_child(weekly_title)
 
 	if row_scene == null:

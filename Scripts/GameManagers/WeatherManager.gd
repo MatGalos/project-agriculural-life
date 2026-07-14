@@ -549,7 +549,7 @@ func get_phase_forecast_text(phase_data: WeatherPhaseData) -> String:
 
 	return "%s: %s, %d°C, Rain: %d%%" % [
 		get_day_phase_name(phase_data.phase),
-		phase_data.weather.display_name,
+		UIFormatHelper.display_weather_name(phase_data.weather),
 		phase_data.temperature,
 		phase_data.rain_chance
 	]

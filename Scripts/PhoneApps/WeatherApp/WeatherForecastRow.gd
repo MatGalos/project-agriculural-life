@@ -20,11 +20,11 @@ func setup(
 		day_label.text = "Day +%d" % day_offset
 
 	if pattern != null:
-		weather_label.text = pattern.display_name
+		weather_label.text = UIFormatHelper.display_weather_name(pattern)
 	elif weather == null:
 		weather_label.text = "Unknown"
 	else:
-		weather_label.text = weather.display_name
+		weather_label.text = UIFormatHelper.display_weather_name(weather)
 
 	temperature_label.text = "%d°C" % temperature
 	rain_label.text = "Rain: %d%%" % rain_chance

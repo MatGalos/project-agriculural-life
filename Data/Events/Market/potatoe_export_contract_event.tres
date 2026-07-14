@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1")
 event_id = "potatoe_export_contract"
-display_name = "Potatoe Export Contract"
-description = "A regional buyer signs an export contract for potatoe."
+display_name = "Potato Export Contract"
+description = "A regional buyer signs an export contract for potato."
 duration_days = 3
 trigger_chance = 0.01
 target_item = ExtResource("2")
