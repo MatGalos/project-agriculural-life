@@ -37,8 +37,9 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Central HUD visibility modes hide crosshair, hotbar, prompts, status HUD, and notifications while blocking menus are open.
 - Bottom-left HUD news alerts show newly generated market-event news; multiple alerts can stack at once.
 - Save/load persistence with three save slots stored under `user://save_slot_%d.json`.
-- New game and load game menus for choosing the active save slot.
-- Pause menu save actions for saving the current slot, saving and returning to the main menu, or saving and quitting to desktop.
+- New game and load game menus for choosing the active save slot, with save slots presented as paper cards.
+- New game overwrite confirmation for occupied save slots.
+- Pause menu save actions for saving the current slot, saving and returning to the main menu, or saving and quitting to desktop, each with confirmation before writing.
 - Basic interactables for well, house, and silo prompts.
 - Editor farm-grid generator with stable tile IDs for save restoration.
 
@@ -46,6 +47,12 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 
 ### Version 0.6
 - UI polish pass:
+  - Reworked Main Menu, Pause Menu, Options, New Game, and Load Game around a shared wooden-board menu style.
+  - Replaced dark rectangular menu buttons with transparent text-style buttons using black normal text and white hover/pressed text.
+  - Reworked Options from a tabbed layout into a root segment list with Sound, Controls, Graphics, and Feedback submenus.
+  - Added custom Options controls styling, including menu-style dropdowns, a square fullscreen checkbox, and a black line scroll indicator for Controls.
+  - Reworked New Game and Load Game save slots into light beige paper-card buttons with save summaries and subtle hover states.
+  - Added overwrite confirmation for New Game occupied slots and save/quit confirmations in Pause Menu.
   - Added `UIFormatHelper` for visible UI formatting, including money, market percentages, season dates, product/seed display names, market trends, weather names, news categories, and cleaned input labels.
   - Unified visible FarmPhone app names to News, Market, Shop, Weather, Storage, and Sell.
   - Standardized UI money, date, percentage, market status, product, seed, weather, and interaction prompt text formats.

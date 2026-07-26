@@ -236,7 +236,8 @@ Good next targets:
 - `WeatherManager` phase forecast generation with real `WeatherDayPatternData` resources.
 - Menu and HUD panel exclusivity rules in `PlayerHUD`.
 - Visual/UI verification for stacked bottom-left HUD event/news alerts.
-- Visual verification for UI panel opacity in Inventory, FarmPhone apps, Storage/Silo, Options, New Game, Load Game, and Pause Menu.
+- Visual verification for UI panel opacity in Inventory, FarmPhone apps, and Storage/Silo.
+- Visual verification for wooden menu panels, text-style menu buttons, paper save-slot cards, Options submenus, custom Options scroll/checkbox/dropdown controls, and save/overwrite confirmation popups.
 - Manual regression pass for HUD visibility modes: gameplay, pause, phone, inventory, and storage.
 - Manual pass for UI formatting consistency in money, dates, market percentages, product/seed names, weather names, input labels, and interaction prompts.
 
@@ -247,9 +248,11 @@ For UI-heavy behavior, prefer small logic tests around panel state and signal co
 Run this checklist in Godot after UI polish changes, especially when no screenshot-based test exists:
 
 1. Start gameplay and verify that crosshair, hotbar, date/time, money, interaction prompts, and gameplay notifications appear only in normal gameplay.
-2. Open Pause Menu. Confirm the world remains visible behind the blur, the blur is not doubled, the dark overlay disappears after closing, and the HUD is hidden.
+2. Open Pause Menu. Confirm the world remains visible behind the blur, the blur is not doubled, the dark overlay disappears after closing, the HUD is hidden, and Save / Save and Quit actions show confirmation popups before writing.
 3. Open FarmPhone and each app: News, Market, Shop, Weather, Storage, and Sell. Confirm labels use the display formatting helpers and panel backgrounds keep text readable.
 4. Open Inventory and Storage/Silo. Confirm panels and slots are readable against bright and dark world backgrounds.
-5. Open Options, New Game, and Load Game from their supported contexts. Confirm the panel background remains readable when the full-screen background is transparent behind pause.
-6. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting.
-7. Repeat the UI pass at 1280x720, 1920x1080, and 2560x1440.
+5. Open Options from Main Menu and Pause Menu. Confirm the root segment list opens Sound, Controls, Graphics, and Feedback submenus; `Back to Options`, root `Back`, and Escape return to the correct previous state.
+6. In Options, verify Graphics dropdown popups, the square fullscreen checkbox, and the Controls scroll line match the wooden menu style.
+7. Open New Game and Load Game from their supported contexts. Confirm wooden panels, paper save-slot cards, empty/occupied slot labels, disabled empty load slots, and occupied-slot overwrite confirmation in New Game.
+8. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting.
+9. Repeat the UI pass at 1280x720, 1920x1080, and 2560x1440.

@@ -630,9 +630,16 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 
 | Function | Description |
 | --- | --- |
-| `func _ready() -> void:` | Connects slot buttons and the back button to panel actions. |
+| `func _ready() -> void:` | Connects slot buttons, the back button, and overwrite-confirmation buttons to panel actions. |
+| `func _notification(what: int) -> void:` | Refreshes visible save-slot labels when the panel becomes visible. |
+| `func refresh() -> void:` | Refreshes new-game slot cards from `SaveManager.get_save_slot_info()`. |
+| `func _update_slot_button(button: Button, slot: int) -> void:` | Updates one new-game slot card with empty or existing-save summary text. |
 | `func _start_slot(slot: int) -> void:` | Starts a new game in the selected save slot, resets that slot, and changes to the gameplay scene. |
 | `func _on_back_pressed() -> void:` | Returns from the new game slot picker to the main menu. |
+| `func _on_slot_pressed(slot: int) -> void:` | Starts an empty slot immediately or opens overwrite confirmation for an occupied slot. |
+| `func _show_overwrite_confirmation(slot: int) -> void:` | Shows the local overwrite prompt for the selected occupied slot. |
+| `func _hide_overwrite_confirmation() -> void:` | Hides the overwrite prompt and clears the pending slot. |
+| `func _on_overwrite_confirmed() -> void:` | Starts a new game in the pending slot after overwrite confirmation. |
 
 ## `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/control_bind_row.gd`
 
@@ -655,29 +662,84 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 | `func _start_waiting_for_action(action_name: String) -> void:` | Handles start waiting for action behavior. |
 | `func _notification(what: int) -> void:` | Handles notification behavior. |
 
+## `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/graphics.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Styles graphics controls, builds dropdown options, loads current settings, and connects setting callbacks. |
+| `func _build_resolution_options() -> void:` | Populates the resolution dropdown with supported presets and metadata. |
+| `func _build_interface_scale_options() -> void:` | Populates the interface-scale dropdown with supported scale labels and metadata. |
+| `func _load_values_from_settings() -> void:` | Selects current settings from `GraphicsSettingsManager` without reapplying them. |
+| `func _find_resolution_index(target_resolution: Vector2i) -> int:` | Finds the dropdown index for a saved resolution, falling back to 1080p. |
+| `func _find_interface_scale_index(target_interface_scale: String) -> int:` | Finds the dropdown index for a saved interface scale, falling back to Medium. |
+| `func _on_resolution_selected(index: int) -> void:` | Applies a selected resolution through `GraphicsSettingsManager`. |
+| `func _on_interface_scale_selected(index: int) -> void:` | Applies a selected interface scale through `GraphicsSettingsManager`. |
+| `func _on_fullscreen_toggled(is_fullscreen: bool) -> void:` | Applies fullscreen state through `GraphicsSettingsManager`. |
+| `func _update_fullscreen_text(_is_fullscreen: bool) -> void:` | Keeps the custom drawn fullscreen checkbox free of text. |
+| `func _apply_graphics_control_styles() -> void:` | Applies local wooden-menu styling to graphics dropdowns and checkbox. |
+| `func _apply_dropdown_style(option_button: OptionButton) -> void:` | Styles an `OptionButton` and its popup to match the wooden menu UI. |
+| `func _apply_checkbox_style(check_button: Button) -> void:` | Configures the fullscreen control as a textless square toggle. |
+
 ## `Scripts/UIs/Menus/OptionsMenu/optionsMenu.gd`
 
 | Function | Description |
 | --- | --- |
-| `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func close() -> void:` | Closes . |
-| `func setContext(context: int) -> void:` | Handles set context behavior. |
+| `func _ready() -> void:` | Connects root segment buttons and submenu back buttons, then shows the root Options panel. |
+| `func _input(event: InputEvent) -> void:` | Routes pause/Escape input to options back navigation while Options is visible. |
+| `func close() -> void:` | Closes Options and returns to the menu context that opened it. |
+| `func handle_back_action() -> void:` | Returns from a submenu to the root Options panel, or closes Options from the root panel. |
+| `func setContext(context: int) -> void:` | Applies main-menu or pause-menu background behavior and resets to the root Options panel. |
+| `func _show_main_options() -> void:` | Shows the root Options segment list. |
+| `func _show_sound_options() -> void:` | Shows the Sound submenu. |
+| `func _show_controls_options() -> void:` | Shows the Controls submenu. |
+| `func _show_graphics_options() -> void:` | Shows the Graphics submenu. |
+| `func _show_feedback_options() -> void:` | Shows the Feedback submenu. |
+| `func _set_active_panel(active_panel: Control) -> void:` | Sets exactly one Options panel visible. |
+
+## `Scripts/UIs/Menus/OptionsMenu/OptionsCheckBox.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Configures the square toggle checkbox and connects redraw signals. |
+| `func _draw() -> void:` | Draws the checkbox border, checked fill, and check mark using menu colors. |
+| `func _on_mouse_entered() -> void:` | Switches the checkbox to hover color and redraws. |
+| `func _on_mouse_exited() -> void:` | Restores the normal checkbox color and redraws. |
+| `func _on_toggled(_is_pressed: bool) -> void:` | Redraws the check mark after the toggle state changes. |
+
+## `Scripts/UIs/Menus/OptionsMenu/OptionsScrollLine.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Resolves the target `ScrollContainer`, connects to its vertical scrollbar, and prepares redraws. |
+| `func _draw() -> void:` | Draws a black vertical line whose size and position follow the underlying scroll state. |
+| `func _on_scroll_changed(_value: float) -> void:` | Redraws the custom scroll indicator after scrolling. |
 
 ## `Scripts/UIs/Menus/PauseMenu/pauseMenu.gd`
 
 | Function | Description |
 | --- | --- |
-| `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
+| `func _ready() -> void:` | Connects pause-menu buttons, confirmation buttons, and initial visibility state. |
+| `func _input(event: InputEvent) -> void:` | Lets Escape close the active save/quit confirmation popup. |
 | `func onPauseButtonPressed(paused: bool) -> void:` | Handles on pause button pressed behavior. |
 | `func setMenuVisible(is_visible: bool) -> void:` | Handles set menu visible behavior. |
 | `func showBlurOnly() -> void:` | Handles show blur only behavior. |
 | `func onContinueButtonPressed() -> void:` | Handles on continue button pressed behavior. |
-| `func onSaveGameButtonPressed() -> void:` | Handles on save game button pressed behavior. |
+| `func onSaveGameButtonPressed() -> void:` | Opens confirmation before overwriting the current save slot. |
 | `func onLoadGameButtonPressed() -> void:` | Handles on load game button pressed behavior. |
 | `func onOptionsButtonPressed() -> void:` | Handles on options button pressed behavior. |
-| `func onSaveAndQuitToMenuButtonPressed() -> void:` | Handles on save and quit to menu button pressed behavior. |
-| `func onSaveAndQuitToDesktopButtonPressed() -> void:` | Handles on save and quit to desktop button pressed behavior. |
+| `func onSaveAndQuitToMenuButtonPressed() -> void:` | Opens confirmation before saving and returning to the main menu. |
+| `func onSaveAndQuitToDesktopButtonPressed() -> void:` | Opens confirmation before saving and quitting to desktop. |
 | `func onOptionsClosed() -> void:` | Handles on options closed behavior. |
+| `func _show_confirmation(action: ConfirmationAction, message: String) -> void:` | Shows the local save/quit confirmation popup and stores the pending action. |
+| `func _hide_confirmation() -> void:` | Hides the confirmation popup and clears the pending action. |
+| `func _on_confirmation_confirmed() -> void:` | Executes the pending save, save-and-quit-to-menu, or save-and-quit-to-desktop action. |
+
+## `Scripts/UIs/Menus/WoodenMenuPanel.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Ignores mouse input and redraws when the panel size changes. |
+| `func _draw() -> void:` | Draws the shared wooden board background used by menu panels and confirmation popups. |
 
 ## `Scripts/UIs/PlayerHUD/inventory_panel.gd`
 

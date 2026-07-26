@@ -191,3 +191,100 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
 text = "Save and Quit to Desktop"
 flat = true
+
+[node name="ConfirmationOverlay" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Dim" type="ColorRect" parent="ConfirmationOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.16)
+
+[node name="ConfirmCenter" type="CenterContainer" parent="ConfirmationOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="WoodenBoard" type="Control" parent="ConfirmationOverlay/ConfirmCenter"]
+custom_minimum_size = Vector2(540, 230)
+layout_mode = 2
+script = ExtResource("3_wooden")
+plank_count = 4
+
+[node name="MenuMargin" type="MarginContainer" parent="ConfirmationOverlay/ConfirmCenter/WoodenBoard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 38
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 38
+theme_override_constants/margin_bottom = 30
+
+[node name="MenuContent" type="VBoxContainer" parent="ConfirmationOverlay/ConfirmCenter/WoodenBoard/MenuMargin"]
+layout_mode = 2
+theme_override_constants/separation = 22
+alignment = 1
+
+[node name="MessageLabel" type="Label" parent="ConfirmationOverlay/ConfirmCenter/WoodenBoard/MenuMargin/MenuContent"]
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Confirm action?"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ButtonRow" type="HBoxContainer" parent="ConfirmationOverlay/ConfirmCenter/WoodenBoard/MenuMargin/MenuContent"]
+layout_mode = 2
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="ConfirmButton" type="Button" parent="ConfirmationOverlay/ConfirmCenter/WoodenBoard/MenuMargin/MenuContent/ButtonRow"]
+custom_minimum_size = Vector2(190, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
+text = "Confirm"
+flat = true
+
+[node name="CancelButton" type="Button" parent="ConfirmationOverlay/ConfirmCenter/WoodenBoard/MenuMargin/MenuContent/ButtonRow"]
+custom_minimum_size = Vector2(170, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
+text = "Cancel"
+flat = true
