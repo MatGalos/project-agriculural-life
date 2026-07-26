@@ -199,6 +199,7 @@ func showGlobalUI() -> void:
 
 func _handle_pause_action() -> void:
 	if optionsMenu and optionsMenu.visible:
+		optionsMenu.handle_back_action()
 		get_viewport().set_input_as_handled()
 		return
 

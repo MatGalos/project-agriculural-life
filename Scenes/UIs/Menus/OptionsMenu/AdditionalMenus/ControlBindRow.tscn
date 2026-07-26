@@ -1,6 +1,8 @@
-[gd_scene format=3 uid="uid://cu5gkeiyqhxjq"]
+[gd_scene load_steps=3 format=3 uid="uid://cu5gkeiyqhxjq"]
 
 [ext_resource type="Script" uid="uid://dky2svkcio1m1" path="res://Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/control_bind_row.gd" id="1_rnnim"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bind_button"]
 
 [node name="ControlBindRow" type="HBoxContainer" unique_id=386521510]
 custom_minimum_size = Vector2(0, 36)
@@ -16,8 +18,18 @@ script = ExtResource("1_rnnim")
 [node name="ActionLabel" type="Label" parent="." unique_id=624677290]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 vertical_alignment = 1
 
 [node name="BindButton" type="Button" parent="." unique_id=397772006]
 custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_bind_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_bind_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_bind_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_bind_button")
+flat = true
