@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://cb3qefv5afyy6" path="res://Scenes/UIs/PlayerHUD/Storage/storage_panel.tscn" id="11_i6vwx"]
 [ext_resource type="Resource" uid="uid://c46mxpfymbli4" path="res://Data/Storage/silo_storage.tres" id="12_uqy4o"]
 [ext_resource type="PackedScene" uid="uid://cpaiyaqvr2mmn" path="res://Scenes/UIs/PlayerHUD/Storage/storage_item_row.tscn" id="13_cn4vo"]
+[ext_resource type="Script" path="res://Scripts/UIs/PlayerHUD/HUDPlaque.gd" id="14_hudpl"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_334lg"]
 font_size = 32
@@ -62,7 +63,8 @@ grow_horizontal = 0
 layout_mode = 0
 offset_right = 112.0
 offset_bottom = 48.0
-color = Color(0.15294118, 0.15294118, 0.15294118, 1)
+color = Color(0, 0, 0, 0)
+script = ExtResource("14_hudpl")
 
 [node name="DateTimeContainer" type="VBoxContainer" parent="Root/DateTimeController" unique_id=1634932118]
 layout_mode = 0
@@ -72,11 +74,13 @@ offset_bottom = 44.0
 
 [node name="DateLabel" type="Label" parent="Root/DateTimeController/DateTimeContainer" unique_id=1312538155]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
 text = "Winter 30, Year 1"
 horizontal_alignment = 1
 
 [node name="TimeLabel" type="Label" parent="Root/DateTimeController/DateTimeContainer" unique_id=1239664169]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
 text = "10:00"
 horizontal_alignment = 1
 
@@ -94,14 +98,17 @@ grow_horizontal = 0
 layout_mode = 0
 offset_right = 112.0
 offset_bottom = 20.0
-color = Color(0.153, 0.153, 0.153, 1)
+color = Color(0, 0, 0, 0)
+script = ExtResource("14_hudpl")
 
 [node name="FundsLabel" type="Label" parent="Root/FundsController" unique_id=1665244698]
 layout_mode = 0
 offset_right = 112.0
 offset_bottom = 20.0
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
 text = "$100"
 horizontal_alignment = 2
+vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="EventController" type="Control" parent="Root" unique_id=251260563]
@@ -121,16 +128,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.153, 0.153, 0.153, 1)
+color = Color(0, 0, 0, 0)
+script = ExtResource("14_hudpl")
+plaque_style = 1
 
 [node name="EventLabel" type="Label" parent="Root/EventController" unique_id=974498104]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-horizontal_alignment = 1
+anchors_preset = 0
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
 vertical_alignment = 1
 autowrap_mode = 2
 
@@ -287,7 +292,7 @@ offset_top = 52.0
 offset_right = 210.0
 offset_bottom = 92.0
 grow_horizontal = 2
-text = "Description"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2

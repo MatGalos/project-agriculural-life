@@ -396,7 +396,9 @@ Use it for:
 
 Panel styling rules:
 
-- Main gameplay UI panels should use dark farm-themed `StyleBoxFlat` backgrounds with alpha around `0.88-0.95`.
+- Gameplay HUD status elements use compact local plaques rather than menu-sized boards: date/time and money use small wood-drawn plaques, while bottom-left notifications use a light paper-style plaque.
+- Interaction prompts under the crosshair should stay as short white text without a background, using the control-action format such as `E — Open Silo` or `LMB — Water`.
+- Larger gameplay UI panels such as Inventory, FarmPhone apps, and Storage/Silo should use dark farm-themed `StyleBoxFlat` backgrounds with alpha around `0.88-0.95`.
 - Inner cards, slots, and rows should stay in the `0.85-0.95` alpha range when they need a stable reading surface.
 - Modal overlays should remain lower opacity, generally `0.45-0.65`.
 - Avoid pure low-alpha black debug-looking panels. Prefer dark green/brown/black tones such as `Color(0.06, 0.07, 0.06, 0.92)`.
@@ -451,6 +453,14 @@ HUD visibility modes:
 
 The current starting inventory is initialized in `PlayerHUD._setup_starting_inventory()` for new sessions. Save loading replaces inventory and hotbar state through `SaveManager`.
 
+HUD visual styling:
+
+- `Scripts/UIs/PlayerHUD/HUDPlaque.gd` draws compact HUD plaques directly on existing `ColorRect` backgrounds.
+- `DateTimeController` and `FundsController` use the wood plaque variant, keeping the existing date and money formatting.
+- `EventController` uses the paper plaque variant for bottom-left notifications.
+- `PromptLabel` has no background and is initialized with empty text so placeholder text is never shown after starting or loading gameplay.
+- `QuickInventoryController` remains visually separate from this HUD polish pass; hotbar slot visuals and selection behavior are documented under Hotbar UI.
+
 HUD event messages:
 
 - `EventController` is hidden by default.
@@ -468,6 +478,7 @@ Prompt priority:
 
 - Tool prompts from `ToolManager.get_tool_prompt_for_target()` are shown first.
 - Interactable prompts are shown only when no tool prompt is available.
+- Prompt text should use concise control-action wording, for example `E — Interact`, `E — Open Silo`, `LMB — Plow`, and `LMB — Harvest Wheat`.
 
 ## Maintenance Checklist
 

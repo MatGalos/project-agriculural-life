@@ -58,6 +58,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Standardized UI money, date, percentage, market status, product, seed, weather, and interaction prompt text formats.
   - Added Lato typography to FarmPhone, phone apps, bottom-left notifications, and interaction prompts.
   - Added centralized gameplay HUD visibility modes so pause, phone, inventory, and storage UI hide crosshair and unrelated HUD elements consistently.
+  - Polished gameplay HUD date/time and money into small wooden plaques, bottom-left notifications into paper-style cards, and crosshair prompts into short white control-action text without a background.
   - Kept the pause-menu blur effect, reduced its sampling offset, and added a subtle dark overlay plus clearer button states.
   - Increased panel and card background opacity for FarmPhone, inventory, storage/silo, hotbar, options, new game, and load game UI.
 - Removed the old minimap placeholder behavior from visible gameplay HUD; no minimap has been reintroduced.
