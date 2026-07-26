@@ -400,13 +400,24 @@ Resource only plus helper functions. Stores event identity, category, trigger mo
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
+| `func _draw() -> void:` | Draws the current inventory or hotbar slot visual state. |
+| `func _draw_inventory_slot() -> void:` | Draws the regular inventory slot background, hover state, and selected outline. |
+| `func _draw_hotbar_slot() -> void:` | Draws the leather-pocket hotbar slot background and active state. |
+| `func set_display_mode(new_display_mode: int) -> void:` | Sets whether this slot renders as a regular inventory slot or hotbar slot. |
 | `func set_slot(index: int, slot: InventorySlot) -> void:` | Sets slot and applies related side effects. |
 | `func clear() -> void:` | Handles clear behavior. |
+| `func set_selected(is_selected: bool) -> void:` | Updates the selected visual state without changing inventory data. |
+| `func set_active_hotbar(is_active: bool) -> void:` | Updates the active-hotbar visual state without changing hotbar data. |
 | `func _get_drag_data(_position):` | Creates drag payload data and drag preview UI. |
 | `func _can_drop_data(_position, data) -> bool:` | Checks whether the current drag payload can be dropped here. |
 | `func _drop_data(_position, data) -> void:` | Applies the accepted drag-and-drop payload. |
 | `func _update_water_bar(item_data: ItemData) -> void:` | Updates update water bar from current data. |
 | `func _gui_input(event: InputEvent) -> void:` | Handles gui input behavior. |
+| `func _on_mouse_entered() -> void:` | Applies hover visuals and emits the hovered slot index. |
+| `func _on_mouse_exited() -> void:` | Clears hover visuals. |
+| `func _on_resized() -> void:` | Repositions slot contents and redraws when the slot size changes. |
+| `func _apply_layout() -> void:` | Positions the icon, amount badge, and watering-can bar inside the slot. |
+| `func _position_water_bar() -> void:` | Positions the watering-can fill bar at the bottom of the slot. |
 
 ## `Scripts/Inventory/InventoryData.gd`
 
@@ -753,6 +764,12 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 | `func build_slots() -> void:` | Builds slots UI or runtime data. |
 | `func refresh() -> void:` | Rebuilds or updates this UI from current backing data. |
 | `func move_or_merge_slot(from_index: int, to_index: int) -> void:` | Moves or merge slot between source and target containers. |
+| `func select_slot(slot_index: int) -> void:` | Selects a slot for the Inventory description panel and visual highlight. |
+| `func _create_slot_ui(slot_index: int, is_hotbar_slot: bool) -> InventorySlotUI:` | Instantiates one slot UI and configures its display mode, signals, size, and data binding. |
+| `func _on_hotbar_selected_slot_changed(_slot_index: int) -> void:` | Refreshes active-hotbar visuals after hotbar selection changes. |
+| `func _on_slot_hovered(slot_index: int) -> void:` | Updates the description panel from the hovered slot. |
+| `func _update_slot_selection() -> void:` | Applies selected and active-hotbar visual states across all Inventory screen slots. |
+| `func _update_description(slot: InventorySlot) -> void:` | Shows selected item name, amount, and description or the empty-state text. |
 
 ## `Scripts/UIs/PlayerHUD/phone_panel.gd`
 

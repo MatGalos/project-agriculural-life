@@ -13,6 +13,7 @@ func run() -> void:
 
 	runner.assert_eq(hotbar.hotbar_size, 5, "Hotbar size is 5")
 	runner.assert_eq(hotbar.inventory_slot_indexes.size(), 5, "Hotbar slot indexes match size")
+	runner.assert_eq(hotbar.inventory_slot_indexes, [0, 1, 2, 3, 4], "Hotbar uses the first five inventory slots")
 
 	hotbar.select_slot(2)
 	runner.assert_eq(hotbar.selected_slot_index, 2, "Hotbar select slot works")

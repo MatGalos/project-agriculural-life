@@ -55,9 +55,9 @@ Core tests:
 
 - `MoneyManagerTest.gd`: money setting, adding, spending, and failed spending.
 - `StorageDataTest.gd`: storage item add/remove/count behavior.
-- `HotbarDataTest.gd`: hotbar setup, slot mapping, and selected slot behavior.
+- `HotbarDataTest.gd`: hotbar setup, first-five inventory slot mapping, and selected slot behavior.
 - `SalesStatsManagerTest.gd`: sales recording, recent sales totals, and day rollover.
-- `InventoryDataTest.gd`: inventory setup, stacking, removal, and slot movement behavior.
+- `InventoryDataTest.gd`: default 25-slot inventory capacity, setup, stacking, removal, and slot movement behavior.
 - `WeatherManagerTest.gd`: day phase hour boundaries, cached phase updates from time changes, phase temperatures derived from one daily base temperature, expanded daily forecast entry fields, and season weather profile modifiers for temperature and rainy/stormy pattern weights.
 - `EventSystemTest.gd`: event data compatibility, multi-product modifiers, deterministic trend stacking, volatility reset behavior, season/day/weather/temperature requirements, calendar-event locks, cooldowns, once-per-season rules, daily event start limits, seed buy-price modifiers, save/load event state, duplicate-news protection, bad-harvest crop-season restrictions, and configured trigger chances for Demand Spike, Export Contract, and Market Panic.
 
@@ -236,7 +236,7 @@ Good next targets:
 - `WeatherManager` phase forecast generation with real `WeatherDayPatternData` resources.
 - Menu and HUD panel exclusivity rules in `PlayerHUD`.
 - Visual/UI verification for stacked bottom-left HUD event/news alerts, including paper-card alignment and readable font size.
-- Visual verification for UI panel opacity in Inventory, FarmPhone apps, and Storage/Silo.
+- Visual verification for the Inventory wooden panel, centered five-slot leather hotbar strip, lower 20-slot grid, readable amount badges, and spaced description panel.
 - Visual verification for wooden menu panels, text-style menu buttons, paper save-slot cards, Options submenus, custom Options scroll/checkbox/dropdown controls, and save/overwrite confirmation popups.
 - Manual regression pass for HUD visibility modes: gameplay, pause, phone, inventory, and storage.
 - Manual pass for UI formatting consistency in money, dates, market percentages, product/seed names, weather names, input labels, and short control-action interaction prompts.
@@ -251,9 +251,11 @@ Run this checklist in Godot after UI polish changes, especially when no screensh
 2. Open Pause Menu. Confirm the world remains visible behind the blur, the blur is not doubled, the dark overlay disappears after closing, the HUD is hidden, and Save / Save and Quit actions show confirmation popups before writing.
 3. Open FarmPhone and each app: News, Market, Shop, Weather, Storage, and Sell. Confirm labels use the display formatting helpers and panel backgrounds keep text readable.
 4. Open Inventory and Storage/Silo. Confirm panels and slots are readable against bright and dark world backgrounds.
-5. Open Options from Main Menu and Pause Menu. Confirm the root segment list opens Sound, Controls, Graphics, and Feedback submenus; `Back to Options`, root `Back`, and Escape return to the correct previous state.
-6. In Options, verify Graphics dropdown popups, the square fullscreen checkbox, and the Controls scroll line match the wooden menu style.
-7. Open New Game and Load Game from their supported contexts. Confirm wooden panels, paper save-slot cards, empty/occupied slot labels, disabled empty load slots, and occupied-slot overwrite confirmation in New Game.
-8. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting. Prompts should show as white text without a background and should not show placeholder text after starting or loading a game.
-9. Confirm the date/time and money displays sit inside compact wooden plaques, and that the money value is right-aligned with inner padding.
-10. Repeat the UI pass at 1280x720, 1920x1080, and 2560x1440.
+5. In Inventory, confirm the top leather strip is centered and contains exactly 5 hotbar slots, the lower grid contains 20 regular slots in 5 columns, and both zones together represent the 25 inventory slots.
+6. In Inventory, hover and select filled and empty slots. Confirm hover/selected states are readable, item amounts stay inside their badges, and the bottom description panel has enough spacing between title, amount, and description.
+7. Open Options from Main Menu and Pause Menu. Confirm the root segment list opens Sound, Controls, Graphics, and Feedback submenus; `Back to Options`, root `Back`, and Escape return to the correct previous state.
+8. In Options, verify Graphics dropdown popups, the square fullscreen checkbox, and the Controls scroll line match the wooden menu style.
+9. Open New Game and Load Game from their supported contexts. Confirm wooden panels, paper save-slot cards, empty/occupied slot labels, disabled empty load slots, and occupied-slot overwrite confirmation in New Game.
+10. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting. Prompts should show as white text without a background and should not show placeholder text after starting or loading a game.
+11. Confirm the date/time and money displays sit inside compact wooden plaques, and that the money value is right-aligned with inner padding.
+12. Repeat the UI pass at 1280x720, 1920x1080, and 2560x1440.

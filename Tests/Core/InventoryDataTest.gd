@@ -8,6 +8,11 @@ var wheat_seed: ItemData = preload("res://Data/Items/Seeds/wheat_seed_item.tres"
 func run() -> void:
 	print("\n--- InventoryDataTest ---")
 
+	var default_inventory := InventoryData.new()
+	default_inventory.setup()
+	runner.assert_eq(default_inventory.slot_count, 25, "Inventory default slot count is 25")
+	runner.assert_eq(default_inventory.slots.size(), 25, "Inventory default setup creates 25 slots")
+
 	var inventory := InventoryData.new()
 	inventory.slot_count = 3
 	inventory.setup()

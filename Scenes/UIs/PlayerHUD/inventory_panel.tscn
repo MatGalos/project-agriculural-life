@@ -1,15 +1,36 @@
-[gd_scene load_steps=5 format=3 uid="uid://6ki8w20olwhc"]
+[gd_scene load_steps=8 format=3 uid="uid://6ki8w20olwhc"]
 
 [ext_resource type="Script" uid="uid://bhwxedvl3euva" path="res://Scripts/UIs/PlayerHUD/inventory_panel.gd" id="1_yn2sk"]
 [ext_resource type="PackedScene" uid="uid://ccego0c5l0tuu" path="res://Scenes/UIs/PlayerHUD/Inventory/inventory_slot_ui.tscn" id="2_cslww"]
 [ext_resource type="Resource" uid="uid://exkyhl0jf7gm" path="res://Data/Inventory/player_inventory.tres" id="3_n3at5"]
+[ext_resource type="Script" path="res://Scripts/UIs/PlayerHUD/StorageWoodPanel.gd" id="4_wood"]
+[ext_resource type="Script" path="res://Scripts/UIs/PlayerHUD/HotbarToolBeltPanel.gd" id="5_belt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inventory_panel"]
-bg_color = Color(0.06, 0.07, 0.06, 0.92)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+content_margin_left = 22.0
+content_margin_top = 18.0
+content_margin_right = 22.0
+content_margin_bottom = 18.0
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hotbar_panel_empty"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_description_panel"]
+content_margin_left = 18.0
+content_margin_top = 13.0
+content_margin_right = 18.0
+content_margin_bottom = 13.0
+bg_color = Color(0.90, 0.78, 0.55, 0.86)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.24, 0.12, 0.045, 0.90)
 
 [node name="InventoryPanel" type="Control" unique_id=1308746992]
 layout_mode = 3
@@ -18,10 +39,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -240.0
-offset_top = -160.0
-offset_right = 240.0
-offset_bottom = 160.0
+offset_left = -360.0
+offset_top = -312.0
+offset_right = 360.0
+offset_bottom = 312.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
@@ -38,22 +59,69 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_inventory_panel")
+script = ExtResource("4_wood")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=711844938]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 22
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=798571825]
+[node name="Content" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=798571825]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Inventory" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=310859338]
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/Content" unique_id=310859338]
 layout_mode = 2
-text = "Player Inventory"
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
+theme_override_font_sizes/font_size = 28
+text = "Inventory"
+horizontal_alignment = 1
 
-[node name="SlotsGrid" type="GridContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1974687077]
+[node name="HotbarBeltPanel" type="PanelContainer" parent="PanelContainer/MarginContainer/Content"]
+custom_minimum_size = Vector2(442, 88)
 layout_mode = 2
-columns = 6
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_hotbar_panel_empty")
+script = ExtResource("5_belt")
+
+[node name="HotbarSlots" type="HBoxContainer" parent="PanelContainer/MarginContainer/Content/HotbarBeltPanel"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 8
+
+[node name="InventoryGrid" type="GridContainer" parent="PanelContainer/MarginContainer/Content" unique_id=1974687077]
+layout_mode = 2
+size_flags_horizontal = 4
+columns = 5
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+
+[node name="DescriptionPanel" type="PanelContainer" parent="PanelContainer/MarginContainer/Content"]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_description_panel")
+
+[node name="DescriptionContent" type="VBoxContainer" parent="PanelContainer/MarginContainer/Content/DescriptionPanel"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="DescriptionTitle" type="Label" parent="PanelContainer/MarginContainer/Content/DescriptionPanel/DescriptionContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
+theme_override_font_sizes/font_size = 18
+text = "Select an item"
+
+[node name="DescriptionAmount" type="Label" parent="PanelContainer/MarginContainer/Content/DescriptionPanel/DescriptionContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.10, 0.06, 0.025, 0.88)
+theme_override_font_sizes/font_size = 14
+
+[node name="DescriptionText" type="Label" parent="PanelContainer/MarginContainer/Content/DescriptionPanel/DescriptionContent"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.10, 0.06, 0.025, 0.88)
+theme_override_font_sizes/font_size = 14
+text = "Hover or select a slot to view item details."
+vertical_alignment = 1
+autowrap_mode = 2

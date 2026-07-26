@@ -5,14 +5,22 @@ class_name StoragePanel
 @export var row_scene: PackedScene
 @export var player_inventory: InventoryData
 
-@onready var storage_items_container: VBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/StorageColumn/StorageScroll/StorageItemsContainer
-@onready var inventory_items_container: VBoxContainer = $PanelContainer/MarginContainer/HBoxContainer/InventoryColumn/InventoryScroll/InventoryItemsContainer
+@onready var inventory_items_container: VBoxContainer = $PanelContainer/MarginContainer/ContentContainer/ColumnsContainer/InventoryColumnPanel/InventoryColumn/InventoryScroll/ListMargin/InventoryItemsContainer
+@onready var storage_items_container: VBoxContainer = $PanelContainer/MarginContainer/ContentContainer/ColumnsContainer/StorageColumnPanel/StorageColumn/StorageScroll/ListMargin/StorageItemsContainer
+@onready var inventory_scroll: ScrollContainer = $PanelContainer/MarginContainer/ContentContainer/ColumnsContainer/InventoryColumnPanel/InventoryColumn/InventoryScroll
+@onready var storage_scroll: ScrollContainer = $PanelContainer/MarginContainer/ContentContainer/ColumnsContainer/StorageColumnPanel/StorageColumn/StorageScroll
+@onready var hint_label: Label = $PanelContainer/MarginContainer/ContentContainer/FooterContainer/HintLabel
+@onready var close_button: Button = $PanelContainer/MarginContainer/ContentContainer/FooterContainer/CloseButton
+
+var _inventory_scroll_line: OptionsScrollLine
+var _storage_scroll_line: OptionsScrollLine
 
 
 func _ready() -> void:
 	visible = false
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	add_to_group("storage_panel")
+	resized.connect(_position_scroll_lines_deferred)
 
 	if storage_data and not storage_data.storage_changed.is_connected(refresh):
 		storage_data.storage_changed.connect(refresh)
@@ -20,12 +28,19 @@ func _ready() -> void:
 	if player_inventory and not player_inventory.inventory_changed.is_connected(refresh):
 		player_inventory.inventory_changed.connect(refresh)
 
+	if close_button and not close_button.pressed.is_connected(close):
+		close_button.pressed.connect(close)
+
+	_inventory_scroll_line = _create_scroll_line(inventory_scroll, "InventoryScrollLine")
+	_storage_scroll_line = _create_scroll_line(storage_scroll, "StorageScrollLine")
 	refresh()
 
 
 func open() -> void:
 	refresh()
+	_update_hint("Click or drag an item to transfer it.")
 	visible = true
+	_position_scroll_lines_deferred()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 
@@ -52,6 +67,7 @@ func refresh() -> void:
 	_refresh_storage_items()
 	_refresh_inventory_items()
 	_refresh_hotbar()
+	_position_scroll_lines_deferred()
 
 
 func transfer_from_inventory_slot(slot_index: int) -> void:
@@ -105,6 +121,8 @@ func _drop_data(position: Vector2, data: Variant) -> void:
 
 
 func _refresh_storage_items() -> void:
+	var has_items := false
+
 	for item_entry in storage_data.get_all_items():
 		var row := _create_row(
 			item_entry["item_data"],
@@ -115,6 +133,10 @@ func _refresh_storage_items() -> void:
 
 		if row:
 			storage_items_container.add_child(row)
+			has_items = true
+
+	if not has_items:
+		_add_empty_state(storage_items_container, "Empty Storage")
 
 
 func _refresh_inventory_items() -> void:
@@ -122,6 +144,7 @@ func _refresh_inventory_items() -> void:
 		return
 
 	player_inventory.setup()
+	var has_items := false
 
 	for i in range(player_inventory.slots.size()):
 		var slot := player_inventory.slots[i]
@@ -133,6 +156,10 @@ func _refresh_inventory_items() -> void:
 
 		if row:
 			inventory_items_container.add_child(row)
+			has_items = true
+
+	if not has_items:
+		_add_empty_state(inventory_items_container, "Empty Inventory")
 
 
 func _create_row(item_data: ItemData, amount: int, source_type: String, inventory_slot_index: int) -> StorageItemRow:
@@ -180,6 +207,7 @@ func _transfer_inventory_to_storage(slot_index: int) -> void:
 	player_inventory.inventory_changed.emit()
 	storage_data.add_item(item_data, amount)
 	refresh()
+	_update_hint("Transferred %dx %s to Silo Storage." % [amount, UIFormatHelper.display_product_name(item_data)])
 
 
 func _transfer_storage_to_inventory(item_data: ItemData) -> void:
@@ -196,15 +224,75 @@ func _transfer_storage_to_inventory(item_data: ItemData) -> void:
 	var moved_amount := amount_to_transfer - remaining
 
 	if moved_amount <= 0:
+		_update_hint("Inventory is full.")
 		return
 
 	storage_data.remove_item(item_data, moved_amount)
 	refresh()
+	_update_hint("Transferred %dx %s to Player Inventory." % [moved_amount, UIFormatHelper.display_product_name(item_data)])
 
 
 func _clear_container(container: Container) -> void:
 	for child in container.get_children():
 		child.queue_free()
+
+
+func _add_empty_state(container: Container, text: String) -> void:
+	var label := Label.new()
+	label.text = text
+	label.custom_minimum_size = Vector2(0.0, 44.0)
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.add_theme_color_override("font_color", Color(0.18, 0.10, 0.045, 0.78))
+	label.add_theme_font_size_override("font_size", 16)
+	container.add_child(label)
+
+
+func _update_hint(text: String) -> void:
+	if hint_label:
+		hint_label.text = text
+
+
+func _create_scroll_line(scroll_container: ScrollContainer, line_name: String) -> OptionsScrollLine:
+	if scroll_container == null:
+		return null
+
+	scroll_container.vertical_scroll_mode = 3
+	scroll_container.resized.connect(_position_scroll_lines_deferred)
+
+	var scroll_line := OptionsScrollLine.new()
+	scroll_line.name = line_name
+	scroll_line.scroll_container_path = scroll_container.get_path()
+	scroll_line.line_color = Color(0.0, 0.0, 0.0, 1.0)
+	scroll_line.line_width = 3.0
+	scroll_line.min_line_height = 28.0
+	scroll_line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	scroll_line.set_anchors_preset(Control.PRESET_TOP_LEFT, false)
+	add_child(scroll_line)
+	scroll_line.move_to_front()
+	return scroll_line
+
+
+func _position_scroll_lines_deferred() -> void:
+	call_deferred("_position_scroll_lines")
+
+
+func _position_scroll_lines() -> void:
+	_position_scroll_line(_inventory_scroll_line, inventory_scroll)
+	_position_scroll_line(_storage_scroll_line, storage_scroll)
+
+
+func _position_scroll_line(scroll_line: Control, scroll_container: ScrollContainer) -> void:
+	if scroll_line == null or scroll_container == null:
+		return
+
+	var scroll_rect: Rect2 = scroll_container.get_global_rect()
+	var local_position: Vector2 = get_global_transform().affine_inverse() * scroll_rect.position
+	scroll_line.position = local_position + Vector2(maxf(scroll_rect.size.x - 5.0, 0.0), 0.0)
+	scroll_line.size = Vector2(6.0, scroll_rect.size.y)
+	scroll_line.queue_redraw()
 
 
 func _refresh_hotbar() -> void:

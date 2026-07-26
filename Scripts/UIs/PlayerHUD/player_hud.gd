@@ -119,8 +119,10 @@ func _update_corner_panels(ui_scale: float, margin: float) -> void:
 func _update_bottom_panels(ui_scale: float, margin: float) -> void:
 	var event_size: Vector2 = Vector2(300.0, 86.0) * ui_scale
 	var slot_size: Vector2 = Vector2(96.0, 64.0) * ui_scale
-	var inventory_width: float = slot_size.x * 5.0
-	var inventory_height: float = slot_size.y
+	var hotbar_slot_gap: float = 8.0 * ui_scale
+	var hotbar_padding: Vector2 = Vector2(10.0, 8.0) * ui_scale
+	var inventory_width: float = (slot_size.x * 5.0) + (hotbar_slot_gap * 4.0) + (hotbar_padding.x * 2.0)
+	var inventory_height: float = slot_size.y + (hotbar_padding.y * 2.0)
 	var notification_padding: float = 12.0 * ui_scale
 
 	_set_bottom_left_rect(event_controller, margin, margin, event_size.x, event_size.y)
