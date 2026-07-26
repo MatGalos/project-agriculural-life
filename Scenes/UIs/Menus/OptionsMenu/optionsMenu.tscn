@@ -1,19 +1,19 @@
-[gd_scene load_steps=5 format=3 uid="uid://du4mrea3xpemq"]
+[gd_scene load_steps=10 format=3 uid="uid://du4mrea3xpemq"]
 
 [ext_resource type="Script" uid="uid://dxkmocsxsko1a" path="res://Scripts/UIs/Menus/OptionsMenu/optionsMenu.gd" id="1_4k0nn"]
-[ext_resource type="PackedScene" uid="uid://dgsmyf268o2ys" path="res://Scenes/UIs/Menus/OptionsMenu/AdditionalMenus/optionsTabContainer.tscn" id="2_euvqn"]
+[ext_resource type="Script" path="res://Scripts/UIs/Menus/WoodenMenuPanel.gd" id="2_wooden"]
+[ext_resource type="Script" uid="uid://bx5vomsf7vvdj" path="res://Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/controls.gd" id="3_controls"]
+[ext_resource type="PackedScene" uid="uid://cu5gkeiyqhxjq" path="res://Scenes/UIs/Menus/OptionsMenu/AdditionalMenus/ControlBindRow.tscn" id="4_bind_row"]
+[ext_resource type="Script" path="res://Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/graphics.gd" id="5_graphics"]
+[ext_resource type="Script" path="res://Scripts/UIs/Menus/OptionsMenu/OptionsScrollLine.gd" id="6_scroll_line"]
+[ext_resource type="Script" path="res://Scripts/UIs/Menus/OptionsMenu/OptionsCheckBox.gd" id="7_checkbox"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_4k0nn"]
-font_size = 63
+[sub_resource type="LabelSettings" id="LabelSettings_options_title"]
+font_size = 46
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_options_panel"]
-bg_color = Color(0.06, 0.07, 0.06, 0.92)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_options_button"]
 
-[node name="OptionsMenu" type="Control" unique_id=430597010 node_paths=PackedStringArray("button")]
+[node name="OptionsMenu" type="Control" unique_id=430597010]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,7 +21,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_4k0nn")
-button = NodePath("Panel/MarginContainer/VBoxContainer/Button")
 
 [node name="background" type="ColorRect" parent="." unique_id=349310293]
 layout_mode = 1
@@ -30,7 +29,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0)
+color = Color(0, 0, 0, 0.1)
 
 [node name="Panel" type="Control" parent="." unique_id=793432118]
 layout_mode = 1
@@ -40,17 +39,246 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PanelBackdrop" type="PanelContainer" parent="Panel"]
+[node name="MainOptions" type="CenterContainer" parent="Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_options_panel")
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=415866341]
+[node name="WoodenBoard" type="Control" parent="Panel/MainOptions"]
+custom_minimum_size = Vector2(560, 390)
+layout_mode = 2
+script = ExtResource("2_wooden")
+plank_count = 6
+
+[node name="MenuMargin" type="MarginContainer" parent="Panel/MainOptions/WoodenBoard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 42
+
+[node name="MenuContent" type="VBoxContainer" parent="Panel/MainOptions/WoodenBoard/MenuMargin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="Panel/MainOptions/WoodenBoard/MenuMargin/MenuContent"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0.88, 0.62, 0.32, 0.55)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+text = "Options"
+label_settings = SubResource("LabelSettings_options_title")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuButtons" type="VBoxContainer" parent="Panel/MainOptions/WoodenBoard/MenuMargin/MenuContent"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="SoundButton" type="Button" parent="Panel/MainOptions/WoodenBoard/MenuMargin/MenuContent/MenuButtons"]
+custom_minimum_size = Vector2(360, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_options_button")
+text = "Sound"
+flat = true
+
+[node name="ControlsButton" type="Button" parent="Panel/MainOptions/WoodenBoard/MenuMargin/MenuContent/MenuButtons"]
+custom_minimum_size = Vector2(360, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_options_button")
+text = "Controls"
+flat = true
+
+[node name="GraphicsButton" type="Button" parent="Panel/MainOptions/WoodenBoard/MenuMargin/MenuContent/MenuButtons"]
+custom_minimum_size = Vector2(360, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_options_button")
+text = "Graphics"
+flat = true
+
+[node name="FeedbackButton" type="Button" parent="Panel/MainOptions/WoodenBoard/MenuMargin/MenuContent/MenuButtons"]
+custom_minimum_size = Vector2(360, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_options_button")
+text = "Feedback"
+flat = true
+
+[node name="BackButton" type="Button" parent="Panel/MainOptions/WoodenBoard/MenuMargin/MenuContent/MenuButtons"]
+custom_minimum_size = Vector2(360, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_options_button")
+text = "Back"
+flat = true
+
+[node name="SoundOptions" type="CenterContainer" parent="Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WoodenBoard" type="Control" parent="Panel/SoundOptions"]
+custom_minimum_size = Vector2(760, 500)
+layout_mode = 2
+script = ExtResource("2_wooden")
+plank_count = 7
+
+[node name="MenuMargin" type="MarginContainer" parent="Panel/SoundOptions/WoodenBoard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 34
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 34
+
+[node name="MenuContent" type="VBoxContainer" parent="Panel/SoundOptions/WoodenBoard/MenuMargin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Panel/SoundOptions/WoodenBoard/MenuMargin/MenuContent"]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Sound"
+label_settings = SubResource("LabelSettings_options_title")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Content" type="Control" parent="Panel/SoundOptions/WoodenBoard/MenuMargin/MenuContent"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BackToOptionsButton" type="Button" parent="Panel/SoundOptions/WoodenBoard/MenuMargin/MenuContent"]
+custom_minimum_size = Vector2(360, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_options_button")
+text = "Back to Options"
+flat = true
+
+[node name="ControlsOptions" type="CenterContainer" parent="Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WoodenBoard" type="Control" parent="Panel/ControlsOptions"]
+custom_minimum_size = Vector2(820, 620)
+layout_mode = 2
+script = ExtResource("2_wooden")
+plank_count = 8
+
+[node name="MenuMargin" type="MarginContainer" parent="Panel/ControlsOptions/WoodenBoard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 34
+
+[node name="MenuContent" type="VBoxContainer" parent="Panel/ControlsOptions/WoodenBoard/MenuMargin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Panel/ControlsOptions/WoodenBoard/MenuMargin/MenuContent"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Controls"
+label_settings = SubResource("LabelSettings_options_title")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Content" type="Control" parent="Panel/ControlsOptions/WoodenBoard/MenuMargin/MenuContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Controls" type="Control" parent="Panel/ControlsOptions/WoodenBoard/MenuMargin/MenuContent/Content"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_controls")
+control_bind_row_scene = ExtResource("4_bind_row")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/ControlsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Controls"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -58,27 +286,293 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=894230398]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/ControlsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Controls/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 14
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=2143215996]
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/ControlsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Controls/MarginContainer/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 1
-text = "Options"
-label_settings = SubResource("LabelSettings_4k0nn")
+size_flags_horizontal = 3
+size_flags_vertical = 3
+vertical_scroll_mode = 3
+
+[node name="ListMargin" type="MarginContainer" parent="Panel/ControlsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Controls/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 16
+
+[node name="ControlsList" type="VBoxContainer" parent="Panel/ControlsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Controls/MarginContainer/VBoxContainer/ScrollContainer/ListMargin"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="ScrollLine" type="Control" parent="Panel/ControlsOptions/WoodenBoard/MenuMargin/MenuContent/Content"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_right = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_scroll_line")
+scroll_container_path = NodePath("../Controls/MarginContainer/VBoxContainer/ScrollContainer")
+
+[node name="ResetToDefault" type="Button" parent="Panel/ControlsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Controls/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(300, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_options_button")
+text = "Reset to Defaults"
+flat = true
+
+[node name="BackToOptionsButton" type="Button" parent="Panel/ControlsOptions/WoodenBoard/MenuMargin/MenuContent"]
+custom_minimum_size = Vector2(360, 38)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_options_button")
+text = "Back to Options"
+flat = true
+
+[node name="GraphicsOptions" type="CenterContainer" parent="Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WoodenBoard" type="Control" parent="Panel/GraphicsOptions"]
+custom_minimum_size = Vector2(760, 520)
+layout_mode = 2
+script = ExtResource("2_wooden")
+plank_count = 7
+
+[node name="MenuMargin" type="MarginContainer" parent="Panel/GraphicsOptions/WoodenBoard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 54
+theme_override_constants/margin_top = 34
+theme_override_constants/margin_right = 54
+theme_override_constants/margin_bottom = 34
+
+[node name="MenuContent" type="VBoxContainer" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent"]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Graphics"
+label_settings = SubResource("LabelSettings_options_title")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="optionsTabContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=1539039912 instance=ExtResource("2_euvqn")]
+[node name="Content" type="Control" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Graphics" type="Control" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent/Content"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_graphics")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Graphics"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Graphics/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="ResolutionSection" type="VBoxContainer" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Graphics/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ResolutionLabel" type="Label" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Graphics/MarginContainer/VBoxContainer/ResolutionSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Resolution"
+
+[node name="ResolutionOption" type="OptionButton" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Graphics/MarginContainer/VBoxContainer/ResolutionSection"]
+custom_minimum_size = Vector2(520, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_options_button")
+flat = true
+
+[node name="InterfaceScaleSection" type="VBoxContainer" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Graphics/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="InterfaceScaleLabel" type="Label" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Graphics/MarginContainer/VBoxContainer/InterfaceScaleSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Interface Scale"
+
+[node name="InterfaceScaleOption" type="OptionButton" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Graphics/MarginContainer/VBoxContainer/InterfaceScaleSection"]
+custom_minimum_size = Vector2(520, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_options_button")
+flat = true
+
+[node name="FullscreenSection" type="HBoxContainer" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Graphics/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="FullscreenLabel" type="Label" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Graphics/MarginContainer/VBoxContainer/FullscreenSection"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Fullscreen"
+vertical_alignment = 1
+
+[node name="FullscreenCheck" type="Button" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent/Content/Graphics/MarginContainer/VBoxContainer/FullscreenSection"]
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_options_button")
+toggle_mode = true
+flat = true
+script = ExtResource("7_checkbox")
+
+[node name="BackToOptionsButton" type="Button" parent="Panel/GraphicsOptions/WoodenBoard/MenuMargin/MenuContent"]
+custom_minimum_size = Vector2(360, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_options_button")
+text = "Back to Options"
+flat = true
+
+[node name="FeedbackOptions" type="CenterContainer" parent="Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WoodenBoard" type="Control" parent="Panel/FeedbackOptions"]
+custom_minimum_size = Vector2(760, 500)
+layout_mode = 2
+script = ExtResource("2_wooden")
+plank_count = 7
+
+[node name="MenuMargin" type="MarginContainer" parent="Panel/FeedbackOptions/WoodenBoard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 34
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 34
+
+[node name="MenuContent" type="VBoxContainer" parent="Panel/FeedbackOptions/WoodenBoard/MenuMargin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Panel/FeedbackOptions/WoodenBoard/MenuMargin/MenuContent"]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Feedback"
+label_settings = SubResource("LabelSettings_options_title")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Content" type="Control" parent="Panel/FeedbackOptions/WoodenBoard/MenuMargin/MenuContent"]
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="Panel/MarginContainer/VBoxContainer" unique_id=1381860274]
+[node name="BackToOptionsButton" type="Button" parent="Panel/FeedbackOptions/WoodenBoard/MenuMargin/MenuContent"]
+custom_minimum_size = Vector2(360, 40)
 layout_mode = 2
-size_flags_horizontal = 8
-text = "Back"
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_options_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_options_button")
+text = "Back to Options"
+flat = true

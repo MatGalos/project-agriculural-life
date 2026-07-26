@@ -25,12 +25,13 @@ const INTERFACE_SCALE_OPTIONS: Array[Dictionary] = [
 
 @onready var resolution_option: OptionButton = $MarginContainer/VBoxContainer/ResolutionSection/ResolutionOption
 @onready var interface_scale_option: OptionButton = $MarginContainer/VBoxContainer/InterfaceScaleSection/InterfaceScaleOption
-@onready var fullscreen_check: CheckButton = $MarginContainer/VBoxContainer/FullscreenSection/FullscreenCheck
+@onready var fullscreen_check: Button = $MarginContainer/VBoxContainer/FullscreenSection/FullscreenCheck
 
 var _is_loading_values: bool = false
 
 
 func _ready() -> void:
+	_apply_graphics_control_styles()
 	_build_resolution_options()
 	_build_interface_scale_options()
 	_load_values_from_settings()
@@ -112,5 +113,45 @@ func _on_fullscreen_toggled(is_fullscreen: bool) -> void:
 	GraphicsSettingsManager.set_fullscreen(is_fullscreen)
 
 
-func _update_fullscreen_text(is_fullscreen: bool) -> void:
-	fullscreen_check.text = "Enabled" if is_fullscreen else "Disabled"
+func _update_fullscreen_text(_is_fullscreen: bool) -> void:
+	fullscreen_check.text = ""
+
+
+func _apply_graphics_control_styles() -> void:
+	_apply_dropdown_style(resolution_option)
+	_apply_dropdown_style(interface_scale_option)
+	_apply_checkbox_style(fullscreen_check)
+
+
+func _apply_dropdown_style(option_button: OptionButton) -> void:
+	option_button.flat = true
+	option_button.add_theme_color_override("font_color", Color.BLACK)
+	option_button.add_theme_color_override("font_hover_color", Color.WHITE)
+	option_button.add_theme_color_override("font_pressed_color", Color.WHITE)
+	option_button.add_theme_color_override("font_focus_color", Color.BLACK)
+	option_button.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
+	option_button.add_theme_stylebox_override("hover", StyleBoxEmpty.new())
+	option_button.add_theme_stylebox_override("pressed", StyleBoxEmpty.new())
+	option_button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+
+	var popup: PopupMenu = option_button.get_popup()
+	var popup_panel: StyleBoxFlat = StyleBoxFlat.new()
+	popup_panel.bg_color = Color(0.64, 0.38, 0.17, 0.98)
+	popup_panel.border_color = Color(0.24, 0.12, 0.045, 1.0)
+	popup_panel.set_border_width_all(4)
+	popup_panel.set_content_margin_all(8)
+
+	var popup_hover: StyleBoxFlat = StyleBoxFlat.new()
+	popup_hover.bg_color = Color(0.24, 0.12, 0.045, 0.55)
+
+	popup.add_theme_stylebox_override("panel", popup_panel)
+	popup.add_theme_stylebox_override("hover", popup_hover)
+	popup.add_theme_color_override("font_color", Color.BLACK)
+	popup.add_theme_color_override("font_hover_color", Color.WHITE)
+	popup.add_theme_color_override("font_selected_color", Color.WHITE)
+
+
+func _apply_checkbox_style(check_button: Button) -> void:
+	check_button.toggle_mode = true
+	check_button.flat = true
+	check_button.text = ""

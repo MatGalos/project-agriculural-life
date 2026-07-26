@@ -1,9 +1,12 @@
-[gd_scene format=3 uid="uid://bg2wnf0pafkqt"]
+[gd_scene load_steps=5 format=3 uid="uid://bg2wnf0pafkqt"]
 
 [ext_resource type="Script" uid="uid://b5uhdrc81fcde" path="res://Scripts/UIs/Menus/LaunchMenu/mainMenu.gd" id="1_oixpk"]
+[ext_resource type="Script" path="res://Scripts/UIs/Menus/WoodenMenuPanel.gd" id="2_wooden"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_s25uk"]
 font_size = 63
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_menu_button"]
 
 [node name="MainMenu" type="Control" unique_id=176163149 node_paths=PackedStringArray("versionLabel", "startButton", "loadButton", "optionsButton", "creditsButton", "exitButton") groups=["mainMenu"]]
 layout_mode = 3
@@ -13,12 +16,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_oixpk")
-versionLabel = NodePath("MarginContainer/Version")
-startButton = NodePath("MarginContainer/HBoxContainer/VBoxContainer/StartButton")
-loadButton = NodePath("MarginContainer/HBoxContainer/VBoxContainer/LoadButton")
-optionsButton = NodePath("MarginContainer/HBoxContainer/VBoxContainer/OptionsButton")
-creditsButton = NodePath("MarginContainer/HBoxContainer/VBoxContainer/CreditsButton")
-exitButton = NodePath("MarginContainer/HBoxContainer/VBoxContainer/ExitButton")
+versionLabel = NodePath("Version")
+startButton = NodePath("MenuCenter/WoodenBoard/MenuMargin/MenuButtons/StartButton")
+loadButton = NodePath("MenuCenter/WoodenBoard/MenuMargin/MenuButtons/LoadButton")
+optionsButton = NodePath("MenuCenter/WoodenBoard/MenuMargin/MenuButtons/OptionsButton")
+creditsButton = NodePath("MenuCenter/WoodenBoard/MenuMargin/MenuButtons/CreditsButton")
+exitButton = NodePath("MenuCenter/WoodenBoard/MenuMargin/MenuButtons/ExitButton")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1514569189]
 layout_mode = 1
@@ -29,84 +32,136 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.101960786, 0.3372549, 0.15686275, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1504166298]
+[node name="Title (To be replaced later)" type="Label" parent="." unique_id=775014586]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 52.0
+offset_bottom = 132.0
+grow_horizontal = 2
+text = "Project Agricultural Life"
+label_settings = SubResource("LabelSettings_s25uk")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuCenter" type="CenterContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=692876216]
+[node name="WoodenBoard" type="Control" parent="MenuCenter"]
+custom_minimum_size = Vector2(540, 340)
 layout_mode = 2
-theme_override_constants/separation = 60
+script = ExtResource("2_wooden")
+plank_count = 5
 
-[node name="Separator" type="Control" parent="MarginContainer/VBoxContainer" unique_id=134057406]
-layout_mode = 2
+[node name="MenuMargin" type="MarginContainer" parent="MenuCenter/WoodenBoard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 42
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 42
 
-[node name="Title (To be replaced later)" type="Label" parent="MarginContainer/VBoxContainer" unique_id=775014586]
+[node name="MenuButtons" type="VBoxContainer" parent="MenuCenter/WoodenBoard/MenuMargin"]
 layout_mode = 2
-text = "Project Agricultural Life"
-label_settings = SubResource("LabelSettings_s25uk")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1945481364]
-layout_mode = 2
+theme_override_constants/separation = 14
 alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=122931434]
+[node name="StartButton" type="Button" parent="MenuCenter/WoodenBoard/MenuMargin/MenuButtons" unique_id=657587983]
+custom_minimum_size = Vector2(360, 42)
 layout_mode = 2
-theme_override_constants/separation = 6
-alignment = 1
-
-[node name="Separator2" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1549393791]
-layout_mode = 2
-
-[node name="StartButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=657587983]
-layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
 text = "Start Game"
+flat = true
 
-[node name="Separator3" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1793404344]
+[node name="LoadButton" type="Button" parent="MenuCenter/WoodenBoard/MenuMargin/MenuButtons" unique_id=795951830]
+custom_minimum_size = Vector2(360, 42)
 layout_mode = 2
-
-[node name="LoadButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=795951830]
-layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
 text = "Load Game"
+flat = true
 
-[node name="Separator4" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=859619643]
+[node name="OptionsButton" type="Button" parent="MenuCenter/WoodenBoard/MenuMargin/MenuButtons" unique_id=579216073]
+custom_minimum_size = Vector2(360, 42)
 layout_mode = 2
-
-[node name="OptionsButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=579216073]
-layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
 text = "Options"
+flat = true
 
-[node name="Separator5" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1644968830]
+[node name="CreditsButton" type="Button" parent="MenuCenter/WoodenBoard/MenuMargin/MenuButtons" unique_id=719801092]
+custom_minimum_size = Vector2(360, 42)
 layout_mode = 2
-
-[node name="CreditsButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=719801092]
-layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
 text = "Credits"
+flat = true
 
-[node name="Separator6" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=228358304]
+[node name="ExitButton" type="Button" parent="MenuCenter/WoodenBoard/MenuMargin/MenuButtons" unique_id=558665022]
+custom_minimum_size = Vector2(360, 42)
 layout_mode = 2
-
-[node name="ExitButton" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=558665022]
-layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
 text = "Exit to Desktop"
+flat = true
 
-[node name="Version" type="Label" parent="MarginContainer" unique_id=15008933]
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
+[node name="Version" type="Label" parent="." unique_id=15008933]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -180.0
+offset_top = -36.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 0
 horizontal_alignment = 2
 vertical_alignment = 2
