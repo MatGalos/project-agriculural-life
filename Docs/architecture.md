@@ -398,7 +398,7 @@ Panel styling rules:
 
 - Gameplay HUD status elements use compact local plaques rather than menu-sized boards: date/time and money use small wood-drawn plaques, while bottom-left notifications use a light paper-style plaque.
 - Interaction prompts under the crosshair should stay as short white text without a background, using the control-action format such as `E — Open Silo` or `LMB — Water`.
-- Larger gameplay UI panels such as Inventory, FarmPhone apps, and Storage/Silo should use dark farm-themed `StyleBoxFlat` backgrounds with alpha around `0.88-0.95`.
+- Larger gameplay UI panels should use their local farm-themed style: Inventory and Storage/Silo use drawn wooden panels, while FarmPhone apps keep their phone-specific panel styling.
 - Inner cards, slots, and rows should stay in the `0.85-0.95` alpha range when they need a stable reading surface.
 - Modal overlays should remain lower opacity, generally `0.45-0.65`.
 - Avoid pure low-alpha black debug-looking panels. Prefer dark green/brown/black tones such as `Color(0.06, 0.07, 0.06, 0.92)`.
@@ -415,7 +415,16 @@ Menu styling rules:
 
 ## Inventory UI
 
-`InventoryPanel` builds slot UI nodes from `slot_ui_scene` and binds them to `InventoryData.slots` by index.
+`InventoryPanel` builds slot UI nodes from `slot_ui_scene` and binds them to `InventoryData.slots` by index. The player inventory currently contains 25 slots total:
+
+- Inventory slots `0-4` are the hotbar slots.
+- Inventory slots `5-24` are the regular inventory grid slots.
+
+The Inventory screen renders the same 25 slots in two visual zones:
+
+- A centered top leather tool-belt strip displays the five hotbar slots.
+- A lower `5 x 4` grid displays the remaining 20 inventory slots, preserving the total `5 x 5` inventory capacity when the hotbar row is included.
+- The bottom description panel shows the selected or hovered item's display name, amount, and optional `ItemData.description`.
 
 `InventorySlotUI` handles drag and drop:
 
@@ -423,15 +432,17 @@ Menu styling rules:
 - Drag payloads use `{ "type": "inventory_slot", "slot_index": index }` to avoid accepting unrelated UI drags.
 - Icons are displayed at a fixed UI size and do not resize slots based on source texture size.
 - Watering-can slots show a water-fill bar and refresh from `ToolManager.watering_can_changed`.
-- Inventory panel and slot opacity are local scene styles. Keep future inventory visual changes independent from inventory data and drag/drop behavior.
+- Slot visuals are drawn locally: hotbar slots use leather-pocket styling, regular inventory slots use warm wooden/card styling, and item amounts use a small light badge.
+- Hovered, selected, and active-hotbar states are visual only and must not change inventory or hotbar data.
+- Keep future inventory visual changes independent from inventory data, hotbar mapping, and drag/drop behavior.
 
 ## Hotbar UI
 
-`QuickInventoryController` renders the mapped inventory slots and refreshes when inventory data changes. It also refreshes after inventory drag and drop to keep hotbar icons synchronized with slot movement.
+`QuickInventoryController` renders the mapped inventory slots during gameplay and refreshes when inventory data changes. It also refreshes after inventory drag and drop to keep hotbar icons synchronized with slot movement.
 
 Watering-can bars are created under each slot icon at runtime. They are intentionally attached to `IconRect`, not the slot `PanelContainer`, so the bar does not resize or darken the whole hotbar slot.
 
-Hotbar panel and slot backgrounds are local scene styles in `player_hud.tscn`. Changing their opacity must not affect `HotbarData`, selected-slot state, or inventory mapping.
+Hotbar panel and slot backgrounds are local scene styles in `player_hud.tscn` plus the drawn tool-belt helpers under `Scripts/UIs/PlayerHUD/`. Changing their visuals must not affect `HotbarData`, selected-slot state, or inventory mapping.
 
 ## Player HUD
 
