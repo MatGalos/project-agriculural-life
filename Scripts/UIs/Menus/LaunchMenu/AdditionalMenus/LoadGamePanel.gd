@@ -1,10 +1,10 @@
 extends Control
 class_name LoadGamePanel
 
-@onready var slot_1_button: Button = $PanelContainer/MarginContainer/VBoxContainer/Slot1Button
-@onready var slot_2_button: Button = $PanelContainer/MarginContainer/VBoxContainer/Slot2Button
-@onready var slot_3_button: Button = $PanelContainer/MarginContainer/VBoxContainer/Slot3Button
-@onready var back_button: Button = $PanelContainer/MarginContainer/VBoxContainer/BackButton
+@onready var slot_1_button: Button = $MenuCenter/WoodenBoard/MenuMargin/MenuContent/SlotButtons/Slot1Button
+@onready var slot_2_button: Button = $MenuCenter/WoodenBoard/MenuMargin/MenuContent/SlotButtons/Slot2Button
+@onready var slot_3_button: Button = $MenuCenter/WoodenBoard/MenuMargin/MenuContent/SlotButtons/Slot3Button
+@onready var back_button: Button = $MenuCenter/WoodenBoard/MenuMargin/MenuContent/BackButton
 @onready var background: ColorRect = $Background
 
 @onready var game_scene: PackedScene = preload("res://Scenes/Game/mainScene.tscn") as PackedScene
@@ -52,7 +52,7 @@ func _refresh_slots() -> void:
 
 
 func _update_slot_button(button: Button, slot: int) -> void:
-	var info := SaveManager.get_save_slot_info(slot)
+	var info: Dictionary = SaveManager.get_save_slot_info(slot)
 
 	if not bool(info.get("exists", false)):
 		button.text = "Slot %d\nEmpty Slot" % slot

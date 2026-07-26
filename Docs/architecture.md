@@ -63,7 +63,9 @@ Current settings:
 - Interface scale: `Small`, `Medium`, or `Big`, applied through the root window content scale factor.
 - Fullscreen: toggles the game window between windowed and fullscreen mode.
 
-The Graphics tab in options owns only UI controls. Runtime application and persistence stay in `GraphicsSettingsManager`.
+The Graphics submenu in options owns only UI controls. Runtime application and persistence stay in `GraphicsSettingsManager`.
+
+The graphics dropdowns and fullscreen checkbox are styled locally in `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/graphics.gd`. Dropdown popup styling stays UI-only; the selected values still flow through `GraphicsSettingsManager`. Fullscreen uses a square toggle button drawn by `Scripts/UIs/Menus/OptionsMenu/OptionsCheckBox.gd` instead of the default `CheckButton` visuals.
 
 ## Pause And Mouse Capture
 
@@ -72,7 +74,7 @@ The Graphics tab in options owns only UI controls. Runtime application and persi
 Rules:
 
 - `setPaused()` must be used instead of changing `get_tree().paused` directly.
-- `Esc` is ignored while options or load game are open, so submenu overlays cannot accidentally unpause the game or create a second pause stack.
+- `Esc` closes the active options submenu back to the options root, closes options from the root, and is ignored while load game is open so submenu overlays cannot accidentally unpause the game or create a second pause stack.
 - Inventory and phone are closed before toggling pause.
 - Mouse capture is enabled only while the player is in game, not paused, and no blocking UI is visible.
 - Options and load game opened from pause keep the pause blur visible and hide the pause button panel.
@@ -84,6 +86,7 @@ Pause menu visuals are intentionally local to `Scenes/UIs/Menus/PauseMenu/pauseM
 - The blur should stay subtle enough to avoid a doubled-image effect.
 - A full-screen dark overlay may improve contrast, but large opaque foreground blocks should be avoided unless they are part of the actual menu controls.
 - Save/load button behavior belongs to `pauseMenu.gd` and should not be changed when tuning blur or panel styling.
+- `Save`, `Save and Quit to Menu`, and `Save and Quit to Desktop` open a local confirmation overlay before writing the current save slot. Confirmation messages and buttons are part of `pauseMenu.tscn`; `SaveManager.save_game()` remains the only save writer.
 
 ## Inventory Data
 
@@ -326,9 +329,9 @@ Save-slot behavior:
 - `get_save_path(slot)` resolves a slot to its `user://save_slot_%d.json` path.
 - `has_save(slot)` checks whether a slot file exists.
 - `delete_save(slot)` removes a slot file if it exists.
-- The new game menu selects a slot with `SaveManager.start_new_game(slot)`, clears any old file for that slot, resets runtime state, and writes the initial save.
+- The new game menu starts empty slots immediately. If the selected slot already has a save, it shows a local overwrite confirmation before calling `SaveManager.start_new_game(slot)`, which clears the old file, resets runtime state, and writes the initial save.
 - The load game menu selects a slot with `set_current_save_slot(slot)`, starts gameplay, changes to the main game scene, and then applies `load_game()`.
-- Pause menu `Save`, `Save and quit to menu`, and `Save and quit to desktop` all write to the current save slot before continuing their action.
+- Pause menu `Save`, `Save and quit to menu`, and `Save and quit to desktop` all ask for confirmation, then write to the current save slot before continuing their action.
 
 Saved data:
 
@@ -398,6 +401,15 @@ Panel styling rules:
 - Modal overlays should remain lower opacity, generally `0.45-0.65`.
 - Avoid pure low-alpha black debug-looking panels. Prefer dark green/brown/black tones such as `Color(0.06, 0.07, 0.06, 0.92)`.
 - Do not use panel-opacity polish as a reason to change anchors, layout, app logic, inventory logic, storage logic, save/load behavior, or economy values.
+
+Menu styling rules:
+
+- Main Menu, Pause Menu, Options, New Game, and Load Game use local scene styles rather than a global theme migration.
+- `Scripts/UIs/Menus/WoodenMenuPanel.gd` draws the shared wooden board background for central menu panels and confirmation overlays.
+- Main/Pause/Options menu buttons should read as text painted on wood: transparent button backgrounds, black normal text, and white hover/pressed text.
+- New Game and Load Game save slots use light beige paper-card `StyleBoxFlat` resources, black text, and subtle warm hover states.
+- Options uses a root segment list instead of tabs. Sound, Controls, Graphics, and Feedback are separate visible panels controlled by `OptionsMenu`.
+- Controls Options uses a custom black scroll indicator from `Scripts/UIs/Menus/OptionsMenu/OptionsScrollLine.gd` instead of relying on the native scrollbar skin.
 
 ## Inventory UI
 
