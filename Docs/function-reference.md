@@ -775,10 +775,10 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func _update_layout() -> void:` | Updates update layout from current data. |
-| `func _update_corner_panels(ui_scale: float, margin: float) -> void:` | Updates update corner panels from current data. |
-| `func _update_bottom_panels(ui_scale: float, margin: float) -> void:` | Updates update bottom panels from current data. |
-| `func _update_center_prompt(viewport_size: Vector2, min_axis: float) -> void:` | Updates update center prompt from current data. |
+| `func _update_layout() -> void:` | Recalculates HUD placement from the current viewport size. |
+| `func _update_corner_panels(ui_scale: float, margin: float) -> void:` | Sizes and positions the date/time and money wood plaques in the top-right corner. |
+| `func _update_bottom_panels(ui_scale: float, margin: float) -> void:` | Sizes bottom-left notification cards and the existing hotbar area without changing hotbar behavior. |
+| `func _update_center_prompt(viewport_size: Vector2, min_axis: float) -> void:` | Positions the short white interaction prompt under the crosshair. |
 | `func _set_rect(control: Control, left: float, top: float, width: float, height: float) -> void:` | Sets set rect for internal UI or gameplay state. |
 | `func _set_top_right_rect(control: Control, right_margin: float, top: float, width: float, height: float) -> void:` | Sets set top right rect for internal UI or gameplay state. |
 | `func _set_bottom_left_rect(control: Control, left: float, bottom_margin: float, width: float, height: float) -> void:` | Sets set bottom left rect for internal UI or gameplay state. |
@@ -807,6 +807,17 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 | `func _update_time_ui() -> void:` | Updates update time ui from current data. |
 | `func _on_money_changed(_new_amount: int) -> void:` | Handles the 'on money changed' signal callback. |
 | `func _update_money_ui() -> void:` | Updates update money ui from current data. |
+
+## `Scripts/UIs/PlayerHUD/HUDPlaque.gd`
+
+Drawn `ColorRect` helper for compact gameplay HUD plaques. It is used by `player_hud.tscn` for date/time, money, and bottom-left notifications.
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Makes the base `ColorRect` transparent and queues redraws when resized. |
+| `func _draw() -> void:` | Draws either the wood or paper plaque variant based on `plaque_style`. |
+| `func _draw_wood_plaque() -> void:` | Draws a small wooden HUD plaque with border, grain lines, and highlight. |
+| `func _draw_paper_plaque() -> void:` | Draws a light paper notification card with border, subtle shadow, and guide line. |
 
 ## `Scripts/UIs/UIFormatHelper.gd`
 

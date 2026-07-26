@@ -235,11 +235,11 @@ Good next targets:
 - `WeatherManager._water_fields_if_needed()` for rain and storm field watering.
 - `WeatherManager` phase forecast generation with real `WeatherDayPatternData` resources.
 - Menu and HUD panel exclusivity rules in `PlayerHUD`.
-- Visual/UI verification for stacked bottom-left HUD event/news alerts.
+- Visual/UI verification for stacked bottom-left HUD event/news alerts, including paper-card alignment and readable font size.
 - Visual verification for UI panel opacity in Inventory, FarmPhone apps, and Storage/Silo.
 - Visual verification for wooden menu panels, text-style menu buttons, paper save-slot cards, Options submenus, custom Options scroll/checkbox/dropdown controls, and save/overwrite confirmation popups.
 - Manual regression pass for HUD visibility modes: gameplay, pause, phone, inventory, and storage.
-- Manual pass for UI formatting consistency in money, dates, market percentages, product/seed names, weather names, input labels, and interaction prompts.
+- Manual pass for UI formatting consistency in money, dates, market percentages, product/seed names, weather names, input labels, and short control-action interaction prompts.
 
 For UI-heavy behavior, prefer small logic tests around panel state and signal connections before adding full scene interaction tests.
 
@@ -254,5 +254,6 @@ Run this checklist in Godot after UI polish changes, especially when no screensh
 5. Open Options from Main Menu and Pause Menu. Confirm the root segment list opens Sound, Controls, Graphics, and Feedback submenus; `Back to Options`, root `Back`, and Escape return to the correct previous state.
 6. In Options, verify Graphics dropdown popups, the square fullscreen checkbox, and the Controls scroll line match the wooden menu style.
 7. Open New Game and Load Game from their supported contexts. Confirm wooden panels, paper save-slot cards, empty/occupied slot labels, disabled empty load slots, and occupied-slot overwrite confirmation in New Game.
-8. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting.
-9. Repeat the UI pass at 1280x720, 1920x1080, and 2560x1440.
+8. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting. Prompts should show as white text without a background and should not show placeholder text after starting or loading a game.
+9. Confirm the date/time and money displays sit inside compact wooden plaques, and that the money value is right-aligned with inner padding.
+10. Repeat the UI pass at 1280x720, 1920x1080, and 2560x1440.

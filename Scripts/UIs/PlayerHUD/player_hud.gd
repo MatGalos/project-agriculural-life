@@ -60,6 +60,8 @@ func _ready() -> void:
 	phone_panel.visible = false
 	storage_panel.close()
 	_hide_event_message()
+	prompt_label.text = ""
+	set_interaction_prompt_visible(false)
 	MoneyManager.money_changed.connect(_on_money_changed)
 	_update_money_ui()
 	gamemanager.pauseChanged.connect(_on_pause_changed)
@@ -67,6 +69,17 @@ func _ready() -> void:
 	_refresh_ui_mode()
 
 func _apply_scoped_typography() -> void:
+	var text_color: Color = Color(0.06, 0.035, 0.015, 1.0)
+	var shadow_color: Color = Color(0.94, 0.77, 0.45, 0.20)
+
+	for label: Label in [date_label, time_label, funds_label, event_label, prompt_label]:
+		label.add_theme_color_override("font_color", text_color)
+		label.add_theme_color_override("font_shadow_color", shadow_color)
+		label.add_theme_constant_override("shadow_offset_x", 1)
+		label.add_theme_constant_override("shadow_offset_y", 1)
+
+	prompt_label.add_theme_color_override("font_color", Color.WHITE)
+	prompt_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.65))
 	event_label.add_theme_font_override("font", LATO_REGULAR_FONT)
 	prompt_label.add_theme_font_override("font", LATO_REGULAR_FONT)
 
@@ -81,19 +94,22 @@ func _update_layout() -> void:
 	_update_center_prompt(viewport_size, min_axis)
 
 func _update_corner_panels(ui_scale: float, margin: float) -> void:
-	var date_width: float = 140.0 * ui_scale
-	var date_height: float = 54.0 * ui_scale
+	var date_width: float = 168.0 * ui_scale
+	var date_height: float = 56.0 * ui_scale
 	var funds_width: float = date_width
-	var funds_height: float = 28.0 * ui_scale
+	var funds_height: float = 30.0 * ui_scale
 	var map_size: Vector2 = Vector2(150.0, 156.0) * ui_scale
+	var plaque_padding: float = 10.0 * ui_scale
 
 	_set_top_right_rect(date_time_controller, margin, margin, date_width, date_height)
 	_set_rect(date_time_bg, 0.0, 0.0, date_width, date_height)
-	_set_rect(date_time_container, 0.0, 4.0 * ui_scale, date_width, date_height - (8.0 * ui_scale))
+	_set_rect(date_time_container, plaque_padding, 5.0 * ui_scale, date_width - (plaque_padding * 2.0), date_height - (10.0 * ui_scale))
 
 	_set_top_right_rect(funds_controller, margin, margin + date_height + (8.0 * ui_scale), funds_width, funds_height)
 	_set_rect(funds_bg, 0.0, 0.0, funds_width, funds_height)
-	_set_rect(funds_label, 0.0, 0.0, funds_width - (8.0 * ui_scale), funds_height)
+	_set_rect(funds_label, plaque_padding, 0.0, funds_width - (plaque_padding * 2.0), funds_height)
+	funds_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	funds_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 
 	_set_rect(map_controller, margin, margin, map_size.x, map_size.y)
 	date_label.add_theme_font_size_override("font_size", roundi(14.0 * ui_scale))
@@ -101,24 +117,26 @@ func _update_corner_panels(ui_scale: float, margin: float) -> void:
 	funds_label.add_theme_font_size_override("font_size", roundi(15.0 * ui_scale))
 
 func _update_bottom_panels(ui_scale: float, margin: float) -> void:
-	var event_size: Vector2 = Vector2(190.0, 96.0) * ui_scale
+	var event_size: Vector2 = Vector2(300.0, 86.0) * ui_scale
 	var slot_size: Vector2 = Vector2(96.0, 64.0) * ui_scale
 	var inventory_width: float = slot_size.x * 5.0
 	var inventory_height: float = slot_size.y
+	var notification_padding: float = 12.0 * ui_scale
 
 	_set_bottom_left_rect(event_controller, margin, margin, event_size.x, event_size.y)
+	_set_rect(event_label, notification_padding, 6.0 * ui_scale, event_size.x - (notification_padding * 2.0), event_size.y - (12.0 * ui_scale))
 	_set_bottom_center_rect(quick_inventory_controller, margin, inventory_width, inventory_height)
 
 	_set_inventory_slot_sizes(slot_size)
 
-	event_label.add_theme_font_size_override("font_size", roundi(14.0 * ui_scale))
+	event_label.add_theme_font_size_override("font_size", roundi(17.0 * ui_scale))
 	_update_inventory_label_fonts(roundi(13.0 * ui_scale))
 
 func _update_center_prompt(viewport_size: Vector2, min_axis: float) -> void:
-	var prompt_width: float = clampf(viewport_size.x * 0.42, 280.0, 640.0)
+	var prompt_width: float = clampf(viewport_size.x * 0.28, 220.0, 460.0)
 	var prompt_gap: float = clampf(min_axis * 0.045, 28.0, 64.0)
-	var prompt_font_size: int = roundi(clampf(min_axis * 0.026, 18.0, 28.0))
-	var prompt_height: float = maxf(float(prompt_font_size) * 1.7, 40.0)
+	var prompt_font_size: int = roundi(clampf(min_axis * 0.021, 16.0, 22.0))
+	var prompt_height: float = maxf(float(prompt_font_size) * 1.9, 36.0)
 	var prompt_top: float = (CROSSHAIR_SIZE * 0.5) + prompt_gap
 
 	prompt_label.offset_left = -prompt_width * 0.5
@@ -298,7 +316,7 @@ func set_crosshair_visible(is_visible: bool) -> void:
 
 
 func set_interaction_prompt_visible(is_visible: bool) -> void:
-	prompt_label.visible = is_visible
+	prompt_label.visible = is_visible and not prompt_label.text.strip_edges().is_empty()
 
 
 func set_hotbar_visible(is_visible: bool) -> void:
