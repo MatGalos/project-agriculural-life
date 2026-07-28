@@ -12,6 +12,7 @@ func run_all_tests() -> void:
 	print("\n========== RUNNING TESTS ==========")
 
 	_run_test_script(preload("res://Tests/Core/UIFormatHelperTest.gd").new())
+	_run_test_script(preload("res://Tests/Core/FarmPhoneLayoutTest.gd").new())
 	_run_test_script(preload("res://Tests/Core/MoneyManagerTest.gd").new())
 	_run_test_script(preload("res://Tests/Core/StorageDataTest.gd").new())
 	_run_test_script(preload("res://Tests/Core/HotbarDataTest.gd").new())

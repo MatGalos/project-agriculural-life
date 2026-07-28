@@ -358,14 +358,24 @@ Load behavior:
 
 ## Phone Apps
 
-`PhonePanel` hosts separate app scenes and bottom navigation buttons.
+`PhonePanel` renders the FarmPhone shell, home screen, and hosted app scenes.
+
+Base layout:
+
+- The phone shell is a stylized black smartphone front inspired by the general shape of older flat black smartphones, without Apple branding or product logos.
+- `PhoneShell` owns the black outer frame, rounded corners, subtle border, top camera/speaker details, screen frame, and lower physical-style home button.
+- `ScreenArea` contains a black `Wallpaper`, the `HomeScreen`, and a shared `AppContainer`.
+- `HomeScreen/HomeGrid` is a fixed 4-column grid with 16 slots. App entries are represented by a button-style icon plus a readable name label below it.
+- Opening the phone should land on the home screen. Pressing the home button while an app is open hides all apps and returns to the home screen.
+- Pressing the home button while already on the home screen is intentionally safe and keeps the phone open.
+- Closing the phone remains owned by `PlayerHUD` and the existing input flow.
 
 Current apps:
 
 - Sell app: sells storage items and uses dynamic commodity prices where available.
 - Shop app: buys items through configured shop data and `MoneyManager`.
 - Market app: displays commodity prices, market status, trends, percentage changes, and recent history. Internal scene and script names may still use stock/commodity terminology.
-- Storage app: displays stored items when present in the phone flow.
+- Storage is currently represented as a visible disabled home-screen icon because storage/silo UI remains a separate `PlayerHUD` panel, not a wired FarmPhone app.
 - Weather app: displays current weather, current-day phase rows, and next-day forecast rows.
 - News app: displays latest `NewsManager` entries in a vertical scroll list.
 
@@ -374,11 +384,13 @@ Rules:
 - Phone, inventory, and storage panels are mutually exclusive from `PlayerHUD`.
 - Visible phone app labels should use `News`, `Market`, `Shop`, `Weather`, `Storage`, and `Sell`.
 - Each app owns its own `refresh()` method.
+- Phone app switching should use the shared `AppContainer`: hide home, hide all app children, show the selected app, then call that app's `refresh()`.
 - App panels should connect to relevant manager signals only once.
 - App row scenes should be passed through exported `row_scene` fields, not hardcoded in scripts.
 - Phone app content that can grow beyond the phone frame should sit inside a vertical `ScrollContainer`.
 - Current scrollable phone areas are news entries, shop items, sellable silo items, commodity list/history, and weather forecast rows.
-- FarmPhone typography and basic panel styles are centralized in `Scenes/UIs/PlayerHUD/Phone/FarmPhoneTheme.tres`. Keep this theme small; do not migrate unrelated game menus into it.
+- FarmPhone typography, shell styles, home button style, and home-screen icon styles are centralized in `Scenes/UIs/PlayerHUD/Phone/FarmPhoneTheme.tres`. Keep this theme scoped to FarmPhone; do not migrate unrelated game menus into it.
+- FarmPhone layout tests in `Tests/Core/FarmPhoneLayoutTest.gd` cover scene structure, grid size, app labels, shared app container presence, and visible-text branding guardrails. Visual proportions still require a manual Godot pass.
 
 ## UI Formatting And Panel Styling
 
