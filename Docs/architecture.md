@@ -245,8 +245,14 @@ Important behavior:
 - Event requirements use completed-day history, not the current in-progress phase.
 - A rainy day is evaluated from the representative day pattern or watering weather options; a dry day is any completed day that is not rainy.
 - `get_consecutive_recent_dry_days()`, `get_rainy_days_in_recent_days(days)`, and `get_current_day_base_temperature()` are used by weather/temperature event requirements.
-- The weather phone app listens to `weather_changed` and rebuilds current phase rows plus next-day forecast rows.
-- Next-day forecast rows show the pattern display name, representative temperature, and rain chance; the first future row is labeled `Tomorrow`, then later rows use `Day +N`.
+- The weather phone app listens to `weather_changed` and rebuilds its Today card, current-day phase cards, and next-day forecast rows.
+- The weather phone app uses the existing `WeatherPhaseData` day parts: `Dawn`, `Morning`, `Afternoon`, and `Night`. Do not replace these with hourly forecast entries.
+- The Today card shows the current day pattern, current weather, current temperature, a drawn weather icon, and current phase rain chance.
+- Day-part cards show phase name, drawn weather icon, temperature, and rain chance.
+- Next-day forecast rows show `Tomorrow` or `Day +N`, a drawn weather icon, normalized weather name, representative temperature, and rain chance.
+- Weather app content keeps a larger left safe inset than right inset inside the FarmPhone screen so labels such as `Weather`, `Day Parts`, `Dawn`, `Afternoon`, and `Next Days` do not clip against the black screen frame.
+- Day-part cards and next-day rows use compact minimum widths to avoid horizontal overflow in the narrow FarmPhone screen.
+- Humidity is not currently displayed because no humidity field exists in `WeatherData`, `WeatherPhaseData`, or forecast entries.
 
 ## Market Events And News
 
@@ -376,7 +382,7 @@ Current apps:
 - Shop app: buys items through configured shop data and `MoneyManager`.
 - Market app: displays commodity prices, market status, trends, percentage changes, and recent history. Internal scene and script names may still use stock/commodity terminology.
 - Storage is currently represented as a visible disabled home-screen icon because storage/silo UI remains a separate `PlayerHUD` panel, not a wired FarmPhone app.
-- Weather app: displays current weather, current-day phase rows, and next-day forecast rows.
+- Weather app: displays a Today card, current-day `Dawn`/`Morning`/`Afternoon`/`Night` cards, and next-day forecast cards using existing weather data.
 - News app: displays latest `NewsManager` entries in a vertical scroll list.
 
 Rules:
