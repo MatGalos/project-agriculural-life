@@ -55,6 +55,7 @@ Core tests:
 
 - `UIFormatHelperTest.gd`: money, market percentage, season date, product/seed display name, market trend, weather display name, news category, and input label formatting.
 - `FarmPhoneLayoutTest.gd`: FarmPhone scene structure, black smartphone shell nodes, 4-column/16-slot home grid, app icon labels, shared app container, hidden initial app panels, disabled Storage placeholder, and visible-text branding guardrails.
+- `WeatherAppLayoutTest.gd`: Weather app scene structure, scroll container, Today card, Day Parts grid, Next Days container, unavailable state text, safe FarmPhone insets, compact forecast row width budget, and forecast row weather icon/label fields.
 - `MoneyManagerTest.gd`: money setting, adding, spending, and failed spending.
 - `StorageDataTest.gd`: storage item add/remove/count behavior.
 - `HotbarDataTest.gd`: hotbar setup, first-five inventory slot mapping, and selected slot behavior.
@@ -253,13 +254,15 @@ Run this checklist in Godot after UI polish changes, especially when no screensh
 2. Open Pause Menu. Confirm the world remains visible behind the blur, the blur is not doubled, the dark overlay disappears after closing, the HUD is hidden, and Save / Save and Quit actions show confirmation popups before writing.
 3. Open FarmPhone and confirm the black smartphone shell, simple black wallpaper, 4x4 home grid, app icons, app labels, and lower home button are readable.
 4. Open FarmPhone apps from the home screen: News, Market, Shop, Weather, and Sell. Confirm the shell remains visible, app content stays inside the phone screen, and the home button returns to the home grid.
-5. Confirm the Storage icon is visible but disabled until storage is intentionally wired into the FarmPhone app flow. Storage/Silo should still open through its existing gameplay interaction.
-6. Open Inventory and Storage/Silo. Confirm panels and slots are readable against bright and dark world backgrounds.
-7. In Inventory, confirm the top leather strip is centered and contains exactly 5 hotbar slots, the lower grid contains 20 regular slots in 5 columns, and both zones together represent the 25 inventory slots.
-8. In Inventory, hover and select filled and empty slots. Confirm hover/selected states are readable, item amounts stay inside their badges, and the bottom description panel has enough spacing between title, amount, and description.
-9. Open Options from Main Menu and Pause Menu. Confirm the root segment list opens Sound, Controls, Graphics, and Feedback submenus; `Back to Options`, root `Back`, and Escape return to the correct previous state.
-10. In Options, verify Graphics dropdown popups, the square fullscreen checkbox, and the Controls scroll line match the wooden menu style.
-11. Open New Game and Load Game from their supported contexts. Confirm wooden panels, paper save-slot cards, empty/occupied slot labels, disabled empty load slots, and occupied-slot overwrite confirmation in New Game.
-12. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting. Prompts should show as white text without a background and should not show placeholder text after starting or loading a game.
-13. Confirm the date/time and money displays sit inside compact wooden plaques, and that the money value is right-aligned with inner padding.
-14. Repeat the UI pass at 1280x720, 1920x1080, and 2560x1440.
+5. In Weather, confirm there is no hourly forecast. The app should show Today, Day Parts with Dawn/Morning/Afternoon/Night cards, and Next Days/Weekly Forecast rows.
+6. In Weather, confirm temperature, rain chance, and weather icons are readable. The first letters of `Weather`, `Day Parts`, `Dawn`, `Afternoon`, and `Next Days` must not be clipped by the left edge of the phone screen. Humidity should appear only after real humidity data exists.
+7. Confirm the Storage icon is visible but disabled until storage is intentionally wired into the FarmPhone app flow. Storage/Silo should still open through its existing gameplay interaction.
+8. Open Inventory and Storage/Silo. Confirm panels and slots are readable against bright and dark world backgrounds.
+9. In Inventory, confirm the top leather strip is centered and contains exactly 5 hotbar slots, the lower grid contains 20 regular slots in 5 columns, and both zones together represent the 25 inventory slots.
+10. In Inventory, hover and select filled and empty slots. Confirm hover/selected states are readable, item amounts stay inside their badges, and the bottom description panel has enough spacing between title, amount, and description.
+11. Open Options from Main Menu and Pause Menu. Confirm the root segment list opens Sound, Controls, Graphics, and Feedback submenus; `Back to Options`, root `Back`, and Escape return to the correct previous state.
+12. In Options, verify Graphics dropdown popups, the square fullscreen checkbox, and the Controls scroll line match the wooden menu style.
+13. Open New Game and Load Game from their supported contexts. Confirm wooden panels, paper save-slot cards, empty/occupied slot labels, disabled empty load slots, and occupied-slot overwrite confirmation in New Game.
+14. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting. Prompts should show as white text without a background and should not show placeholder text after starting or loading a game.
+15. Confirm the date/time and money displays sit inside compact wooden plaques, and that the money value is right-aligned with inner padding.
+16. Repeat the UI pass at 1280x720, 1920x1080, and 2560x1440.
