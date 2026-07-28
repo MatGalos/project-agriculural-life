@@ -309,6 +309,11 @@ Important behavior:
 - Loading a save replaces current news history with the saved news list, then rebuilds announced event IDs from active saved events.
 - New event news also calls `PlayerHUD.show_event_message("News alert: <event name>")`.
 - `sync_active_market_event_news()` can recreate missing news for active events but does not show duplicate HUD alerts.
+- The News phone app renders news as cards with category icon, title, date, category, and body text.
+- The News phone app uses `NewsItem.title`, `NewsItem.body`, `NewsItem.day`, `NewsItem.month`, `NewsItem.year`, and `NewsItem.category`; it does not query or mutate event logic while rendering.
+- News categories should be displayed through `UIFormatHelper.display_news_category()`. Unknown or missing categories should fall back to `General`.
+- News impact markers are not currently displayed because `NewsItem` does not store trend/effect direction or a stable event reference.
+- The News phone app shows `No news yet.` when there are no generated news items or active event fallback items.
 
 ## Sales Stats
 
@@ -383,7 +388,7 @@ Current apps:
 - Market app: displays commodity prices, market status, trends, percentage changes, and recent history. Internal scene and script names may still use stock/commodity terminology.
 - Storage is currently represented as a visible disabled home-screen icon because storage/silo UI remains a separate `PlayerHUD` panel, not a wired FarmPhone app.
 - Weather app: displays a Today card, current-day `Dawn`/`Morning`/`Afternoon`/`Night` cards, and next-day forecast cards using existing weather data.
-- News app: displays latest `NewsManager` entries in a vertical scroll list.
+- News app: displays latest `NewsManager` entries as scrollable news cards with title, date, category, body, and category icon. The panel uses balanced outer content insets and an inner right gutter so the vertical scrollbar does not overlap card content.
 
 Rules:
 
