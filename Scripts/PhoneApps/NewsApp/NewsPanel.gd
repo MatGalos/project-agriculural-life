@@ -5,11 +5,15 @@ class_name NewsPanel
 
 const DEFAULT_ROW_SCENE := preload("res://Scenes/UIs/PlayerHUD/Phone/NewsApp/news_item_row.tscn")
 
-@onready var news_container: VBoxContainer = $PanelContainer/MarginContainer/VBoxContainer/NewsScroll/NewsContainer
+@onready var empty_state_card: PanelContainer = $PanelContainer/MarginContainer/ContentStack/EmptyStateCard
+@onready var empty_body_label: Label = $PanelContainer/MarginContainer/ContentStack/EmptyStateCard/EmptyMargin/EmptyStack/EmptyBodyLabel
+@onready var news_scroll: ScrollContainer = $PanelContainer/MarginContainer/ContentStack/NewsScroll
+@onready var news_container: VBoxContainer = $PanelContainer/MarginContainer/ContentStack/NewsScroll/ListMargin/NewsContainer
 
 func _ready() -> void:
 	visible = false
 	add_to_group("news_panel")
+	_apply_typography()
 
 	if not NewsManager.news_added.is_connected(_on_news_added):
 		NewsManager.news_added.connect(_on_news_added)
@@ -38,6 +42,11 @@ func refresh() -> void:
 		child.free()
 
 	var news_items := _get_news_items_to_display()
+	empty_state_card.visible = news_items.is_empty()
+	news_scroll.visible = not news_items.is_empty()
+
+	if news_items.is_empty():
+		return
 
 	for news_item in news_items:
 		var row := resolved_row_scene.instantiate() as NewsItemRow
@@ -48,6 +57,13 @@ func refresh() -> void:
 
 		news_container.add_child(row)
 		row.setup(news_item)
+
+func _apply_typography() -> void:
+	empty_body_label.add_theme_color_override("font_color", Color(0.72, 0.78, 0.86, 1.0))
+	empty_body_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.65))
+	empty_body_label.add_theme_constant_override("shadow_offset_x", 1)
+	empty_body_label.add_theme_constant_override("shadow_offset_y", 1)
+	empty_body_label.add_theme_font_size_override("font_size", 12)
 
 func _get_news_items_to_display() -> Array[NewsItem]:
 	var news_items := NewsManager.get_latest_news()
