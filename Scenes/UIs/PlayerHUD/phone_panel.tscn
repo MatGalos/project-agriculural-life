@@ -10,6 +10,7 @@
 [ext_resource type="Resource" uid="uid://exkyhl0jf7gm" path="res://Data/Inventory/player_inventory.tres" id="8_44o7y"]
 [ext_resource type="PackedScene" uid="uid://dx0gm8cd8556s" path="res://Scenes/UIs/PlayerHUD/Phone/CommodityExchangeApp/commodity_exchange_panel.tscn" id="9_4t3lr"]
 [ext_resource type="PackedScene" uid="uid://co8tk0tro0mec" path="res://Scenes/UIs/PlayerHUD/Phone/CommodityExchangeApp/commodity_item_row.tscn" id="10_814bx"]
+[ext_resource type="PackedScene" uid="uid://b65f1rejsifdq" path="res://Scenes/UIs/PlayerHUD/Phone/ShopApp/shop_cart_row.tscn" id="10_cart"]
 [ext_resource type="PackedScene" uid="uid://datulgagyqbol" path="res://Scenes/UIs/PlayerHUD/Phone/WeatherApp/weather_panel.tscn" id="11_se1to"]
 [ext_resource type="PackedScene" uid="uid://beet0aeil50xy" path="res://Scenes/UIs/PlayerHUD/Phone/WeatherApp/weather_forecast_row.tscn" id="12_5upr8"]
 [ext_resource type="PackedScene" uid="uid://br8ir85avtkfg" path="res://Scenes/UIs/PlayerHUD/Phone/NewsApp/news_panel.tscn" id="13_0jn3t"]
@@ -341,6 +342,7 @@ grow_horizontal = 2
 grow_vertical = 2
 shop_data = ExtResource("6_4t3lr")
 row_scene = ExtResource("7_814bx")
+cart_row_scene = ExtResource("10_cart")
 player_inventory = ExtResource("8_44o7y")
 
 [node name="StockMarketApp" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/AppContainer" unique_id=1407838760 instance=ExtResource("9_4t3lr")]

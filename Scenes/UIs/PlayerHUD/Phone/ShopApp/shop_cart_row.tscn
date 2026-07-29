@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://b65f1rejsifdq"]
+
+[ext_resource type="Script" path="res://Scripts/PhoneApps/ShopApp/ShopCartRow.gd" id="1_cart"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cart_row"]
+bg_color = Color(0.035, 0.04, 0.046, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1, 0.12, 0.13, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="ShopCartRow" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_cart_row")
+script = ExtResource("1_cart")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 7
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 7
+theme_override_constants/margin_bottom = 5
+
+[node name="Row" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="InfoStack" type="VBoxContainer" parent="MarginContainer/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameLabel" type="Label" parent="MarginContainer/Row/InfoStack"]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+mouse_filter = 2
+text_overrun_behavior = 3
+
+[node name="SubtotalLabel" type="Label" parent="MarginContainer/Row/InfoStack"]
+layout_mode = 2
+mouse_filter = 2
+text = "1 x $0 = $0"
+text_overrun_behavior = 3
+
+[node name="ControlsRow" type="HBoxContainer" parent="MarginContainer/Row"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 3
+
+[node name="MinusButton" type="Button" parent="MarginContainer/Row/ControlsRow"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+text = "-"
+
+[node name="QuantityEdit" type="LineEdit" parent="MarginContainer/Row/ControlsRow"]
+custom_minimum_size = Vector2(34, 25)
+layout_mode = 2
+text = "1"
+horizontal_alignment = 1
+context_menu_enabled = false
+virtual_keyboard_type = 2
+select_all_on_focus = true
+
+[node name="PlusButton" type="Button" parent="MarginContainer/Row/ControlsRow"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+text = "+"
+
+[node name="RemoveButton" type="Button" parent="MarginContainer/Row/ControlsRow"]
+custom_minimum_size = Vector2(28, 25)
+layout_mode = 2
+text = "x"
