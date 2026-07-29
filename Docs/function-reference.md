@@ -514,10 +514,18 @@ Resource only plus helper functions. Stores event identity, category, trigger mo
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func setup(new_item_data: ItemData, new_amount: int) -> void:` | Initializes this object or row from provided data. |
-| `func _apply_values() -> void:` | Applies apply values to current state. |
-| `func _on_sell_one_pressed() -> void:` | Handles the 'on sell one pressed' signal callback. |
-| `func _on_sell_all_pressed() -> void:` | Handles the 'on sell all pressed' signal callback. |
+| `func setup(new_item_data: ItemData, new_amount: int, new_selected_amount: int = 0) -> void:` | Initializes one sell row from item data, stored amount, and selected sell amount. |
+| `func _apply_values() -> void:` | Applies icon, product name, stored amount, unit price, selected quantity, subtotal, and button enabled state. |
+| `func _set_selected_amount(value: int) -> void:` | Clamps selected quantity to available storage and emits the updated row quantity. |
+| `func _on_minus_pressed() -> void:` | Decreases selected sell quantity by one. |
+| `func _on_plus_pressed() -> void:` | Increases selected sell quantity by one. |
+| `func _on_half_pressed() -> void:` | Sets selected sell quantity to half of the stored amount. |
+| `func _on_all_pressed() -> void:` | Sets selected sell quantity to all stored items for this product. |
+| `func _on_selected_text_submitted(new_text: String) -> void:` | Commits direct typed quantity edits when Enter is pressed. |
+| `func _on_selected_focus_exited() -> void:` | Commits direct typed quantity edits when the field loses focus. |
+| `func _commit_selected_text(new_text: String) -> void:` | Validates typed selected quantity, clamps it to storage amount, or restores the previous valid number. |
+| `func _on_sell_pressed() -> void:` | Requests sale of the selected quantity. |
+| `func _on_sell_all_pressed() -> void:` | Requests sale of all stored items for this product. |
 
 ## `Scripts/PhoneApps/SellApp/SellingPanel.gd`
 
@@ -527,11 +535,24 @@ Resource only plus helper functions. Stores event identity, category, trigger mo
 | `func open() -> void:` | Opens . |
 | `func close() -> void:` | Closes . |
 | `func toggle() -> void:` | Toggles  between active and inactive states. |
-| `func refresh() -> void:` | Rebuilds or updates this UI from current backing data. |
-| `func _on_sell_one_requested(item_data: ItemData) -> void:` | Handles the 'on sell one requested' signal callback. |
-| `func _on_commodity_prices_updated() -> void:` | Handles the 'on commodity prices updated' signal callback. |
-| `func _on_sell_all_requested(item_data: ItemData) -> void:` | Handles the 'on sell all requested' signal callback. |
-| `func _sell_item(item_data: ItemData, amount: int) -> void:` | Handles sell item behavior. |
+| `func refresh() -> void:` | Rebuilds sell rows from `StorageData`, clamps local selected quantities, and updates empty state and summary. |
+| `func set_sell_quantity(item_id: String, quantity: int) -> void:` | Sets local selected sell quantity for one stored product. |
+| `func increase_sell_quantity(item_id: String, amount: int = 1) -> void:` | Increases selected sell quantity for one product. |
+| `func decrease_sell_quantity(item_id: String, amount: int = 1) -> void:` | Decreases selected sell quantity for one product. |
+| `func set_half_quantity(item_id: String) -> void:` | Sets selected sell quantity to half of the stored amount. |
+| `func set_all_quantity(item_id: String) -> void:` | Sets selected sell quantity to all stored items for one product. |
+| `func get_sell_value(item_id: String) -> int:` | Calculates selected sale value for one product from current sell price and selected quantity. |
+| `func get_total_selected_value() -> int:` | Calculates total selected sale value across all rows. |
+| `func _on_row_quantity_changed(item_id: String, quantity: int) -> void:` | Stores a row's selected sell quantity. |
+| `func _on_commodity_prices_updated() -> void:` | Refreshes prices and sale values when commodity market prices update. |
+| `func _on_sell_requested(item_data: ItemData, amount: int) -> void:` | Handles a row request to sell selected quantity. |
+| `func _on_sell_all_requested(item_data: ItemData) -> void:` | Handles a row request to sell all stored quantity for one product. |
+| `func sell_product(item_data: ItemData, amount: int) -> void:` | Validates amount/storage, removes items from storage, adds money, records `SalesStatsManager` sale, refreshes UI, and shows feedback. |
+| `func sell_selected_products() -> void:` | Sells only the currently selected per-product quantities from the summary button, adds total money, records each sold product in `SalesStatsManager`, clears selected quantities, refreshes UI, and shows feedback. |
+| `func _remove_missing_selections(live_item_ids: Array[String]) -> void:` | Clears selected quantities for products no longer present in storage. |
+| `func _update_summary() -> void:` | Updates total selected sale value and enables `Sell Selected` only when selected value is above zero. |
+| `func _set_feedback(message: String, color: Color) -> void:` | Shows local Sell app feedback text. |
+| `func _refresh_game_ui() -> void:` | Refreshes inventory/hotbar UI after a sale. |
 
 ## `Scripts/PhoneApps/ShopApp/ShopData.gd`
 

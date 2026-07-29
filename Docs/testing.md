@@ -57,6 +57,7 @@ Core tests:
 - `FarmPhoneLayoutTest.gd`: FarmPhone scene structure, black smartphone shell nodes, 4-column/16-slot home grid, app icon labels, shared app container, hidden initial app panels, disabled Storage placeholder, and visible-text branding guardrails.
 - `MarketAppLayoutTest.gd`: Market app two-view scene structure, local details back button, product list scroll container, details hero, price-history chart, compact min/max/average stats, removed product/sample count labels, and compact commodity row fields.
 - `ShopAppLayoutTest.gd`: Shop app cart scene structure, money/feedback labels, product list scroll container, collapsible cart panel with `v`/`^` toggle states, clear/purchase controls, product row Add flow, editable cart quantity field, subtotal fields, and removal of immediate Buy row behavior.
+- `SellAppLayoutTest.gd`: Sell app scene structure, storage product list, empty state, selected sale value summary, product sale cards, editable selected quantity field, quantity controls, Half/All controls, per-row Sell/Sell All buttons, summary Sell Selected button, and removal of the old one-click `SellOneButton` layout.
 - `WeatherAppLayoutTest.gd`: Weather app scene structure, scroll container, Today card, Day Parts grid, Next Days container, unavailable state text, safe FarmPhone insets, compact forecast row width budget, and forecast row weather icon/label fields.
 - `NewsAppLayoutTest.gd`: News app scene structure, empty state card, scroll container, card list container, adjusted FarmPhone insets, scrollbar gutter, and news card fields for icon, title, date, category, and body wrapping.
 - `MoneyManagerTest.gd`: money setting, adding, spending, and failed spending.
@@ -265,17 +266,23 @@ Run this checklist in Godot after UI polish changes, especially when no screensh
 10. In Shop cart, confirm `Total` and `Available` are readable before purchase. `Purchase` should be disabled for an empty cart and for a cart the player cannot afford.
 11. In Shop cart, collapse and expand the cart. Confirm the expanded state shows `v`, the collapsed state shows `^`, the product list gets more room while collapsed, cart contents are preserved, and `Total`, `Available`, and `Purchase` remain usable.
 12. In Shop checkout, confirm an empty cart shows `Cart is empty.`, insufficient money shows `Not enough money.`, a full inventory blocks purchase with `Inventory is full.`, and a successful purchase spends money, adds all items, clears the cart, and refreshes owned counts.
-13. In Weather, confirm there is no hourly forecast. The app should show Today, Day Parts with Dawn/Morning/Afternoon/Night cards, and Next Days/Weekly Forecast rows.
-14. In Weather, confirm temperature, rain chance, and weather icons are readable. The first letters of `Weather`, `Day Parts`, `Dawn`, `Afternoon`, and `Next Days` must not be clipped by the left edge of the phone screen. Humidity should appear only after real humidity data exists.
-15. In News, confirm news items are cards with icon/category marker, title, date, category, and wrapped body text. If there are no news items, confirm the empty state says `No news yet.`.
-16. In News, confirm the feed scrolls inside the phone screen when multiple cards exist, the scrollbar does not overlap card content, and the home button does not cover the last card.
-17. Confirm the Storage icon is visible but disabled until storage is intentionally wired into the FarmPhone app flow. Storage/Silo should still open through its existing gameplay interaction.
-18. Open Inventory and Storage/Silo. Confirm panels and slots are readable against bright and dark world backgrounds.
-19. In Inventory, confirm the top leather strip is centered and contains exactly 5 hotbar slots, the lower grid contains 20 regular slots in 5 columns, and both zones together represent the 25 inventory slots.
-20. In Inventory, hover and select filled and empty slots. Confirm hover/selected states are readable, item amounts stay inside their badges, and the bottom description panel has enough spacing between title, amount, and description.
-21. Open Options from Main Menu and Pause Menu. Confirm the root segment list opens Sound, Controls, Graphics, and Feedback submenus; `Back to Options`, root `Back`, and Escape return to the correct previous state.
-22. In Options, verify Graphics dropdown popups, the square fullscreen checkbox, and the Controls scroll line match the wooden menu style.
-23. Open New Game and Load Game from their supported contexts. Confirm wooden panels, paper save-slot cards, empty/occupied slot labels, disabled empty load slots, and occupied-slot overwrite confirmation in New Game.
-24. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting. Prompts should show as white text without a background and should not show placeholder text after starting or loading a game.
-25. Confirm the date/time and money displays sit inside compact wooden plaques, and that the money value is right-aligned with inner padding.
-26. Repeat the UI pass at 1280x720, 1920x1080, and 2560x1440.
+13. In Sell, confirm products from Silo Storage appear as cards with icon, product name, stored quantity, current unit price, selected quantity, and selected sale value.
+14. In Sell, test `-1`, `+1`, `Half`, `All`, and direct typing in the selected quantity field. Quantity should stay between `0` and the stored amount, invalid text should reset to the previous valid number, and the row subtotal plus bottom `Selected value` should update immediately.
+15. In Sell, click `Sell` after selecting an amount. Confirm storage quantity decreases, money increases, sale feedback appears, and sales are still recorded for `SalesStatsManager`-driven events.
+16. In Sell, click per-row `Sell All` for one product. Confirm only that product is sold and feedback appears.
+17. In Sell, click summary `Sell Selected`. Confirm only the typed/selected quantities are sold, money increases by the selected value, selected quantities clear after success, and each sold product is recorded for `SalesStatsManager`-driven events.
+18. In Sell, confirm empty storage shows `No products in storage.` instead of a blank list.
+19. In Weather, confirm there is no hourly forecast. The app should show Today, Day Parts with Dawn/Morning/Afternoon/Night cards, and Next Days/Weekly Forecast rows.
+20. In Weather, confirm temperature, rain chance, and weather icons are readable. The first letters of `Weather`, `Day Parts`, `Dawn`, `Afternoon`, and `Next Days` must not be clipped by the left edge of the phone screen. Humidity should appear only after real humidity data exists.
+21. In News, confirm news items are cards with icon/category marker, title, date, category, and wrapped body text. If there are no news items, confirm the empty state says `No news yet.`.
+22. In News, confirm the feed scrolls inside the phone screen when multiple cards exist, the scrollbar does not overlap card content, and the home button does not cover the last card.
+23. Confirm the Storage icon is visible but disabled until storage is intentionally wired into the FarmPhone app flow. Storage/Silo should still open through its existing gameplay interaction.
+24. Open Inventory and Storage/Silo. Confirm panels and slots are readable against bright and dark world backgrounds.
+25. In Inventory, confirm the top leather strip is centered and contains exactly 5 hotbar slots, the lower grid contains 20 regular slots in 5 columns, and both zones together represent the 25 inventory slots.
+26. In Inventory, hover and select filled and empty slots. Confirm hover/selected states are readable, item amounts stay inside their badges, and the bottom description panel has enough spacing between title, amount, and description.
+27. Open Options from Main Menu and Pause Menu. Confirm the root segment list opens Sound, Controls, Graphics, and Feedback submenus; `Back to Options`, root `Back`, and Escape return to the correct previous state.
+28. In Options, verify Graphics dropdown popups, the square fullscreen checkbox, and the Controls scroll line match the wooden menu style.
+29. Open New Game and Load Game from their supported contexts. Confirm wooden panels, paper save-slot cards, empty/occupied slot labels, disabled empty load slots, and occupied-slot overwrite confirmation in New Game.
+30. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting. Prompts should show as white text without a background and should not show placeholder text after starting or loading a game.
+31. Confirm the date/time and money displays sit inside compact wooden plaques, and that the money value is right-aligned with inner padding.
+32. Repeat the UI pass at 1280x720, 1920x1080, and 2560x1440.

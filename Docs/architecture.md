@@ -383,7 +383,7 @@ Base layout:
 
 Current apps:
 
-- Sell app: sells storage items and uses dynamic commodity prices where available.
+- Sell app: sells products from Silo Storage, uses dynamic commodity prices where available, lets the player select per-product sale quantities with buttons or direct numeric entry, supports per-product Sell All and summary-level Sell Selected, and records completed sales in `SalesStatsManager` so sales-driven market events still work.
 - Shop app: renders configured shop items as a seed/product list, keeps a local cart, shows cart subtotals and total cost, and purchases the whole cart through `MoneyManager` and `InventoryData` only after checkout validation succeeds.
 - Market app: displays a compact commodity list with icon, product name, current price, and percentage change. Selecting a product opens an in-app details view with a local back button, current price/trend data, min/max/average stats, and a bar chart drawn from real commodity price history. Internal scene and script names may still use stock/commodity terminology.
 - Storage is currently represented as a visible disabled home-screen icon because storage/silo UI remains a separate `PlayerHUD` panel, not a wired FarmPhone app.

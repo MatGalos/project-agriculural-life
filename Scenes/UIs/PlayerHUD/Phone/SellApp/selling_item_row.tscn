@@ -1,42 +1,152 @@
-[gd_scene format=3 uid="uid://c0i15p4b8nfb2"]
+[gd_scene load_steps=4 format=3 uid="uid://c0i15p4b8nfb2"]
 
 [ext_resource type="Script" uid="uid://ctwebibic6v60" path="res://Scripts/PhoneApps/SellApp/SellingItemRow.gd" id="1_sxjky"]
 
-[node name="SellingItemRow" type="HBoxContainer" unique_id=1541392515]
-custom_minimum_size = Vector2(0, 40)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sell_row"]
+bg_color = Color(0.055, 0.061, 0.072, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.12, 0.14, 0.16, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sell_action"]
+bg_color = Color(0.08, 0.45, 0.3, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="SellingItemRow" type="PanelContainer" unique_id=1541392515]
+custom_minimum_size = Vector2(0, 128)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_sell_row")
 script = ExtResource("1_sxjky")
 
-[node name="IconRect" type="TextureRect" parent="." unique_id=339563447]
-custom_minimum_size = Vector2(40, 40)
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="CardStack" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="TopRow" type="HBoxContainer" parent="MarginContainer/CardStack"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="IconRect" type="TextureRect" parent="MarginContainer/CardStack/TopRow" unique_id=339563447]
+custom_minimum_size = Vector2(42, 42)
 layout_mode = 2
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="NameLabel" type="Label" parent="." unique_id=1204312885]
+[node name="InfoStack" type="VBoxContainer" parent="MarginContainer/CardStack/TopRow"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameLabel" type="Label" parent="MarginContainer/CardStack/TopRow/InfoStack" unique_id=1204312885]
+layout_mode = 2
 theme_type_variation = &"HeaderLabel"
 mouse_filter = 2
+text_overrun_behavior = 3
 
-[node name="AmountLabel" type="Label" parent="." unique_id=978941708]
+[node name="AmountLabel" type="Label" parent="MarginContainer/CardStack/TopRow/InfoStack" unique_id=978941708]
 layout_mode = 2
 mouse_filter = 2
+text = "In storage: 0x"
 
-[node name="PriceLabel" type="Label" parent="." unique_id=1214003219]
+[node name="PriceStack" type="VBoxContainer" parent="MarginContainer/CardStack/TopRow"]
+custom_minimum_size = Vector2(92, 0)
 layout_mode = 2
 mouse_filter = 2
+theme_override_constants/separation = 0
 
-[node name="SellOneButton" type="Button" parent="." unique_id=1330634637]
+[node name="PriceLabel" type="Label" parent="MarginContainer/CardStack/TopRow/PriceStack" unique_id=1214003219]
 layout_mode = 2
+mouse_filter = 2
+text = "$0 each"
+horizontal_alignment = 2
+
+[node name="ValueLabel" type="Label" parent="MarginContainer/CardStack/TopRow/PriceStack"]
+layout_mode = 2
+mouse_filter = 2
+text = "$0"
+horizontal_alignment = 2
+
+[node name="QuantityRow" type="HBoxContainer" parent="MarginContainer/CardStack"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="MinusButton" type="Button" parent="MarginContainer/CardStack/QuantityRow"]
+custom_minimum_size = Vector2(28, 26)
+layout_mode = 2
+text = "-1"
+
+[node name="SelectedEdit" type="LineEdit" parent="MarginContainer/CardStack/QuantityRow"]
+custom_minimum_size = Vector2(72, 26)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0"
+horizontal_alignment = 1
+context_menu_enabled = false
+virtual_keyboard_type = 2
+select_all_on_focus = true
+
+[node name="PlusButton" type="Button" parent="MarginContainer/CardStack/QuantityRow"]
+custom_minimum_size = Vector2(28, 26)
+layout_mode = 2
+text = "+1"
+
+[node name="HalfButton" type="Button" parent="MarginContainer/CardStack/QuantityRow"]
+custom_minimum_size = Vector2(42, 26)
+layout_mode = 2
+text = "Half"
+
+[node name="AllButton" type="Button" parent="MarginContainer/CardStack/QuantityRow"]
+custom_minimum_size = Vector2(34, 26)
+layout_mode = 2
+text = "All"
+
+[node name="ActionRow" type="HBoxContainer" parent="MarginContainer/CardStack"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="SubtotalLabel" type="Label" parent="MarginContainer/CardStack/ActionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+text = "Value: $0"
+
+[node name="SellButton" type="Button" parent="MarginContainer/CardStack/ActionRow" unique_id=1330634637]
+custom_minimum_size = Vector2(58, 28)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_sell_action")
+theme_override_styles/hover = SubResource("StyleBoxFlat_sell_action")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_sell_action")
 text = "Sell"
 
-[node name="SellAllButton" type="Button" parent="." unique_id=1857469429]
+[node name="SellAllButton" type="Button" parent="MarginContainer/CardStack/ActionRow" unique_id=1857469429]
+custom_minimum_size = Vector2(72, 28)
 layout_mode = 2
 text = "Sell All"
