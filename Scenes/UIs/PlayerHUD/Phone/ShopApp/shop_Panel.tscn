@@ -1,6 +1,32 @@
-[gd_scene format=3 uid="uid://citho0esmm5oc"]
+[gd_scene load_steps=5 format=3 uid="uid://citho0esmm5oc"]
 
 [ext_resource type="Script" uid="uid://bhtipsclaxexd" path="res://Scripts/PhoneApps/ShopApp/ShopPanel.gd" id="1_qt4o2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shop_cart"]
+bg_color = Color(0.055, 0.061, 0.072, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.14, 0.16, 0.18, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shop_button"]
+bg_color = Color(0.08, 0.45, 0.3, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shop_button_disabled"]
+bg_color = Color(0.12, 0.13, 0.14, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="ShopPanel" type="Control" unique_id=1245120243]
 layout_mode = 3
@@ -22,23 +48,131 @@ grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1035328585]
 layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=322683863]
+[node name="RootStack" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=322683863]
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 7
 
-[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1974218168]
+[node name="HeaderRow" type="HBoxContainer" parent="PanelContainer/MarginContainer/RootStack"]
 layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/HeaderRow" unique_id=1974218168]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"HeaderLabel"
 text = "Shop"
 
-[node name="ItemsScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="MoneyLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/HeaderRow"]
+layout_mode = 2
+text = "$0"
+horizontal_alignment = 2
+
+[node name="FeedbackLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack"]
+layout_mode = 2
+text = ""
+text_overrun_behavior = 3
+
+[node name="ProductsLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack"]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "Seeds"
+
+[node name="ItemsScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/RootStack"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 1
 
-[node name="ItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ItemsScroll" unique_id=598493140]
+[node name="ItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/RootStack/ItemsScroll" unique_id=598493140]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="CartPanel" type="PanelContainer" parent="PanelContainer/MarginContainer/RootStack"]
+custom_minimum_size = Vector2(0, 190)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_shop_cart")
+
+[node name="CartMargin" type="MarginContainer" parent="PanelContainer/MarginContainer/RootStack/CartPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="CartStack" type="VBoxContainer" parent="PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="CartHeaderRow" type="HBoxContainer" parent="PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin/CartStack"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="CartTitleLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin/CartStack/CartHeaderRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
+text = "Cart"
+
+[node name="ToggleCartButton" type="Button" parent="PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin/CartStack/CartHeaderRow"]
+custom_minimum_size = Vector2(28, 26)
+layout_mode = 2
+text = "v"
+
+[node name="ClearButton" type="Button" parent="PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin/CartStack/CartHeaderRow"]
+custom_minimum_size = Vector2(52, 26)
+layout_mode = 2
+text = "Clear"
+
+[node name="CartBody" type="VBoxContainer" parent="PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin/CartStack"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="CartScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin/CartStack/CartBody"]
+custom_minimum_size = Vector2(0, 76)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 1
+
+[node name="CartItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin/CartStack/CartBody/CartScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="CartEmptyLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin/CartStack/CartBody"]
+layout_mode = 2
+text = "Cart is empty."
+horizontal_alignment = 1
+
+[node name="TotalsRow" type="HBoxContainer" parent="PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin/CartStack"]
+layout_mode = 2
+
+[node name="TotalLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin/CartStack/TotalsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
+text = "Total: $0"
+
+[node name="AvailableLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin/CartStack/TotalsRow"]
+layout_mode = 2
+text = "Available: $0"
+horizontal_alignment = 2
+
+[node name="PurchaseButton" type="Button" parent="PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin/CartStack"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderButton"
+theme_override_styles/normal = SubResource("StyleBoxFlat_shop_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_shop_button")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_shop_button")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_shop_button_disabled")
+text = "Purchase"

@@ -544,18 +544,54 @@ Resource only plus helper functions. Stores event identity, category, trigger mo
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func setup(shop_item: ShopItemData) -> void:` | Initializes this object or row from provided data. |
-| `func _apply_values() -> void:` | Applies apply values to current state. |
-| `func _on_buy_pressed() -> void:` | Handles the 'on buy pressed' signal callback. |
+| `func setup(shop_item: ShopItemData, new_owned_count: int = 0) -> void:` | Initializes one shop product row from configured shop data and the player's current owned count. |
+| `func _apply_values() -> void:` | Applies seed icon, display name, owned count, and current buy price to the row. |
+| `func _on_add_pressed() -> void:` | Emits a cart add request without spending money or changing inventory. |
+
+## `Scripts/PhoneApps/ShopApp/ShopCartRow.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Connects cart quantity buttons, editable quantity field, and remove button. |
+| `func setup(item: ItemData, new_quantity: int, new_unit_price: int) -> void:` | Initializes one cart row from item data, quantity, and current unit price. |
+| `func _apply_values() -> void:` | Applies display name, editable quantity, unit price, and subtotal text. |
+| `func _on_minus_pressed() -> void:` | Requests quantity decrease for this cart item. |
+| `func _on_plus_pressed() -> void:` | Requests quantity increase for this cart item. |
+| `func _on_remove_pressed() -> void:` | Requests removal of this cart item. |
+| `func _on_quantity_submitted(new_text: String) -> void:` | Commits a manually typed cart quantity from the edit field. |
+| `func _on_quantity_focus_exited() -> void:` | Commits a manually typed cart quantity when the edit field loses focus. |
+| `func _commit_quantity_text(new_text: String) -> void:` | Validates typed quantity text, emits a set-quantity request, or restores the previous value. |
 
 ## `Scripts/PhoneApps/ShopApp/ShopPanel.gd`
 
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func refresh() -> void:` | Rebuilds or updates this UI from current backing data. |
-| `func _on_buy_requested(shop_item: ShopItemData) -> void:` | Handles the 'on buy requested' signal callback. |
+| `func refresh() -> void:` | Rebuilds shop item lookup, product list, and cart summary from current backing data. |
+| `func refresh_product_list() -> void:` | Recreates product rows from available `ShopData` items. |
+| `func refresh_cart_view() -> void:` | Recreates cart rows, empty state, controls, and totals from local cart state. |
+| `func add_to_cart(shop_item: ShopItemData, amount: int = 1) -> void:` | Adds item quantity to the local cart without spending money. |
+| `func remove_from_cart(item_id: String, amount: int = 1) -> void:` | Decreases item quantity and removes the cart row when quantity reaches zero. |
+| `func clear_cart() -> void:` | Clears local cart state. |
+| `func get_cart_total() -> int:` | Calculates total cart cost from current buy prices. |
+| `func can_afford_cart() -> bool:` | Returns whether the player can afford the current cart total. |
+| `func purchase_cart() -> void:` | Validates non-empty cart, money, and inventory space, then spends money, adds items, clears cart, and refreshes UI. |
+| `func _rebuild_shop_item_lookup() -> void:` | Maps available shop items by item ID for cart calculations. |
+| `func _get_shop_item(item_id: String) -> ShopItemData:` | Returns the available shop item for a cart item ID. |
+| `func _get_owned_count(item_data: ItemData) -> int:` | Reads current inventory count for one item. |
+| `func _can_fit_cart() -> bool:` | Simulates stacking and empty slots to verify the whole cart fits before checkout. |
+| `func _get_first_remaining_item_id(remaining_by_id: Dictionary) -> String:` | Finds the first cart item quantity still not fitted in the inventory simulation. |
+| `func _get_cart_item_count() -> int:` | Counts all item units currently in the cart. |
+| `func _rollback_added_items(added_items: Array[Dictionary]) -> void:` | Removes already-added checkout items if an unexpected leftover occurs. |
+| `func _update_summary() -> void:` | Updates total, available money, purchase enabled state, and not-enough-money feedback. |
+| `func _set_feedback(message: String, color: Color) -> void:` | Shows local Shop app feedback text. |
+| `func _apply_cart_collapsed_state() -> void:` | Applies collapsed or expanded cart body visibility, `^`/`v` toggle text, and cart panel height. |
+| `func _on_toggle_cart_pressed() -> void:` | Toggles the cart body without clearing cart contents. |
+| `func _on_cart_quantity_changed(item_id: String, delta: int) -> void:` | Applies cart row quantity changes. |
+| `func _on_cart_quantity_set(item_id: String, quantity: int) -> void:` | Sets a cart item to a manually typed quantity and removes it when the value is zero. |
+| `func _on_cart_remove_requested(item_id: String) -> void:` | Removes one item from the cart. |
 | `func _on_buy_prices_changed() -> void:` | Refreshes shop rows when event-driven buy-price modifiers change. |
+| `func _on_money_changed(_new_amount: int) -> void:` | Refreshes cart summary when player money changes. |
 | `func _refresh_game_ui() -> void:` | Refreshes refresh game ui from current data. |
 
 ## `Scripts/PhoneApps/WeatherApp/WeatherForecastRow.gd`

@@ -1,34 +1,79 @@
-[gd_scene format=3 uid="uid://c2qivd1xjjeke"]
+[gd_scene load_steps=3 format=3 uid="uid://c2qivd1xjjeke"]
 
 [ext_resource type="Script" uid="uid://bhfvmmavwf3rj" path="res://Scripts/PhoneApps/ShopApp/ShopItemRow.gd" id="1_ak6hb"]
 
-[node name="ShopItemRow" type="HBoxContainer" unique_id=631531937]
-custom_minimum_size = Vector2(0, 40)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_shop_row"]
+bg_color = Color(0.055, 0.061, 0.072, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.12, 0.14, 0.16, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="ShopItemRow" type="PanelContainer" unique_id=631531937]
+custom_minimum_size = Vector2(0, 62)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_shop_row")
 script = ExtResource("1_ak6hb")
 
-[node name="IconRect" type="TextureRect" parent="." unique_id=1747909279]
-custom_minimum_size = Vector2(40, 40)
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="Row" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="IconRect" type="TextureRect" parent="MarginContainer/Row" unique_id=1747909279]
+custom_minimum_size = Vector2(38, 38)
 layout_mode = 2
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="NameLabel" type="Label" parent="." unique_id=1535635075]
+[node name="InfoStack" type="VBoxContainer" parent="MarginContainer/Row"]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="NameLabel" type="Label" parent="MarginContainer/Row/InfoStack" unique_id=1535635075]
+layout_mode = 2
 theme_type_variation = &"HeaderLabel"
 mouse_filter = 2
+text_overrun_behavior = 3
 
-[node name="PriceLabel" type="Label" parent="." unique_id=1091071158]
+[node name="MetaLabel" type="Label" parent="MarginContainer/Row/InfoStack"]
 layout_mode = 2
 mouse_filter = 2
+text = "Owned: 0"
 
-[node name="BuyButton" type="Button" parent="." unique_id=897785528]
+[node name="ActionStack" type="VBoxContainer" parent="MarginContainer/Row"]
+custom_minimum_size = Vector2(74, 0)
 layout_mode = 2
-text = "Buy"
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="PriceLabel" type="Label" parent="MarginContainer/Row/ActionStack" unique_id=1091071158]
+layout_mode = 2
+mouse_filter = 2
+horizontal_alignment = 2
+
+[node name="AddButton" type="Button" parent="MarginContainer/Row/ActionStack" unique_id=897785528]
+custom_minimum_size = Vector2(68, 26)
+layout_mode = 2
+text = "Add"

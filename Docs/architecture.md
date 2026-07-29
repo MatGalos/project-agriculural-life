@@ -384,7 +384,7 @@ Base layout:
 Current apps:
 
 - Sell app: sells storage items and uses dynamic commodity prices where available.
-- Shop app: buys items through configured shop data and `MoneyManager`.
+- Shop app: renders configured shop items as a seed/product list, keeps a local cart, shows cart subtotals and total cost, and purchases the whole cart through `MoneyManager` and `InventoryData` only after checkout validation succeeds.
 - Market app: displays a compact commodity list with icon, product name, current price, and percentage change. Selecting a product opens an in-app details view with a local back button, current price/trend data, min/max/average stats, and a bar chart drawn from real commodity price history. Internal scene and script names may still use stock/commodity terminology.
 - Storage is currently represented as a visible disabled home-screen icon because storage/silo UI remains a separate `PlayerHUD` panel, not a wired FarmPhone app.
 - Weather app: displays a Today card, current-day `Dawn`/`Morning`/`Afternoon`/`Night` cards, and next-day forecast cards using existing weather data.
@@ -400,6 +400,7 @@ Rules:
 - App row scenes should be passed through exported `row_scene` fields, not hardcoded in scripts.
 - Phone app content that can grow beyond the phone frame should sit inside a vertical `ScrollContainer`.
 - Current scrollable phone areas are news entries, shop items, sellable silo items, commodity list rows, and weather forecast rows.
+- Shop app checkout is intentionally all-or-nothing: an empty cart, insufficient money, or insufficient inventory space blocks purchase before money is spent. Product row `Add` only changes local cart state; it must not mutate money or inventory.
 - Market app navigation is local to `CommodityExchangePanel`: the details back button returns to the product list and must not call the FarmPhone home flow.
 - Market app should not show generic finance UI, product-count labels, or price-history sample-count labels. Only game commodity data should be rendered.
 - FarmPhone typography, shell styles, home button style, and home-screen icon styles are centralized in `Scenes/UIs/PlayerHUD/Phone/FarmPhoneTheme.tres`. Keep this theme scoped to FarmPhone; do not migrate unrelated game menus into it.
