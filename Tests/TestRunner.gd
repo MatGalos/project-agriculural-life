@@ -15,6 +15,7 @@ func run_all_tests() -> void:
 	_run_test_script(preload("res://Tests/Core/FarmPhoneLayoutTest.gd").new())
 	_run_test_script(preload("res://Tests/Core/MarketAppLayoutTest.gd").new())
 	_run_test_script(preload("res://Tests/Core/ShopAppLayoutTest.gd").new())
+	_run_test_script(preload("res://Tests/Core/SellAppLayoutTest.gd").new())
 	_run_test_script(preload("res://Tests/Core/WeatherAppLayoutTest.gd").new())
 	_run_test_script(preload("res://Tests/Core/NewsAppLayoutTest.gd").new())
 	_run_test_script(preload("res://Tests/Core/MoneyManagerTest.gd").new())
