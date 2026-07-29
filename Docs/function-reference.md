@@ -449,10 +449,19 @@ Resource only plus helper functions. Stores event identity, category, trigger mo
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func refresh() -> void:` | Rebuilds or updates this UI from current backing data. |
-| `func _update_status() -> void:` | Updates update status from current data. |
-| `func _on_commodity_selected(commodity: CommodityData) -> void:` | Handles the 'on commodity selected' signal callback. |
-| `func _update_history(commodity: CommodityData) -> void:` | Updates update history from current data. |
+| `func refresh() -> void:` | Rebuilds the market list from `CommodityMarketManager.commodities` and refreshes the details view when it is visible. |
+| `func _update_status() -> void:` | Updates the open/closed market status from configured market hours. |
+| `func _rebuild_list() -> void:` | Recreates the compact commodity row list without changing market data. |
+| `func _on_commodity_selected(commodity: CommodityData) -> void:` | Selects a commodity, marks the selected row, and opens the local details view. |
+| `func _show_list_view() -> void:` | Shows the product list and hides the local details back button. |
+| `func _show_details_view() -> void:` | Shows the selected product details and displays the local back button. |
+| `func _update_row_selection() -> void:` | Applies selected-row state to the current row instances. |
+| `func _update_details(commodity: CommodityData) -> void:` | Populates the details header, trend, current price, percent change, chart, and compact stats from `CommodityData`. |
+| `func _update_stats(commodity: CommodityData) -> void:` | Calculates min, max, and average price from real `price_history`. |
+| `func _set_stats_empty() -> void:` | Clears detail stats when no price history is available. |
+| `func _get_change_percent(commodity: CommodityData) -> float:` | Calculates percent change from current price versus the previous history entry. |
+| `func _get_change_color(change: float) -> Color:` | Maps positive, negative, and neutral changes to market UI colors. |
+| `func _on_visibility_changed() -> void:` | Resets the Market app to the product list when the app becomes visible. |
 
 ## `Scripts/PhoneApps/CommodityExchangeApp/CommodityItemRow.gd`
 
@@ -460,10 +469,31 @@ Resource only plus helper functions. Stores event identity, category, trigger mo
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
 | `func setup(commodity: CommodityData) -> void:` | Initializes this object or row from provided data. |
-| `func _apply_values() -> void:` | Applies apply values to current state. |
-| `func _get_trend_text(commodity: CommodityData) -> String:` | Builds or returns get trend text for internal use. |
-| `func _get_change_text(commodity: CommodityData) -> String:` | Builds or returns get change text for internal use. |
+| `func set_selected(value: bool) -> void:` | Updates the visual selected state for the row. |
+| `func _apply_values() -> void:` | Applies icon, product name, current price, and percent change text from the assigned commodity. |
+| `func _get_change_percent(commodity: CommodityData) -> float:` | Calculates percent change from current price versus the previous history entry. |
+| `func _get_change_color(change: float) -> Color:` | Maps positive, negative, and neutral changes to market UI colors. |
+| `func _prepare_styles() -> void:` | Builds normal, hover, and selected row styleboxes. |
+| `func _configure_style(style: StyleBoxFlat, bg_color: Color, border_color: Color) -> void:` | Applies shared row card style settings to one stylebox. |
+| `func _apply_style() -> void:` | Applies normal, hover, or selected card styling. |
+| `func _on_mouse_entered() -> void:` | Applies hover state. |
+| `func _on_mouse_exited() -> void:` | Clears hover state. |
 | `func _gui_input(event: InputEvent) -> void:` | Handles gui input behavior. |
+
+## `Scripts/PhoneApps/CommodityExchangeApp/PriceHistoryChart.gd`
+
+| Function | Description |
+| --- | --- |
+| `func set_commodity(commodity: CommodityData) -> void:` | Sets the commodity whose real `price_history` should be drawn. |
+| `func _draw() -> void:` | Draws the chart grid, bars, and range labels from current history data. |
+| `func _recent_prices(history: Array[float]) -> Array[float]:` | Returns the latest history samples used for the visible chart. |
+| `func _draw_grid(chart_rect: Rect2) -> void:` | Draws subtle horizontal chart guide lines. |
+| `func _draw_bars(chart_rect: Rect2, prices: Array[float], min_price: float, price_range: float) -> void:` | Draws one bar per price sample, colored by movement versus the previous sample. |
+| `func _draw_range_labels(chart_rect: Rect2, min_price: float, max_price: float) -> void:` | Draws min and max price labels for the visible chart range. |
+| `func _draw_empty_state() -> void:` | Draws the no-history fallback text. |
+| `func _bar_color(prices: Array[float], index: int) -> Color:` | Returns positive, negative, or neutral bar color for a history sample. |
+| `func _min_price(prices: Array[float]) -> float:` | Returns the minimum visible chart price. |
+| `func _max_price(prices: Array[float]) -> float:` | Returns the maximum visible chart price. |
 
 ## `Scripts/PhoneApps/NewsApp/NewsItemRow.gd`
 
