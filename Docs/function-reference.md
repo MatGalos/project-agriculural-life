@@ -1001,8 +1001,18 @@ RefCounted static helper only. It formats visible UI text without changing gamep
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func update_lighting() -> void:` | Updates lighting from current gameplay data. |
-| `func _update_environment(sky_color: Color, ambient_color: Color) -> void:` | Updates update environment from current data. |
+| `func update_lighting() -> void:` | Updates visual lighting, environment, sun/moon positions, and directional-light alignment from current `TimeManager` time. |
+| `func _setup_lighting_points() -> void:` | Builds the ordered day/night visual keyframes used for interpolated lighting and environment state. |
+| `func _create_lighting_point(minute: int, light_energy: float, light_color: Color, sky_color: Color, ambient_color: Color, ambient_energy: float) -> Dictionary:` | Creates one lighting/environment keyframe dictionary. |
+| `func _get_lighting_state(current_minute: int) -> Dictionary:` | Interpolates light energy, light color, sky color, ambient color, and ambient energy between configured keyframes. |
+| `func _update_environment(sky_color: Color, ambient_color: Color, ambient_energy: float) -> void:` | Applies the current background and ambient visual state to the configured `WorldEnvironment`. |
+| `func _update_celestial_visuals(day_progress: float, sun_source_direction: Vector3) -> void:` | Updates sun and moon visual positions and visibility from the current day progress and sun source direction. |
+| `func _update_celestial_body(body: MeshInstance3D, source_direction: Vector3, visibility_alpha: float, base_scale: float) -> void:` | Places one sky visual on the configured arc radius, scales it, toggles visibility, and applies fade alpha. |
+| `func _get_sun_source_direction(current_minute: int) -> Vector3:` | Computes the shared source direction used by both `SunVisual` placement and `SunLight` shadow alignment. |
+| `func _align_sun_light_to_source(source_direction: Vector3) -> void:` | Rotates the directional light to match the computed sun source direction so shadows match the visible sun. |
+| `func _set_visual_alpha(body: MeshInstance3D, alpha: float) -> void:` | Applies fade alpha to the active `StandardMaterial3D` on a celestial visual. |
+| `func _get_sun_visibility(day_progress: float) -> float:` | Returns the sun fade value for dawn, daytime, and sunset. |
+| `func _get_moon_visibility(day_progress: float) -> float:` | Returns the moon fade value for evening, nighttime, and dawn. |
 
 ## `Tests/TestRunner.gd`
 
