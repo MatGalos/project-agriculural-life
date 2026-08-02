@@ -19,6 +19,36 @@ sky = SubResource("Sky_2kb25")
 tonemap_mode = 2
 glow_enabled = true
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sun_visual"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.86, 0.24, 1)
+emission_enabled = true
+emission = Color(1, 0.72, 0.18, 1)
+emission_energy_multiplier = 1.35
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_moon_visual"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.78, 0.86, 1, 1)
+emission_enabled = true
+emission = Color(0.58, 0.68, 1, 1)
+emission_energy_multiplier = 0.85
+
+[sub_resource type="SphereMesh" id="SphereMesh_sun_visual"]
+material = SubResource("StandardMaterial3D_sun_visual")
+radius = 1.0
+height = 2.0
+radial_segments = 16
+rings = 8
+
+[sub_resource type="SphereMesh" id="SphereMesh_moon_visual"]
+material = SubResource("StandardMaterial3D_moon_visual")
+radius = 1.0
+height = 2.0
+radial_segments = 16
+rings = 8
+
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_pmpwp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_juroi"]
@@ -65,10 +95,29 @@ script = ExtResource("8_tfxbu")
 
 [node name="SunLight" type="DirectionalLight3D" parent="." unique_id=2136742272]
 transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
+light_color = Color(1, 0.96, 0.84, 1)
+light_energy = 1.05
+shadow_enabled = true
+directional_shadow_blend_splits = true
 
-[node name="DayNightController" type="Node3D" parent="." unique_id=894958895 node_paths=PackedStringArray("sun_light", "world_environment")]
+[node name="CelestialVisuals" type="Node3D" parent="."]
+
+[node name="SunVisual" type="MeshInstance3D" parent="CelestialVisuals"]
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, 0, 30, -55)
+mesh = SubResource("SphereMesh_sun_visual")
+cast_shadow = 0
+
+[node name="MoonVisual" type="MeshInstance3D" parent="CelestialVisuals"]
+visible = false
+transform = Transform3D(2.4, 0, 0, 0, 2.4, 0, 0, 0, 2.4, 0, 30, 55)
+mesh = SubResource("SphereMesh_moon_visual")
+cast_shadow = 0
+
+[node name="DayNightController" type="Node3D" parent="." unique_id=894958895 node_paths=PackedStringArray("sun_light", "world_environment", "sun_visual", "moon_visual")]
 script = ExtResource("15_584e8")
 sun_light = NodePath("../SunLight")
 world_environment = NodePath("../WorldEnvironment")
+sun_visual = NodePath("../CelestialVisuals/SunVisual")
+moon_visual = NodePath("../CelestialVisuals/MoonVisual")
 
 [node name="World" parent="." unique_id=1489175734 instance=ExtResource("19_6s3ud")]

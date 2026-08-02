@@ -315,3 +315,18 @@ Run this checklist in Godot after UI polish changes, especially when no screensh
 37. Confirm the date/time and money displays sit inside compact wooden plaques, and that the money value is right-aligned with inner padding.
 38. Repeat the UI pass at 1280x720, 1600x900, 1920x1080, and 2560x1440.
 39. In Graphics options, switch Interface Scale between Small, Medium, and Big. Confirm FarmPhone, Inventory, Silo Storage, and Options panels remain inside the viewport and keep buttons clickable.
+
+## Manual Stage 5.4 Visual Checklist
+
+Run this checklist in Godot after lighting, day/night, sun, or moon visual changes:
+
+1. Start gameplay around daytime and confirm the player, house, silo, farm tiles, HUD, prompts, and FarmPhone remain readable.
+2. Let time advance through night, dawn, day, evening, and back to night. Confirm transitions are smooth enough and do not jump abruptly at 05:00, 07:00, 10:00, 16:00, 18:30, 20:00, or 21:00.
+3. At 05:00-07:00, confirm the sun appears low and rises upward rather than moving downward.
+4. Around midday, confirm the sun is high in the sky and shadows point consistently away from the visible sun.
+5. Around evening, confirm the sun descends toward the horizon and fades out before night.
+6. During night, confirm the moon is visible, the sun is hidden, and the scene remains playable rather than fully black.
+7. During dawn, confirm the moon fades out as the sun fades in.
+8. Open FarmPhone, Inventory, and Silo Storage during day and night. Confirm CanvasLayer UI readability is unaffected by world lighting.
+9. Interact with the silo and house during day and night. Confirm interaction prompts remain readable.
+10. Confirm Weather VFX, audio, terrain, crop visuals, world boundaries, house model polish, silo model polish, gameplay time, economy, save/load, and UI behavior were not changed by the visual pass.

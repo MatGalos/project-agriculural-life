@@ -170,6 +170,33 @@ Important behavior:
 - `skip_to_morning()` advances time to 06:00 and simulates missed commodity market updates when skipping past market hours.
 - Systems that need daily processing should connect to `day_changed` instead of checking the date every frame.
 
+## Day/Night Visuals
+
+`DayNightController` is attached in `Scenes/Game/mainScene.tscn` and owns only the visual mapping from current game time to lighting, environment, and sky objects. It does not advance time and should not change gameplay calendar rules.
+
+Scene wiring:
+
+- `SunLight` is the existing `DirectionalLight3D` used for world lighting and shadows.
+- `WorldEnvironment` provides the environment resource controlled by the day/night visual pass.
+- `CelestialVisuals` contains `SunVisual` and `MoonVisual`, both simple non-shadow-casting `MeshInstance3D` sky markers.
+- `DayNightController` exports node references for `sun_light`, `world_environment`, `sun_visual`, and `moon_visual`.
+
+Runtime behavior:
+
+- `DayNightController` listens to `TimeManager.time_changed` and calls `update_lighting()`.
+- Lighting state is interpolated between configured minute points with `smoothstep`, avoiding hard visual jumps around dawn, day, evening, and night.
+- The environment currently uses `Environment.BG_COLOR`; `DayNightController` updates background color, ambient color, and ambient energy from the interpolated state.
+- `SunVisual` follows a simple sky arc from sunrise to sunset. The arc starts low at 05:00, reaches its highest point around midday, and descends toward 20:00.
+- `MoonVisual` uses the opposite side of the same arc and fades in during evening and out during dawn.
+- `SunLight` is aligned from the same computed sun-source direction as `SunVisual`, so visible sun position and shadow direction remain consistent.
+- The sun and moon visuals do not affect lighting directly; they are presentation objects only.
+
+Maintenance rules:
+
+- Do not duplicate time progression inside `DayNightController`; use `TimeManager.current_minute_of_day` or `TimeManager.get_day_progress()`.
+- Keep future Weather VFX and weather audio separate from this controller unless the change is only a lightweight visual modifier hook.
+- If the visible sun path is adjusted, update the light alignment from the same source vector so shadows remain believable.
+
 ## Economy And Commodity Market
 
 `MoneyManager` stores player funds and emits `money_changed` after every successful update.

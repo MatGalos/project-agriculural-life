@@ -20,6 +20,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Temporary HUD event messages for gameplay feedback, such as planting blocked by season.
 - Watering can capacity, refill at the well, and water-fill bars in inventory/hotbar UI.
 - Day/night and date progression.
+- Interpolated day/night lighting with visible sun and moon visuals aligned to the shadow direction.
 - Four-season calendar: Spring, Summer, Autumn, and Winter.
 - Money, buy prices, sell prices, and commodity-backed dynamic crop prices.
 - Commodity market updates during market hours with price history.
@@ -44,6 +45,15 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Editor farm-grid generator with stable tile IDs for save restoration.
 
 ## Changelog
+
+### Version 0.7
+- Stage 5.4 Visual / World Polish:
+  - Polished the day/night visual mapping with smoother lighting, sky-color, and ambient transitions between night, dawn, day, and evening.
+  - Improved nighttime readability while keeping the scene darker and cooler than daytime.
+  - Added simple low-poly `SunVisual` and `MoonVisual` objects under `CelestialVisuals` in `Scenes/Game/mainScene.tscn`.
+  - Sun and moon visuals move across the sky from the existing `TimeManager` day progress without changing time gameplay.
+  - The visible sun path is aligned with `SunLight`, so the sun position and shadow direction stay consistent.
+  - Kept Weather VFX, audio, terrain polish, crop polish, camera pass, world boundaries, house model polish, and silo model polish outside this pass.
 
 ### Version 0.6
 - UI polish pass:

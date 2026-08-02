@@ -25,6 +25,20 @@ size = Vector3(5, 5, 4)
 height = 5.5
 radius = 1.5
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_polish_stone"]
+albedo_color = Color(0.48, 0.46, 0.42, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMesh_house_step"]
+material = SubResource("StandardMaterial3D_polish_stone")
+size = Vector3(1.8, 0.18, 0.8)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_silo_base"]
+material = SubResource("StandardMaterial3D_polish_stone")
+top_radius = 1.8
+bottom_radius = 1.8
+height = 0.2
+
 [node name="World" type="Node3D" unique_id=1489175734]
 
 [node name="HomeArea" type="Node3D" parent="." unique_id=607767263]
@@ -67,6 +81,14 @@ prompt_text = "Press E to open Silo."
 [node name="CollisionShape3D" type="CollisionShape3D" parent="HomeArea/Silo/StaticBody3D" unique_id=710056272]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
 shape = SubResource("CylinderShape3D_j8hn3")
+
+[node name="HouseStep" type="MeshInstance3D" parent="HomeArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9971428, 0.09, 2.85)
+mesh = SubResource("BoxMesh_house_step")
+
+[node name="SiloBase" type="MeshInstance3D" parent="HomeArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0015109, 0.1, -6.998237)
+mesh = SubResource("CylinderMesh_silo_base")
 
 [node name="Grass" type="Node3D" parent="HomeArea" unique_id=225793907]
 
