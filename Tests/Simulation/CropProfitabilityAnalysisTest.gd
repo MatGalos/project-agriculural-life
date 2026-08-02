@@ -110,19 +110,19 @@ func _collect_crop_entries() -> Array[Dictionary]:
 		seen_ids[crop_id] = true
 
 		var crop: CropData = SaveManager._get_crop_by_id(crop_id)
-		var seed: SeedItemData = null
+		var seed_item: SeedItemData = null
 		var harvest_item: CropItemData = null
 		if crop != null:
-			seed = crop.seed_item
+			seed_item = crop.seed_item
 			harvest_item = crop.harvest_item
-		var seed_price_data: ItemPriceData = _find_price_data(seed)
+		var seed_price_data: ItemPriceData = _find_price_data(seed_item)
 		var product_price_data: ItemPriceData = _find_price_data(harvest_item)
 		var oversupply: MarketEventData = EventManager.get_event_by_id("%s_oversupply" % crop_id)
 
 		entries.append({
 			"crop_id": crop_id,
 			"crop": crop,
-			"seed": seed,
+			"seed": seed_item,
 			"harvest_item": harvest_item,
 			"commodity": commodity,
 			"seed_price_data": seed_price_data,
@@ -165,7 +165,7 @@ func _analyze_crops(crops: Array[Dictionary]) -> Array[Dictionary]:
 func _analyze_crop(entry: Dictionary) -> Dictionary:
 	var crop_id: String = str(entry["crop_id"])
 	var crop: CropData = entry["crop"] as CropData
-	var seed: SeedItemData = entry["seed"] as SeedItemData
+	var seed_item: SeedItemData = entry["seed"] as SeedItemData
 	var harvest_item: CropItemData = entry["harvest_item"] as CropItemData
 	var commodity: CommodityData = entry["commodity"] as CommodityData
 	var seed_price_data: ItemPriceData = entry["seed_price_data"] as ItemPriceData
@@ -181,7 +181,7 @@ func _analyze_crop(entry: Dictionary) -> Dictionary:
 	if crop == null:
 		_fail_result(result, "MISSING_CROP_DATA", "Missing CropData for %s" % crop_id)
 		return result
-	if seed == null:
+	if seed_item == null:
 		_fail_result(result, "MISSING_SEED_DATA", "Missing seed data for %s" % crop_id)
 	if harvest_item == null:
 		_fail_result(result, "MISSING_PRODUCT_DATA", "Missing harvest item for %s" % crop_id)
@@ -1745,7 +1745,7 @@ func _median(values: Array[float]) -> float:
 		return 0.0
 	var sorted := values.duplicate()
 	sorted.sort()
-	var middle := sorted.size() / 2
+	var middle := int(floor(float(sorted.size()) / 2.0))
 	if sorted.size() % 2 == 0:
 		return (sorted[middle - 1] + sorted[middle]) / 2.0
 	return sorted[middle]

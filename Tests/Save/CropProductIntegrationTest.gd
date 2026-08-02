@@ -90,47 +90,47 @@ func _verify_data_links() -> void:
 	for crop_product: Dictionary in CROP_PRODUCTS:
 		var crop_id: String = String(crop_product["id"])
 		var item: CropItemData = load(String(crop_product["item_path"])) as CropItemData
-		var seed: SeedItemData = load(String(crop_product["seed_path"])) as SeedItemData
+		var seed_item: SeedItemData = load(String(crop_product["seed_path"])) as SeedItemData
 		var crop: CropData = load(String(crop_product["crop_path"])) as CropData
 		var commodity: CommodityData = load(String(crop_product["commodity_path"])) as CommodityData
 
 		runner.assert_true(item != null, "%s crop item loads" % crop_id)
-		runner.assert_true(seed != null, "%s seed item loads" % crop_id)
+		runner.assert_true(seed_item != null, "%s seed item loads" % crop_id)
 		runner.assert_true(crop != null, "%s crop data loads" % crop_id)
 		runner.assert_true(commodity != null, "%s commodity loads" % crop_id)
 
-		if item == null or seed == null or crop == null or commodity == null:
+		if item == null or seed_item == null or crop == null or commodity == null:
 			continue
 
 		runner.assert_eq(item.id, crop_id, "%s crop item id matches" % crop_id)
-		runner.assert_eq(seed.id, "%s_seed" % crop_id, "%s seed item id matches" % crop_id)
-		runner.assert_eq(seed.crop_id, crop_id, "%s seed crop id matches" % crop_id)
+		runner.assert_eq(seed_item.id, "%s_seed" % crop_id, "%s seed item id matches" % crop_id)
+		runner.assert_eq(seed_item.crop_id, crop_id, "%s seed crop id matches" % crop_id)
 		runner.assert_eq(crop.crop_id, crop_id, "%s crop data id matches" % crop_id)
 		runner.assert_eq(crop.harvest_item.id, item.id, "%s crop harvest item linked" % crop_id)
-		runner.assert_eq(crop.seed_item.id, seed.id, "%s crop seed item linked" % crop_id)
-		runner.assert_eq(seed.growth_days, crop.days_to_ready, "%s seed growth days match crop ready days" % crop_id)
+		runner.assert_eq(crop.seed_item.id, seed_item.id, "%s crop seed item linked" % crop_id)
+		runner.assert_eq(seed_item.growth_days, crop.days_to_ready, "%s seed growth days match crop ready days" % crop_id)
 		runner.assert_eq(commodity.item_data.id, item.id, "%s commodity item linked" % crop_id)
 
 		var save_item: ItemData = SaveManager._get_item_by_id(item.id)
 		runner.assert_true(save_item != null, "%s item registered in SaveManager" % crop_id)
 		runner.assert_eq(save_item.id, item.id, "%s SaveManager item id matches" % crop_id)
 
-		var save_seed: ItemData = SaveManager._get_item_by_id(seed.id)
+		var save_seed: ItemData = SaveManager._get_item_by_id(seed_item.id)
 		runner.assert_true(save_seed != null, "%s seed registered in SaveManager" % crop_id)
-		runner.assert_eq(save_seed.id, seed.id, "%s SaveManager seed id matches" % crop_id)
+		runner.assert_eq(save_seed.id, seed_item.id, "%s SaveManager seed id matches" % crop_id)
 
 		var save_crop: CropData = SaveManager._get_crop_by_id(crop.crop_id)
 		runner.assert_true(save_crop != null, "%s crop registered in SaveManager" % crop_id)
 		runner.assert_eq(save_crop.crop_id, crop.crop_id, "%s SaveManager crop id matches" % crop_id)
 
-		var tool_crop: CropData = ToolManager._get_crop_data_for_seed(seed)
+		var tool_crop: CropData = ToolManager._get_crop_data_for_seed(seed_item)
 		runner.assert_true(tool_crop != null, "%s seed resolves to crop in ToolManager" % crop_id)
 		runner.assert_eq(tool_crop.crop_id, crop.crop_id, "%s ToolManager crop id matches" % crop_id)
 
 		var silo_item: ItemData = SaveManager.silo_storage.get_item_by_id(item.id)
 		runner.assert_true(silo_item != null, "%s item registered in silo storage" % crop_id)
 
-		var silo_seed: ItemData = SaveManager.silo_storage.get_item_by_id(seed.id)
+		var silo_seed: ItemData = SaveManager.silo_storage.get_item_by_id(seed_item.id)
 		runner.assert_true(silo_seed != null, "%s seed registered in silo storage" % crop_id)
 
 		var manager_commodity: CommodityData = CommodityMarketManager.get_commodity_for_item(item)
@@ -142,8 +142,8 @@ func _verify_data_links() -> void:
 		runner.assert_true(shop_item != null, "%s seed shop item loads" % crop_id)
 
 		if shop_item != null:
-			runner.assert_eq(shop_item.item_data.id, seed.id, "%s shop item seed linked" % crop_id)
-			runner.assert_true(_is_seed_in_basic_shop(seed.id), "%s seed registered in basic shop" % crop_id)
+			runner.assert_eq(shop_item.item_data.id, seed_item.id, "%s shop item seed linked" % crop_id)
+			runner.assert_true(_is_seed_in_basic_shop(seed_item.id), "%s seed registered in basic shop" % crop_id)
 
 		var event_ids: Array = crop_product["event_ids"] as Array
 
@@ -167,10 +167,10 @@ func _verify_inventory_save_restore() -> void:
 
 	for crop_product: Dictionary in CROP_PRODUCTS:
 		var item: ItemData = load(String(crop_product["item_path"])) as ItemData
-		var seed: ItemData = load(String(crop_product["seed_path"])) as ItemData
+		var seed_item: ItemData = load(String(crop_product["seed_path"])) as ItemData
 
 		inventory.add_item(item, 1)
-		inventory.add_item(seed, 1)
+		inventory.add_item(seed_item, 1)
 
 	var save_data: Array = SaveManager._create_inventory_save_data()
 	inventory.clear_inventory()
@@ -179,10 +179,10 @@ func _verify_inventory_save_restore() -> void:
 	for crop_product: Dictionary in CROP_PRODUCTS:
 		var crop_id: String = String(crop_product["id"])
 		var item: ItemData = load(String(crop_product["item_path"])) as ItemData
-		var seed: ItemData = load(String(crop_product["seed_path"])) as ItemData
+		var seed_item: ItemData = load(String(crop_product["seed_path"])) as ItemData
 
 		runner.assert_eq(inventory.get_item_count(item), 1, "%s inventory crop restored" % crop_id)
-		runner.assert_eq(inventory.get_item_count(seed), 1, "%s inventory seed restored" % crop_id)
+		runner.assert_eq(inventory.get_item_count(seed_item), 1, "%s inventory seed restored" % crop_id)
 
 	inventory.clear_inventory()
 

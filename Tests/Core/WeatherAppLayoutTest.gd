@@ -16,6 +16,7 @@ func run() -> void:
 		_assert_weather_panel_layout(panel)
 		_assert_weather_safe_insets(panel)
 		_assert_no_hourly_forecast_text(panel)
+		_assert_forecast_date_labels(panel)
 		panel.free()
 
 	var row := FORECAST_ROW_SCENE.instantiate() as PanelContainer
@@ -46,8 +47,8 @@ func _assert_weather_safe_insets(panel: Control) -> void:
 	runner.assert_true(margin != null, "Weather app has outer content margin")
 
 	if margin:
-		runner.assert_true(margin.get_theme_constant("margin_left") >= 18, "Weather app keeps safe left inset inside FarmPhone screen")
-		runner.assert_true(margin.get_theme_constant("margin_right") <= 8, "Weather app preserves right-side space after left inset correction")
+		runner.assert_true(margin.get_theme_constant("margin_left") >= 30, "Weather app keeps safe left inset inside FarmPhone screen")
+		runner.assert_true(margin.get_theme_constant("margin_right") <= 6, "Weather app preserves right-side space after left inset correction")
 
 	var today_icon_anchor := panel.get_node_or_null("PanelContainer/MarginContainer/ContentScroll/Content/TodayCard/TodayMargin/TodayRow/TodayIconAnchor") as Control
 	runner.assert_true(today_icon_anchor != null and today_icon_anchor.custom_minimum_size.x <= 60.0, "Today icon anchor stays compact enough for phone width")
@@ -69,11 +70,33 @@ func _assert_forecast_row_width_budget(row: PanelContainer) -> void:
 	var temperature_label := row.get_node_or_null("MarginContainer/Row/TemperatureLabel") as Label
 	var rain_label := row.get_node_or_null("MarginContainer/Row/RainLabel") as Label
 
-	runner.assert_true(day_label != null and day_label.custom_minimum_size.x <= 64.0, "Forecast day label width fits phone screen")
+	runner.assert_true(day_label != null and day_label.custom_minimum_size.x <= 72.0, "Forecast season date label width fits phone screen")
 	runner.assert_true(weather_icon != null and weather_icon.custom_minimum_size.x <= 30.0, "Forecast weather icon width fits phone screen")
-	runner.assert_true(weather_label != null and weather_label.custom_minimum_size.x <= 54.0, "Forecast weather label width fits phone screen")
+	runner.assert_true(weather_label != null and weather_label.custom_minimum_size.x <= 42.0, "Forecast weather label width fits phone screen")
 	runner.assert_true(temperature_label != null and temperature_label.custom_minimum_size.x <= 38.0, "Forecast temperature label width fits phone screen")
-	runner.assert_true(rain_label != null and rain_label.custom_minimum_size.x <= 56.0, "Forecast rain label width fits phone screen")
+	runner.assert_true(rain_label != null and rain_label.custom_minimum_size.x <= 52.0, "Forecast rain label width fits phone screen")
+
+
+func _assert_forecast_date_labels(panel: Control) -> void:
+	var weather_panel := panel as WeatherPanel
+	runner.assert_true(weather_panel != null, "Weather forecast panel script is available")
+
+	if weather_panel == null:
+		return
+
+	var previous_day := TimeManager.current_day
+	var previous_month := TimeManager.current_month
+
+	TimeManager.current_day = 5
+	TimeManager.current_month = 1
+	runner.assert_eq(weather_panel._get_forecast_date_label(2), "7th Spring", "Weather forecast uses season date labels")
+
+	TimeManager.current_day = 29
+	TimeManager.current_month = 1
+	runner.assert_eq(weather_panel._get_forecast_date_label(2), "1st Summer", "Weather forecast season date labels wrap seasons")
+
+	TimeManager.current_day = previous_day
+	TimeManager.current_month = previous_month
 
 
 func _assert_no_hourly_forecast_text(panel: Control) -> void:

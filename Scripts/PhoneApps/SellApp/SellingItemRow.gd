@@ -97,7 +97,7 @@ func _on_plus_pressed() -> void:
 
 
 func _on_half_pressed() -> void:
-	_set_selected_amount(int(amount / 2))
+	_set_selected_amount(int(floor(float(amount) / 2.0)))
 
 
 func _on_all_pressed() -> void:

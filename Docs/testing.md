@@ -23,11 +23,18 @@ Tests are run in-game through the debug input action:
 - Action name: `run_tests_debug`
 - Current default key: `F6`
 - Runtime path: `DebugManager._input()` creates `TestRunner`, adds it to the scene tree, runs all tests, then frees it.
+- Interactive `F6` runs skip heavy simulation tests by default so they do not stress an active editor/gameplay scene. Launch with `--run-heavy-simulations` before pressing `F6` if those simulations need to run interactively.
 
 Tests can also be run headless by launching the project with the `--run-tests` argument:
 
 ```powershell
 & 'C:\Program Files (x86)\Steam\steamapps\common\Godot Engine\godot.windows.opt.tools.64.exe' --headless --path . -- --run-tests
+```
+
+To print every passed assertion, add `--verbose-tests`:
+
+```powershell
+& 'C:\Program Files (x86)\Steam\steamapps\common\Godot Engine\godot.windows.opt.tools.64.exe' --headless --path . -- --run-tests --verbose-tests
 ```
 
 Use the full path to the Godot executable if `godot` is not available in `PATH`:
@@ -40,30 +47,40 @@ Measure-Command {
 ```
 
 `DebugManager` exits with code `1` when any test fails and `0` when all tests pass.
+Headless `--run-tests` includes the heavy simulation tests.
 
 When the action is pressed, results are printed to the Godot output console:
 
 - `========== RUNNING TESTS ==========` starts the run.
 - Each test prints its section name.
-- Passing assertions increment `passed`.
+- Passing assertions increment `passed`; individual pass lines are printed only when the project is launched with `--verbose-tests`.
 - Failing assertions increment `failed` and call `push_error()`.
-- Final totals are printed under `========== TEST RESULTS ==========`.
+- Each completed test prints one compact `PASS/FAIL <TestName> assertions=<count> failed=<count>` line.
+- Skipped heavy simulations print one `SKIP <TestName> heavy simulation...` line each.
+- Final totals, including skipped heavy simulations, are printed under `========== TEST RESULTS ==========`.
+
+The runner keeps explicit local types around command-line arguments, script references, test names, and compact status strings. This avoids Godot 4.6 type-inference warnings such as `Cannot infer the type of "test_name"` when reading `get_script().resource_path`.
 
 ## Current Test Coverage
 
 Core tests:
 
-- `UIFormatHelperTest.gd`: money, market percentage, season date, product/seed display name, market trend, weather display name, news category, and input label formatting.
+- `UIFormatHelperTest.gd`: money, market percentage, season date, compact ordinal season day, product/seed display name, market trend, weather display name, news category, and input label formatting.
 - `FarmPhoneLayoutTest.gd`: FarmPhone scene structure, black smartphone shell nodes, 4-column/16-slot home grid, app icon labels, shared app container, hidden initial app panels, disabled Storage placeholder, and visible-text branding guardrails.
 - `MarketAppLayoutTest.gd`: Market app two-view scene structure, local details back button, product list scroll container, details hero, price-history chart, compact min/max/average stats, removed product/sample count labels, and compact commodity row fields.
 - `ShopAppLayoutTest.gd`: Shop app cart scene structure, money/feedback labels, product list scroll container, collapsible cart panel with `v`/`^` toggle states, clear/purchase controls, product row Add flow, editable cart quantity field, subtotal fields, and removal of immediate Buy row behavior.
 - `SellAppLayoutTest.gd`: Sell app scene structure, storage product list, empty state, selected sale value summary, product sale cards, editable selected quantity field, quantity controls, Half/All controls, per-row Sell/Sell All buttons, summary Sell Selected button, and removal of the old one-click `SellOneButton` layout.
-- `WeatherAppLayoutTest.gd`: Weather app scene structure, scroll container, Today card, Day Parts grid, Next Days container, unavailable state text, safe FarmPhone insets, compact forecast row width budget, and forecast row weather icon/label fields.
+- `GameplayFeedbackTest.gd`: source-level coverage for Shop/Sell/Silo/world feedback strings, HUD duplicate-message cooldown, selected sale feedback, transfer feedback, invalid world action feedback, item-use feedback, and inventory-gain feedback.
+- `UIResponsivenessSourceTest.gd`: source-level coverage for responsive FarmPhone sizing, Inventory panel/slot scaling, Silo Storage panel sizing, drop-handler parameter naming that avoids `Control.position` shadowing, typed scroll-mode enum usage for custom scroll lines, scroll-line repositioning, Options board scaling, centralized HUD bottom layout, typed HUD UI mode enum usage, and visibility helper names that avoid `CanvasLayer.is_visible` shadowing.
+- `UIVisualPolishSourceTest.gd`: source-level visual polish coverage for visible UI text avoiding technical IDs, Weather forecast labels avoiding `Tomorrow`/`Day +N`, FarmPhone app safe left insets, and manual checklist coverage for left-edge clipping and actual season-date forecast labels.
+- `TestRunnerBehaviorTest.gd`: source-level coverage for keeping heavy simulation tests behind the headless/explicit simulation gate, gating verbose passed-assertion output, and printing compact final summaries.
+- `TimeManagerTest.gd`: current time formatting coverage for exact hours, partial-hour flooring, minute remainders, and the last minute of the day.
+- `WeatherAppLayoutTest.gd`: Weather app scene structure, scroll container, Today card, Day Parts grid, Next Days container, unavailable state text, safe FarmPhone insets, compact forecast row width budget, actual season-date forecast labels with season rollover, and forecast row weather icon/label fields.
 - `NewsAppLayoutTest.gd`: News app scene structure, empty state card, scroll container, card list container, adjusted FarmPhone insets, scrollbar gutter, and news card fields for icon, title, date, category, and body wrapping.
 - `MoneyManagerTest.gd`: money setting, adding, spending, and failed spending.
 - `StorageDataTest.gd`: storage item add/remove/count behavior.
 - `HotbarDataTest.gd`: hotbar setup, first-five inventory slot mapping, and selected slot behavior.
-- `SalesStatsManagerTest.gd`: sales recording, recent sales totals, and day rollover.
+- `SalesStatsManagerTest.gd`: sales recording, recent sales totals, day rollover, and suppressible sale debug logs for long simulations.
 - `InventoryDataTest.gd`: default 25-slot inventory capacity, setup, stacking, removal, and slot movement behavior.
 - `WeatherManagerTest.gd`: day phase hour boundaries, cached phase updates from time changes, phase temperatures derived from one daily base temperature, expanded daily forecast entry fields, and season weather profile modifiers for temperature and rainy/stormy pattern weights.
 - `EventSystemTest.gd`: event data compatibility, multi-product modifiers, deterministic trend stacking, volatility reset behavior, season/day/weather/temperature requirements, calendar-event locks, cooldowns, once-per-season rules, daily event start limits, seed buy-price modifiers, save/load event state, duplicate-news protection, bad-harvest crop-season restrictions, and configured trigger chances for Demand Spike, Export Contract, and Market Panic.
@@ -77,7 +94,7 @@ Save tests:
 - `StorageSaveTest.gd`: silo storage serialization and restoration.
 - `WeatherSaveTest.gd`: current weather, temperature, forecast save data, forecast pattern, and forecast rain chance.
 - `NewsSaveTest.gd`: news history serialization and restoration.
-- `MarketSaveTest.gd`: commodity market prices, trends, volatility, and history.
+- `MarketSaveTest.gd`: commodity market prices, typed trend enum restore, volatility, and history.
 - `EventSaveTest.gd`: active market event persistence.
 - `CropProductIntegrationTest.gd`: integration coverage for added crop products, seeds, crop data, commodity data, market events, shop items, storage registration, and save-manager lookup.
 - `FarmTileLogicTest.gd`: farm tile state transitions, planting, growth, and crop clearing.
@@ -88,6 +105,7 @@ Simulation tests:
 - `FullYearSimulationTest.gd`: deterministic multi-seed 120-day market/event/weather simulation. Each run simulates exactly five seeds: `123456`, `234567`, `345678`, `456789`, and `567890`.
 - `OversupplySalesSimulationTest.gd`: deterministic integration test for sales-driven Oversupply events across all 10 crop products.
 - `CropProfitabilityAnalysisTest.gd`: static crop-economy analyzer for product prices, seed prices, growth time, yield, seasonal profitability, ROI, role classification, market scenarios, Oversupply risk, and recommendation diagnostics.
+- Heavy simulation tests are skipped by interactive debug-key runs to avoid crashing or freezing an active editor/gameplay scene with long market/event simulations. Run them headless with `--run-tests`, or launch with `--run-heavy-simulations` before pressing `F6`.
 - Each seed reports exactly one calendar year: `Year 1 Spring 1` through `Year 1 Winter 30`.
 - Total reported coverage is `5 seeds * 120 days = 600 days`.
 - The test advances calendar days directly through `TimeManager.advance_day_for_test()` and must not wait for the normal in-game clock, timers, process frames, physics frames, or per-minute/per-hour playback.
@@ -111,6 +129,7 @@ Oversupply sales simulation reports:
 - Summary report: `user://simulation_reports/oversupply/oversupply_sales_summary.csv`.
 - Threshold analysis: `user://simulation_reports/oversupply/oversupply_threshold_analysis.csv`.
 - The test uses `SalesStatsManager.record_sale()` and the production event requirement checks.
+- It suppresses production-style market/event/weather/sales logs during the mass scenarios so high-volume crop sales such as Corn threshold runs do not flood the Godot console.
 - It covers no sales, below threshold, exact threshold, above threshold, distributed sales, product isolation, small regular sales, mass regular sales, and Wheat save/load.
 - Technical validation covers sales-window summing, `>=` threshold semantics, product isolation, bearish trend, volatility modifier application, no volatility accumulation, modifier reset after event end, save/load restoration, cooldown behavior, news duplication, event duration, and price min/max bounds.
 - `condition_met` in the detailed CSV is kept as a compatibility alias for `condition_ever_met`; use `condition_met_at_end` when inspecting the final state of long-running scenarios.
@@ -236,6 +255,9 @@ Recommended rules:
 
 Good next targets:
 
+- Stage 6 UI animation pass for gameplay feedback, phone apps, menu transitions, and HUD messages.
+- Screenshot or viewport-rect UI tests for 1280x720, 1600x900, 1920x1080, and 2560x1440 once the Godot executable is available in automation.
+- Runtime interaction tests for opening/closing all major UI panels and confirming HUD/crosshair mode restoration once a stable Godot scene fixture is available.
 - `ToolManager` planting restrictions, watering-can usage, and harvest behavior.
 - Full crop gameplay loop coverage for all crop products, not only wheat.
 - `CommodityMarketManager.simulate_skipped_market_hours()` for time skips.
@@ -257,7 +279,7 @@ Run this checklist in Godot after UI polish changes, especially when no screensh
 1. Start gameplay and verify that crosshair, hotbar, date/time, money, interaction prompts, and gameplay notifications appear only in normal gameplay.
 2. Open Pause Menu. Confirm the world remains visible behind the blur, the blur is not doubled, the dark overlay disappears after closing, the HUD is hidden, and Save / Save and Quit actions show confirmation popups before writing.
 3. Open FarmPhone and confirm the black smartphone shell, simple black wallpaper, 4x4 home grid, app icons, app labels, and lower home button are readable.
-4. Open FarmPhone apps from the home screen: News, Market, Shop, Weather, and Sell. Confirm the shell remains visible, app content stays inside the phone screen, and the home button returns to the home grid.
+4. Open FarmPhone apps from the home screen: News, Market, Shop, Weather, and Sell. Confirm the shell remains visible, app content stays inside the phone screen, left-edge titles are not clipped by the phone frame, and the home button returns to the home grid.
 5. In Market, confirm the first screen is a scrollable product list. Each row should show product icon, product name, current price, and percentage change; it should not show a product count in the header.
 6. In Market, click a product and confirm the details view opens inside the app. The local `<` back button should return to the product list without closing FarmPhone or invoking the phone home screen.
 7. In Market details, confirm the chart is drawn from real price history, bars use green/red/neutral movement colors, min/max/average stats are readable, and there is no `Samples` count.
@@ -272,17 +294,24 @@ Run this checklist in Godot after UI polish changes, especially when no screensh
 16. In Sell, click per-row `Sell All` for one product. Confirm only that product is sold and feedback appears.
 17. In Sell, click summary `Sell Selected`. Confirm only the typed/selected quantities are sold, money increases by the selected value, selected quantities clear after success, and each sold product is recorded for `SalesStatsManager`-driven events.
 18. In Sell, confirm empty storage shows `No products in storage.` instead of a blank list.
-19. In Weather, confirm there is no hourly forecast. The app should show Today, Day Parts with Dawn/Morning/Afternoon/Night cards, and Next Days/Weekly Forecast rows.
-20. In Weather, confirm temperature, rain chance, and weather icons are readable. The first letters of `Weather`, `Day Parts`, `Dawn`, `Afternoon`, and `Next Days` must not be clipped by the left edge of the phone screen. Humidity should appear only after real humidity data exists.
-21. In News, confirm news items are cards with icon/category marker, title, date, category, and wrapped body text. If there are no news items, confirm the empty state says `No news yet.`.
-22. In News, confirm the feed scrolls inside the phone screen when multiple cards exist, the scrollbar does not overlap card content, and the home button does not cover the last card.
-23. Confirm the Storage icon is visible but disabled until storage is intentionally wired into the FarmPhone app flow. Storage/Silo should still open through its existing gameplay interaction.
-24. Open Inventory and Storage/Silo. Confirm panels and slots are readable against bright and dark world backgrounds.
-25. In Inventory, confirm the top leather strip is centered and contains exactly 5 hotbar slots, the lower grid contains 20 regular slots in 5 columns, and both zones together represent the 25 inventory slots.
-26. In Inventory, hover and select filled and empty slots. Confirm hover/selected states are readable, item amounts stay inside their badges, and the bottom description panel has enough spacing between title, amount, and description.
-27. Open Options from Main Menu and Pause Menu. Confirm the root segment list opens Sound, Controls, Graphics, and Feedback submenus; `Back to Options`, root `Back`, and Escape return to the correct previous state.
-28. In Options, verify Graphics dropdown popups, the square fullscreen checkbox, and the Controls scroll line match the wooden menu style.
-29. Open New Game and Load Game from their supported contexts. Confirm wooden panels, paper save-slot cards, empty/occupied slot labels, disabled empty load slots, and occupied-slot overwrite confirmation in New Game.
-30. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting. Prompts should show as white text without a background and should not show placeholder text after starting or loading a game.
-31. Confirm the date/time and money displays sit inside compact wooden plaques, and that the money value is right-aligned with inner padding.
-32. Repeat the UI pass at 1280x720, 1920x1080, and 2560x1440.
+19. In Silo Storage, transfer an inventory product to storage and confirm `Transferred 10x Wheat to Silo.` style feedback in the footer.
+20. In Silo Storage, transfer a product from storage to inventory and confirm `Transferred 10x Wheat to Inventory.` style feedback. Confirm empty lists show `Empty Storage` and `Empty Inventory`, invalid drops show `Cannot transfer item.`, and missing item transfers show `Not enough items.`
+21. In gameplay, use LMB with no selected hotbar item and confirm `No tool selected.`. Use LMB while looking at nothing and confirm `Nothing to interact with.`.
+22. In gameplay, try invalid tool actions and confirm concise feedback: `Cannot use this here.`, `Cannot plant here.`, `No seeds selected.`, `Need a watering can.`, `Crop is not ready.`, or `Cannot harvest this.` as appropriate.
+23. In gameplay, confirm successful seed use and harvest show `Used 1x <Seed>.` and `Added 1x <Product>.` without technical item IDs.
+24. Repeat one invalid action quickly and confirm duplicate HUD messages are not spammed.
+25. In Weather, confirm there is no hourly forecast. The app should show Today, Day Parts with Dawn/Morning/Afternoon/Night cards, and Next Days/Weekly Forecast rows labeled with actual future season dates such as `7th Spring`, not `Day +2`.
+26. In Weather, confirm temperature, rain chance, and weather icons are readable. The first letters of `Weather`, `Day Parts`, `Dawn`, `Afternoon`, and `Next Days` must not be clipped by the left edge of the phone screen. Humidity should appear only after real humidity data exists.
+27. In News, confirm news items are cards with icon/category marker, title, date, category, and wrapped body text. If there are no news items, confirm the empty state says `No news yet.`.
+28. In News, confirm the feed scrolls inside the phone screen when multiple cards exist, the scrollbar does not overlap card content, and the home button does not cover the last card.
+29. Confirm the Storage icon is visible but disabled until storage is intentionally wired into the FarmPhone app flow. Storage/Silo should still open through its existing gameplay interaction.
+30. Open Inventory and Storage/Silo. Confirm panels and slots are readable against bright and dark world backgrounds.
+31. In Inventory, confirm the top leather strip is centered and contains exactly 5 hotbar slots, the lower grid contains 20 regular slots in 5 columns, and both zones together represent the 25 inventory slots.
+32. In Inventory, hover and select filled and empty slots. Confirm hover/selected states are readable, item amounts stay inside their badges, and the bottom description panel has enough spacing between title, amount, and description.
+33. Open Options from Main Menu and Pause Menu. Confirm the root segment list opens Sound, Controls, Graphics, and Feedback submenus; `Back to Options`, root `Back`, and Escape return to the correct previous state.
+34. In Options, verify Graphics dropdown popups, the square fullscreen checkbox, and the Controls scroll line match the wooden menu style.
+35. Open New Game and Load Game from their supported contexts. Confirm wooden panels, paper save-slot cards, empty/occupied slot labels, disabled empty load slots, and occupied-slot overwrite confirmation in New Game.
+36. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting. Prompts should show as white text without a background and should not show placeholder text after starting or loading a game.
+37. Confirm the date/time and money displays sit inside compact wooden plaques, and that the money value is right-aligned with inner padding.
+38. Repeat the UI pass at 1280x720, 1600x900, 1920x1080, and 2560x1440.
+39. In Graphics options, switch Interface Scale between Small, Medium, and Big. Confirm FarmPhone, Inventory, Silo Storage, and Options panels remain inside the viewport and keep buttons clickable.

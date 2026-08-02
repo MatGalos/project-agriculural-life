@@ -249,7 +249,7 @@ Important behavior:
 - The weather phone app uses the existing `WeatherPhaseData` day parts: `Dawn`, `Morning`, `Afternoon`, and `Night`. Do not replace these with hourly forecast entries.
 - The Today card shows the current day pattern, current weather, current temperature, a drawn weather icon, and current phase rain chance.
 - Day-part cards show phase name, drawn weather icon, temperature, and rain chance.
-- Next-day forecast rows show `Tomorrow` or `Day +N`, a drawn weather icon, normalized weather name, representative temperature, and rain chance.
+- Next-day forecast rows show the actual future season date, for example `7th Spring`, plus a drawn weather icon, normalized weather name, representative temperature, and rain chance.
 - Weather app content keeps a larger left safe inset than right inset inside the FarmPhone screen so labels such as `Weather`, `Day Parts`, `Dawn`, `Afternoon`, and `Next Days` do not clip against the black screen frame.
 - Day-part cards and next-day rows use compact minimum widths to avoid horizontal overflow in the narrow FarmPhone screen.
 - Humidity is not currently displayed because no humidity field exists in `WeatherData`, `WeatherPhaseData`, or forecast entries.
@@ -322,6 +322,7 @@ Important behavior:
 Important behavior:
 
 - `record_sale(item_data, amount)` is called by the sell phone app after money is awarded.
+- `suppress_logs` can silence sale debug prints during high-volume simulation tests without changing sale totals or emitted signals.
 - `current_day_sales` stores totals for the active day.
 - `sales_history` stores previous day dictionaries and is capped by `HISTORY_DAYS`.
 - `get_recent_sales_amount(item_id, days)` returns current-day sales plus up to `days - 1` previous days.
@@ -405,6 +406,7 @@ Rules:
 - Market app should not show generic finance UI, product-count labels, or price-history sample-count labels. Only game commodity data should be rendered.
 - FarmPhone typography, shell styles, home button style, and home-screen icon styles are centralized in `Scenes/UIs/PlayerHUD/Phone/FarmPhoneTheme.tres`. Keep this theme scoped to FarmPhone; do not migrate unrelated game menus into it.
 - FarmPhone layout tests in `Tests/Core/FarmPhoneLayoutTest.gd` cover scene structure, grid size, app labels, shared app container presence, and visible-text branding guardrails. Visual proportions still require a manual Godot pass.
+- Final visual polish guardrails in `Tests/Core/UIVisualPolishSourceTest.gd` check visible UI scene text for technical IDs, Weather forecast label regressions, and safe left insets for FarmPhone apps. These tests complement, but do not replace, manual viewport checks.
 
 ## UI Formatting And Panel Styling
 
@@ -504,8 +506,16 @@ HUD event messages:
 - `show_event_message(message, duration)` displays temporary feedback in the bottom-left event area.
 - Empty messages hide the panel immediately.
 - The HUD stores active messages by local ID, so multiple simultaneous messages can be displayed as stacked lines.
+- Repeated identical messages are suppressed briefly by `EVENT_MESSAGE_REPEAT_COOLDOWN`, so invalid world actions cannot flood the notification area.
 - Each message removes only itself when its timer expires.
-- Current seasonal planting feedback and market-event news alerts use this path.
+- Current world-action feedback, seasonal planting feedback, harvest/inventory feedback, watering-can feedback, and market-event news alerts use this path.
+
+Gameplay feedback:
+
+- FarmPhone Shop and Sell apps use their existing local feedback labels because HUD gameplay notifications are hidden while the phone is open.
+- Silo Storage uses the existing footer `HintLabel` for transfer feedback because HUD notifications are hidden while storage is open.
+- World actions use `PlayerHUD.show_event_message()` for short messages such as `No tool selected.`, `Nothing to interact with.`, `Cannot use this here.`, `Cannot plant here.`, `No seeds selected.`, `Need a watering can.`, `Crop is not ready.`, `Cannot harvest this.`, `Used 1x <Seed>.`, and `Added 1x <Product>.`
+- Sell app still records completed sales through `SalesStatsManager`; feedback does not replace the sale/statistics path.
 
 ## Interaction UI
 
@@ -516,6 +526,17 @@ Prompt priority:
 - Tool prompts from `ToolManager.get_tool_prompt_for_target()` are shown first.
 - Interactable prompts are shown only when no tool prompt is available.
 - Prompt text should use concise control-action wording, for example `E — Interact`, `E — Open Silo`, `LMB — Plow`, and `LMB — Harvest Wheat`.
+
+## Responsive UI
+
+Final polish keeps large UI panels inside the active viewport without changing their visual style.
+
+- FarmPhone keeps its fixed base layout and applies uniform centered scaling, so the shell, screen, apps, and home button keep their proportions at 1280x720 with Big interface scale.
+- Inventory and Silo Storage keep fixed base sizes but recalculate centered offsets from the viewport and `GraphicsSettingsManager.get_interface_scale_multiplier()`.
+- Inventory also rescales its hotbar and grid slot minimum sizes with the panel fit scale, so the 5-slot hotbar strip and 5-column inventory grid remain visible at 1280x720 and Big interface scale.
+- Options caches base wooden-board sizes and reduces submenu board minimum sizes when the viewport/interface-scale combination would otherwise overflow.
+- HUD bottom layout remains centralized in `PlayerHUD._update_bottom_panels()`, keeping bottom-left notifications separate from the centered hotbar.
+- These are layout/responsiveness corrections only; they do not add animations or change gameplay, economy, save/load, market, inventory, or FarmPhone app behavior.
 
 ## Maintenance Checklist
 

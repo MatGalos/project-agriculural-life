@@ -1,5 +1,9 @@
 extends Control
 
+const BASE_PHONE_SIZE := Vector2(380.0, 640.0)
+const VIEWPORT_SAFE_MARGIN := Vector2(24.0, 24.0)
+const MIN_RESPONSIVE_SCALE := 0.5
+
 @onready var news_button: Button = $PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/NewsIcon/IconButton
 @onready var exchange_button: Button = $PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/MarketIcon/IconButton
 @onready var shop_button: Button = $PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/ShopIcon/IconButton
@@ -16,6 +20,11 @@ extends Control
 
 func _ready() -> void:
 	visible = false
+	get_viewport().size_changed.connect(_apply_responsive_layout)
+
+	if not GraphicsSettingsManager.interface_scale_changed.is_connected(_on_interface_scale_changed):
+		GraphicsSettingsManager.interface_scale_changed.connect(_on_interface_scale_changed)
+
 	news_button.pressed.connect(_on_news_pressed)
 	exchange_button.pressed.connect(_on_exchange_pressed)
 	shop_button.pressed.connect(_on_shop_pressed)
@@ -24,6 +33,7 @@ func _ready() -> void:
 	home_button.pressed.connect(_on_home_pressed)
 	visibility_changed.connect(_on_visibility_changed)
 	add_to_group("phone_panel")
+	_apply_responsive_layout()
 	_show_home_screen()
 
 func open() -> void:
@@ -87,4 +97,24 @@ func _on_home_pressed() -> void:
 
 func _on_visibility_changed() -> void:
 	if visible:
+		_apply_responsive_layout()
 		_show_home_screen()
+
+
+func _on_interface_scale_changed(_scale_multiplier: float) -> void:
+	_apply_responsive_layout()
+
+
+func _apply_responsive_layout() -> void:
+	var viewport_size := get_viewport().get_visible_rect().size
+	var interface_scale := maxf(GraphicsSettingsManager.get_interface_scale_multiplier(), 0.1)
+	var available_size := (viewport_size / interface_scale) - (VIEWPORT_SAFE_MARGIN * 2.0)
+	var fit_scale := minf(available_size.x / BASE_PHONE_SIZE.x, available_size.y / BASE_PHONE_SIZE.y)
+	fit_scale = clampf(fit_scale, MIN_RESPONSIVE_SCALE, 1.0)
+
+	offset_left = -BASE_PHONE_SIZE.x * 0.5
+	offset_top = -BASE_PHONE_SIZE.y * 0.5
+	offset_right = BASE_PHONE_SIZE.x * 0.5
+	offset_bottom = BASE_PHONE_SIZE.y * 0.5
+	pivot_offset = BASE_PHONE_SIZE * 0.5
+	scale = Vector2.ONE * fit_scale

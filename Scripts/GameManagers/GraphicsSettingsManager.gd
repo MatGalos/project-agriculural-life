@@ -102,8 +102,8 @@ func _center_window(window_size: Vector2i) -> void:
 	var screen_position: Vector2i = DisplayServer.screen_get_position(screen_index)
 	var screen_size: Vector2i = DisplayServer.screen_get_size(screen_index)
 	var centered_position := Vector2i(
-		screen_position.x + ((screen_size.x - window_size.x) / 2),
-		screen_position.y + ((screen_size.y - window_size.y) / 2)
+		screen_position.x + int(floor(float(screen_size.x - window_size.x) / 2.0)),
+		screen_position.y + int(floor(float(screen_size.y - window_size.y) / 2.0))
 	)
 
 	DisplayServer.window_set_position(centered_position)

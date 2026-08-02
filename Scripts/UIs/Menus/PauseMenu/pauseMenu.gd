@@ -57,12 +57,12 @@ func onPauseButtonPressed(paused: bool) -> void:
 	setMenuVisible(paused)
 
 
-func setMenuVisible(is_visible: bool) -> void:
-	visible = is_visible
-	blurBg.visible = is_visible
-	panel.visible = is_visible
+func setMenuVisible(should_show: bool) -> void:
+	visible = should_show
+	blurBg.visible = should_show
+	panel.visible = should_show
 
-	if not is_visible:
+	if not should_show:
 		_hide_confirmation()
 
 

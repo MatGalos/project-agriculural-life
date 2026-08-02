@@ -9,16 +9,13 @@ class_name WeatherForecastRow
 
 
 func setup(
-	day_offset: int,
+	forecast_date: String,
 	weather: WeatherData,
 	temperature: int,
 	pattern: WeatherDayPatternData = null,
 	rain_chance: int = 0
 ) -> void:
-	if day_offset == 1:
-		day_label.text = "Tomorrow"
-	else:
-		day_label.text = "Day +%d" % day_offset
+	day_label.text = forecast_date
 
 	var display_weather := _get_display_weather(weather, pattern)
 	weather_label.text = display_weather

@@ -68,7 +68,7 @@ func _advance_year() -> void:
 	year_changed.emit()
 
 func get_hour() -> int:
-	return current_minute_of_day / 60
+	return int(floor(float(current_minute_of_day) / 60.0))
 
 func get_minute() -> int:
 	return current_minute_of_day % 60

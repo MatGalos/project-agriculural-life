@@ -1,6 +1,10 @@
 extends Control
 class_name InventoryPanel
 
+const BASE_PANEL_SIZE := Vector2(720.0, 624.0)
+const VIEWPORT_SAFE_MARGIN := Vector2(48.0, 48.0)
+const MIN_RESPONSIVE_SCALE := 0.5
+
 @export var slot_ui_scene: PackedScene
 @export var inventory_data: InventoryData
 
@@ -13,14 +17,21 @@ class_name InventoryPanel
 const HOTBAR_DISPLAY_COUNT := 5
 const INVENTORY_GRID_SLOT_COUNT := 20
 const INVENTORY_GRID_START_INDEX := 5
+const HOTBAR_SLOT_BASE_SIZE := Vector2(78.0, 78.0)
+const INVENTORY_SLOT_BASE_SIZE := Vector2(76.0, 76.0)
 
 var hotbar_slot_ui_nodes: Array[InventorySlotUI] = []
 var inventory_slot_ui_nodes: Array[InventorySlotUI] = []
 var _selected_slot_index: int = -1
+var _responsive_scale := 1.0
 
 func _ready() -> void:
 	visible = false
 	add_to_group("inventory_panel")
+	get_viewport().size_changed.connect(_apply_responsive_layout)
+
+	if not GraphicsSettingsManager.interface_scale_changed.is_connected(_on_interface_scale_changed):
+		GraphicsSettingsManager.interface_scale_changed.connect(_on_interface_scale_changed)
 
 	if inventory_data and not inventory_data.inventory_changed.is_connected(refresh):
 		inventory_data.inventory_changed.connect(refresh)
@@ -32,11 +43,13 @@ func _ready() -> void:
 		HotbarManager.selected_slot_changed.connect(_on_hotbar_selected_slot_changed)
 
 	build_slots()
+	_apply_responsive_layout()
 	refresh()
 	_update_description(null)
 
 
 func open() -> void:
+	_apply_responsive_layout()
 	refresh()
 	visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -152,7 +165,7 @@ func _create_slot_ui(slot_index: int, is_hotbar_slot: bool) -> InventorySlotUI:
 	slot_ui.set_display_mode(InventorySlotUI.DisplayMode.HOTBAR if is_hotbar_slot else InventorySlotUI.DisplayMode.INVENTORY)
 	slot_ui.slot_selected.connect(select_slot)
 	slot_ui.slot_hovered.connect(_on_slot_hovered)
-	slot_ui.custom_minimum_size = Vector2(78.0, 78.0) if is_hotbar_slot else Vector2(76.0, 76.0)
+	slot_ui.custom_minimum_size = _get_slot_size(is_hotbar_slot)
 	slot_ui.set_slot(slot_index, inventory_data.get_slot(slot_index))
 	return slot_ui
 
@@ -195,3 +208,35 @@ func _update_description(slot: InventorySlot) -> void:
 
 	var description := String(slot.item_data.description).strip_edges()
 	description_text.text = description if not description.is_empty() else "No description available."
+
+
+func _on_interface_scale_changed(_scale_multiplier: float) -> void:
+	_apply_responsive_layout()
+
+
+func _apply_responsive_layout() -> void:
+	var viewport_size := get_viewport().get_visible_rect().size
+	var interface_scale := maxf(GraphicsSettingsManager.get_interface_scale_multiplier(), 0.1)
+	var available_size := (viewport_size / interface_scale) - (VIEWPORT_SAFE_MARGIN * 2.0)
+	var fit_scale := minf(available_size.x / BASE_PANEL_SIZE.x, available_size.y / BASE_PANEL_SIZE.y)
+	_responsive_scale = clampf(fit_scale, MIN_RESPONSIVE_SCALE, 1.0)
+
+	var panel_size := BASE_PANEL_SIZE * _responsive_scale
+	offset_left = -panel_size.x * 0.5
+	offset_top = -panel_size.y * 0.5
+	offset_right = panel_size.x * 0.5
+	offset_bottom = panel_size.y * 0.5
+	_apply_slot_sizes()
+
+
+func _apply_slot_sizes() -> void:
+	for slot_ui in hotbar_slot_ui_nodes:
+		slot_ui.custom_minimum_size = _get_slot_size(true)
+
+	for slot_ui in inventory_slot_ui_nodes:
+		slot_ui.custom_minimum_size = _get_slot_size(false)
+
+
+func _get_slot_size(is_hotbar_slot: bool) -> Vector2:
+	var base_size := HOTBAR_SLOT_BASE_SIZE if is_hotbar_slot else INVENTORY_SLOT_BASE_SIZE
+	return base_size * _responsive_scale

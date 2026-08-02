@@ -530,7 +530,7 @@ func _apply_market_save_data(market_data: Dictionary) -> void:
 
 		commodity.current_price = float(entry.get("current_price", commodity.base_price))
 		commodity.volatility = float(entry.get("volatility", commodity.volatility))
-		commodity.trend = int(entry.get("trend", CommodityData.MarketTrend.NEUTRAL))
+		commodity.trend = int(entry.get("trend", CommodityData.MarketTrend.NEUTRAL)) as CommodityData.MarketTrend
 		commodity.trend_strength = float(entry.get("trend_strength", commodity.trend_strength))
 
 		commodity.price_history.clear()
