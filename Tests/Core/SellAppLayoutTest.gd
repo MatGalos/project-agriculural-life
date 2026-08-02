@@ -38,9 +38,16 @@ func _assert_sell_panel_layout(panel: Control) -> void:
 
 	var sell_selected_button := panel.get_node_or_null("PanelContainer/MarginContainer/RootStack/SummaryPanel/SummaryMargin/SummaryRow/SellSelectedButton") as Button
 	runner.assert_true(sell_selected_button != null and sell_selected_button.text == "Sell Selected", "Sell app summary action is labeled Sell Selected")
+	runner.assert_true(sell_selected_button != null and sell_selected_button.custom_minimum_size.x >= 106.0, "Sell app summary action reserves enough width")
 
 	var empty_label := panel.get_node_or_null("PanelContainer/MarginContainer/RootStack/EmptyStateLabel") as Label
 	runner.assert_true(empty_label != null and empty_label.text == "No products in storage.", "Sell app empty state text is user-facing")
+
+	var margin := panel.get_node_or_null("PanelContainer/MarginContainer") as MarginContainer
+	runner.assert_true(margin != null and margin.get_theme_constant("margin_left") >= 12, "Sell app keeps safe left inset inside FarmPhone screen")
+
+	var selected_value_label := panel.get_node_or_null("PanelContainer/MarginContainer/RootStack/SummaryPanel/SummaryMargin/SummaryRow/SelectedValueLabel") as Label
+	runner.assert_true(selected_value_label != null and selected_value_label.text_overrun_behavior == TextServer.OVERRUN_TRIM_ELLIPSIS, "Sell app summary value trims instead of overflowing")
 
 
 func _assert_sell_row_layout(row: PanelContainer) -> void:
@@ -62,4 +69,4 @@ func _assert_sell_row_layout(row: PanelContainer) -> void:
 	runner.assert_true(row.get_node_or_null("SellOneButton") == null, "Sell row no longer has one-click SellOneButton")
 
 	var selected_edit := row.get_node_or_null("MarginContainer/CardStack/QuantityRow/SelectedEdit") as LineEdit
-	runner.assert_true(selected_edit != null and selected_edit.virtual_keyboard_type == LineEdit.KEYBOARD_TYPE_NUMBER, "Sell row quantity edit uses numeric keyboard")
+	runner.assert_true(selected_edit != null and selected_edit.virtual_keyboard_type == 2, "Sell row quantity edit uses numeric keyboard")

@@ -189,7 +189,7 @@ Resource only plus helper functions. Stores event identity, category, trigger mo
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Connects daily rollover handling to `TimeManager.day_changed`. |
-| `func record_sale(item_data: ItemData, amount: int) -> void:` | Adds sold amount to the current day's item total and emits `sales_stats_changed`. |
+| `func record_sale(item_data: ItemData, amount: int) -> void:` | Adds sold amount to the current day's item total, optionally prints debug output when `suppress_logs` is false, and emits `sales_stats_changed`. |
 | `func get_recent_sales_amount(item_id: String, days: int = HISTORY_DAYS) -> int:` | Returns sales for an item across the current day and recent history. |
 | `func _on_day_changed() -> void:` | Moves current-day sales into rolling history, trims old entries, and emits `sales_stats_changed`. |
 | `func create_save_data() -> Dictionary:` | Serializes current-day sales and recent sales history. |
@@ -279,19 +279,20 @@ Resource only plus helper functions. Stores event identity, category, trigger mo
 | Function | Description |
 | --- | --- |
 | `func get_active_tool() -> ToolItemData:` | Returns the current active tool. |
-| `func use_active_tool(target: Node) -> void:` | Handles use active tool behavior. |
-| `func refill_watering_can() -> void:` | Handles refill watering can behavior. |
+| `func use_active_tool(target: Node) -> void:` | Uses the selected hotbar item on a world target or shows concise HUD feedback when no tool/target/action is valid. |
+| `func refill_watering_can() -> void:` | Refills watering-can water, emits refresh signal, and shows HUD feedback. |
 | `func get_tool_prompt_for_target(target: Node) -> String:` | Returns the current tool prompt for target. |
 | `func _use_tool_item(target: Node, tool: ToolItemData) -> void:` | Handles use tool item behavior. |
-| `func _use_hoe(target: Node) -> void:` | Handles use hoe behavior. |
-| `func _use_watering_can(target: Node) -> void:` | Handles use watering can behavior. |
-| `func _use_seed_item(target: Node, seed_item: SeedItemData) -> void:` | Handles use seed item behavior. |
-| `func _use_scythe(target: Node) -> void:` | Handles use scythe behavior. |
+| `func _use_hoe(target: Node) -> void:` | Plows grass farm tiles or shows invalid-action HUD feedback. |
+| `func _use_watering_can(target: Node) -> void:` | Waters plowed farm tiles or shows watering-can/invalid-action HUD feedback. |
+| `func _use_seed_item(target: Node, seed_item: SeedItemData) -> void:` | Plants valid seeds, consumes one seed, refreshes UI, and shows use/error HUD feedback. |
+| `func _use_scythe(target: Node) -> void:` | Harvests ready crops when inventory can accept the product and shows harvest/error HUD feedback. |
+| `func _can_inventory_fit(item_data: ItemData, amount: int) -> bool:` | Checks stack and empty-slot capacity before harvesting so full-inventory feedback does not destroy crops. |
 | `func _find_farm_tile(target: Node) -> FarmTile:` | Finds find farm tile from the provided context. |
 | `func _get_crop_data_for_seed(seed_item: SeedItemData) -> CropData:` | Builds or returns get crop data for seed for internal use. |
 | `func _get_tool_item_prompt(tile: FarmTile, tool: ToolItemData) -> String:` | Builds or returns get tool item prompt for internal use. |
 | `func _refresh_inventory_ui() -> void:` | Refreshes refresh inventory ui from current data. |
-| `func _show_hud_event_message(message: String) -> void:` | Handles show hud event message behavior. |
+| `func _show_hud_event_message(message: String) -> void:` | Sends short gameplay feedback through `PlayerHUD.show_event_message()`. |
 
 ## `Scripts/GameManagers/WeatherManager.gd`
 
@@ -619,7 +620,7 @@ Resource only plus helper functions. Stores event identity, category, trigger mo
 
 | Function | Description |
 | --- | --- |
-| `func setup(day_offset: int, weather: WeatherData, temperature: int, pattern: WeatherDayPatternData = null, rain_chance: int = 0) -> void:` | Displays one next-day forecast row; `day_offset == 1` is labeled `Tomorrow`, later rows use `Day +N`, and the row shows pattern name, temperature, and rain chance. |
+| `func setup(forecast_date: String, weather: WeatherData, temperature: int, pattern: WeatherDayPatternData = null, rain_chance: int = 0) -> void:` | Displays one next-day forecast row with a preformatted season date label, pattern name, temperature, and rain chance. |
 
 ## `Scripts/PhoneApps/WeatherApp/WeatherPanel.gd`
 
@@ -630,6 +631,7 @@ Resource only plus helper functions. Stores event identity, category, trigger mo
 | `func refresh() -> void:` | Rebuilds or updates this UI from current backing data. |
 | `func _update_today() -> void:` | Updates the current day pattern and current weather summary. |
 | `func _update_forecast() -> void:` | Rebuilds current-day phase rows and next-day forecast rows from `WeatherManager`. |
+| `func _get_forecast_date_label(day_offset: int) -> String:` | Converts a forecast offset into an actual future season day label such as `7th Spring`, wrapping across season boundaries. |
 
 ## `Scripts/Seasons/SeasonWeatherData.gd`
 
@@ -643,12 +645,13 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 | `func _input(event: InputEvent) -> void:` | Handles raw input events routed to this node. |
 | `func _physics_process(delta: float) -> void:` | Runs fixed-timestep movement or physics logic. |
 | `func _rotate_camera(mouse_motion: InputEventMouseMotion) -> void:` | Handles rotate camera behavior. |
-| `func _use_selected_tool() -> void:` | Handles use selected tool behavior. |
+| `func _use_selected_tool() -> void:` | Uses the selected hotbar tool on the raycast target or shows `No tool selected.`, `Nothing to interact with.`, or invalid-action HUD feedback. |
 | `func _is_inventory_open() -> bool:` | Checks whether is inventory open is true for internal flow. |
 | `func _is_phone_open() -> bool:` | Checks whether is phone open is true for internal flow. |
 | `func _is_storage_open() -> bool:` | Checks whether is storage open is true for internal flow. |
 | `func _is_any_game_menu_open() -> bool:` | Checks whether is any game menu open is true for internal flow. |
-| `func _ensure_player_hud() -> void:` | Ensures ensure player hud exists before it is used. |
+| `func _ensure_player_hud() -> void:` | Ensures the HUD reference exists before UI feedback or menu checks. |
+| `func _show_hud_event_message(message: String) -> void:` | Sends short world-interaction feedback through the existing HUD notification area. |
 
 ## `Scripts/Player/InteractionController.gd`
 
@@ -793,6 +796,9 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 | `func _show_graphics_options() -> void:` | Shows the Graphics submenu. |
 | `func _show_feedback_options() -> void:` | Shows the Feedback submenu. |
 | `func _set_active_panel(active_panel: Control) -> void:` | Sets exactly one Options panel visible. |
+| `func _on_interface_scale_changed(_scale_multiplier: float) -> void:` | Reapplies Options board sizing after Interface Scale changes. |
+| `func _cache_board_base_sizes() -> void:` | Stores original wooden-board sizes before responsive fitting changes them. |
+| `func _apply_responsive_layout() -> void:` | Fits large Options boards inside the viewport using current interface scale while preserving style. |
 
 ## `Scripts/UIs/Menus/OptionsMenu/OptionsCheckBox.gd`
 
@@ -857,6 +863,10 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 | `func _on_slot_hovered(slot_index: int) -> void:` | Updates the description panel from the hovered slot. |
 | `func _update_slot_selection() -> void:` | Applies selected and active-hotbar visual states across all Inventory screen slots. |
 | `func _update_description(slot: InventorySlot) -> void:` | Shows selected item name, amount, and description or the empty-state text. |
+| `func _on_interface_scale_changed(_scale_multiplier: float) -> void:` | Reapplies Inventory panel and slot sizing after Interface Scale changes. |
+| `func _apply_responsive_layout() -> void:` | Fits the centered Inventory panel inside the viewport and reapplies responsive slot sizes. |
+| `func _apply_slot_sizes() -> void:` | Updates existing hotbar and grid slot minimum sizes from the current responsive scale. |
+| `func _get_slot_size(is_hotbar_slot: bool) -> Vector2:` | Returns the scaled minimum size for hotbar or inventory grid slots. |
 
 ## `Scripts/UIs/PlayerHUD/phone_panel.gd`
 
@@ -873,6 +883,8 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 | `func _on_exchange_pressed() -> void:` | Handles the 'on exchange pressed' signal callback. |
 | `func _on_weather_pressed() -> void:` | Handles the 'on weather pressed' signal callback. |
 | `func _on_news_pressed() -> void:` | Handles the 'on news pressed' signal callback. |
+| `func _on_interface_scale_changed(_scale_multiplier: float) -> void:` | Reapplies FarmPhone responsive sizing after Interface Scale changes. |
+| `func _apply_responsive_layout() -> void:` | Fits the centered FarmPhone shell inside the viewport with uniform panel scaling so internal phone layout proportions stay intact. |
 
 ## `Scripts/UIs/PlayerHUD/player_hud.gd`
 
@@ -904,7 +916,7 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 | `func toggle_storage() -> void:` | Toggles storage between active and inactive states. |
 | `func is_storage_open() -> bool:` | Returns whether storage open is true. |
 | `func is_any_game_menu_open() -> bool:` | Returns whether any game menu open is true. |
-| `func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATION) -> void:` | Shows a temporary bottom-left HUD message; multiple active messages stack as separate lines. |
+| `func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATION) -> void:` | Shows a temporary bottom-left HUD message; multiple active messages stack as separate lines and repeated identical messages are briefly suppressed. |
 | `func _refresh_event_messages() -> void:` | Rebuilds the stacked HUD message label from active timed messages. |
 | `func _hide_event_message() -> void:` | Clears all active HUD messages and hides the event message panel. |
 | `func _on_time_changed() -> void:` | Handles the 'on time changed' signal callback. |
@@ -934,6 +946,8 @@ RefCounted static helper only. It formats visible UI text without changing gamep
 | `static func money_each(amount: int) -> String:` | Formats per-item prices, for example `$12 each`. |
 | `static func percent(value: float) -> String:` | Formats already-percent values as `+7.04%`, `-2.51%`, or `0.00%`. |
 | `static func season_date(season: Variant, day: int, year: int) -> String:` | Formats seasonal dates as `Spring 3, Year 1`. |
+| `static func ordinal_day(day: int) -> String:` | Formats a season day with an ordinal suffix, for example `1st`, `2nd`, `3rd`, or `11th`. |
+| `static func season_day(season: Variant, day: int) -> String:` | Formats compact in-season dates as `5th Spring` for phone forecast labels. |
 | `static func display_product_name(value: Variant) -> String:` | Converts item resources or technical product IDs to visible product names. |
 | `static func display_seed_name(value: Variant) -> String:` | Converts seed resources or seed IDs to visible seed names. |
 | `static func display_market_trend(trend: Variant) -> String:` | Converts trend enums or strings to `Bullish`, `Bearish`, or `Neutral`. |
@@ -965,19 +979,22 @@ RefCounted static helper only. It formats visible UI text without changing gamep
 | `func transfer_from_inventory_slot(slot_index: int) -> void:` | Handles transfer from inventory slot behavior. |
 | `func is_open() -> bool:` | Returns whether open is true. |
 | `func can_accept_transfer_drop(target_type: String, data: Variant) -> bool:` | Returns whether accept transfer drop is allowed in the current state. |
-| `func drop_transfer_to(target_type: String, data: Variant) -> void:` | Handles drop transfer to behavior. |
+| `func drop_transfer_to(target_type: String, data: Variant) -> void:` | Routes accepted transfer drops or shows `Cannot transfer item.` feedback for invalid payloads. |
 | `func _can_drop_data(_position: Vector2, data: Variant) -> bool:` | Checks whether the current drag payload can be dropped here. |
-| `func _drop_data(position: Vector2, data: Variant) -> void:` | Applies the accepted drag-and-drop payload. |
+| `func _drop_data(position: Vector2, data: Variant) -> void:` | Applies the accepted drag-and-drop payload or shows transfer failure feedback. |
 | `func _refresh_storage_items() -> void:` | Refreshes refresh storage items from current data. |
 | `func _refresh_inventory_items() -> void:` | Refreshes refresh inventory items from current data. |
 | `func _create_row(item_data: ItemData, amount: int, source_type: String, inventory_slot_index: int) -> StorageItemRow:` | Creates create row for UI or runtime use. |
 | `func _on_row_transfer_requested(row: StorageItemRow) -> void:` | Handles the 'on row transfer requested' signal callback. |
 | `func _on_row_item_dropped(target_row: StorageItemRow, payload: Dictionary) -> void:` | Handles the 'on row item dropped' signal callback. |
-| `func _transfer_inventory_to_storage(slot_index: int) -> void:` | Handles transfer inventory to storage behavior. |
-| `func _transfer_storage_to_inventory(item_data: ItemData) -> void:` | Handles transfer storage to inventory behavior. |
+| `func _transfer_inventory_to_storage(slot_index: int) -> void:` | Transfers one inventory slot to silo storage and updates footer feedback for success, empty inventory, or invalid transfer. |
+| `func _transfer_storage_to_inventory(item_data: ItemData) -> void:` | Transfers up to one stack from silo storage to inventory and updates footer feedback for success, full inventory, missing items, or invalid transfer. |
 | `func _clear_container(container: Container) -> void:` | Clears clear container and related state. |
+| `func _update_hint(text: String) -> void:` | Updates the Silo Storage footer feedback text. |
 | `func _refresh_hotbar() -> void:` | Refreshes refresh hotbar from current data. |
 | `func _is_transfer_payload(data: Variant) -> bool:` | Checks whether is transfer payload is true for internal flow. |
+| `func _on_interface_scale_changed(_scale_multiplier: float) -> void:` | Reapplies Silo Storage panel sizing after Interface Scale changes. |
+| `func _apply_responsive_layout() -> void:` | Fits the centered Silo Storage transfer panel inside the viewport and repositions scroll indicators. |
 
 ## `Scripts/World/DayNightController.gd`
 
@@ -986,3 +1003,15 @@ RefCounted static helper only. It formats visible UI text without changing gamep
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
 | `func update_lighting() -> void:` | Updates lighting from current gameplay data. |
 | `func _update_environment(sky_color: Color, ambient_color: Color) -> void:` | Updates update environment from current data. |
+
+## `Tests/TestRunner.gd`
+
+| Function | Description |
+| --- | --- |
+| `func should_run_heavy_simulation_tests() -> bool:` | Returns true for headless `--run-tests` runs or explicit `--run-heavy-simulations` interactive runs. |
+| `func should_print_passed_assertions() -> bool:` | Returns true when `--verbose-tests` should print every passed assertion. |
+| `func run_all_tests() -> void:` | Runs registered tests, skips heavy simulations when gated off, and prints compact per-test and final summaries. |
+| `func _run_test_script(test_script: Object) -> void:` | Assigns the runner, runs one test object, and prints a compact `PASS/FAIL` line with assertion counts. |
+| `func _skip_test(test_name: String) -> void:` | Records and prints one skipped heavy simulation test. |
+| `func assert_true(value: bool, message: String) -> void:` | Increments pass/fail counters for boolean assertions and only prints passing assertions in verbose mode. |
+| `func assert_eq(actual, expected, message: String) -> void:` | Increments pass/fail counters for equality assertions and reports expected/actual values on failure. |

@@ -27,20 +27,20 @@ script = ExtResource("1_u6y55")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
-theme_override_constants/margin_left = 8
+theme_override_constants/margin_left = 6
 theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 8
+theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 6
 
 [node name="Row" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 5
 
 [node name="DayLabel" type="Label" parent="MarginContainer/Row" unique_id=493260984]
-custom_minimum_size = Vector2(64, 0)
+custom_minimum_size = Vector2(72, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Tomorrow"
+text = "2nd Spring"
 vertical_alignment = 1
 
 [node name="WeatherIcon" type="Control" parent="MarginContainer/Row"]
@@ -49,7 +49,7 @@ layout_mode = 2
 script = ExtResource("2_icon")
 
 [node name="WeatherLabel" type="Label" parent="MarginContainer/Row" unique_id=1487925750]
-custom_minimum_size = Vector2(54, 0)
+custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Unknown"
@@ -63,7 +63,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 
 [node name="RainLabel" type="Label" parent="MarginContainer/Row"]
-custom_minimum_size = Vector2(56, 0)
+custom_minimum_size = Vector2(52, 0)
 layout_mode = 2
 text = "Rain: 0%"
 horizontal_alignment = 2

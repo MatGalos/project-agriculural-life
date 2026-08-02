@@ -45,6 +45,7 @@ var _executed_days: int = 0
 var _previous_commodity_logs_suppressed := false
 var _previous_weather_logs_suppressed := false
 var _previous_event_logs_suppressed := false
+var _previous_sales_logs_suppressed := false
 
 
 func run() -> void:
@@ -253,7 +254,7 @@ func _collect_current_day_data(simulation_day: int) -> void:
 	_collect_event_statistics(simulation_day)
 
 
-func _simulate_next_day(simulation_day: int) -> void:
+func _simulate_next_day(_simulation_day: int) -> void:
 	var start_time: int = Time.get_ticks_msec()
 
 	_started_today.clear()
@@ -656,7 +657,7 @@ func _save_multi_seed_aggregate(all_results: Array[Dictionary]) -> void:
 func _validate_seed_diversity(all_results: Array[Dictionary]) -> Array[String]:
 	var errors: Array[String] = []
 	var fingerprint_to_seed: Dictionary = {}
-	var identical_pairs := 0
+	var _identical_pairs := 0
 
 	for result in all_results:
 		var simulation_seed := int(result["seed"])
@@ -664,7 +665,7 @@ func _validate_seed_diversity(all_results: Array[Dictionary]) -> Array[String]:
 
 		if fingerprint_to_seed.has(fingerprint):
 			var previous_seed := int(fingerprint_to_seed[fingerprint])
-			identical_pairs += 1
+			_identical_pairs += 1
 			print("WARNING: Seeds %d and %d generated identical simulation output." % [previous_seed, simulation_seed])
 		else:
 			fingerprint_to_seed[fingerprint] = simulation_seed
@@ -1207,7 +1208,7 @@ func _collect_balance_warnings() -> void:
 
 	for product_id in _product_ids:
 		var stats := _product_stats[product_id] as Dictionary
-		if int(stats.get("max_price_days", 0)) > DAYS_IN_YEAR / 4:
+		if int(stats.get("max_price_days", 0)) > int(floor(float(DAYS_IN_YEAR) / 4.0)):
 			_balance_warnings.append("%s remained at max price for more than 25%% of the year." % product_id)
 
 	if _days_without_events < int(ceil(float(DAYS_IN_YEAR) * 0.1)):
@@ -1227,16 +1228,19 @@ func _suppress_production_logs() -> void:
 	_previous_commodity_logs_suppressed = CommodityMarketManager.suppress_logs
 	_previous_weather_logs_suppressed = WeatherManager.suppress_logs
 	_previous_event_logs_suppressed = EventManager.suppress_logs
+	_previous_sales_logs_suppressed = SalesStatsManager.suppress_logs
 
 	CommodityMarketManager.suppress_logs = true
 	WeatherManager.suppress_logs = true
 	EventManager.suppress_logs = true
+	SalesStatsManager.suppress_logs = true
 
 
 func _restore_production_logs() -> void:
 	CommodityMarketManager.suppress_logs = _previous_commodity_logs_suppressed
 	WeatherManager.suppress_logs = _previous_weather_logs_suppressed
 	EventManager.suppress_logs = _previous_event_logs_suppressed
+	SalesStatsManager.suppress_logs = _previous_sales_logs_suppressed
 
 
 func _event_category_to_string(category: MarketEventData.EventCategory) -> String:

@@ -102,12 +102,19 @@ func _rotate_camera(mouse_motion: InputEventMouseMotion) -> void:
 
 
 func _use_selected_tool() -> void:
+	if HotbarManager.get_selected_item() == null:
+		_show_hud_event_message("No tool selected.")
+		return
+
 	if not interaction_raycast.is_colliding():
+		_show_hud_event_message("Nothing to interact with.")
 		return
 
 	var target := interaction_raycast.get_collider()
 	if target is Node:
 		ToolManager.use_active_tool(target as Node)
+	else:
+		_show_hud_event_message("Cannot use this here.")
 
 
 func _is_inventory_open() -> bool:
@@ -143,3 +150,10 @@ func _ensure_player_hud() -> void:
 		return
 
 	player_hud = get_tree().get_first_node_in_group("player_hud") as PlayerHUD
+
+
+func _show_hud_event_message(message: String) -> void:
+	_ensure_player_hud()
+
+	if player_hud and player_hud.has_method("show_event_message"):
+		player_hud.show_event_message(message)

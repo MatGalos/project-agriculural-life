@@ -32,3 +32,18 @@ func run() -> void:
 	runner.assert_eq(commodity.trend_strength, 0.03, "Market trend strength restored")
 	runner.assert_eq(commodity.price_history.size(), 3, "Market history restored")
 	runner.assert_eq(commodity.price_history_labels.size(), 3, "Market history labels restored")
+	runner.assert_true(
+		_read_file("res://Scripts/GameManagers/SaveManager.gd").contains("as CommodityData.MarketTrend"),
+		"Market save restore casts trend integer to typed enum"
+	)
+
+
+func _read_file(path: String) -> String:
+	var file := FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		return ""
+
+	var text := file.get_as_text()
+	file.close()
+	return text

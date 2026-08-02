@@ -21,6 +21,7 @@ var _active_days_by_event: Dictionary = {}
 var _previous_commodity_logs_suppressed := false
 var _previous_event_logs_suppressed := false
 var _previous_weather_logs_suppressed := false
+var _previous_sales_logs_suppressed := false
 var _saved_possible_market_events: Array[MarketEventData] = []
 
 
@@ -1245,9 +1246,11 @@ func _suppress_production_logs() -> void:
 	_previous_commodity_logs_suppressed = CommodityMarketManager.suppress_logs
 	_previous_event_logs_suppressed = EventManager.suppress_logs
 	_previous_weather_logs_suppressed = WeatherManager.suppress_logs
+	_previous_sales_logs_suppressed = SalesStatsManager.suppress_logs
 	CommodityMarketManager.suppress_logs = true
 	EventManager.suppress_logs = true
 	WeatherManager.suppress_logs = true
+	SalesStatsManager.suppress_logs = true
 
 
 func _restore_production_logs() -> void:
@@ -1255,6 +1258,7 @@ func _restore_production_logs() -> void:
 	CommodityMarketManager.suppress_logs = _previous_commodity_logs_suppressed
 	EventManager.suppress_logs = _previous_event_logs_suppressed
 	WeatherManager.suppress_logs = _previous_weather_logs_suppressed
+	SalesStatsManager.suppress_logs = _previous_sales_logs_suppressed
 
 
 func _limit_possible_events(events: Array) -> void:

@@ -69,7 +69,7 @@ func _draw_bars(chart_rect: Rect2, prices: Array[float], min_price: float, price
 		draw_rect(bar_rect, color)
 
 
-func _draw_range_labels(chart_rect: Rect2, min_price: float, max_price: float) -> void:
+func _draw_range_labels(_chart_rect: Rect2, min_price: float, max_price: float) -> void:
 	var font := get_theme_default_font()
 	var font_size := 10
 

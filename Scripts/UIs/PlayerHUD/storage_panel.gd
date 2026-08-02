@@ -1,6 +1,10 @@
 extends Control
 class_name StoragePanel
 
+const BASE_PANEL_SIZE := Vector2(680.0, 460.0)
+const VIEWPORT_SAFE_MARGIN := Vector2(48.0, 48.0)
+const MIN_RESPONSIVE_SCALE := 0.5
+
 @export var storage_data: StorageData
 @export var row_scene: PackedScene
 @export var player_inventory: InventoryData
@@ -20,7 +24,11 @@ func _ready() -> void:
 	visible = false
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	add_to_group("storage_panel")
+	get_viewport().size_changed.connect(_apply_responsive_layout)
 	resized.connect(_position_scroll_lines_deferred)
+
+	if not GraphicsSettingsManager.interface_scale_changed.is_connected(_on_interface_scale_changed):
+		GraphicsSettingsManager.interface_scale_changed.connect(_on_interface_scale_changed)
 
 	if storage_data and not storage_data.storage_changed.is_connected(refresh):
 		storage_data.storage_changed.connect(refresh)
@@ -33,10 +41,12 @@ func _ready() -> void:
 
 	_inventory_scroll_line = _create_scroll_line(inventory_scroll, "InventoryScrollLine")
 	_storage_scroll_line = _create_scroll_line(storage_scroll, "StorageScrollLine")
+	_apply_responsive_layout()
 	refresh()
 
 
 func open() -> void:
+	_apply_responsive_layout()
 	refresh()
 	_update_hint("Click or drag an item to transfer it.")
 	visible = true
@@ -88,6 +98,7 @@ func can_accept_transfer_drop(target_type: String, data: Variant) -> bool:
 
 func drop_transfer_to(target_type: String, data: Variant) -> void:
 	if not can_accept_transfer_drop(target_type, data):
+		_update_hint("Cannot transfer item.")
 		return
 
 	var payload := data as Dictionary
@@ -97,27 +108,33 @@ func drop_transfer_to(target_type: String, data: Variant) -> void:
 		_transfer_storage_to_inventory(payload.get("item_data") as ItemData)
 	elif source == "inventory" and target_type == "storage":
 		_transfer_inventory_to_storage(int(payload.get("inventory_slot_index", -1)))
+	else:
+		_update_hint("Cannot transfer item.")
 
 
 func _can_drop_data(_position: Vector2, data: Variant) -> bool:
 	return _is_transfer_payload(data)
 
 
-func _drop_data(position: Vector2, data: Variant) -> void:
-	if not _can_drop_data(position, data):
+func _drop_data(drop_position: Vector2, data: Variant) -> void:
+	if not _can_drop_data(drop_position, data):
+		_update_hint("Cannot transfer item.")
 		return
 
 	var payload := data as Dictionary
 	var source := String(payload.get("source", ""))
-	var target := "storage" if position.x < size.x * 0.5 else "inventory"
+	var target := "storage" if drop_position.x < size.x * 0.5 else "inventory"
 
 	if source == target:
+		_update_hint("Cannot transfer item.")
 		return
 
 	if source == "storage" and target == "inventory":
 		_transfer_storage_to_inventory(payload.get("item_data") as ItemData)
 	elif source == "inventory" and target == "storage":
 		_transfer_inventory_to_storage(int(payload.get("inventory_slot_index", -1)))
+	else:
+		_update_hint("Cannot transfer item.")
 
 
 func _refresh_storage_items() -> void:
@@ -193,11 +210,13 @@ func _on_row_item_dropped(target_row: StorageItemRow, payload: Dictionary) -> vo
 
 func _transfer_inventory_to_storage(slot_index: int) -> void:
 	if player_inventory == null or storage_data == null:
+		_update_hint("Cannot transfer item.")
 		return
 
 	var slot := player_inventory.get_slot(slot_index)
 
 	if slot == null or slot.is_empty():
+		_update_hint("Empty Inventory.")
 		return
 
 	var item_data := slot.item_data
@@ -207,17 +226,19 @@ func _transfer_inventory_to_storage(slot_index: int) -> void:
 	player_inventory.inventory_changed.emit()
 	storage_data.add_item(item_data, amount)
 	refresh()
-	_update_hint("Transferred %dx %s to Silo Storage." % [amount, UIFormatHelper.display_product_name(item_data)])
+	_update_hint("Transferred %dx %s to Silo." % [amount, UIFormatHelper.display_product_name(item_data)])
 
 
 func _transfer_storage_to_inventory(item_data: ItemData) -> void:
 	if player_inventory == null or storage_data == null or item_data == null:
+		_update_hint("Cannot transfer item.")
 		return
 
 	var stored_amount := storage_data.get_item_amount(item_data)
 	var amount_to_transfer := mini(item_data.max_stack, stored_amount)
 
 	if amount_to_transfer <= 0:
+		_update_hint("Not enough items.")
 		return
 
 	var remaining := player_inventory.add_item(item_data, amount_to_transfer)
@@ -229,7 +250,7 @@ func _transfer_storage_to_inventory(item_data: ItemData) -> void:
 
 	storage_data.remove_item(item_data, moved_amount)
 	refresh()
-	_update_hint("Transferred %dx %s to Player Inventory." % [moved_amount, UIFormatHelper.display_product_name(item_data)])
+	_update_hint("Transferred %dx %s to Inventory." % [moved_amount, UIFormatHelper.display_product_name(item_data)])
 
 
 func _clear_container(container: Container) -> void:
@@ -259,7 +280,7 @@ func _create_scroll_line(scroll_container: ScrollContainer, line_name: String) -
 	if scroll_container == null:
 		return null
 
-	scroll_container.vertical_scroll_mode = 3
+	scroll_container.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	scroll_container.resized.connect(_position_scroll_lines_deferred)
 
 	var scroll_line := OptionsScrollLine.new()
@@ -304,3 +325,22 @@ func _refresh_hotbar() -> void:
 
 func _is_transfer_payload(data: Variant) -> bool:
 	return typeof(data) == TYPE_DICTIONARY and (data as Dictionary).get("type", "") == "storage_transfer_item"
+
+
+func _on_interface_scale_changed(_scale_multiplier: float) -> void:
+	_apply_responsive_layout()
+
+
+func _apply_responsive_layout() -> void:
+	var viewport_size := get_viewport().get_visible_rect().size
+	var interface_scale := maxf(GraphicsSettingsManager.get_interface_scale_multiplier(), 0.1)
+	var available_size := (viewport_size / interface_scale) - (VIEWPORT_SAFE_MARGIN * 2.0)
+	var fit_scale := minf(available_size.x / BASE_PANEL_SIZE.x, available_size.y / BASE_PANEL_SIZE.y)
+	fit_scale = clampf(fit_scale, MIN_RESPONSIVE_SCALE, 1.0)
+
+	var panel_size := BASE_PANEL_SIZE * fit_scale
+	offset_left = -panel_size.x * 0.5
+	offset_top = -panel_size.y * 0.5
+	offset_right = panel_size.x * 0.5
+	offset_bottom = panel_size.y * 0.5
+	_position_scroll_lines_deferred()

@@ -5,6 +5,12 @@ class_name WeatherPanel
 
 const CARD_BG := Color(0.045, 0.052, 0.064, 0.96)
 const CARD_BORDER := Color(0.13, 0.16, 0.20, 1.0)
+const SEASON_NAMES := {
+	1: "Spring",
+	2: "Summer",
+	3: "Autumn",
+	4: "Winter"
+}
 const PHASE_COLORS := {
 	"Dawn": Color(0.12, 0.14, 0.20, 0.96),
 	"Morning": Color(0.10, 0.15, 0.17, 0.96),
@@ -198,8 +204,26 @@ func _update_forecast() -> void:
 		var temperature := int(entry.get("temperature", 0))
 		var pattern := entry.get("pattern", null) as WeatherDayPatternData
 		var rain_chance := int(entry.get("rain_chance", 0))
+		var date_label := _get_forecast_date_label(i + 1)
 
-		row.setup(i + 1, weather, temperature, pattern, rain_chance)
+		row.setup(date_label, weather, temperature, pattern, rain_chance)
+
+
+func _get_forecast_date_label(day_offset: int) -> String:
+	var forecast_day := TimeManager.current_day + day_offset
+	var forecast_month := TimeManager.current_month
+
+	while forecast_day > TimeManager.DAYS_PER_MONTH:
+		forecast_day -= TimeManager.DAYS_PER_MONTH
+		forecast_month += 1
+
+		if forecast_month > TimeManager.MONTHS_PER_YEAR:
+			forecast_month = 1
+
+	return UIFormatHelper.season_day(
+		SEASON_NAMES.get(forecast_month, TimeManager.get_current_season_display_name()),
+		forecast_day
+	)
 
 
 func _get_current_rain_chance(current_phase: WeatherPhaseData) -> int:

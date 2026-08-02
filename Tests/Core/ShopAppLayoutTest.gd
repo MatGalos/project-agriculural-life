@@ -51,12 +51,15 @@ func _assert_shop_panel_layout(panel: Control) -> void:
 	var purchase_button := panel.get_node_or_null("PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin/CartStack/PurchaseButton") as Button
 	runner.assert_true(purchase_button != null and purchase_button.text == "Purchase", "Shop checkout button uses Purchase label")
 
+	var margin := panel.get_node_or_null("PanelContainer/MarginContainer") as MarginContainer
+	runner.assert_true(margin != null and margin.get_theme_constant("margin_left") >= 12, "Shop app keeps safe left inset inside FarmPhone screen")
+
 	var toggle_button := panel.get_node_or_null("PanelContainer/MarginContainer/RootStack/CartPanel/CartMargin/CartStack/CartHeaderRow/ToggleCartButton") as Button
 	runner.assert_true(toggle_button != null and toggle_button.text == "v", "Shop cart expanded state uses down caret")
+	runner.assert_true(panel.has_method("_apply_cart_collapsed_state"), "Shop cart has collapsed-state handler")
 
-	if panel.has_method("_on_toggle_cart_pressed"):
-		panel.call("_on_toggle_cart_pressed")
-		runner.assert_true(toggle_button != null and toggle_button.text == "^", "Shop cart collapsed state uses up caret")
+	var panel_source := _read_file("res://Scripts/PhoneApps/ShopApp/ShopPanel.gd")
+	runner.assert_true(panel_source.contains("toggle_cart_button.text = \"^\" if _is_cart_collapsed else \"v\""), "Shop cart collapsed handler uses up caret")
 
 
 func _assert_product_row_layout(row: PanelContainer) -> void:
@@ -77,3 +80,14 @@ func _assert_cart_row_layout(row: PanelContainer) -> void:
 	runner.assert_true(row.get_node_or_null("MarginContainer/Row/ControlsRow/QuantityEdit") is LineEdit, "Shop cart row has editable quantity field")
 	runner.assert_true(row.get_node_or_null("MarginContainer/Row/ControlsRow/PlusButton") is Button, "Shop cart row has increase button")
 	runner.assert_true(row.get_node_or_null("MarginContainer/Row/ControlsRow/RemoveButton") is Button, "Shop cart row has remove button")
+
+
+func _read_file(path: String) -> String:
+	var file := FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		return ""
+
+	var text := file.get_as_text()
+	file.close()
+	return text

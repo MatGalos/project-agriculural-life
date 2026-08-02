@@ -31,6 +31,29 @@ static func season_date(season: Variant, day: int, year: int) -> String:
 	]
 
 
+static func ordinal_day(day: int) -> String:
+	var suffix := "th"
+	var normalized_day := absi(day)
+
+	if normalized_day % 100 < 11 or normalized_day % 100 > 13:
+		match normalized_day % 10:
+			1:
+				suffix = "st"
+			2:
+				suffix = "nd"
+			3:
+				suffix = "rd"
+
+	return "%d%s" % [day, suffix]
+
+
+static func season_day(season: Variant, day: int) -> String:
+	return "%s %s" % [
+		ordinal_day(day),
+		display_season_name(season)
+	]
+
+
 static func display_season_name(season: Variant) -> String:
 	if season is int:
 		match int(season):

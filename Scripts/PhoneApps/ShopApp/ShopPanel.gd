@@ -210,7 +210,7 @@ func purchase_cart() -> void:
 		if leftover > 0:
 			_rollback_added_items(added_items)
 			MoneyManager.add_money(total)
-			_set_feedback("Inventory is full.", COLOR_ERROR)
+			_set_feedback("Could not add items to inventory.", COLOR_ERROR)
 			refresh()
 			return
 

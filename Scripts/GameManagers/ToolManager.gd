@@ -32,11 +32,13 @@ func get_active_tool() -> ToolItemData:
 
 func use_active_tool(target: Node) -> void:
 	if target == null:
+		_show_hud_event_message("Nothing to interact with.")
 		return
 
 	var item: ItemData = HotbarManager.get_selected_item()
 
 	if item == null:
+		_show_hud_event_message("No tool selected.")
 		return
 
 	if item is SeedItemData:
@@ -45,11 +47,15 @@ func use_active_tool(target: Node) -> void:
 
 	if item is ToolItemData:
 		_use_tool_item(target, item as ToolItemData)
+		return
+
+	_show_hud_event_message("Cannot use this here.")
 
 
 func refill_watering_can() -> void:
 	watering_can_water = watering_can_capacity
 	watering_can_changed.emit()
+	_show_hud_event_message("Watering can filled.")
 
 
 func get_tool_prompt_for_target(target: Node) -> String:
@@ -91,6 +97,11 @@ func _use_hoe(target: Node) -> void:
 	var tile := _find_farm_tile(target)
 
 	if tile == null:
+		_show_hud_event_message("Cannot use this here.")
+		return
+
+	if tile.current_state != FarmTile.TileState.GRASS:
+		_show_hud_event_message("Cannot use this here.")
 		return
 
 	tile.plow()
@@ -100,12 +111,15 @@ func _use_watering_can(target: Node) -> void:
 	var tile := _find_farm_tile(target)
 
 	if tile == null:
+		_show_hud_event_message("Cannot use this here.")
 		return
 
 	if watering_can_water <= 0:
+		_show_hud_event_message("Need a watering can.")
 		return
 
 	if tile.current_state != FarmTile.TileState.PLOWED:
+		_show_hud_event_message("Cannot use this here.")
 		return
 
 	tile.water()
@@ -116,12 +130,18 @@ func _use_watering_can(target: Node) -> void:
 func _use_seed_item(target: Node, seed_item: SeedItemData) -> void:
 	var tile := _find_farm_tile(target)
 
-	if tile == null or not tile.can_plant():
+	if tile == null:
+		_show_hud_event_message("Cannot plant here.")
+		return
+
+	if not tile.can_plant():
+		_show_hud_event_message("Cannot plant here.")
 		return
 
 	var crop_data := _get_crop_data_for_seed(seed_item)
 
 	if crop_data == null:
+		_show_hud_event_message("No seeds selected.")
 		return
 
 	if not crop_data.can_grow_in_current_season():
@@ -134,26 +154,70 @@ func _use_seed_item(target: Node, seed_item: SeedItemData) -> void:
 		return
 
 	if not player_inventory.has_item(seed_item, 1):
+		_show_hud_event_message("No seeds selected.")
 		return
 
 	if tile.plant_crop(crop_data):
 		player_inventory.remove_item(seed_item, 1)
 		_refresh_inventory_ui()
+		_show_hud_event_message("Used 1x %s." % UIFormatHelper.display_seed_name(seed_item))
 
 
 func _use_scythe(target: Node) -> void:
 	var tile := _find_farm_tile(target)
 
-	if tile == null or not tile.is_crop_ready():
+	if tile == null:
+		_show_hud_event_message("Cannot harvest this.")
+		return
+
+	if not tile.is_crop_ready():
+		_show_hud_event_message("Crop is not ready.")
+		return
+
+	var expected_item: ItemData = tile.crop_data.harvest_item if tile.crop_data != null else null
+	if expected_item == null:
+		_show_hud_event_message("Cannot harvest this.")
+		return
+
+	if not _can_inventory_fit(expected_item, 1):
+		_show_hud_event_message("Inventory is full.")
 		return
 
 	var harvested_item := tile.harvest_crop()
 
 	if harvested_item == null:
+		_show_hud_event_message("Cannot harvest this.")
 		return
 
 	player_inventory.add_item(harvested_item, 1)
 	_refresh_inventory_ui()
+	_show_hud_event_message("Added 1x %s." % UIFormatHelper.display_product_name(harvested_item))
+
+
+func _can_inventory_fit(item_data: ItemData, amount: int) -> bool:
+	if player_inventory == null or item_data == null or amount <= 0:
+		return false
+
+	player_inventory.setup()
+	var remaining := amount
+
+	for slot in player_inventory.slots:
+		if slot == null or slot.is_empty() or slot.item_data != item_data:
+			continue
+
+		remaining -= maxi(item_data.max_stack - slot.amount, 0)
+
+		if remaining <= 0:
+			return true
+
+	for slot in player_inventory.slots:
+		if slot != null and slot.is_empty():
+			remaining -= item_data.max_stack
+
+			if remaining <= 0:
+				return true
+
+	return false
 
 
 func _find_farm_tile(target: Node) -> FarmTile:

@@ -3,6 +3,7 @@ class_name PlayerHUD
 
 const CROSSHAIR_SIZE := 40.0
 const EVENT_MESSAGE_DURATION := 7.0
+const EVENT_MESSAGE_REPEAT_COOLDOWN := 1.2
 const LATO_REGULAR_FONT := preload("res://Assets/Fonts/Lato/Lato-Regular.ttf")
 
 enum UIMode {
@@ -45,6 +46,7 @@ enum UIMode {
 
 var _event_message_version := 0
 var _event_messages: Dictionary = {}
+var _event_message_last_shown: Dictionary = {}
 var _next_event_message_id := 0
 var _ui_mode := UIMode.GAMEPLAY
 
@@ -277,7 +279,7 @@ func is_any_game_menu_open() -> bool:
 func is_gameplay_hud_visible() -> bool:
 	return _ui_mode == UIMode.GAMEPLAY
 
-func set_ui_mode(mode: int) -> void:
+func set_ui_mode(mode: UIMode) -> void:
 	_ui_mode = mode
 
 	match _ui_mode:
@@ -313,25 +315,25 @@ func set_ui_mode(mode: int) -> void:
 			set_notifications_visible(false)
 
 
-func set_crosshair_visible(is_visible: bool) -> void:
-	crosshair.visible = is_visible
+func set_crosshair_visible(should_show: bool) -> void:
+	crosshair.visible = should_show
 
 
-func set_interaction_prompt_visible(is_visible: bool) -> void:
-	prompt_label.visible = is_visible and not prompt_label.text.strip_edges().is_empty()
+func set_interaction_prompt_visible(should_show: bool) -> void:
+	prompt_label.visible = should_show and not prompt_label.text.strip_edges().is_empty()
 
 
-func set_hotbar_visible(is_visible: bool) -> void:
-	quick_inventory_controller.visible = is_visible
+func set_hotbar_visible(should_show: bool) -> void:
+	quick_inventory_controller.visible = should_show
 
 
-func set_status_hud_visible(is_visible: bool) -> void:
-	date_time_controller.visible = is_visible
-	funds_controller.visible = is_visible
+func set_status_hud_visible(should_show: bool) -> void:
+	date_time_controller.visible = should_show
+	funds_controller.visible = should_show
 
 
-func set_notifications_visible(is_visible: bool) -> void:
-	event_controller.visible = is_visible and not _event_messages.is_empty()
+func set_notifications_visible(should_show: bool) -> void:
+	event_controller.visible = should_show and not _event_messages.is_empty()
 
 
 func _refresh_ui_mode() -> void:
@@ -355,6 +357,13 @@ func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATIO
 		_hide_event_message()
 		return
 
+	var now_msec := Time.get_ticks_msec()
+	var last_msec := int(_event_message_last_shown.get(message, -1000000))
+
+	if now_msec - last_msec < int(EVENT_MESSAGE_REPEAT_COOLDOWN * 1000.0):
+		return
+
+	_event_message_last_shown[message] = now_msec
 	_event_message_version += 1
 	_next_event_message_id += 1
 	var message_id := _next_event_message_id

@@ -54,9 +54,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_weather_root")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=359916078]
 layout_mode = 2
-theme_override_constants/margin_left = 18
+theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
+theme_override_constants/margin_right = 6
 theme_override_constants/margin_bottom = 10
 
 [node name="ContentScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer"]

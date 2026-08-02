@@ -125,7 +125,7 @@ func set_half_quantity(item_id: String) -> void:
 
 	var item_data := storage_data.get_item_by_id(item_id)
 	if item_data:
-		set_sell_quantity(item_id, int(storage_data.get_item_amount(item_data) / 2))
+		set_sell_quantity(item_id, int(floor(float(storage_data.get_item_amount(item_data)) / 2.0)))
 
 
 func set_all_quantity(item_id: String) -> void:
@@ -278,10 +278,7 @@ func sell_selected_products() -> void:
 	selected_sell_quantities.clear()
 	_refresh_game_ui()
 	refresh()
-	_set_feedback("Sold selected: %dx items for %s." % [
-		sold_items,
-		UIFormatHelper.money_int(total_value)
-	], COLOR_SUCCESS)
+	_set_feedback("Sold selected items for %s." % UIFormatHelper.money_int(total_value), COLOR_SUCCESS)
 
 
 func _remove_missing_selections(live_item_ids: Array[String]) -> void:

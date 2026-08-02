@@ -40,6 +40,9 @@ func _assert_market_panel_layout(panel: Control) -> void:
 	var back_button := panel.get_node_or_null("PanelContainer/MarginContainer/RootStack/TopBar/BackButton") as Button
 	runner.assert_true(back_button != null and back_button.text == "<", "Market details back button uses arrow text")
 
+	var margin := panel.get_node_or_null("PanelContainer/MarginContainer") as MarginContainer
+	runner.assert_true(margin != null and margin.get_theme_constant("margin_left") >= 12, "Market app keeps safe left inset inside FarmPhone screen")
+
 	var list_view := panel.get_node_or_null("PanelContainer/MarginContainer/RootStack/ListView") as VBoxContainer
 	var details_view := panel.get_node_or_null("PanelContainer/MarginContainer/RootStack/DetailsView") as VBoxContainer
 	runner.assert_true(list_view != null and list_view.visible, "Market app starts on list view")

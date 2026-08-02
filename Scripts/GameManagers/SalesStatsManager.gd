@@ -4,6 +4,7 @@ signal sales_stats_changed
 
 const HISTORY_DAYS := 7
 
+var suppress_logs := false
 var current_day_sales: Dictionary = {}
 var sales_history: Array[Dictionary] = []
 
@@ -20,7 +21,8 @@ func record_sale(item_data: ItemData, amount: int) -> void:
 
 	current_day_sales[item_id] = int(current_day_sales.get(item_id, 0)) + amount
 
-	print("[SalesStats] Sold ", amount, "x ", item_id, " today total=", current_day_sales[item_id])
+	if not suppress_logs:
+		print("[SalesStats] Sold ", amount, "x ", item_id, " today total=", current_day_sales[item_id])
 
 	sales_stats_changed.emit()
 
