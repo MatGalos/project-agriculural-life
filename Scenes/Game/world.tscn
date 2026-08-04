@@ -82,11 +82,11 @@ prompt_text = "Press E to open Silo."
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
 shape = SubResource("CylinderShape3D_j8hn3")
 
-[node name="HouseStep" type="MeshInstance3D" parent="HomeArea"]
+[node name="HouseStep" type="MeshInstance3D" parent="HomeArea" unique_id=21860245]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9971428, 0.09, 2.85)
 mesh = SubResource("BoxMesh_house_step")
 
-[node name="SiloBase" type="MeshInstance3D" parent="HomeArea"]
+[node name="SiloBase" type="MeshInstance3D" parent="HomeArea" unique_id=906926971]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0015109, 0.1, -6.998237)
 mesh = SubResource("CylinderMesh_silo_base")
 
