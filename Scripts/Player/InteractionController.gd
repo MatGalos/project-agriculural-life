@@ -6,6 +6,7 @@ extends Node
 
 var current_interactable: Interactable = null
 var current_tool_prompt := ""
+var current_can_show_gameplay_prompt := true
 
 var normal_crosshair_color := Color.WHITE
 var interact_crosshair_color := Color.YELLOW
@@ -25,15 +26,21 @@ func _process(_delta: float) -> void:
 
 	var tool_prompt := _get_looked_at_tool_prompt()
 	var interactable: Interactable = null
+	var can_show_gameplay_prompt := _can_show_gameplay_prompt()
 
 	if tool_prompt == "":
 		interactable = _get_looked_at_interactable()
 
-	if interactable == current_interactable and tool_prompt == current_tool_prompt:
+	if (
+		interactable == current_interactable
+		and tool_prompt == current_tool_prompt
+		and can_show_gameplay_prompt == current_can_show_gameplay_prompt
+	):
 		return
 
 	current_interactable = interactable
 	current_tool_prompt = tool_prompt
+	current_can_show_gameplay_prompt = can_show_gameplay_prompt
 
 	_update_prompt_label()
 	_update_crosshair_color()
@@ -98,7 +105,7 @@ func _update_prompt_label() -> void:
 	if not prompt_label:
 		return
 
-	var can_show_prompt := _can_show_gameplay_prompt()
+	var can_show_prompt := current_can_show_gameplay_prompt
 
 	if current_tool_prompt != "":
 		prompt_label.text = current_tool_prompt
@@ -117,7 +124,7 @@ func _update_crosshair_color() -> void:
 	if not crosshair_label:
 		return
 
-	if current_tool_prompt != "" or current_interactable:
+	if current_can_show_gameplay_prompt and (current_tool_prompt != "" or current_interactable):
 		crosshair_label.modulate = interact_crosshair_color
 	else:
 		crosshair_label.modulate = normal_crosshair_color
