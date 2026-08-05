@@ -43,8 +43,19 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Pause menu save actions for saving the current slot, saving and returning to the main menu, or saving and quitting to desktop, each with confirmation before writing.
 - Basic interactables for well, house, and silo prompts.
 - Editor farm-grid generator with stable tile IDs for save restoration.
+- Physical farm border boundaries built from invisible `StaticBody3D` colliders aligned with the existing visual fences.
 
 ## Changelog
+
+### Version 0.8
+- Added gameplay world boundaries for the farm border:
+  - Preserved the existing manually placed `FarmBorder` fence visuals in `Scenes/Game/world.tscn`.
+  - Added invisible `BoundaryColliders` under `World/Farm/FarmBorder`.
+  - Added `NorthBoundaryCollider`, `SouthBoundaryCollider`, `EastBoundaryCollider`, and `WestBoundaryCollider` as `StaticBody3D` nodes with `BoxShape3D` collision.
+  - Kept boundary colliders on the default physics layer/mask so they collide with the existing player controller and static world objects.
+  - Adjusted collider placement inward after runtime testing showed the player could get trapped between the fence edge and the first boundary placement.
+  - Left `WorldBoundaryShape3D` in `mainScene.tscn` unchanged as legacy/unused scene data.
+  - Did not change farm grid size, tile behavior, economy, save/load, UI, day/night, or weather systems.
 
 ### Version 0.7
 - Stage 5.4 Visual / World Polish:
