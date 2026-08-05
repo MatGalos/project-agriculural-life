@@ -267,10 +267,39 @@ Good next targets:
 - Visual/UI verification for stacked bottom-left HUD event/news alerts, including paper-card alignment and readable font size.
 - Visual verification for the Inventory wooden panel, centered five-slot leather hotbar strip, lower 20-slot grid, readable amount badges, and spaced description panel.
 - Visual verification for wooden menu panels, text-style menu buttons, paper save-slot cards, Options submenus, custom Options scroll/checkbox/dropdown controls, and save/overwrite confirmation popups.
+- Runtime farm-border boundary checks for all four sides and corners once a stable Godot scene fixture is available.
 - Manual regression pass for HUD visibility modes: gameplay, pause, phone, inventory, and storage.
 - Manual pass for UI formatting consistency in money, dates, market percentages, product/seed names, weather names, input labels, and short control-action interaction prompts.
 
 For UI-heavy behavior, prefer small logic tests around panel state and signal connections before adding full scene interaction tests.
+
+## Manual Farm Border Boundary Checklist
+
+Run this checklist in Godot after changing `Scenes/Game/world.tscn`, farm border fence placement, farm ground placement, player collision settings, or boundary collider transforms:
+
+1. Start gameplay and walk to the north farm border.
+2. Push into the north fence line from several angles and confirm the player is blocked before leaving supported ground.
+3. Repeat for the south, east, and west border lines.
+4. Test all four corners by walking and sprinting diagonally into them.
+5. Confirm there are no diagonal escape gaps at the corners.
+6. Confirm the player does not get trapped between a visual fence and a boundary collider.
+7. Confirm the player cannot enter a narrow strip outside the playable tile/ground area and fall.
+8. Walk along each fence line and confirm normal movement remains smooth.
+9. Confirm boundary colliders are invisible and have no mesh.
+10. Look at the border with the interaction raycast and confirm no interaction prompt appears.
+11. Use tools near the outer farm tiles and confirm planting, watering, harvesting, and invalid-tool feedback still target farm tiles correctly.
+12. Walk from the farm border back to the house and confirm the house remains reachable.
+13. Interact with the house and confirm the sleep prompt/action still works.
+14. Walk from the farm border back to the silo and confirm the silo remains reachable.
+15. Interact with the silo and confirm Silo Storage still opens.
+16. Check the camera near the fence line and corners for obvious clipping or lockups.
+
+Boundary maintenance expectations:
+
+- Visual fence instances under `World/Farm/FarmBorder` should remain authored by hand.
+- Gameplay blocking should come from `World/Farm/FarmBorder/BoundaryColliders`.
+- Boundary colliders should stay on the default physics layer/mask unless the player and static world collision policy is intentionally changed.
+- `WorldBoundaryShape3D` in `mainScene.tscn` is legacy scene data and is not the farm-border blocker.
 
 ## Manual UI Polish Checklist
 

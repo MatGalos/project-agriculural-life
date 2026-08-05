@@ -42,6 +42,32 @@ Important behavior:
 - Generated tiles are named `Tile_x_z`.
 - Generated tile IDs use `grid_prefix_x_z`, for example `small_0_0`.
 
+## Farm Border Boundaries
+
+The farm border is scene-authored in `Scenes/Game/world.tscn` under `World/Farm/FarmBorder`.
+
+Structure:
+
+- `FarmBorder` contains the existing manually placed visual fence instances.
+- `FarmBorder/BoundaryColliders` contains invisible gameplay collision only.
+- Boundary nodes are `NorthBoundaryCollider`, `SouthBoundaryCollider`, `EastBoundaryCollider`, and `WestBoundaryCollider`.
+- Each boundary node is a `StaticBody3D` with one `CollisionShape3D` using a `BoxShape3D`.
+
+Current collision rules:
+
+- Boundary colliders do not define custom `collision_layer` or `collision_mask`, so they use Godot's default layer/mask `1`.
+- The player `CharacterBody3D`, farm tiles, home area ground, house, silo, and well also use default collision settings unless explicitly changed later.
+- Boundary colliders must not be added to the `interactable` group and must not have interaction scripts or prompt text.
+
+Positioning rules:
+
+- Keep fence models as visual border assets; do not rely on per-fence mesh collision for the gameplay boundary.
+- Keep the long boundary colliders near the playable ground edge, not far outside the fence, so the player cannot slip into a narrow unsupported strip and fall.
+- Corners should overlap enough to avoid diagonal escape gaps.
+- Adjust only the boundary collider transforms and shape sizes when fixing border blocking issues. Do not move the authored fence layout or regenerate the farm grid for boundary fixes.
+
+The legacy `WorldBoundaryShape3D` in `Scenes/Game/mainScene.tscn` is currently present under `MainScene/Area3D/CollisionShape3D`. It is not wired to gameplay scripts and should be left unchanged unless a later pass deliberately replaces or removes that legacy area.
+
 ## Input And Controls
 
 `InputManager` wraps gameplay input reads and persists rebinds to `user://controls.cfg`.

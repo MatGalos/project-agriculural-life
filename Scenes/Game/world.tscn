@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://cxxr0r1e8i1bj" path="res://Assets/Models/Terrain/grass_block.glb" id="7_xvcwp"]
 [ext_resource type="PackedScene" uid="uid://bpc10uol4byfo" path="res://Scenes/Game/Farming/farm_tile.tscn" id="8_xvcwp"]
 [ext_resource type="Script" uid="uid://epxguj1ev7ej" path="res://Scripts/GameManagers/WorldManager.gd" id="10_6y6xk"]
+[ext_resource type="PackedScene" uid="uid://ctijjvl21yqc8" path="res://Assets/Models/Buildings/corner_fence.glb" id="10_g86rf"]
+[ext_resource type="PackedScene" uid="uid://cifmua4q3t5v4" path="res://Assets/Models/Buildings/fence.glb" id="11_0e11a"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_home_ground"]
 size = Vector3(10, 0.5, 21)
@@ -24,6 +26,18 @@ size = Vector3(5, 5, 4)
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_j8hn3"]
 height = 5.5
 radius = 1.5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_north_boundary"]
+size = Vector3(29, 2.75, 0.35)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_south_boundary"]
+size = Vector3(29, 2.75, 0.35)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_east_boundary"]
+size = Vector3(0.35, 2.75, 21.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_west_boundary"]
+size = Vector3(0.35, 2.75, 21.4)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_polish_stone"]
 albedo_color = Color(0.48, 0.46, 0.42, 1)
@@ -2141,6 +2155,344 @@ tile_id = "small_18_19"
 [node name="Tile_19_19" parent="Farm/FarmGridGenerator" unique_id=703244575 instance=ExtResource("8_xvcwp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 19)
 tile_id = "small_19_19"
+
+[node name="FarmBorder" type="Node3D" parent="Farm" unique_id=383049731]
+
+[node name="corner_fence" parent="Farm/FarmBorder" unique_id=568014175 instance=ExtResource("10_g86rf")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 22, 0, -10)
+
+[node name="fence2" parent="Farm/FarmBorder" unique_id=2069704931 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 20, 0, -10)
+
+[node name="fence" parent="Farm/FarmBorder" unique_id=280338681 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 21, 0, -10)
+
+[node name="fence3" parent="Farm/FarmBorder" unique_id=1304531936 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 18, 0, -10)
+
+[node name="fence4" parent="Farm/FarmBorder" unique_id=1758158813 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 19, 0, -10)
+
+[node name="fence5" parent="Farm/FarmBorder" unique_id=1179782203 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 16, 0, -10)
+
+[node name="fence6" parent="Farm/FarmBorder" unique_id=1073863080 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 17, 0, -10)
+
+[node name="fence7" parent="Farm/FarmBorder" unique_id=1850313052 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 14, 0, -10)
+
+[node name="fence8" parent="Farm/FarmBorder" unique_id=1319914736 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 15, 0, -10)
+
+[node name="fence9" parent="Farm/FarmBorder" unique_id=1285980995 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 12, 0, -10)
+
+[node name="fence10" parent="Farm/FarmBorder" unique_id=1622313244 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 13, 0, -10)
+
+[node name="fence11" parent="Farm/FarmBorder" unique_id=300746243 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 10, 0, -10)
+
+[node name="fence12" parent="Farm/FarmBorder" unique_id=487581882 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 11, 0, -10)
+
+[node name="fence13" parent="Farm/FarmBorder" unique_id=1569844268 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 8, 0, -10)
+
+[node name="fence14" parent="Farm/FarmBorder" unique_id=1563166577 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 9, 0, -10)
+
+[node name="fence15" parent="Farm/FarmBorder" unique_id=2045541593 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 6, 0, -10)
+
+[node name="fence16" parent="Farm/FarmBorder" unique_id=726653524 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 7, 0, -10)
+
+[node name="fence17" parent="Farm/FarmBorder" unique_id=1317829060 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 4, 0, -10)
+
+[node name="fence18" parent="Farm/FarmBorder" unique_id=63267713 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 5, 0, -10)
+
+[node name="fence19" parent="Farm/FarmBorder" unique_id=400502965 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 2, 0, -10)
+
+[node name="fence20" parent="Farm/FarmBorder" unique_id=237185550 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 3, 0, -10)
+
+[node name="fence21" parent="Farm/FarmBorder" unique_id=208423994 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, -10)
+
+[node name="fence22" parent="Farm/FarmBorder" unique_id=325540726 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1, 0, -10)
+
+[node name="fence23" parent="Farm/FarmBorder" unique_id=1495344534 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, 0, -10)
+
+[node name="fence24" parent="Farm/FarmBorder" unique_id=1174972521 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1, 0, -10)
+
+[node name="fence25" parent="Farm/FarmBorder" unique_id=1834564067 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4, 0, -10)
+
+[node name="fence26" parent="Farm/FarmBorder" unique_id=1132916949 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -3, 0, -10)
+
+[node name="fence27" parent="Farm/FarmBorder" unique_id=1121215110 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -6, 0, -10)
+
+[node name="fence28" parent="Farm/FarmBorder" unique_id=773291625 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5, 0, -10)
+
+[node name="fence30" parent="Farm/FarmBorder" unique_id=2058304694 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -7, 0, -10)
+
+[node name="corner_fence2" parent="Farm/FarmBorder" unique_id=1481096074 instance=ExtResource("10_g86rf")]
+transform = Transform3D(1.3113416e-07, 0, -1, 0, 1, 0, 1, 0, 1.3113416e-07, -8, 0, -10)
+
+[node name="corner_fence3" parent="Farm/FarmBorder" unique_id=2117458358 instance=ExtResource("10_g86rf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 10.999999)
+
+[node name="fence29" parent="Farm/FarmBorder" unique_id=967248055 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, -6, 0, 10.999999)
+
+[node name="fence31" parent="Farm/FarmBorder" unique_id=1910675928 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, -7, 0, 10.999999)
+
+[node name="fence32" parent="Farm/FarmBorder" unique_id=593655077 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, -4, 0, 10.999999)
+
+[node name="fence33" parent="Farm/FarmBorder" unique_id=819198984 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, -5, 0, 10.999999)
+
+[node name="fence34" parent="Farm/FarmBorder" unique_id=942162741 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, -2, 0, 10.999999)
+
+[node name="fence35" parent="Farm/FarmBorder" unique_id=719679054 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, -3, 0, 10.999999)
+
+[node name="fence36" parent="Farm/FarmBorder" unique_id=684859415 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 0, 0, 10.999999)
+
+[node name="fence37" parent="Farm/FarmBorder" unique_id=1145942303 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, -1, 0, 10.999999)
+
+[node name="fence38" parent="Farm/FarmBorder" unique_id=1486762602 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 2, 0, 11)
+
+[node name="fence39" parent="Farm/FarmBorder" unique_id=1387029292 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 1, 0, 10.999999)
+
+[node name="fence40" parent="Farm/FarmBorder" unique_id=1941883933 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 4, 0, 11)
+
+[node name="fence41" parent="Farm/FarmBorder" unique_id=429412961 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 3, 0, 11)
+
+[node name="fence42" parent="Farm/FarmBorder" unique_id=1694564982 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 6, 0, 11)
+
+[node name="fence43" parent="Farm/FarmBorder" unique_id=463923880 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 5, 0, 11)
+
+[node name="fence44" parent="Farm/FarmBorder" unique_id=498458844 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 8, 0, 11)
+
+[node name="fence45" parent="Farm/FarmBorder" unique_id=697399369 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 7, 0, 11)
+
+[node name="fence46" parent="Farm/FarmBorder" unique_id=979905049 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 10, 0, 11)
+
+[node name="fence47" parent="Farm/FarmBorder" unique_id=1976185099 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 9, 0, 11)
+
+[node name="fence48" parent="Farm/FarmBorder" unique_id=825970033 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 12, 0, 11)
+
+[node name="fence49" parent="Farm/FarmBorder" unique_id=986027823 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 11, 0, 11)
+
+[node name="fence50" parent="Farm/FarmBorder" unique_id=411275628 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 14, 0, 11.000001)
+
+[node name="fence51" parent="Farm/FarmBorder" unique_id=1963065450 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 13, 0, 11.000001)
+
+[node name="fence52" parent="Farm/FarmBorder" unique_id=771278752 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 16, 0, 11.000001)
+
+[node name="fence53" parent="Farm/FarmBorder" unique_id=921694553 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 15, 0, 11.000001)
+
+[node name="fence54" parent="Farm/FarmBorder" unique_id=499161189 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 18, 0, 11.000001)
+
+[node name="fence55" parent="Farm/FarmBorder" unique_id=295613567 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 17, 0, 11.000001)
+
+[node name="fence56" parent="Farm/FarmBorder" unique_id=1032526932 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 20, 0, 11.000001)
+
+[node name="fence57" parent="Farm/FarmBorder" unique_id=36738225 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1.3113416e-07, 0, 1, 0, 1, 0, -1, 0, 1.3113416e-07, 19, 0, 11.000001)
+
+[node name="fence58" parent="Farm/FarmBorder" unique_id=2131926335 instance=ExtResource("11_0e11a")]
+transform = Transform3D(0.00064411294, 0.00061843055, 0.9999996, -0.0001630407, 0.99999976, -0.00061832427, -0.99999976, -0.00016263715, 0.0006442149, 21, 0, 11.000001)
+
+[node name="corner_fence4" parent="Farm/FarmBorder" unique_id=1202358596 instance=ExtResource("10_g86rf")]
+transform = Transform3D(-4.371138e-08, 0, 1, 0, 1, 0, -1, 0, -4.371138e-08, 22, 0, 11.000001)
+
+[node name="fence59" parent="Farm/FarmBorder" unique_id=1872823073 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, 9.992199)
+
+[node name="fence60" parent="Farm/FarmBorder" unique_id=1842870933 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, 7.9921994)
+
+[node name="fence61" parent="Farm/FarmBorder" unique_id=1924835708 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, 8.992199)
+
+[node name="fence62" parent="Farm/FarmBorder" unique_id=644534170 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, 5.9921994)
+
+[node name="fence63" parent="Farm/FarmBorder" unique_id=972076806 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, 6.9921994)
+
+[node name="fence64" parent="Farm/FarmBorder" unique_id=316148512 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, 3.9921994)
+
+[node name="fence65" parent="Farm/FarmBorder" unique_id=1460577295 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, 4.9921994)
+
+[node name="fence66" parent="Farm/FarmBorder" unique_id=2135653958 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-0.9999996, -9.04885e-05, 0.0008938164, -9.2037546e-05, 0.9999985, -0.0017360981, -0.0008936582, -0.0017361796, -0.9999981, 22.008087, 0, 1.9921994)
+
+[node name="fence67" parent="Farm/FarmBorder" unique_id=431250770 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, 2.9921994)
+
+[node name="fence68" parent="Farm/FarmBorder" unique_id=273230901 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, -0.007800579)
+
+[node name="fence69" parent="Farm/FarmBorder" unique_id=1536078988 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, 0.9921994)
+
+[node name="fence70" parent="Farm/FarmBorder" unique_id=226126397 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, -2.0078006)
+
+[node name="fence71" parent="Farm/FarmBorder" unique_id=1021667038 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, -1.0078006)
+
+[node name="fence72" parent="Farm/FarmBorder" unique_id=1114974693 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-0.99999976, -0.0001626372, 0.00064417126, -0.00016304072, 0.99999976, -0.0006183243, -0.0006440693, -0.0006184306, -0.9999996, 22.008087, 0, -3.0078006)
+
+[node name="fence73" parent="Farm/FarmBorder" unique_id=1008919967 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, -5.0078006)
+
+[node name="fence74" parent="Farm/FarmBorder" unique_id=575822588 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, -4.0078006)
+
+[node name="fence75" parent="Farm/FarmBorder" unique_id=1518994053 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, -7.0078006)
+
+[node name="fence76" parent="Farm/FarmBorder" unique_id=601734754 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-1, 0, 8.742277e-08, 0, 1, 0, -8.742277e-08, 0, -1, 22.008087, 0, -6.0078006)
+
+[node name="fence77" parent="Farm/FarmBorder" unique_id=345947846 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-0.99999976, -0.0001626372, 0.00064417126, -0.00016304072, 0.99999976, -0.0006183243, -0.0006440693, -0.0006184306, -0.9999996, 22.008087, 0, -8.007801)
+
+[node name="fence78" parent="Farm/FarmBorder" unique_id=1618123753 instance=ExtResource("11_0e11a")]
+transform = Transform3D(-0.99999976, -0.0001626372, 0.00064417126, -0.00016304072, 0.99999976, -0.0006183243, -0.0006440693, -0.0006184306, -0.9999996, 22.008087, 0, -9.007801)
+
+[node name="fence79" parent="Farm/FarmBorder" unique_id=936072480 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, -9.007801)
+
+[node name="fence80" parent="Farm/FarmBorder" unique_id=824720221 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, -7.0078015)
+
+[node name="fence81" parent="Farm/FarmBorder" unique_id=1409169149 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, -8.007801)
+
+[node name="fence82" parent="Farm/FarmBorder" unique_id=1348694736 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, -5.0078015)
+
+[node name="fence83" parent="Farm/FarmBorder" unique_id=289673620 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, -6.0078015)
+
+[node name="fence84" parent="Farm/FarmBorder" unique_id=1021957855 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, -3.0078015)
+
+[node name="fence85" parent="Farm/FarmBorder" unique_id=1269102060 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, -4.0078015)
+
+[node name="fence86" parent="Farm/FarmBorder" unique_id=109141540 instance=ExtResource("11_0e11a")]
+transform = Transform3D(0.9999996, 9.048866e-05, -0.000893729, -9.203755e-05, 0.9999985, -0.0017360981, 0.00089357083, 0.0017361797, 0.9999981, -7.991913, 0, -1.0078015)
+
+[node name="fence87" parent="Farm/FarmBorder" unique_id=2013970296 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, -2.0078015)
+
+[node name="fence88" parent="Farm/FarmBorder" unique_id=779496170 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, 0.99219847)
+
+[node name="fence89" parent="Farm/FarmBorder" unique_id=999014132 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, -0.0078015327)
+
+[node name="fence90" parent="Farm/FarmBorder" unique_id=314218245 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, 2.9921985)
+
+[node name="fence91" parent="Farm/FarmBorder" unique_id=1151690343 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, 1.9921985)
+
+[node name="fence92" parent="Farm/FarmBorder" unique_id=1663993091 instance=ExtResource("11_0e11a")]
+transform = Transform3D(0.99999976, 0.00016263725, -0.0006440839, -0.00016304074, 0.99999976, -0.0006183244, 0.0006439819, 0.00061843067, 0.9999996, -7.991913, 0, 3.9921985)
+
+[node name="fence93" parent="Farm/FarmBorder" unique_id=1075776704 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, 5.9921985)
+
+[node name="fence94" parent="Farm/FarmBorder" unique_id=1893439432 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, 4.9921985)
+
+[node name="fence95" parent="Farm/FarmBorder" unique_id=724053278 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, 7.9921985)
+
+[node name="fence96" parent="Farm/FarmBorder" unique_id=54454144 instance=ExtResource("11_0e11a")]
+transform = Transform3D(1, 0, 7.1054274e-15, 0, 1, 0, -7.1054274e-15, 0, 1, -7.991913, 0, 6.9921985)
+
+[node name="fence97" parent="Farm/FarmBorder" unique_id=2098294568 instance=ExtResource("11_0e11a")]
+transform = Transform3D(0.99999976, 0.00016263725, -0.0006440839, -0.00016304074, 0.99999976, -0.0006183244, 0.0006439819, 0.00061843067, 0.9999996, -7.991913, 0, 8.992199)
+
+[node name="fence98" parent="Farm/FarmBorder" unique_id=1558737828 instance=ExtResource("11_0e11a")]
+transform = Transform3D(0.99999976, 0.00016263725, -0.0006440839, -0.00016304074, 0.99999976, -0.0006183244, 0.0006439819, 0.00061843067, 0.9999996, -7.991913, 0, 9.992199)
+
+[node name="BoundaryColliders" type="Node3D" parent="Farm/FarmBorder"]
+
+[node name="NorthBoundaryCollider" type="StaticBody3D" parent="Farm/FarmBorder/BoundaryColliders"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3625, 0, -9.6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Farm/FarmBorder/BoundaryColliders/NorthBoundaryCollider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.375, 0)
+shape = SubResource("BoxShape3D_north_boundary")
+
+[node name="SouthBoundaryCollider" type="StaticBody3D" parent="Farm/FarmBorder/BoundaryColliders"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3625, 0, 10.6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Farm/FarmBorder/BoundaryColliders/SouthBoundaryCollider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.375, 0)
+shape = SubResource("BoxShape3D_south_boundary")
+
+[node name="EastBoundaryCollider" type="StaticBody3D" parent="Farm/FarmBorder/BoundaryColliders"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.325, 0, 0.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Farm/FarmBorder/BoundaryColliders/EastBoundaryCollider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.375, 0)
+shape = SubResource("BoxShape3D_east_boundary")
+
+[node name="WestBoundaryCollider" type="StaticBody3D" parent="Farm/FarmBorder/BoundaryColliders"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.6, 0, 0.5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Farm/FarmBorder/BoundaryColliders/WestBoundaryCollider"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.375, 0)
+shape = SubResource("BoxShape3D_west_boundary")
 
 [node name="WorldManager" type="Node" parent="." unique_id=2136268591 node_paths=PackedStringArray("world_root", "home_area", "farm_root", "farm_tiles_root")]
 script = ExtResource("10_6y6xk")
