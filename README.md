@@ -47,111 +47,19 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 
 ## Changelog
 
-### Version 0.8
-- Added gameplay world boundaries for the farm border:
-  - Preserved the existing manually placed `FarmBorder` fence visuals in `Scenes/Game/world.tscn`.
-  - Added invisible `BoundaryColliders` under `World/Farm/FarmBorder`.
-  - Added `NorthBoundaryCollider`, `SouthBoundaryCollider`, `EastBoundaryCollider`, and `WestBoundaryCollider` as `StaticBody3D` nodes with `BoxShape3D` collision.
-  - Kept boundary colliders on the default physics layer/mask so they collide with the existing player controller and static world objects.
-  - Adjusted collider placement inward after runtime testing showed the player could get trapped between the fence edge and the first boundary placement.
-  - Left `WorldBoundaryShape3D` in `mainScene.tscn` unchanged as legacy/unused scene data.
-  - Did not change farm grid size, tile behavior, economy, save/load, UI, day/night, or weather systems.
-
-### Version 0.7
-- Stage 5.4 Visual / World Polish:
-  - Polished the day/night visual mapping with smoother lighting, sky-color, and ambient transitions between night, dawn, day, and evening.
-  - Improved nighttime readability while keeping the scene darker and cooler than daytime.
-  - Added simple low-poly `SunVisual` and `MoonVisual` objects under `CelestialVisuals` in `Scenes/Game/mainScene.tscn`.
-  - Sun and moon visuals move across the sky from the existing `TimeManager` day progress without changing time gameplay.
-  - The visible sun path is aligned with `SunLight`, so the sun position and shadow direction stay consistent.
-  - Kept Weather VFX, audio, terrain polish, crop polish, camera pass, world boundaries, house model polish, and silo model polish outside this pass.
-
-### Version 0.6
-- UI polish pass:
-  - Reworked Main Menu, Pause Menu, Options, New Game, and Load Game around a shared wooden-board menu style.
-  - Replaced dark rectangular menu buttons with transparent text-style buttons using black normal text and white hover/pressed text.
-  - Reworked Options from a tabbed layout into a root segment list with Sound, Controls, Graphics, and Feedback submenus.
-  - Added custom Options controls styling, including menu-style dropdowns, a square fullscreen checkbox, and a black line scroll indicator for Controls.
-  - Reworked New Game and Load Game save slots into light beige paper-card buttons with save summaries and subtle hover states.
-  - Added overwrite confirmation for New Game occupied slots and save/quit confirmations in Pause Menu.
-  - Added `UIFormatHelper` for visible UI formatting, including money, market percentages, season dates, product/seed display names, market trends, weather names, news categories, and cleaned input labels.
-  - Unified visible FarmPhone app names to News, Market, Shop, Weather, Storage, and Sell.
-  - Standardized UI money, date, percentage, market status, product, seed, weather, and interaction prompt text formats.
-  - Added Lato typography to FarmPhone, phone apps, bottom-left notifications, and interaction prompts.
-  - Added centralized gameplay HUD visibility modes so pause, phone, inventory, and storage UI hide crosshair and unrelated HUD elements consistently.
-  - Polished gameplay HUD date/time and money into small wooden plaques, bottom-left notifications into paper-style cards, and crosshair prompts into short white control-action text without a background.
-  - Kept the pause-menu blur effect, reduced its sampling offset, and added a subtle dark overlay plus clearer button states.
-  - Increased panel and card background opacity for FarmPhone, inventory, storage/silo, hotbar, options, new game, and load game UI.
-- Removed the old minimap placeholder behavior from visible gameplay HUD; no minimap has been reintroduced.
-
-### Version 0.5
-- Expanded the market event system:
-  - Added market, weather, and seasonal event categories.
-  - Added random, condition-based, and fixed-date trigger modes.
-  - Added multi-product market events through explicit affected item lists.
-  - Added season, day-range, weather-history, temperature, and recent-sales requirements.
-  - Added fixed-date calendar-event protection so events such as Halloween Pumpkin Demand run once per year.
-  - Limited new event starts to two events per in-game day.
-- Added runtime buy-price event modifiers for seed prices without mutating `ItemPriceData`.
-- Reworked commodity event modifiers so trend strength and volatility do not permanently accumulate.
-- Added completed-day weather history used by Drought, Heavy Rain, and Summer Heatwave.
-- Added Spring Planting Boom, Autumn Harvest Festival, Halloween Pumpkin Demand, Winter Shortage, Drought, Heavy Rain, Summer Heatwave, Export Contract, and Market Panic events.
-- Restricted bad harvest events to the matching crop season.
-- Reduced high-volume random market event chances:
-  - Demand Spike: `0.032` per crop event.
-  - Export Contract: `0.01` per crop event.
-  - Market Panic: `0.02` per crop event.
-- Added bottom-left HUD news alerts for newly started market events, including stacked alerts when multiple events start together.
-- Extended save/load with calendar-event lock state, daily event limit state, and weather history.
-- Added EventSystem tests covering multi-product events, event conditions, seed price modifiers, calendar locks, weather requirements, deterministic stacking, event chance configuration, and save/load behavior.
-- Added a deterministic full-year simulation test with CSV reports for daily market/weather/event data and event activation summaries.
-- Updated the full-year simulation into a five-seed run that reports `600` total days, per-seed daily/event/validation CSV files, a multi-seed summary, and an aggregate report.
-- Added an Oversupply sales simulation report covering all crop products, sales thresholds, cooldown behavior, product isolation, price impact, and save/load diagnostics.
-- Rebalanced selected event parameters after multi-seed simulation:
-  - Demand Spike trigger chance is `0.032`.
-  - Export Contract trigger chance is `0.01`.
-  - Summer Heatwave trigger chance is `0.56`.
-  - Heavy Rain uses `cooldown_days = 7`.
-  - Bad Harvest events use `cooldown_days = 5`.
-  - `beetroot_bad_harvest` trend strength modifier is `0.024`.
-- Rebalanced Oversupply events:
-  - All Oversupply events use `cooldown_days = 5`.
-  - Yield-1 crops use `recent_sales_threshold = 200`.
-  - Yield-3 crops use `recent_sales_threshold = 600`.
-- Added crop profitability analysis reports for product price, seed price, seasonal profitability, ROI, market scenarios, and Oversupply risk.
-- Rebalanced crop product base sell prices:
-  - Wheat `15`, Carrot `23`, Beetroot `33`, Lettuce `33`, Cabbage `50`, Pumpkin `39`.
-  - Potatoe `16`, Corn `15`, Strawberry `15`, Tomatoe `13`.
-- Rebalanced seed buy prices:
-  - Wheat `5`, Carrot `5`, Beetroot `8`, Lettuce `8`, Cabbage `12`, Pumpkin `8`.
-  - Potatoe `8`, Corn `9`, Strawberry `11`, Tomatoe `10`.
-
 ### Version 0.4
-- Fixed the camera controls
-- Harvest during rain keeps soil watered
-- Updated events for overproducing crops
-- Added recent sales statistics for sales-driven market event requirements
-- Persisted sales statistics in save files
-- Documented world tile registration and editor farm-grid generation
-- Implemented unit testing for the game
-- Implemented more products
-  - Implemented carrot
-  - Implemented lettuce
-  - Implemented potatoe
-  - Implemented beetroot
-  - Implemented cabbage
-  - Implemented pumpkin
-  - Implemented tomatoe
-  - Implemented corn
-  - Implemented strawberry
-- Added settings for the resolutions
-- Improvements to weather
-  - Implemented weather phase system
-  - Added cached day phase updates from in-game time changes
-  - Implemented seasonal weather balancing for temperature and rainy/stormy pattern weights
-- Improvements to apps
-  - Improve weather app
-  - Weather forecast now labels the next day as Tomorrow and shows pattern, temperature, and rain chance
+- Expanded farm content with additional crop products, seasonal crop support, overproduction events, and recent sales statistics.
+- Improved weather with day phases, cached phase updates, seasonal balancing, forecasts, and rain/storm field watering behavior.
+- Expanded the market/event layer with market, weather, seasonal, fixed-date, and sales-driven events, plus buy-price and commodity modifiers.
+- Polished UI across Main Menu, Pause Menu, Options, New Game, Load Game, HUD, FarmPhone apps, Inventory, Storage, Shop, Sell, Market, Weather, and News.
+- Standardized player-facing formatting for money, dates, market trends, weather names, product/seed names, and concise interaction prompts.
+- Improved day/night visuals with smoother lighting transitions and low-poly sun/moon scene markers.
+- Added physical farm border boundaries using invisible colliders aligned with the existing authored fence layout.
+- Completed a small camera and interaction readability pass around farm borders, house, silo, prompts, and blocking UI transitions.
+- Extended save/load coverage for player state, weather, market events, news, sales statistics, and farm tile state.
+- Added automated tests, full-year simulations, oversupply simulations, crop profitability reports, and related balance diagnostics.
+- Rebalanced selected crop prices, seed prices, event chances, cooldowns, and oversupply thresholds.
+- Fixed camera controls, rain harvest behavior, stale prompt/crosshair feedback, and several world/gameplay readability issues.
 
 ### Version 0.3
 - Restructured the world

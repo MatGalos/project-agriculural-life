@@ -268,6 +268,7 @@ Good next targets:
 - Visual verification for the Inventory wooden panel, centered five-slot leather hotbar strip, lower 20-slot grid, readable amount badges, and spaced description panel.
 - Visual verification for wooden menu panels, text-style menu buttons, paper save-slot cards, Options submenus, custom Options scroll/checkbox/dropdown controls, and save/overwrite confirmation popups.
 - Runtime farm-border boundary checks for all four sides and corners once a stable Godot scene fixture is available.
+- Runtime camera and interaction readability checks around farm boundaries, house, silo, and blocking UI transitions.
 - Manual regression pass for HUD visibility modes: gameplay, pause, phone, inventory, and storage.
 - Manual pass for UI formatting consistency in money, dates, market percentages, product/seed names, weather names, input labels, and short control-action interaction prompts.
 
@@ -300,6 +301,39 @@ Boundary maintenance expectations:
 - Gameplay blocking should come from `World/Farm/FarmBorder/BoundaryColliders`.
 - Boundary colliders should stay on the default physics layer/mask unless the player and static world collision policy is intentionally changed.
 - `WorldBoundaryShape3D` in `mainScene.tscn` is legacy scene data and is not the farm-border blocker.
+
+## Manual Camera And Interaction Readability Checklist
+
+Run this checklist in Godot after camera, player interaction, farm border, house, silo, HUD prompt, FarmPhone, Inventory, or Storage changes:
+
+1. Start gameplay and verify normal walking and sprinting still feel unchanged.
+2. Rotate the camera around the player near the farm grid and confirm the farm remains readable.
+3. Walk along each fence line and confirm there is no critical camera clipping or lockup.
+4. Test all four farm-border corners and confirm the camera remains controllable.
+5. Stand near the house and rotate the camera. Confirm there is no critical clipping through the house that blocks play.
+6. Look at the house interactable and confirm the prompt reads `E — Sleep`.
+7. Walk away from the house and confirm the prompt disappears and the crosshair returns to its normal state.
+8. Stand near the silo and rotate the camera. Confirm there is no critical clipping through the silo that blocks play.
+9. Look at the silo interactable and confirm the prompt reads `E — Open Silo`.
+10. Walk away from the silo and confirm the prompt disappears and the crosshair returns to its normal state.
+11. Look at the well and confirm its existing fill-watering-can interaction remains readable.
+12. Look at fences and boundary colliders and confirm no interaction prompt appears.
+13. Use tools on farm tiles near the border and confirm tile prompts still appear only for valid tool targets.
+14. Open FarmPhone while a prompt is visible and confirm the prompt/crosshair feedback is hidden.
+15. Close FarmPhone while still looking at the same interactable and confirm prompt/crosshair state refreshes correctly.
+16. Open Inventory while a prompt is visible and confirm the prompt/crosshair feedback is hidden.
+17. Close Inventory while still looking at the same interactable and confirm prompt/crosshair state refreshes correctly.
+18. Open Silo Storage from the silo and confirm the prompt/crosshair feedback is hidden while storage is open.
+19. Close Silo Storage and confirm normal gameplay prompt/crosshair behavior returns.
+20. Open Pause while a prompt is visible and confirm gameplay HUD prompt/crosshair feedback is hidden.
+21. Confirm Shop, Market, Sell, Weather, and News FarmPhone apps still open normally.
+22. Save and load once, then confirm house and silo prompts still work.
+
+Camera pass limitations:
+
+- The current camera rig does not use `SpringArm3D` or collision avoidance.
+- Serious camera clipping around buildings or fences should be tracked for a later dedicated camera-collision pass.
+- Camera readability checks are manual until a stable runtime scene fixture or screenshot automation is available.
 
 ## Manual UI Polish Checklist
 

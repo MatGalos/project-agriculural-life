@@ -79,6 +79,31 @@ Important behavior:
 - `reset_to_defaults()` recreates all known actions before assigning default binds.
 - `use_tool` defaults to left mouse button and is routed through `CharacterController` to `ToolManager`.
 
+## Player Camera
+
+The gameplay camera is a simple third-person rig owned by `CharacterBody3D` in `Scenes/Game/mainScene.tscn`.
+
+Scene structure:
+
+- `CharacterBody3D/CameraPivot`
+- `CharacterBody3D/CameraPivot/Camera3D`
+- `CharacterBody3D/CameraPivot/Camera3D/InteractionRayCast`
+
+Runtime camera setup is local to `Scripts/Player/CharacterController.gd`:
+
+- `camera_distance` is currently `4.0`.
+- `CameraPivot` is positioned at `Vector3(0, 1.4, 0)`.
+- `Camera3D` is positioned at `Vector3(0, 0.5, camera_distance)`.
+- Pitch is clamped from `-75` to `35` degrees.
+- Camera FOV uses the scene/default Godot value unless explicitly configured later.
+- There is currently no `SpringArm3D`, camera smoothing, or camera collision avoidance.
+
+Maintenance rules:
+
+- Keep movement input and camera rotation behavior in `CharacterController` unless doing a dedicated camera-system pass.
+- Small polish changes may tune camera distance, pivot height, FOV, or pitch limits.
+- If fences, house, or silo reveal serious camera clipping, prefer documenting it for a later camera-collision pass instead of adding a large new camera system inside a world-polish task.
+
 ## Graphics Options
 
 `GraphicsSettingsManager` stores graphics settings in `user://graphics.cfg` and applies them at startup and when options change.
@@ -579,6 +604,8 @@ Prompt priority:
 - Tool prompts from `ToolManager.get_tool_prompt_for_target()` are shown first.
 - Interactable prompts are shown only when no tool prompt is available.
 - Prompt text should use concise control-action wording, for example `E — Interact`, `E — Open Silo`, `LMB — Plow`, and `LMB — Harvest Wheat`.
+- Prompt and crosshair state are refreshed when gameplay HUD visibility changes, so opening or closing FarmPhone, Inventory, Storage, or Pause cannot leave stale highlighted interaction feedback.
+- Non-interactive collision such as farm boundary colliders may be hit by the raycast, but it should produce no prompt unless an ancestor is an `Interactable`.
 
 ## Responsive UI
 
