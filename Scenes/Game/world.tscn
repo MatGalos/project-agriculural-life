@@ -27,18 +27,6 @@ size = Vector3(5, 5, 4)
 height = 5.5
 radius = 1.5
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_north_boundary"]
-size = Vector3(29, 2.75, 0.35)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_south_boundary"]
-size = Vector3(29, 2.75, 0.35)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_east_boundary"]
-size = Vector3(0.35, 2.75, 21.4)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_west_boundary"]
-size = Vector3(0.35, 2.75, 21.4)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_polish_stone"]
 albedo_color = Color(0.48, 0.46, 0.42, 1)
 roughness = 0.9
@@ -52,6 +40,18 @@ material = SubResource("StandardMaterial3D_polish_stone")
 top_radius = 1.8
 bottom_radius = 1.8
 height = 0.2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_north_boundary"]
+size = Vector3(29, 2.75, 0.35)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_south_boundary"]
+size = Vector3(29, 2.75, 0.35)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_east_boundary"]
+size = Vector3(0.35, 2.75, 21.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_west_boundary"]
+size = Vector3(0.35, 2.75, 21.4)
 
 [node name="World" type="Node3D" unique_id=1489175734]
 
@@ -86,7 +86,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("BoxShape3D_g7nqd")
 
 [node name="Silo" parent="HomeArea" unique_id=732485724 groups=["interactable"] instance=ExtResource("5_g7nqd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0015109, 0, -6.998237)
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1.0015109, 0, -6.998237)
+metadata/_edit_group_ = true
 
 [node name="StaticBody3D" type="StaticBody3D" parent="HomeArea/Silo" unique_id=1857743202]
 script = ExtResource("6_6y6xk")
@@ -2464,33 +2465,33 @@ transform = Transform3D(0.99999976, 0.00016263725, -0.0006440839, -0.00016304074
 [node name="fence98" parent="Farm/FarmBorder" unique_id=1558737828 instance=ExtResource("11_0e11a")]
 transform = Transform3D(0.99999976, 0.00016263725, -0.0006440839, -0.00016304074, 0.99999976, -0.0006183244, 0.0006439819, 0.00061843067, 0.9999996, -7.991913, 0, 9.992199)
 
-[node name="BoundaryColliders" type="Node3D" parent="Farm/FarmBorder"]
+[node name="BoundaryColliders" type="Node3D" parent="Farm/FarmBorder" unique_id=18354595]
 
-[node name="NorthBoundaryCollider" type="StaticBody3D" parent="Farm/FarmBorder/BoundaryColliders"]
+[node name="NorthBoundaryCollider" type="StaticBody3D" parent="Farm/FarmBorder/BoundaryColliders" unique_id=1507288774]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3625, 0, -9.6)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Farm/FarmBorder/BoundaryColliders/NorthBoundaryCollider"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Farm/FarmBorder/BoundaryColliders/NorthBoundaryCollider" unique_id=1317984450]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.375, 0)
 shape = SubResource("BoxShape3D_north_boundary")
 
-[node name="SouthBoundaryCollider" type="StaticBody3D" parent="Farm/FarmBorder/BoundaryColliders"]
+[node name="SouthBoundaryCollider" type="StaticBody3D" parent="Farm/FarmBorder/BoundaryColliders" unique_id=1060883761]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3625, 0, 10.6)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Farm/FarmBorder/BoundaryColliders/SouthBoundaryCollider"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Farm/FarmBorder/BoundaryColliders/SouthBoundaryCollider" unique_id=1548024066]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.375, 0)
 shape = SubResource("BoxShape3D_south_boundary")
 
-[node name="EastBoundaryCollider" type="StaticBody3D" parent="Farm/FarmBorder/BoundaryColliders"]
+[node name="EastBoundaryCollider" type="StaticBody3D" parent="Farm/FarmBorder/BoundaryColliders" unique_id=605477103]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.325, 0, 0.5)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Farm/FarmBorder/BoundaryColliders/EastBoundaryCollider"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Farm/FarmBorder/BoundaryColliders/EastBoundaryCollider" unique_id=338227098]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.375, 0)
 shape = SubResource("BoxShape3D_east_boundary")
 
-[node name="WestBoundaryCollider" type="StaticBody3D" parent="Farm/FarmBorder/BoundaryColliders"]
+[node name="WestBoundaryCollider" type="StaticBody3D" parent="Farm/FarmBorder/BoundaryColliders" unique_id=1870227244]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.6, 0, 0.5)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Farm/FarmBorder/BoundaryColliders/WestBoundaryCollider"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Farm/FarmBorder/BoundaryColliders/WestBoundaryCollider" unique_id=287245741]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.375, 0)
 shape = SubResource("BoxShape3D_west_boundary")
 
