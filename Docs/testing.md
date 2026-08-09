@@ -71,6 +71,7 @@ Core tests:
 - `ShopAppLayoutTest.gd`: Shop app cart scene structure, money/feedback labels, product list scroll container, collapsible cart panel with `v`/`^` toggle states, clear/purchase controls, product row Add flow, editable cart quantity field, subtotal fields, and removal of immediate Buy row behavior.
 - `SellAppLayoutTest.gd`: Sell app scene structure, storage product list, empty state, selected sale value summary, product sale cards, editable selected quantity field, quantity controls, Half/All controls, per-row Sell/Sell All buttons, summary Sell Selected button, and removal of the old one-click `SellOneButton` layout.
 - `GameplayFeedbackTest.gd`: source-level coverage for Shop/Sell/Silo/world feedback strings, HUD duplicate-message cooldown, selected sale feedback, transfer feedback, invalid world action feedback, item-use feedback, and inventory-gain feedback.
+- `AudioSettingsSourceTest.gd`: source-level coverage for the audio settings autoload, default bus layout, `SFX`/`Notifications`/`Music` buses sending to `Master`, `user://settings.cfg` persistence, linear-to-dB conversion, 0% mute behavior, Sound Options sliders, and keeping audio settings out of gameplay save-slot data.
 - `UIResponsivenessSourceTest.gd`: source-level coverage for responsive FarmPhone sizing, Inventory panel/slot scaling, Silo Storage panel sizing, drop-handler parameter naming that avoids `Control.position` shadowing, typed scroll-mode enum usage for custom scroll lines, scroll-line repositioning, Options board scaling, centralized HUD bottom layout, typed HUD UI mode enum usage, and visibility helper names that avoid `CanvasLayer.is_visible` shadowing.
 - `UIVisualPolishSourceTest.gd`: source-level visual polish coverage for visible UI text avoiding technical IDs, Weather forecast labels avoiding `Tomorrow`/`Day +N`, FarmPhone app safe left insets, and manual checklist coverage for left-edge clipping and actual season-date forecast labels.
 - `TestRunnerBehaviorTest.gd`: source-level coverage for keeping heavy simulation tests behind the headless/explicit simulation gate, gating verbose passed-assertion output, and printing compact final summaries.
@@ -258,6 +259,7 @@ Good next targets:
 - Stage 6 UI animation pass for gameplay feedback, phone apps, menu transitions, and HUD messages.
 - Screenshot or viewport-rect UI tests for 1280x720, 1600x900, 1920x1080, and 2560x1440 once the Godot executable is available in automation.
 - Runtime interaction tests for opening/closing all major UI panels and confirming HUD/crosshair mode restoration once a stable Godot scene fixture is available.
+- Runtime audio settings tests for slider persistence, bus volume/mute state, and restart reload once a stable Godot scene fixture is available.
 - `ToolManager` planting restrictions, watering-can usage, and harvest behavior.
 - Full crop gameplay loop coverage for all crop products, not only wheat.
 - `CommodityMarketManager.simulate_skipped_market_hours()` for time skips.
@@ -372,12 +374,30 @@ Run this checklist in Godot after UI polish changes, especially when no screensh
 31. In Inventory, confirm the top leather strip is centered and contains exactly 5 hotbar slots, the lower grid contains 20 regular slots in 5 columns, and both zones together represent the 25 inventory slots.
 32. In Inventory, hover and select filled and empty slots. Confirm hover/selected states are readable, item amounts stay inside their badges, and the bottom description panel has enough spacing between title, amount, and description.
 33. Open Options from Main Menu and Pause Menu. Confirm the root segment list opens Sound, Controls, Graphics, and Feedback submenus; `Back to Options`, root `Back`, and Escape return to the correct previous state.
-34. In Options, verify Graphics dropdown popups, the square fullscreen checkbox, and the Controls scroll line match the wooden menu style.
-35. Open New Game and Load Game from their supported contexts. Confirm wooden panels, paper save-slot cards, empty/occupied slot labels, disabled empty load slots, and occupied-slot overwrite confirmation in New Game.
-36. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting. Prompts should show as white text without a background and should not show placeholder text after starting or loading a game.
-37. Confirm the date/time and money displays sit inside compact wooden plaques, and that the money value is right-aligned with inner padding.
-38. Repeat the UI pass at 1280x720, 1600x900, 1920x1080, and 2560x1440.
-39. In Graphics options, switch Interface Scale between Small, Medium, and Big. Confirm FarmPhone, Inventory, Silo Storage, and Options panels remain inside the viewport and keep buttons clickable.
+34. In Options, verify Sound sliders for Master, SFX, Notifications, and Music are visible, use the wooden-menu slider style, update their percentage labels, and keep their values after leaving and reopening Options.
+35. In Options, verify Graphics dropdown popups, the square fullscreen checkbox, and the Controls scroll line match the wooden menu style.
+36. Open New Game and Load Game from their supported contexts. Confirm wooden panels, paper save-slot cards, empty/occupied slot labels, disabled empty load slots, and occupied-slot overwrite confirmation in New Game.
+37. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting. Prompts should show as white text without a background and should not show placeholder text after starting or loading a game.
+38. Confirm the date/time and money displays sit inside compact wooden plaques, and that the money value is right-aligned with inner padding.
+39. Repeat the UI pass at 1280x720, 1600x900, 1920x1080, and 2560x1440.
+40. In Graphics options, switch Interface Scale between Small, Medium, and Big. Confirm FarmPhone, Inventory, Silo Storage, and Options panels remain inside the viewport and keep buttons clickable.
+
+## Manual Audio Settings Checklist
+
+Run this checklist in Godot after audio bus, audio settings, or Sound Options changes:
+
+1. Start the game with no existing `user://settings.cfg` and confirm there are no console errors.
+2. Open Main Menu -> Options -> Sound.
+3. Confirm the Sound submenu shows `Master Volume`, `SFX Volume`, `Notifications Volume`, and `Music Volume`.
+4. Confirm the sliders use the wooden-menu visual style and the percentage labels fit at `0%`, `50%`, and `100%`.
+5. Move Master Volume to `0%` and confirm the `Master` bus is muted or fully silent in the Audio bus panel.
+6. Move Master Volume back to `100%` and confirm the `Master` bus returns to `0 dB`.
+7. Move SFX, Notifications, and Music sliders and confirm their respective buses update immediately.
+8. Leave Sound Options, return to Sound Options, and confirm slider values are preserved.
+9. Close and restart the game, then confirm the saved slider values are loaded.
+10. Open Pause Menu -> Options -> Sound and confirm the same controls and values are available.
+11. Confirm gameplay save/load still writes only save-slot JSON and does not add audio settings to save data.
+12. Confirm no music, weather audio, rain/storm VFX, or temporary test sounds were introduced by the audio settings pass.
 
 ## Manual Stage 5.4 Visual Checklist
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://du4mrea3xpemq"]
+[gd_scene load_steps=11 format=3 uid="uid://du4mrea3xpemq"]
 
 [ext_resource type="Script" uid="uid://dxkmocsxsko1a" path="res://Scripts/UIs/Menus/OptionsMenu/optionsMenu.gd" id="1_4k0nn"]
 [ext_resource type="Script" path="res://Scripts/UIs/Menus/WoodenMenuPanel.gd" id="2_wooden"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/graphics.gd" id="5_graphics"]
 [ext_resource type="Script" path="res://Scripts/UIs/Menus/OptionsMenu/OptionsScrollLine.gd" id="6_scroll_line"]
 [ext_resource type="Script" path="res://Scripts/UIs/Menus/OptionsMenu/OptionsCheckBox.gd" id="7_checkbox"]
+[ext_resource type="Script" path="res://Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/audio.gd" id="8_audio"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_options_title"]
 font_size = 46
@@ -206,6 +207,7 @@ vertical_alignment = 1
 custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 size_flags_vertical = 3
+script = ExtResource("8_audio")
 
 [node name="BackToOptionsButton" type="Button" parent="Panel/SoundOptions/WoodenBoard/MenuMargin/MenuContent"]
 custom_minimum_size = Vector2(360, 40)
