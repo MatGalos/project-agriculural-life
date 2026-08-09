@@ -21,7 +21,7 @@ func _ready() -> void:
 	slot_3_button.pressed.connect(func(): _on_slot_pressed(3))
 	back_button.pressed.connect(_on_back_pressed)
 	overwrite_button.pressed.connect(_on_overwrite_confirmed)
-	cancel_button.pressed.connect(_hide_overwrite_confirmation)
+	cancel_button.pressed.connect(_on_overwrite_cancelled)
 	overwrite_overlay.visible = false
 	refresh()
 
@@ -60,10 +60,13 @@ func _start_slot(slot: int) -> void:
 
 
 func _on_back_pressed() -> void:
+	UISoundManager.play_ui_click()
 	gamemanager.showMainMenu()
 
 
 func _on_slot_pressed(slot: int) -> void:
+	UISoundManager.play_ui_click()
+
 	if SaveManager.has_save(slot):
 		_show_overwrite_confirmation(slot)
 		return
@@ -83,7 +86,14 @@ func _hide_overwrite_confirmation() -> void:
 	overwrite_overlay.visible = false
 
 
+func _on_overwrite_cancelled() -> void:
+	UISoundManager.play_ui_click()
+	_hide_overwrite_confirmation()
+
+
 func _on_overwrite_confirmed() -> void:
+	UISoundManager.play_ui_click()
+
 	if _pending_overwrite_slot <= 0:
 		_hide_overwrite_confirmation()
 		return

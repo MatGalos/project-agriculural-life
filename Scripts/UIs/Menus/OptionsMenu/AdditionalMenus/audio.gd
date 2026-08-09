@@ -144,13 +144,14 @@ func _apply_slider_style(slider: HSlider) -> void:
 
 func _create_track_style(fill_color: Color) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
+	var track_radius := int(round(float(TRACK_HEIGHT) * 0.5))
 	style.bg_color = fill_color
 	style.border_color = TRACK_BORDER_COLOR
 	style.set_border_width_all(2)
-	style.corner_radius_top_left = TRACK_HEIGHT / 2
-	style.corner_radius_top_right = TRACK_HEIGHT / 2
-	style.corner_radius_bottom_left = TRACK_HEIGHT / 2
-	style.corner_radius_bottom_right = TRACK_HEIGHT / 2
+	style.corner_radius_top_left = track_radius
+	style.corner_radius_top_right = track_radius
+	style.corner_radius_bottom_left = track_radius
+	style.corner_radius_bottom_right = track_radius
 	style.content_margin_top = TRACK_HEIGHT
 	style.content_margin_bottom = TRACK_HEIGHT
 	return style

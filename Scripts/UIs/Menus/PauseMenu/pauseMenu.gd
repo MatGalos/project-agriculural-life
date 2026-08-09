@@ -35,7 +35,7 @@ func _ready() -> void:
 	saveAndQuitToMenu.button_down.connect(onSaveAndQuitToMenuButtonPressed)
 	saveAndQuitToDesktop.button_down.connect(onSaveAndQuitToDesktopButtonPressed)
 	confirm_button.button_down.connect(_on_confirmation_confirmed)
-	cancel_button.button_down.connect(_hide_confirmation)
+	cancel_button.button_down.connect(_on_confirmation_cancelled)
 	visible = false
 	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	blurBg.visible = false
@@ -74,10 +74,12 @@ func showBlurOnly() -> void:
 
 
 func onContinueButtonPressed() -> void:
+	UISoundManager.play_ui_click()
 	gamemanager.setPaused(false)
 
 
 func onSaveGameButtonPressed() -> void:
+	UISoundManager.play_ui_click()
 	_show_confirmation(
 		ConfirmationAction.SAVE,
 		"Overwrite the current saved game?"
@@ -85,14 +87,17 @@ func onSaveGameButtonPressed() -> void:
 
 
 func onLoadGameButtonPressed() -> void:
+	UISoundManager.play_ui_click()
 	gamemanager.openLoadGamePanel(gamemanager.menuContext.Pause_Menu)
 
 
 func onOptionsButtonPressed() -> void:
+	UISoundManager.play_ui_click()
 	gamemanager.openOptions(gamemanager.menuContext.Pause_Menu)
 
 
 func onSaveAndQuitToMenuButtonPressed() -> void:
+	UISoundManager.play_ui_click()
 	_show_confirmation(
 		ConfirmationAction.SAVE_AND_QUIT_TO_MENU,
 		"Save the game and quit to menu?"
@@ -100,6 +105,7 @@ func onSaveAndQuitToMenuButtonPressed() -> void:
 
 
 func onSaveAndQuitToDesktopButtonPressed() -> void:
+	UISoundManager.play_ui_click()
 	_show_confirmation(
 		ConfirmationAction.SAVE_AND_QUIT_TO_DESKTOP,
 		"Save the game and quit to desktop?"
@@ -135,7 +141,13 @@ func _hide_confirmation() -> void:
 		confirmation_overlay.visible = false
 
 
+func _on_confirmation_cancelled() -> void:
+	UISoundManager.play_ui_click()
+	_hide_confirmation()
+
+
 func _on_confirmation_confirmed() -> void:
+	UISoundManager.play_ui_click()
 	var action: ConfirmationAction = _pending_confirmation_action
 	_hide_confirmation()
 

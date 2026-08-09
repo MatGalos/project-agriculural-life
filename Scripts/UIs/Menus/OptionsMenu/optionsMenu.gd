@@ -51,10 +51,10 @@ func _ready() -> void:
 	feedback_button.button_down.connect(_show_feedback_options)
 	back_button.button_down.connect(close)
 
-	sound_back_button.button_down.connect(_show_main_options)
-	controls_back_button.button_down.connect(_show_main_options)
-	graphics_back_button.button_down.connect(_show_main_options)
-	feedback_back_button.button_down.connect(_show_main_options)
+	sound_back_button.button_down.connect(_on_back_to_options_pressed)
+	controls_back_button.button_down.connect(_on_back_to_options_pressed)
+	graphics_back_button.button_down.connect(_on_back_to_options_pressed)
+	feedback_back_button.button_down.connect(_on_back_to_options_pressed)
 
 	_cache_board_base_sizes()
 	_apply_responsive_layout()
@@ -71,6 +71,7 @@ func _input(event: InputEvent) -> void:
 
 
 func close() -> void:
+	UISoundManager.play_ui_click()
 	visible = false
 	_show_main_options()
 	closed.emit()
@@ -88,6 +89,7 @@ func handle_back_action() -> void:
 	if main_panel.visible:
 		close()
 	else:
+		UISoundManager.play_ui_click()
 		_show_main_options()
 
 
@@ -105,19 +107,28 @@ func _show_main_options() -> void:
 	_set_active_panel(main_panel)
 
 
+func _on_back_to_options_pressed() -> void:
+	UISoundManager.play_ui_click()
+	_show_main_options()
+
+
 func _show_sound_options() -> void:
+	UISoundManager.play_ui_click()
 	_set_active_panel(sound_panel)
 
 
 func _show_controls_options() -> void:
+	UISoundManager.play_ui_click()
 	_set_active_panel(controls_panel)
 
 
 func _show_graphics_options() -> void:
+	UISoundManager.play_ui_click()
 	_set_active_panel(graphics_panel)
 
 
 func _show_feedback_options() -> void:
+	UISoundManager.play_ui_click()
 	_set_active_panel(feedback_panel)
 
 
