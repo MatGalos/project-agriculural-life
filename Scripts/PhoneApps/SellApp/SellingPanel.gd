@@ -182,22 +182,26 @@ func _on_sell_all_requested(item_data: ItemData) -> void:
 
 func sell_product(item_data: ItemData, amount: int) -> void:
 	if storage_data == null or item_data == null:
+		UISoundManager.play_action_error()
 		_set_feedback("Storage is empty.", COLOR_ERROR)
 		return
 
 	if amount <= 0:
+		UISoundManager.play_action_error()
 		_set_feedback("Select an amount to sell.", COLOR_ERROR)
 		return
 
 	var available := storage_data.get_item_amount(item_data)
 
 	if available <= 0:
+		UISoundManager.play_action_error()
 		_set_feedback("Storage is empty.", COLOR_ERROR)
 		selected_sell_quantities.erase(item_data.id)
 		refresh()
 		return
 
 	if amount > available:
+		UISoundManager.play_action_error()
 		_set_feedback("Not enough items.", COLOR_ERROR)
 		set_sell_quantity(item_data.id, available)
 		refresh()
@@ -207,12 +211,14 @@ func sell_product(item_data: ItemData, amount: int) -> void:
 	var total_value := sell_price * amount
 
 	if not storage_data.remove_item(item_data, amount):
+		UISoundManager.play_action_error()
 		_set_feedback("Not enough items.", COLOR_ERROR)
 		refresh()
 		return
 
 	MoneyManager.add_money(total_value)
 	SalesStatsManager.record_sale(item_data, amount)
+	UISoundManager.play_sell_item()
 	selected_sell_quantities.erase(item_data.id)
 	_refresh_game_ui()
 	refresh()
@@ -225,6 +231,7 @@ func sell_product(item_data: ItemData, amount: int) -> void:
 
 func sell_selected_products() -> void:
 	if storage_data == null:
+		UISoundManager.play_action_error()
 		_set_feedback("Storage is empty.", COLOR_ERROR)
 		return
 
@@ -248,6 +255,7 @@ func sell_selected_products() -> void:
 		})
 
 	if sale_requests.is_empty():
+		UISoundManager.play_action_error()
 		_set_feedback("Select an amount to sell.", COLOR_ERROR)
 		refresh()
 		return
@@ -271,6 +279,7 @@ func sell_selected_products() -> void:
 		total_value += item_value
 
 	if sold_items <= 0:
+		UISoundManager.play_action_error()
 		_set_feedback("Not enough items.", COLOR_ERROR)
 		refresh()
 		return
@@ -278,6 +287,7 @@ func sell_selected_products() -> void:
 	selected_sell_quantities.clear()
 	_refresh_game_ui()
 	refresh()
+	UISoundManager.play_sell_item()
 	_set_feedback("Sold selected items for %s." % UIFormatHelper.money_int(total_value), COLOR_SUCCESS)
 
 

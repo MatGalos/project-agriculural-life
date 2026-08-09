@@ -163,6 +163,7 @@ func can_afford_cart() -> bool:
 
 func purchase_cart() -> void:
 	if cart.is_empty():
+		UISoundManager.play_action_error()
 		_set_feedback("Cart is empty.", COLOR_ERROR)
 		_update_summary()
 		return
@@ -170,21 +171,25 @@ func purchase_cart() -> void:
 	var total := get_cart_total()
 
 	if total <= 0:
+		UISoundManager.play_action_error()
 		_set_feedback("Cart is empty.", COLOR_ERROR)
 		_update_summary()
 		return
 
 	if not MoneyManager.can_afford(total):
+		UISoundManager.play_action_error()
 		_set_feedback("Not enough money.", COLOR_ERROR)
 		_update_summary()
 		return
 
 	if player_inventory == null or not _can_fit_cart():
+		UISoundManager.play_action_error()
 		_set_feedback("Inventory is full.", COLOR_ERROR)
 		_update_summary()
 		return
 
 	if not MoneyManager.spend_money(total):
+		UISoundManager.play_action_error()
 		_set_feedback("Not enough money.", COLOR_ERROR)
 		_update_summary()
 		return
@@ -210,6 +215,7 @@ func purchase_cart() -> void:
 		if leftover > 0:
 			_rollback_added_items(added_items)
 			MoneyManager.add_money(total)
+			UISoundManager.play_action_error()
 			_set_feedback("Could not add items to inventory.", COLOR_ERROR)
 			refresh()
 			return
@@ -218,6 +224,7 @@ func purchase_cart() -> void:
 	cart.clear()
 	_refresh_game_ui()
 	refresh()
+	UISoundManager.play_buy_item()
 	_set_feedback("Bought %d items for %s." % [item_count, UIFormatHelper.money_int(total)], COLOR_SUCCESS)
 
 

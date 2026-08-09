@@ -358,7 +358,7 @@ func _refresh_ui_mode() -> void:
 func _on_pause_changed(_paused: bool) -> void:
 	_refresh_ui_mode()
 
-func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATION) -> void:
+func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATION, play_notification_sound: bool = true) -> void:
 	if message.is_empty():
 		_hide_event_message()
 		return
@@ -375,7 +375,10 @@ func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATIO
 	var message_id := _next_event_message_id
 
 	_event_messages[message_id] = message
-	UISoundManager.play_notification_new()
+
+	if play_notification_sound:
+		UISoundManager.play_notification_new()
+
 	_refresh_event_messages()
 
 	await get_tree().create_timer(duration).timeout

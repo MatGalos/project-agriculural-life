@@ -73,6 +73,7 @@ Core tests:
 - `GameplayFeedbackTest.gd`: source-level coverage for Shop/Sell/Silo/world feedback strings, HUD duplicate-message cooldown, selected sale feedback, transfer feedback, invalid world action feedback, item-use feedback, and inventory-gain feedback.
 - `AudioSettingsSourceTest.gd`: source-level coverage for the audio settings autoload, default bus layout, `SFX`/`Notifications`/`Music` buses sending to `Master`, `user://settings.cfg` persistence, linear-to-dB conversion, 0% mute behavior, Sound Options sliders, and keeping audio settings out of gameplay save-slot data.
 - `UISoundSourceTest.gd`: source-level coverage for the UI sound autoload, SFX/Notifications bus routing, prepared `.wav` asset paths, missing-file checks, notification cooldown, main menu/pause/options/new-game/load-game button hooks, FarmPhone open/close/app-switch hooks, and HUD notification sound hooks.
+- `GameplaySFXSourceTest.gd`: source-level coverage for gameplay SFX asset paths, playback methods, tilling/planting/watering/harvest hooks, shop buy hooks, sell hooks, storage transfer hooks, action-error hooks, and suppressing duplicate notification sounds for gameplay feedback.
 - `UIResponsivenessSourceTest.gd`: source-level coverage for responsive FarmPhone sizing, Inventory panel/slot scaling, Silo Storage panel sizing, drop-handler parameter naming that avoids `Control.position` shadowing, typed scroll-mode enum usage for custom scroll lines, scroll-line repositioning, Options board scaling, centralized HUD bottom layout, typed HUD UI mode enum usage, and visibility helper names that avoid `CanvasLayer.is_visible` shadowing.
 - `UIVisualPolishSourceTest.gd`: source-level visual polish coverage for visible UI text avoiding technical IDs, Weather forecast labels avoiding `Tomorrow`/`Day +N`, FarmPhone app safe left insets, and manual checklist coverage for left-edge clipping and actual season-date forecast labels.
 - `TestRunnerBehaviorTest.gd`: source-level coverage for keeping heavy simulation tests behind the headless/explicit simulation gate, gating verbose passed-assertion output, and printing compact final summaries.
@@ -435,6 +436,53 @@ Run this checklist in Godot after UI sound or notification sound changes:
 29. Change Music Volume and confirm it does not affect UI or notification sounds.
 30. Confirm no hover/focus sounds, gameplay SFX, weather SFX/VFX, or music were introduced.
 31. Check the Godot console for warnings or errors.
+
+## Manual Gameplay SFX Checklist
+
+Run this checklist in Godot after gameplay SFX changes:
+
+1. Set Master Volume to `100%`.
+2. Set SFX Volume to `100%`.
+3. Set Notifications Volume to `100%`.
+4. Set Music Volume to any value.
+5. Start gameplay.
+6. Buy seeds from the Shop app.
+7. Confirm a successful purchase plays `buy_item`.
+8. Try to purchase with an empty cart or insufficient money.
+9. Confirm the blocked purchase plays `action_error`.
+10. Till a valid grass tile with the hoe.
+11. Confirm successful tilling plays `till_soil`.
+12. Try to till an already plowed or otherwise invalid tile.
+13. Confirm `till_soil` does not play for the blocked till action.
+14. Plant seeds on a valid tile.
+15. Confirm successful planting plays `plant_seed`.
+16. Water a valid plowed tile.
+17. Confirm successful watering plays `water_crop`.
+18. Make a crop ready through normal play or test acceleration.
+19. Harvest the ready crop.
+20. Confirm successful harvest plays `harvest_crop`.
+21. Transfer an item from inventory to Silo Storage.
+22. Confirm successful transfer plays `transfer_item`.
+23. Transfer an item from Silo Storage back to inventory.
+24. Confirm successful transfer plays `transfer_item`.
+25. Sell a product through the Sell app.
+26. Confirm successful sale plays `sell_item`.
+27. Trigger selected invalid tool, sell, shop, and storage actions.
+28. Confirm each blocked action plays one `action_error` and does not spam.
+29. Set SFX Volume to `0%`.
+30. Repeat several gameplay actions and confirm gameplay SFX are silent.
+31. Set SFX Volume to `100%`.
+32. Set Master Volume to `0%`.
+33. Repeat several gameplay actions and confirm gameplay SFX are silent.
+34. Set Master Volume to `100%`.
+35. Set Notifications Volume to `0%`.
+36. Confirm gameplay SFX still play.
+37. Change Music Volume.
+38. Confirm Music Volume does not affect gameplay SFX.
+39. Confirm one successful action plays only one gameplay sound.
+40. Confirm gameplay feedback messages do not also play `notification_new`.
+41. Check the Godot console for missing-file warnings or errors.
+42. Confirm gameplay save/load still works.
 
 ## Manual Stage 5.4 Visual Checklist
 

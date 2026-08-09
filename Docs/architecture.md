@@ -167,6 +167,14 @@ Current methods:
 - `play_phone_close()` for closing FarmPhone.
 - `play_phone_app_switch()` for FarmPhone app icons and the phone home button.
 - `play_notification_new()` for new bottom-left HUD notifications.
+- `play_plant_seed()` for successful seed planting.
+- `play_till_soil()` for successful hoe use that turns grass into plowed soil.
+- `play_water_crop()` for successful watering.
+- `play_harvest_crop()` for successful crop harvesting.
+- `play_buy_item()` for successful Shop purchases.
+- `play_sell_item()` for successful Sell app sales.
+- `play_transfer_item()` for successful Inventory/Silo transfers.
+- `play_action_error()` for selected blocked gameplay actions.
 
 Bus routing:
 
@@ -174,6 +182,7 @@ Bus routing:
 - New notification sounds play through `Notifications` when it exists.
 - `Notification` is supported as a fallback bus name for projects that use the singular form.
 - These sounds do not use the `Music` bus.
+- Gameplay SFX also use the `SFX` bus. They do not use `Notifications`, `Notification`, or `Music`.
 
 Audio asset paths:
 
@@ -182,6 +191,14 @@ Audio asset paths:
 - `res://Assets/Audio/UI/ui_phone_close.wav`
 - `res://Assets/Audio/UI/ui_app_switch.wav`
 - `res://Assets/Audio/Notifications/notification_new.wav`
+- `res://Assets/Audio/Gameplay/plant_seed.wav`
+- `res://Assets/Audio/Gameplay/till_soil.wav`
+- `res://Assets/Audio/Gameplay/water_crop.wav`
+- `res://Assets/Audio/Gameplay/harvest_crop.wav`
+- `res://Assets/Audio/Gameplay/buy_item.wav`
+- `res://Assets/Audio/Gameplay/sell_item.wav`
+- `res://Assets/Audio/Gameplay/transfer_item.wav`
+- `res://Assets/Audio/Gameplay/action_error.wav`
 - `UISoundManager` checks each path with `ResourceLoader.exists()` before loading; missing files produce a warning and leave the related sound silent instead of crashing the project.
 
 Notification rules:
@@ -189,6 +206,15 @@ Notification rules:
 - `PlayerHUD.show_event_message()` calls `UISoundManager.play_notification_new()` only after a new message passes the existing duplicate-message cooldown and receives a new message ID.
 - Refreshing the notification label does not replay the sound.
 - `UISoundManager` also applies a short notification SFX cooldown so simultaneous messages do not stack too loudly.
+
+Gameplay SFX rules:
+
+- `ToolManager` plays tilling, planting, watering, and harvest sounds only after the tile/inventory state has changed successfully.
+- Shop purchase SFX plays only after money is spent, all items are added to inventory, the cart is cleared, and UI refresh has started.
+- Sell SFX plays only after storage is reduced, money is added, and `SalesStatsManager.record_sale()` has run.
+- Storage transfer SFX plays only after items move between inventory and silo storage.
+- Selected blocked actions play `action_error` before returning.
+- Gameplay feedback messages call `PlayerHUD.show_event_message(..., false)` so gameplay SFX do not stack with the notification sound from Stage 5.5.2.
 
 ## Pause And Mouse Capture
 
@@ -714,5 +740,5 @@ Before adding new inventory, crop, tool, or UI behavior:
 - For growing UI lists, prefer a fixed outer panel with inner `ScrollContainer` nodes over allowing rows to resize the panel.
 - Keep display/window settings in `GraphicsSettingsManager` rather than applying them directly from individual menu controls.
 - Keep audio volume settings in `AudioSettingsManager` and route future UI, notification, SFX, and music players to `SFX`, `Notifications`, or `Music` instead of using ad hoc bus names.
-- Keep short interface sounds in `UISoundManager`; do not add hover/focus sounds, gameplay SFX, weather SFX, or music as part of UI SFX maintenance.
+- Keep short interface and gameplay sounds in `UISoundManager`; do not add hover/focus sounds, weather SFX, footstep SFX, or music as part of gameplay SFX maintenance.
 - Do not add debug `print()` calls in runtime paths unless they are temporary and removed before commit.
