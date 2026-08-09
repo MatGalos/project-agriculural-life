@@ -25,23 +25,28 @@ func _ready() -> void:
 
 
 func onStartButtonPressed() -> void:
+	UISoundManager.play_ui_click()
 	gamemanager.openNewGamePanel()
 
 
 func onLoadButtonPressed() -> void:
+	UISoundManager.play_ui_click()
 	gamemanager.openLoadGamePanel(gamemanager.menuContext.Main_Menu)
 
 
 func onOptionsButtonPressed() -> void:
+	UISoundManager.play_ui_click()
 	gamemanager.openOptions(gamemanager.menuContext.Main_Menu)
 
 
 func onCreditsButtonPressed() -> void:
+	UISoundManager.play_ui_click()
 	# Credits screen is not implemented yet.
 	pass
 
 
 func onExitButtonPressed() -> void:
+	UISoundManager.play_ui_click()
 	get_tree().quit()
 
 

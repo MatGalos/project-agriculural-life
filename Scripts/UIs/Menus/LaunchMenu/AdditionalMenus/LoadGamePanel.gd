@@ -72,6 +72,7 @@ func _update_slot_button(button: Button, slot: int) -> void:
 
 
 func _load_slot(slot: int) -> void:
+	UISoundManager.play_ui_click()
 	SaveManager.set_current_save_slot(slot)
 	gamemanager.startGame()
 	get_tree().change_scene_to_packed.call_deferred(game_scene)
@@ -79,6 +80,7 @@ func _load_slot(slot: int) -> void:
 
 
 func _on_back_pressed() -> void:
+	UISoundManager.play_ui_click()
 	gamemanager.closeLoadGamePanel()
 
 

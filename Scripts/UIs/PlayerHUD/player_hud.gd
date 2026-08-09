@@ -233,11 +233,17 @@ func open_phone() -> void:
 	if is_inventory_open() or is_storage_open():
 		return
 
+	if not phone_panel.visible:
+		UISoundManager.play_phone_open()
+
 	phone_panel.visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	_refresh_ui_mode()
 
 func close_phone() -> void:
+	if phone_panel.visible:
+		UISoundManager.play_phone_close()
+
 	phone_panel.visible = false
 	_refresh_ui_mode()
 
@@ -369,6 +375,7 @@ func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATIO
 	var message_id := _next_event_message_id
 
 	_event_messages[message_id] = message
+	UISoundManager.play_notification_new()
 	_refresh_event_messages()
 
 	await get_tree().create_timer(duration).timeout

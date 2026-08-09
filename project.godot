@@ -11,10 +11,14 @@ config_version=5
 [application]
 
 config/name="Project_Agricultural_life"
-config/version="0.3.1.40"
+config/version="0.3.1.41"
 run/main_scene="uid://bg2wnf0pafkqt"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://Assets/Icons/AppIcons/icon.svg"
+
+[audio]
+
+buses/default_bus_layout="res://default_bus_layout.tres"
 
 [autoload]
 
@@ -34,12 +38,9 @@ NewsManager="*uid://cwr650hesrdt5"
 SaveManager="*uid://d078pyjylr6e"
 SalesStatsManager="*uid://c0fuxcijbhuq3"
 GraphicsSettingsManager="*res://Scripts/GameManagers/GraphicsSettingsManager.gd"
-AudioSettingsManager="*res://Scripts/GameManagers/AudioSettingsManager.gd"
 DebugManager="*uid://v4uibwiagewl"
-
-[audio]
-
-buses/default_bus_layout="res://default_bus_layout.tres"
+AudioSettingsManager="*res://Scripts/GameManagers/AudioSettingsManager.gd"
+UISoundManager="*res://Scripts/GameManagers/UISoundManager.gd"
 
 [dotnet]
 

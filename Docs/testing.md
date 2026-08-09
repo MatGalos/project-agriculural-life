@@ -72,6 +72,7 @@ Core tests:
 - `SellAppLayoutTest.gd`: Sell app scene structure, storage product list, empty state, selected sale value summary, product sale cards, editable selected quantity field, quantity controls, Half/All controls, per-row Sell/Sell All buttons, summary Sell Selected button, and removal of the old one-click `SellOneButton` layout.
 - `GameplayFeedbackTest.gd`: source-level coverage for Shop/Sell/Silo/world feedback strings, HUD duplicate-message cooldown, selected sale feedback, transfer feedback, invalid world action feedback, item-use feedback, and inventory-gain feedback.
 - `AudioSettingsSourceTest.gd`: source-level coverage for the audio settings autoload, default bus layout, `SFX`/`Notifications`/`Music` buses sending to `Master`, `user://settings.cfg` persistence, linear-to-dB conversion, 0% mute behavior, Sound Options sliders, and keeping audio settings out of gameplay save-slot data.
+- `UISoundSourceTest.gd`: source-level coverage for the UI sound autoload, SFX/Notifications bus routing, prepared `.wav` asset paths, missing-file checks, notification cooldown, main menu/pause/options/new-game/load-game button hooks, FarmPhone open/close/app-switch hooks, and HUD notification sound hooks.
 - `UIResponsivenessSourceTest.gd`: source-level coverage for responsive FarmPhone sizing, Inventory panel/slot scaling, Silo Storage panel sizing, drop-handler parameter naming that avoids `Control.position` shadowing, typed scroll-mode enum usage for custom scroll lines, scroll-line repositioning, Options board scaling, centralized HUD bottom layout, typed HUD UI mode enum usage, and visibility helper names that avoid `CanvasLayer.is_visible` shadowing.
 - `UIVisualPolishSourceTest.gd`: source-level visual polish coverage for visible UI text avoiding technical IDs, Weather forecast labels avoiding `Tomorrow`/`Day +N`, FarmPhone app safe left insets, and manual checklist coverage for left-edge clipping and actual season-date forecast labels.
 - `TestRunnerBehaviorTest.gd`: source-level coverage for keeping heavy simulation tests behind the headless/explicit simulation gate, gating verbose passed-assertion output, and printing compact final summaries.
@@ -398,6 +399,42 @@ Run this checklist in Godot after audio bus, audio settings, or Sound Options ch
 10. Open Pause Menu -> Options -> Sound and confirm the same controls and values are available.
 11. Confirm gameplay save/load still writes only save-slot JSON and does not add audio settings to save data.
 12. Confirm no music, weather audio, rain/storm VFX, or temporary test sounds were introduced by the audio settings pass.
+
+## Manual UI And Notification SFX Checklist
+
+Run this checklist in Godot after UI sound or notification sound changes:
+
+1. Set Master Volume to `100%`.
+2. Set SFX Volume to `100%`.
+3. Set Notifications Volume to `100%`.
+4. Set Music Volume to any value.
+5. Click Main Menu buttons for New Game, Load Game, Options, Credits, and Exit where safe to test.
+6. Confirm each normal main button click plays one UI click sound.
+7. Open New Game and click save slots, Back, and overwrite confirmation buttons if an occupied slot exists.
+8. Open Load Game and click an occupied slot and Back.
+9. Open Pause Menu and click Resume, Save, Load, Options, Save and Quit actions, and confirmation buttons where safe.
+10. Open Options and click Sound, Controls, Graphics, Feedback, Back to Options, and root Back.
+11. Start gameplay and open FarmPhone.
+12. Confirm opening FarmPhone plays one phone open sound.
+13. Close FarmPhone.
+14. Confirm closing FarmPhone plays one phone close sound.
+15. Reopen FarmPhone and switch between News, Market, Shop, Weather, Sell, and Home.
+16. Confirm app icons and Home play one app-switch sound per click, without also playing the generic UI click.
+17. Trigger a new bottom-left HUD notification.
+18. Confirm the notification sound plays once when the new message appears.
+19. Trigger repeated identical notifications quickly and confirm duplicate sounds do not spam.
+20. Set SFX Volume to `0%`.
+21. Confirm UI click, phone open, phone close, and app-switch sounds are silent.
+22. With SFX Volume still `0%`, set Notifications Volume to `100%` and trigger a new notification.
+23. Confirm notification sound still follows Notifications Volume rather than SFX Volume.
+24. Set Notifications Volume to `0%`.
+25. Confirm new notification sounds are silent.
+26. Set Master Volume to `0%`.
+27. Confirm all UI and notification sounds are silent.
+28. Set Master Volume back to `100%` and confirm sounds return.
+29. Change Music Volume and confirm it does not affect UI or notification sounds.
+30. Confirm no hover/focus sounds, gameplay SFX, weather SFX/VFX, or music were introduced.
+31. Check the Godot console for warnings or errors.
 
 ## Manual Stage 5.4 Visual Checklist
 

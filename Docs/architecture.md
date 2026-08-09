@@ -22,6 +22,7 @@ The project uses these gameplay autoloads:
 - `SalesStatsManager` tracks recent sold item amounts for sales-driven market events.
 - `GraphicsSettingsManager` persists and applies resolution, fullscreen mode, and interface scale.
 - `AudioSettingsManager` persists and applies audio volume settings and ensures the required runtime audio buses exist.
+- `UISoundManager` plays short UI and notification sound effects through the configured audio buses.
 - `UI` is the player HUD scene autoload.
 
 Keep cross-system state in autoloads only when multiple unrelated scenes need it. Scene-local display logic should stay in UI controllers.
@@ -154,6 +155,40 @@ Persistence rules:
 The Sound submenu in Options owns only UI controls. Runtime application and persistence stay in `AudioSettingsManager`.
 
 The Sound sliders are built and styled locally in `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/audio.gd`. They use custom track, fill, and knob styling to match the wooden Options menu instead of relying on default native `HSlider` visuals.
+
+## UI And Notification SFX
+
+`UISoundManager` is the central runtime entry point for short interface sounds. It owns a small pool of `AudioStreamPlayer` nodes so UI code can request sounds without adding players to every menu scene.
+
+Current methods:
+
+- `play_ui_click()` for main menu, pause menu, options navigation, new-game slot, load-game slot, and shared confirmation button clicks.
+- `play_phone_open()` for opening FarmPhone.
+- `play_phone_close()` for closing FarmPhone.
+- `play_phone_app_switch()` for FarmPhone app icons and the phone home button.
+- `play_notification_new()` for new bottom-left HUD notifications.
+
+Bus routing:
+
+- UI click, phone open, phone close, and phone app switch sounds play through the `SFX` bus.
+- New notification sounds play through `Notifications` when it exists.
+- `Notification` is supported as a fallback bus name for projects that use the singular form.
+- These sounds do not use the `Music` bus.
+
+Audio asset paths:
+
+- `res://Assets/Audio/UI/ui_click.wav`
+- `res://Assets/Audio/UI/ui_phone_open.wav`
+- `res://Assets/Audio/UI/ui_phone_close.wav`
+- `res://Assets/Audio/UI/ui_app_switch.wav`
+- `res://Assets/Audio/Notifications/notification_new.wav`
+- `UISoundManager` checks each path with `ResourceLoader.exists()` before loading; missing files produce a warning and leave the related sound silent instead of crashing the project.
+
+Notification rules:
+
+- `PlayerHUD.show_event_message()` calls `UISoundManager.play_notification_new()` only after a new message passes the existing duplicate-message cooldown and receives a new message ID.
+- Refreshing the notification label does not replay the sound.
+- `UISoundManager` also applies a short notification SFX cooldown so simultaneous messages do not stack too loudly.
 
 ## Pause And Mouse Capture
 
@@ -556,6 +591,7 @@ Menu styling rules:
 - Options uses a root segment list instead of tabs. Sound, Controls, Graphics, and Feedback are separate visible panels controlled by `OptionsMenu`.
 - Controls Options uses a custom black scroll indicator from `Scripts/UIs/Menus/OptionsMenu/OptionsScrollLine.gd` instead of relying on the native scrollbar skin.
 - Sound Options uses custom wooden-menu slider styling from `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/audio.gd`; keep slider visuals local to the options submenu unless a broader menu theme pass is intentionally planned.
+- UI/notification sounds should be requested through `UISoundManager` instead of adding ad hoc `AudioStreamPlayer` nodes to menu scenes.
 
 ## Inventory UI
 
@@ -678,4 +714,5 @@ Before adding new inventory, crop, tool, or UI behavior:
 - For growing UI lists, prefer a fixed outer panel with inner `ScrollContainer` nodes over allowing rows to resize the panel.
 - Keep display/window settings in `GraphicsSettingsManager` rather than applying them directly from individual menu controls.
 - Keep audio volume settings in `AudioSettingsManager` and route future UI, notification, SFX, and music players to `SFX`, `Notifications`, or `Music` instead of using ad hoc bus names.
+- Keep short interface sounds in `UISoundManager`; do not add hover/focus sounds, gameplay SFX, weather SFX, or music as part of UI SFX maintenance.
 - Do not add debug `print()` calls in runtime paths unless they are temporary and removed before commit.

@@ -86,6 +86,24 @@ Resource only plus helper functions. Stores event identity, category, trigger mo
 | `func _read_volume(config: ConfigFile, key: String, default_value: float) -> float:` | Safely reads and clamps a saved volume value. |
 | `func _clamp_volume(value: float) -> float:` | Clamps a volume value to `0.0-1.0`. |
 
+## `Scripts/GameManagers/UISoundManager.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Prepares placeholder UI/notification streams and creates the pooled audio players. |
+| `func play_ui_click() -> void:` | Plays the generic UI click sound through the `SFX` bus. |
+| `func play_phone_open() -> void:` | Plays the FarmPhone opening sound through the `SFX` bus. |
+| `func play_phone_close() -> void:` | Plays the FarmPhone closing sound through the `SFX` bus. |
+| `func play_phone_app_switch() -> void:` | Plays the FarmPhone app-switch sound through the `SFX` bus. |
+| `func play_notification() -> void:` | Compatibility wrapper that routes to `play_notification_new()`. |
+| `func play_notification_new() -> void:` | Plays the new-notification sound through the notification bus with a short cooldown. |
+| `func _load_audio_streams() -> void:` | Loads the prepared UI and notification `.wav` files when exported stream overrides are not assigned. |
+| `func _load_stream(path: String, label: String) -> AudioStream:` | Safely loads one audio stream, warning instead of crashing when the file is missing or invalid. |
+| `func _create_player_pool() -> void:` | Creates reusable `AudioStreamPlayer` nodes for short overlapping sounds. |
+| `func _play_stream(stream: AudioStream, bus_name: String) -> void:` | Assigns a stream and bus to an available pooled player and starts playback. |
+| `func _get_available_player() -> AudioStreamPlayer:` | Returns a non-playing audio player or reuses the first pooled player. |
+| `func _get_notification_bus_name() -> String:` | Resolves `Notifications`, falls back to `Notification`, and finally returns `Notifications`. |
+
 ## `Scripts/GameManagers/CropGrowthManager.gd`
 
 | Function | Description |

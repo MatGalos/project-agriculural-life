@@ -37,11 +37,17 @@ func _ready() -> void:
 	_show_home_screen()
 
 func open() -> void:
+	if not visible:
+		UISoundManager.play_phone_open()
+
 	visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	_show_home_screen()
 
 func close() -> void:
+	if visible:
+		UISoundManager.play_phone_close()
+
 	visible = false
 
 	if gamemanager.isInGame and not gamemanager.isPaused:
@@ -62,10 +68,12 @@ func _show_home_screen() -> void:
 	home_screen.visible = true
 
 func _on_sell_pressed() -> void:
+	UISoundManager.play_phone_app_switch()
 	_show_app(sell_app)
 	sell_app.refresh()
 
 func _on_shop_pressed() -> void:
+	UISoundManager.play_phone_app_switch()
 	_show_app(shop_app)
 	shop_app.refresh()
 
@@ -81,18 +89,22 @@ func _show_app(app: Control) -> void:
 	app.visible = true
 
 func _on_exchange_pressed() -> void:
+	UISoundManager.play_phone_app_switch()
 	_show_app(exchange_app)
 	exchange_app.refresh()
 
 func _on_weather_pressed() -> void:
+	UISoundManager.play_phone_app_switch()
 	_show_app(weather_app)
 	weather_app.refresh()
 
 func _on_news_pressed() -> void:
+	UISoundManager.play_phone_app_switch()
 	_show_app(news_app)
 	news_app.refresh()
 
 func _on_home_pressed() -> void:
+	UISoundManager.play_phone_app_switch()
 	_show_home_screen()
 
 func _on_visibility_changed() -> void:
