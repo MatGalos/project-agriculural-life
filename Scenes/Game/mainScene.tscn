@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://cof00ypavhfyq" path="res://Scripts/Player/InteractionController.gd" id="8_tfxbu"]
 [ext_resource type="Script" uid="uid://dyc7d1ebypwwp" path="res://Scripts/World/DayNightController.gd" id="15_584e8"]
 [ext_resource type="PackedScene" uid="uid://cg5o4nhjp5o2r" path="res://Scenes/Game/world.tscn" id="19_6s3ud"]
+[ext_resource type="PackedScene" path="res://Scenes/Weather/WeatherEffects.tscn" id="20_xacmk"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_pmpwp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -86,6 +87,9 @@ target_position = Vector3(0, 0, -8)
 
 [node name="InteractionController" type="Node3D" parent="CharacterBody3D" unique_id=1517850321]
 script = ExtResource("8_tfxbu")
+
+[node name="WeatherEffects" parent="." node_paths=PackedStringArray("follow_target") instance=ExtResource("20_xacmk")]
+follow_target = NodePath("../CharacterBody3D")
 
 [node name="SunLight" type="DirectionalLight3D" parent="." unique_id=2136742272]
 transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)

@@ -158,7 +158,7 @@ The Sound sliders are built and styled locally in `Scripts/UIs/Menus/OptionsMenu
 
 ## UI And Notification SFX
 
-`UISoundManager` is the central runtime entry point for short interface sounds. It owns a small pool of `AudioStreamPlayer` nodes so UI code can request sounds without adding players to every menu scene.
+`UISoundManager` is the central runtime entry point for short interface and gameplay sounds. It owns a small pool of `AudioStreamPlayer` nodes so UI/gameplay code can request sounds without adding players to every menu scene.
 
 Current methods:
 
@@ -199,6 +199,9 @@ Audio asset paths:
 - `res://Assets/Audio/Gameplay/sell_item.wav`
 - `res://Assets/Audio/Gameplay/transfer_item.wav`
 - `res://Assets/Audio/Gameplay/action_error.wav`
+- `res://Assets/Audio/Weather/rain_loop.wav`
+- `res://Assets/Audio/Weather/storm_rain_loop.wav`
+- `res://Assets/Audio/Weather/thunder.wav`
 - `UISoundManager` checks each path with `ResourceLoader.exists()` before loading; missing files produce a warning and leave the related sound silent instead of crashing the project.
 
 Notification rules:
@@ -215,6 +218,50 @@ Gameplay SFX rules:
 - Storage transfer SFX plays only after items move between inventory and silo storage.
 - Selected blocked actions play `action_error` before returning.
 - Gameplay feedback messages call `PlayerHUD.show_event_message(..., false)` so gameplay SFX do not stack with the notification sound from Stage 5.5.2.
+
+## Weather VFX And SFX
+
+`Scenes/Weather/WeatherEffects.tscn` is instanced only in `Scenes/Game/mainScene.tscn`, so weather effects are active during gameplay and not in the main menu.
+
+`Scripts/Weather/WeatherEffectsController.gd` owns the runtime weather effect layer:
+
+- `RainParticles` renders a light rain emitter.
+- `StormParticles` renders a denser storm rain emitter.
+- `WeatherCloudLayer` is created at runtime as a lightweight sky-cloud layer made from small low-poly `SphereMesh` puff clusters.
+- `RainAudio` plays `res://Assets/Audio/Weather/rain_loop.wav`.
+- `StormRainAudio` plays `res://Assets/Audio/Weather/storm_rain_loop.wav`.
+- `ThunderAudio` plays `res://Assets/Audio/Weather/thunder.wav`.
+- `ThunderTimer` schedules randomized thunder playback while storm weather is active.
+- Weather audio streams are duplicated in `WeatherEffectsController` before loop flags are changed, so rain/storm loop setup cannot mutate or silence gameplay SFX resources such as `water_crop.wav`.
+- Active weather SFX playback uses root-level runtime `AudioStreamPlayer` nodes created by `WeatherEffectsController` (`WeatherRainLoopRebuiltPlayer`, `WeatherStormRainLoopRebuiltPlayer`, and `WeatherThunderRuntimePlayer`). They are freed in `_exit_tree()`, keeping weather audio isolated from `UISoundManager` and gameplay SFX.
+
+Weather source:
+
+- The controller connects to `WeatherManager.weather_changed`.
+- On startup it also reads `WeatherManager.current_weather`, so loaded games apply the current weather without saving separate VFX state.
+- Weather values are normalized through `WeatherEffectsController._get_weather_key()`, which recognizes `WeatherData.weather_type`, display names, strings, resource paths such as `storm_weather.tres`, and returns `sunny`, `cloudy`, `rain`, or `storm`.
+- It does not change weather rolls, day phases, crop watering, forecasts, save data, events, or the FarmPhone Weather app.
+
+Weather state behavior:
+
+- Sunny disables visible clouds, rain particles, storm particles, rain loop audio, storm loop audio, and thunder.
+- Cloudy enables the runtime sky cloud layer with light gray medium-intensity clouds, but keeps rain/storm VFX/SFX disabled.
+- Rain enables gray sky clouds, `RainParticles`, and `rain_loop`, disables storm particles/audio, and stops thunder scheduling.
+- Storm enables darker high-intensity sky clouds, `StormParticles`, and `storm_rain_loop`, disables normal rain loop, and schedules thunder every randomized `8-20` seconds.
+- The cloud layer follows the gameplay weather effects node above the player and drifts slowly. It has no collision, no volumetric shader, and does not change sun/moon or day/night state.
+- Rain and storm loop streams use WAV looping when available and also have `finished` signal fallbacks so the loop restarts without creating duplicate players.
+- Rain audio was rebuilt into a dedicated root-level `WeatherRainLoopRebuiltPlayer` that loads `rain_loop.wav` directly. To avoid bad WAV loop point/import behavior, rain can disable `AudioStreamWAV` looping and use manual `finished` replay from `0.0` instead (`rain_loop_manual_restart = true`). It also has a one-second watchdog that restarts the player if rain weather is active but playback is not running. It only falls back to `storm_rain_loop.wav` if `rain_loop.wav` cannot be loaded (`rain_loop_fallback_to_storm_stream = true`).
+- Storm rain audio uses the same rebuilt-loop pattern through `WeatherStormRainLoopRebuiltPlayer`: it loads `storm_rain_loop.wav`, can disable WAV looping, manually replays from `0.0` on `finished`, and has a one-second watchdog while storm weather is active. Thunder remains a separate one-shot player controlled by `ThunderTimer`.
+- Thunder also triggers a short runtime lightning flash when `lightning_flash_enabled` is true. The flash combines an `OmniLight3D` (`WeatherLightningFlash`) with a brief screen-space `ColorRect` overlay, is timer-limited, and does not modify the day/night controller state.
+
+Audio routing:
+
+- All weather SFX use the `SFX` bus.
+- Weather SFX do not use `Notifications`, `Notification`, `Music`, or direct `Master` routing.
+- `SFX Volume` and `Master Volume` control weather audio through the normal audio settings buses; `Notifications Volume` and `Music Volume` do not affect it.
+- Weather players use neutral local volume (`rain_loop_volume_db = 0.0`, `storm_loop_volume_db = 0.0`, `thunder_volume_db = 0.0`). Weather loudness is controlled by the audio buses through `SFX Volume` and `Master Volume`, not by per-player boosts.
+- Weather `.wav.import` files use normalized, uncompressed playback for rain, storm rain, and thunder. After changing these import settings, run Reimport in Godot so the `.godot/imported/*.sample` files are regenerated.
+- `WeatherEffectsController.debug_weather_effects` is an exported diagnostic switch for weather audio/VFX troubleshooting. It defaults to `false` after final audio regression; enable it temporarily in Godot only when checking weather transitions or audio loop state.
 
 ## Pause And Mouse Capture
 

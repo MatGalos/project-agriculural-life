@@ -1055,6 +1055,57 @@ RefCounted static helper only. It formats visible UI text without changing gamep
 | `func _on_interface_scale_changed(_scale_multiplier: float) -> void:` | Reapplies Silo Storage panel sizing after Interface Scale changes. |
 | `func _apply_responsive_layout() -> void:` | Fits the centered Silo Storage transfer panel inside the viewport and repositions scroll indicators. |
 
+## `Scripts/Weather/WeatherEffectsController.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Configures rain/storm particles, loads weather audio, connects to `WeatherManager`, and applies the current weather. |
+| `func _process(_delta: float) -> void:` | Keeps the local weather emitter positioned above the configured follow target. |
+| `func apply_current_weather() -> void:` | Reads and applies the current weather from `WeatherManager`, used at startup and after loaded weather state changes. |
+| `func set_weather(weather_value: Variant) -> void:` | Compatibility entry point for applying a weather value to VFX/SFX. |
+| `func apply_weather(weather_value: Variant) -> void:` | Applies a weather value after normalizing resources, strings, and paths to a stable weather key. |
+| `func _connect_weather_manager() -> void:` | Connects to `WeatherManager.weather_changed` if not already connected. |
+| `func _on_weather_changed(current_weather: WeatherData, _temperature: int) -> void:` | Applies weather effects after WeatherManager emits a weather update. |
+| `func _get_current_weather() -> WeatherData:` | Reads `WeatherManager.current_weather` for startup/load application. |
+| `func _apply_weather_effects(weather_key: String) -> void:` | Routes normalized `sunny`, `cloudy`, `rain`, or `storm` keys to the matching effect state. |
+| `func _set_clear_weather() -> void:` | Disables rain/storm particles, stops weather loops, and stops thunder scheduling. |
+| `func _set_cloudy_weather() -> void:` | Enables the sky cloud layer for cloudy weather while keeping rain and storm effects disabled. |
+| `func _set_rain_weather() -> void:` | Enables rain particles and `rain_loop`, disables storm effects, and stops thunder scheduling. |
+| `func _set_storm_weather() -> void:` | Enables storm particles and `storm_rain_loop`, stops normal rain, and schedules thunder. |
+| `func _set_particles_active(particles: GPUParticles3D, is_active: bool) -> void:` | Toggles one weather particle emitter. |
+| `func _create_cloud_layer() -> void:` | Creates the runtime `WeatherCloudLayer` from lightweight low-poly cloud puff clusters. |
+| `func _create_cloud_cluster(cloud_index: int, cluster_position: Vector3) -> void:` | Builds one simple cloud cluster from several flattened sphere puffs. |
+| `func _create_cloud_puff_mesh() -> SphereMesh:` | Creates the low-poly sphere mesh used by cloud puffs. |
+| `func _set_cloud_layer(weather_key: String, color: Color, intensity: float) -> void:` | Applies cloud visibility, color, alpha, and debug output for the current weather state. |
+| `func _update_cloud_drift(delta: float) -> void:` | Slowly rotates the cloud layer while it is visible. |
+| `func _play_loop(player: AudioStreamPlayer) -> void:` | Starts a loop player only when it has a stream and is not already playing. |
+| `func _stop_audio(player: AudioStreamPlayer) -> void:` | Stops one weather audio player when active. |
+| `func _update_rain_audio_watchdog(delta: float) -> void:` | Checks once per second during rain weather and restarts the rebuilt rain player if playback has stopped. |
+| `func _update_storm_audio_watchdog(delta: float) -> void:` | Checks once per second during storm weather and restarts the rebuilt storm rain player if playback has stopped. |
+| `func _schedule_next_thunder() -> void:` | Starts the one-shot thunder timer with a randomized delay while storm weather is active. |
+| `func _on_thunder_timer_timeout() -> void:` | Plays one thunder sound during storm weather and schedules the next thunder. |
+| `func _configure_audio() -> void:` | Routes weather audio players to `SFX`, loads prepared `.wav` files, enables rain/storm looping, and connects the thunder timer. |
+| `func _load_stream(path: String, label: String) -> AudioStream:` | Safely loads one weather audio stream and warns instead of crashing when missing. |
+| `func _enable_looping(stream: AudioStream) -> void:` | Enables WAV looping for rain and storm loop assets. |
+| `func _disable_looping(stream: AudioStream) -> void:` | Disables WAV looping for rebuilt weather loops so the `finished` signal can manually replay from the beginning. |
+| `func _duplicate_stream(stream: AudioStream) -> AudioStream:` | Duplicates one weather audio stream before loop flags are changed, avoiding shared-resource side effects on gameplay SFX. |
+| `func _create_runtime_audio_players() -> void:` | Creates root-level weather audio players for thunder playback. |
+| `func _create_rebuilt_rain_audio_player() -> void:` | Builds the dedicated root-level rain loop player from `rain_loop.wav`, with a fallback load path if the rain stream is missing. |
+| `func _create_rebuilt_storm_audio_player() -> void:` | Builds the dedicated root-level storm rain loop player from `storm_rain_loop.wav`. |
+| `func _create_runtime_audio_player(...) -> AudioStreamPlayer:` | Builds one root-level `AudioStreamPlayer`, assigns stream, bus, volume, and process mode, then adds it to the root viewport. |
+| `func _create_lightning_flash() -> void:` | Creates the timer-limited runtime light and screen overlay used for storm thunder flashes. |
+| `func _trigger_lightning_flash() -> void:` | Enables the storm light and screen flash briefly when thunder plays. |
+| `func _on_lightning_flash_timeout() -> void:` | Disables the storm light and screen flash after its short timer expires. |
+| `func _free_runtime_audio_player(player: AudioStreamPlayer) -> void:` | Stops and frees one runtime weather audio player when the gameplay scene exits. |
+| `func _on_rebuilt_rain_audio_finished() -> void:` | Restarts the rebuilt rain loop if WAV looping is not active and the current weather is still rain. |
+| `func _on_rebuilt_storm_audio_finished() -> void:` | Restarts the rebuilt storm rain loop if WAV looping is not active and the current weather is still storm. |
+| `func _get_weather_key(weather_value: Variant) -> String:` | Normalizes weather resources, strings, resource paths, and unknown values to stable weather keys. |
+| `func _normalize_weather_text(raw_value: String) -> String:` | Detects `storm`, `rain`, `cloudy`, or `sunny` from display names and paths such as `storm_weather.tres`. |
+| `func _describe_weather_value(weather_value: Variant) -> String:` | Builds temporary non-spam debug text for incoming weather values. |
+| `func _debug_print(message: String) -> void:` | Prints temporary Stage 5.5.4 weather debug messages when `debug_weather_effects` is enabled. |
+| `func _configure_particles() -> void:` | Applies lightweight rain and storm particle settings and starts them disabled. |
+| `func _configure_rain_particles(...) -> void:` | Builds a simple box-emission rain particle material and short raindrop mesh. |
+
 ## `Scripts/World/DayNightController.gd`
 
 | Function | Description |

@@ -33,7 +33,6 @@ func run() -> void:
 	runner.assert_true(ui_sound_source.contains("func play_phone_close()"), "Phone close sound method exists")
 	runner.assert_true(ui_sound_source.contains("func play_phone_app_switch()"), "Phone app switch sound method exists")
 	runner.assert_true(ui_sound_source.contains("func play_notification_new()"), "Notification sound method exists")
-
 	runner.assert_true(main_menu_source.contains("UISoundManager.play_ui_click()"), "Main menu buttons play UI click")
 	runner.assert_true(pause_menu_source.contains("UISoundManager.play_ui_click()"), "Pause menu buttons play UI click")
 	runner.assert_true(new_game_source.contains("UISoundManager.play_ui_click()"), "New game slot UI plays UI click")
