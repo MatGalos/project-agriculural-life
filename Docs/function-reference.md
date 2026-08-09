@@ -68,6 +68,24 @@ Resource only plus helper functions. Stores event identity, category, trigger mo
 | `func apply_event_modifier(event_data: MarketEventData) -> void:` | Applies one event's commodity modifiers to every affected item. |
 | `func _apply_runtime_values_to_commodity(commodity: CommodityData) -> void:` | Resolves summed trend direction, trend strength, and volatility for one commodity. |
 
+## `Scripts/GameManagers/AudioSettingsManager.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Initializes audio settings, ensures required buses exist, loads saved values, and applies them. |
+| `func set_master_volume(value: float) -> void:` | Stores, saves, and applies the Master volume in the `0.0-1.0` range. |
+| `func set_sfx_volume(value: float) -> void:` | Stores, saves, and applies the SFX volume in the `0.0-1.0` range. |
+| `func set_notifications_volume(value: float) -> void:` | Stores, saves, and applies the Notifications volume in the `0.0-1.0` range. |
+| `func set_music_volume(value: float) -> void:` | Stores, saves, and applies the Music volume in the `0.0-1.0` range. |
+| `func apply_settings() -> void:` | Applies all audio settings to named buses and emits `audio_settings_changed`. |
+| `func save_settings() -> void:` | Writes audio settings to `user://settings.cfg`. |
+| `func load_settings() -> void:` | Loads audio settings from `user://settings.cfg`, keeping defaults for missing or invalid values. |
+| `func ensure_audio_buses() -> void:` | Ensures `SFX`, `Notifications`, and `Music` buses exist and send to `Master`. |
+| `func _ensure_bus(bus_name: String) -> void:` | Creates one missing child bus and routes it to `Master`. |
+| `func _apply_bus_volume(bus_name: String, value: float) -> void:` | Resolves a bus by name, mutes 0% values, and applies linear-to-dB volume for nonzero values. |
+| `func _read_volume(config: ConfigFile, key: String, default_value: float) -> float:` | Safely reads and clamps a saved volume value. |
+| `func _clamp_volume(value: float) -> float:` | Clamps a volume value to `0.0-1.0`. |
+
 ## `Scripts/GameManagers/CropGrowthManager.gd`
 
 | Function | Description |
@@ -780,6 +798,21 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 | `func _apply_graphics_control_styles() -> void:` | Applies local wooden-menu styling to graphics dropdowns and checkbox. |
 | `func _apply_dropdown_style(option_button: OptionButton) -> void:` | Styles an `OptionButton` and its popup to match the wooden menu UI. |
 | `func _apply_checkbox_style(check_button: Button) -> void:` | Configures the fullscreen control as a textless square toggle. |
+
+## `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/audio.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Creates reusable slider knob textures, builds Sound options controls, and loads current audio values. |
+| `func _build_audio_options() -> void:` | Builds the local Sound options layout inside the existing Options content placeholder. |
+| `func _add_volume_row(parent: VBoxContainer, setting_key: String, label_text: String) -> void:` | Creates one label, styled `HSlider`, and percentage label row for an audio setting. |
+| `func _load_values_from_settings() -> void:` | Copies current values from `AudioSettingsManager` into sliders without resaving them. |
+| `func _set_slider_value(setting_key: String, volume: float) -> void:` | Updates one slider and percentage label from a `0.0-1.0` volume value. |
+| `func _on_slider_value_changed(value: float, setting_key: String) -> void:` | Converts slider percent to `0.0-1.0` and routes the change to the matching audio setting setter. |
+| `func _update_value_label(setting_key: String, value: float) -> void:` | Updates a visible percentage label for one slider. |
+| `func _apply_slider_style(slider: HSlider) -> void:` | Applies custom wooden-menu track, fill, and knob styling to one slider. |
+| `func _create_track_style(fill_color: Color) -> StyleBoxFlat:` | Creates the rounded track/fill style used by audio sliders. |
+| `func _create_knob_texture(fill_color: Color) -> Texture2D:` | Generates the round slider grabber texture used by audio sliders. |
 
 ## `Scripts/UIs/Menus/OptionsMenu/optionsMenu.gd`
 

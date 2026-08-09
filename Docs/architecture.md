@@ -21,6 +21,7 @@ The project uses these gameplay autoloads:
 - `SaveManager` serializes and restores persistent game state across three save slots.
 - `SalesStatsManager` tracks recent sold item amounts for sales-driven market events.
 - `GraphicsSettingsManager` persists and applies resolution, fullscreen mode, and interface scale.
+- `AudioSettingsManager` persists and applies audio volume settings and ensures the required runtime audio buses exist.
 - `UI` is the player HUD scene autoload.
 
 Keep cross-system state in autoloads only when multiple unrelated scenes need it. Scene-local display logic should stay in UI controllers.
@@ -117,6 +118,42 @@ Current settings:
 The Graphics submenu in options owns only UI controls. Runtime application and persistence stay in `GraphicsSettingsManager`.
 
 The graphics dropdowns and fullscreen checkbox are styled locally in `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/graphics.gd`. Dropdown popup styling stays UI-only; the selected values still flow through `GraphicsSettingsManager`. Fullscreen uses a square toggle button drawn by `Scripts/UIs/Menus/OptionsMenu/OptionsCheckBox.gd` instead of the default `CheckButton` visuals.
+
+## Audio Options
+
+`AudioSettingsManager` stores audio settings in `user://settings.cfg` and applies them at startup and when Sound options change.
+
+Current settings:
+
+- Master Volume: stored as `master_volume`, applied to the `Master` bus.
+- SFX Volume: stored as `sfx_volume`, applied to the `SFX` bus.
+- Notifications Volume: stored as `notifications_volume`, applied to the `Notifications` bus.
+- Music Volume: stored as `music_volume`, applied to the `Music` bus. This is only a foundation for later background music work.
+
+Audio bus layout:
+
+- `default_bus_layout.tres` defines `SFX`, `Notifications`, and `Music` buses.
+- All three child buses send to `Master`.
+- `Master` remains the built-in root bus.
+- `AudioSettingsManager.ensure_audio_buses()` also creates any missing child bus at runtime, so a missing or changed bus layout does not crash the game.
+
+Volume behavior:
+
+- Options UI sliders display values as `0-100%`.
+- Runtime values are stored as floats in the `0.0-1.0` range.
+- Values greater than zero are converted with `linear_to_db(value)` before being applied through `AudioServer`.
+- A value of `0%` mutes the target bus and sets it to `-80 dB`.
+- Bus indexes are resolved by name and missing buses are skipped safely.
+
+Persistence rules:
+
+- Audio settings are intentionally separate from gameplay save slots.
+- Missing or invalid settings use defaults: master `1.0`, SFX `1.0`, notifications `1.0`, music `0.8`.
+- Do not write audio settings to `SaveManager` save-slot JSON unless a later settings-system migration deliberately changes the persistence model.
+
+The Sound submenu in Options owns only UI controls. Runtime application and persistence stay in `AudioSettingsManager`.
+
+The Sound sliders are built and styled locally in `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/audio.gd`. They use custom track, fill, and knob styling to match the wooden Options menu instead of relying on default native `HSlider` visuals.
 
 ## Pause And Mouse Capture
 
@@ -518,6 +555,7 @@ Menu styling rules:
 - New Game and Load Game save slots use light beige paper-card `StyleBoxFlat` resources, black text, and subtle warm hover states.
 - Options uses a root segment list instead of tabs. Sound, Controls, Graphics, and Feedback are separate visible panels controlled by `OptionsMenu`.
 - Controls Options uses a custom black scroll indicator from `Scripts/UIs/Menus/OptionsMenu/OptionsScrollLine.gd` instead of relying on the native scrollbar skin.
+- Sound Options uses custom wooden-menu slider styling from `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/audio.gd`; keep slider visuals local to the options submenu unless a broader menu theme pass is intentionally planned.
 
 ## Inventory UI
 
@@ -639,4 +677,5 @@ Before adding new inventory, crop, tool, or UI behavior:
 - For phone apps, expose row scenes with `@export var row_scene: PackedScene` and refresh from manager signals.
 - For growing UI lists, prefer a fixed outer panel with inner `ScrollContainer` nodes over allowing rows to resize the panel.
 - Keep display/window settings in `GraphicsSettingsManager` rather than applying them directly from individual menu controls.
+- Keep audio volume settings in `AudioSettingsManager` and route future UI, notification, SFX, and music players to `SFX`, `Notifications`, or `Music` instead of using ad hoc bus names.
 - Do not add debug `print()` calls in runtime paths unless they are temporary and removed before commit.
