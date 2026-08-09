@@ -32,13 +32,13 @@ func get_active_tool() -> ToolItemData:
 
 func use_active_tool(target: Node) -> void:
 	if target == null:
-		_show_hud_event_message("Nothing to interact with.")
+		_show_action_error("Nothing to interact with.")
 		return
 
 	var item: ItemData = HotbarManager.get_selected_item()
 
 	if item == null:
-		_show_hud_event_message("No tool selected.")
+		_show_action_error("No tool selected.")
 		return
 
 	if item is SeedItemData:
@@ -49,7 +49,7 @@ func use_active_tool(target: Node) -> void:
 		_use_tool_item(target, item as ToolItemData)
 		return
 
-	_show_hud_event_message("Cannot use this here.")
+	_show_action_error("Cannot use this here.")
 
 
 func refill_watering_can() -> void:
@@ -97,51 +97,53 @@ func _use_hoe(target: Node) -> void:
 	var tile := _find_farm_tile(target)
 
 	if tile == null:
-		_show_hud_event_message("Cannot use this here.")
+		_show_action_error("Cannot use this here.")
 		return
 
 	if tile.current_state != FarmTile.TileState.GRASS:
-		_show_hud_event_message("Cannot use this here.")
+		_show_action_error("Cannot use this here.")
 		return
 
 	tile.plow()
+	UISoundManager.play_till_soil()
 
 
 func _use_watering_can(target: Node) -> void:
 	var tile := _find_farm_tile(target)
 
 	if tile == null:
-		_show_hud_event_message("Cannot use this here.")
+		_show_action_error("Cannot use this here.")
 		return
 
 	if watering_can_water <= 0:
-		_show_hud_event_message("Need a watering can.")
+		_show_action_error("Need a watering can.")
 		return
 
 	if tile.current_state != FarmTile.TileState.PLOWED:
-		_show_hud_event_message("Cannot use this here.")
+		_show_action_error("Cannot use this here.")
 		return
 
 	tile.water()
 	watering_can_water -= 1
 	watering_can_changed.emit()
+	UISoundManager.play_water_crop()
 
 
 func _use_seed_item(target: Node, seed_item: SeedItemData) -> void:
 	var tile := _find_farm_tile(target)
 
 	if tile == null:
-		_show_hud_event_message("Cannot plant here.")
+		_show_action_error("Cannot plant here.")
 		return
 
 	if not tile.can_plant():
-		_show_hud_event_message("Cannot plant here.")
+		_show_action_error("Cannot plant here.")
 		return
 
 	var crop_data := _get_crop_data_for_seed(seed_item)
 
 	if crop_data == null:
-		_show_hud_event_message("No seeds selected.")
+		_show_action_error("No seeds selected.")
 		return
 
 	if not crop_data.can_grow_in_current_season():
@@ -150,16 +152,17 @@ func _use_seed_item(target: Node, seed_item: SeedItemData) -> void:
 			TimeManager.get_current_season_display_name()
 		]
 		print(message)
-		_show_hud_event_message(message)
+		_show_action_error(message)
 		return
 
 	if not player_inventory.has_item(seed_item, 1):
-		_show_hud_event_message("No seeds selected.")
+		_show_action_error("No seeds selected.")
 		return
 
 	if tile.plant_crop(crop_data):
 		player_inventory.remove_item(seed_item, 1)
 		_refresh_inventory_ui()
+		UISoundManager.play_plant_seed()
 		_show_hud_event_message("Used 1x %s." % UIFormatHelper.display_seed_name(seed_item))
 
 
@@ -167,30 +170,31 @@ func _use_scythe(target: Node) -> void:
 	var tile := _find_farm_tile(target)
 
 	if tile == null:
-		_show_hud_event_message("Cannot harvest this.")
+		_show_action_error("Cannot harvest this.")
 		return
 
 	if not tile.is_crop_ready():
-		_show_hud_event_message("Crop is not ready.")
+		_show_action_error("Crop is not ready.")
 		return
 
 	var expected_item: ItemData = tile.crop_data.harvest_item if tile.crop_data != null else null
 	if expected_item == null:
-		_show_hud_event_message("Cannot harvest this.")
+		_show_action_error("Cannot harvest this.")
 		return
 
 	if not _can_inventory_fit(expected_item, 1):
-		_show_hud_event_message("Inventory is full.")
+		_show_action_error("Inventory is full.")
 		return
 
 	var harvested_item := tile.harvest_crop()
 
 	if harvested_item == null:
-		_show_hud_event_message("Cannot harvest this.")
+		_show_action_error("Cannot harvest this.")
 		return
 
 	player_inventory.add_item(harvested_item, 1)
 	_refresh_inventory_ui()
+	UISoundManager.play_harvest_crop()
 	_show_hud_event_message("Added 1x %s." % UIFormatHelper.display_product_name(harvested_item))
 
 
@@ -277,4 +281,9 @@ func _refresh_inventory_ui() -> void:
 func _show_hud_event_message(message: String) -> void:
 	var player_hud := get_tree().get_first_node_in_group("player_hud")
 	if player_hud and player_hud.has_method("show_event_message"):
-		player_hud.show_event_message(message)
+		player_hud.show_event_message(message, PlayerHUD.EVENT_MESSAGE_DURATION, false)
+
+
+func _show_action_error(message: String) -> void:
+	UISoundManager.play_action_error()
+	_show_hud_event_message(message)

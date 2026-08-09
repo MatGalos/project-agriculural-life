@@ -98,6 +98,7 @@ func can_accept_transfer_drop(target_type: String, data: Variant) -> bool:
 
 func drop_transfer_to(target_type: String, data: Variant) -> void:
 	if not can_accept_transfer_drop(target_type, data):
+		UISoundManager.play_action_error()
 		_update_hint("Cannot transfer item.")
 		return
 
@@ -109,6 +110,7 @@ func drop_transfer_to(target_type: String, data: Variant) -> void:
 	elif source == "inventory" and target_type == "storage":
 		_transfer_inventory_to_storage(int(payload.get("inventory_slot_index", -1)))
 	else:
+		UISoundManager.play_action_error()
 		_update_hint("Cannot transfer item.")
 
 
@@ -118,6 +120,7 @@ func _can_drop_data(_position: Vector2, data: Variant) -> bool:
 
 func _drop_data(drop_position: Vector2, data: Variant) -> void:
 	if not _can_drop_data(drop_position, data):
+		UISoundManager.play_action_error()
 		_update_hint("Cannot transfer item.")
 		return
 
@@ -126,6 +129,7 @@ func _drop_data(drop_position: Vector2, data: Variant) -> void:
 	var target := "storage" if drop_position.x < size.x * 0.5 else "inventory"
 
 	if source == target:
+		UISoundManager.play_action_error()
 		_update_hint("Cannot transfer item.")
 		return
 
@@ -134,6 +138,7 @@ func _drop_data(drop_position: Vector2, data: Variant) -> void:
 	elif source == "inventory" and target == "storage":
 		_transfer_inventory_to_storage(int(payload.get("inventory_slot_index", -1)))
 	else:
+		UISoundManager.play_action_error()
 		_update_hint("Cannot transfer item.")
 
 
@@ -210,12 +215,14 @@ func _on_row_item_dropped(target_row: StorageItemRow, payload: Dictionary) -> vo
 
 func _transfer_inventory_to_storage(slot_index: int) -> void:
 	if player_inventory == null or storage_data == null:
+		UISoundManager.play_action_error()
 		_update_hint("Cannot transfer item.")
 		return
 
 	var slot := player_inventory.get_slot(slot_index)
 
 	if slot == null or slot.is_empty():
+		UISoundManager.play_action_error()
 		_update_hint("Empty Inventory.")
 		return
 
@@ -226,11 +233,13 @@ func _transfer_inventory_to_storage(slot_index: int) -> void:
 	player_inventory.inventory_changed.emit()
 	storage_data.add_item(item_data, amount)
 	refresh()
+	UISoundManager.play_transfer_item()
 	_update_hint("Transferred %dx %s to Silo." % [amount, UIFormatHelper.display_product_name(item_data)])
 
 
 func _transfer_storage_to_inventory(item_data: ItemData) -> void:
 	if player_inventory == null or storage_data == null or item_data == null:
+		UISoundManager.play_action_error()
 		_update_hint("Cannot transfer item.")
 		return
 
@@ -238,6 +247,7 @@ func _transfer_storage_to_inventory(item_data: ItemData) -> void:
 	var amount_to_transfer := mini(item_data.max_stack, stored_amount)
 
 	if amount_to_transfer <= 0:
+		UISoundManager.play_action_error()
 		_update_hint("Not enough items.")
 		return
 
@@ -245,11 +255,13 @@ func _transfer_storage_to_inventory(item_data: ItemData) -> void:
 	var moved_amount := amount_to_transfer - remaining
 
 	if moved_amount <= 0:
+		UISoundManager.play_action_error()
 		_update_hint("Inventory is full.")
 		return
 
 	storage_data.remove_item(item_data, moved_amount)
 	refresh()
+	UISoundManager.play_transfer_item()
 	_update_hint("Transferred %dx %s to Inventory." % [moved_amount, UIFormatHelper.display_product_name(item_data)])
 
 

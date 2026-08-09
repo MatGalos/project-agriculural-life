@@ -97,7 +97,15 @@ Resource only plus helper functions. Stores event identity, category, trigger mo
 | `func play_phone_app_switch() -> void:` | Plays the FarmPhone app-switch sound through the `SFX` bus. |
 | `func play_notification() -> void:` | Compatibility wrapper that routes to `play_notification_new()`. |
 | `func play_notification_new() -> void:` | Plays the new-notification sound through the notification bus with a short cooldown. |
-| `func _load_audio_streams() -> void:` | Loads the prepared UI and notification `.wav` files when exported stream overrides are not assigned. |
+| `func play_plant_seed() -> void:` | Plays the successful seed-planting sound through the `SFX` bus. |
+| `func play_till_soil() -> void:` | Plays the successful soil-tilling sound through the `SFX` bus. |
+| `func play_water_crop() -> void:` | Plays the successful watering sound through the `SFX` bus. |
+| `func play_harvest_crop() -> void:` | Plays the successful harvest sound through the `SFX` bus. |
+| `func play_buy_item() -> void:` | Plays the successful purchase sound through the `SFX` bus. |
+| `func play_sell_item() -> void:` | Plays the successful sale sound through the `SFX` bus. |
+| `func play_transfer_item() -> void:` | Plays the successful storage-transfer sound through the `SFX` bus. |
+| `func play_action_error() -> void:` | Plays the selected blocked-action sound through the `SFX` bus. |
+| `func _load_audio_streams() -> void:` | Loads the prepared UI, notification, and gameplay `.wav` files when exported stream overrides are not assigned. |
 | `func _load_stream(path: String, label: String) -> AudioStream:` | Safely loads one audio stream, warning instead of crashing when the file is missing or invalid. |
 | `func _create_player_pool() -> void:` | Creates reusable `AudioStreamPlayer` nodes for short overlapping sounds. |
 | `func _play_stream(stream: AudioStream, bus_name: String) -> void:` | Assigns a stream and bus to an available pooled player and starts playback. |

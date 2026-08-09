@@ -11,12 +11,28 @@ const UI_PHONE_OPEN_PATH := "res://Assets/Audio/UI/ui_phone_open.wav"
 const UI_PHONE_CLOSE_PATH := "res://Assets/Audio/UI/ui_phone_close.wav"
 const UI_APP_SWITCH_PATH := "res://Assets/Audio/UI/ui_app_switch.wav"
 const NOTIFICATION_NEW_PATH := "res://Assets/Audio/Notifications/notification_new.wav"
+const PLANT_SEED_PATH := "res://Assets/Audio/Gameplay/plant_seed.wav"
+const TILL_SOIL_PATH := "res://Assets/Audio/Gameplay/till_soil.wav"
+const WATER_CROP_PATH := "res://Assets/Audio/Gameplay/water_crop.wav"
+const HARVEST_CROP_PATH := "res://Assets/Audio/Gameplay/harvest_crop.wav"
+const BUY_ITEM_PATH := "res://Assets/Audio/Gameplay/buy_item.wav"
+const SELL_ITEM_PATH := "res://Assets/Audio/Gameplay/sell_item.wav"
+const TRANSFER_ITEM_PATH := "res://Assets/Audio/Gameplay/transfer_item.wav"
+const ACTION_ERROR_PATH := "res://Assets/Audio/Gameplay/action_error.wav"
 
 @export var ui_click_stream: AudioStream
 @export var ui_phone_open_stream: AudioStream
 @export var ui_phone_close_stream: AudioStream
 @export var ui_app_switch_stream: AudioStream
 @export var notification_new_stream: AudioStream
+@export var plant_seed_stream: AudioStream
+@export var till_soil_stream: AudioStream
+@export var water_crop_stream: AudioStream
+@export var harvest_crop_stream: AudioStream
+@export var buy_item_stream: AudioStream
+@export var sell_item_stream: AudioStream
+@export var transfer_item_stream: AudioStream
+@export var action_error_stream: AudioStream
 
 var _players: Array[AudioStreamPlayer] = []
 var _last_notification_msec := -1000000
@@ -58,6 +74,38 @@ func play_notification_new() -> void:
 	_play_stream(notification_new_stream, _get_notification_bus_name())
 
 
+func play_plant_seed() -> void:
+	_play_stream(plant_seed_stream, SFX_BUS)
+
+
+func play_till_soil() -> void:
+	_play_stream(till_soil_stream, SFX_BUS)
+
+
+func play_water_crop() -> void:
+	_play_stream(water_crop_stream, SFX_BUS)
+
+
+func play_harvest_crop() -> void:
+	_play_stream(harvest_crop_stream, SFX_BUS)
+
+
+func play_buy_item() -> void:
+	_play_stream(buy_item_stream, SFX_BUS)
+
+
+func play_sell_item() -> void:
+	_play_stream(sell_item_stream, SFX_BUS)
+
+
+func play_transfer_item() -> void:
+	_play_stream(transfer_item_stream, SFX_BUS)
+
+
+func play_action_error() -> void:
+	_play_stream(action_error_stream, SFX_BUS)
+
+
 func _load_audio_streams() -> void:
 	if ui_click_stream == null:
 		ui_click_stream = _load_stream(UI_CLICK_PATH, "ui_click")
@@ -73,6 +121,30 @@ func _load_audio_streams() -> void:
 
 	if notification_new_stream == null:
 		notification_new_stream = _load_stream(NOTIFICATION_NEW_PATH, "notification_new")
+
+	if plant_seed_stream == null:
+		plant_seed_stream = _load_stream(PLANT_SEED_PATH, "plant_seed")
+
+	if till_soil_stream == null:
+		till_soil_stream = _load_stream(TILL_SOIL_PATH, "till_soil")
+
+	if water_crop_stream == null:
+		water_crop_stream = _load_stream(WATER_CROP_PATH, "water_crop")
+
+	if harvest_crop_stream == null:
+		harvest_crop_stream = _load_stream(HARVEST_CROP_PATH, "harvest_crop")
+
+	if buy_item_stream == null:
+		buy_item_stream = _load_stream(BUY_ITEM_PATH, "buy_item")
+
+	if sell_item_stream == null:
+		sell_item_stream = _load_stream(SELL_ITEM_PATH, "sell_item")
+
+	if transfer_item_stream == null:
+		transfer_item_stream = _load_stream(TRANSFER_ITEM_PATH, "transfer_item")
+
+	if action_error_stream == null:
+		action_error_stream = _load_stream(ACTION_ERROR_PATH, "action_error")
 
 
 func _load_stream(path: String, label: String) -> AudioStream:
