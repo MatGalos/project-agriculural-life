@@ -8,7 +8,7 @@ font_size = 63
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_menu_button"]
 
-[node name="MainMenu" type="Control" unique_id=176163149 node_paths=PackedStringArray("versionLabel", "startButton", "loadButton", "optionsButton", "creditsButton", "exitButton") groups=["mainMenu"]]
+[node name="MainMenu" type="Control" unique_id=176163149 node_paths=PackedStringArray("versionLabel", "startButton", "loadButton", "optionsButton", "howToPlayButton", "creditsButton", "exitButton") groups=["mainMenu"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,6 +20,7 @@ versionLabel = NodePath("Version")
 startButton = NodePath("MenuCenter/WoodenBoard/MenuMargin/MenuButtons/StartButton")
 loadButton = NodePath("MenuCenter/WoodenBoard/MenuMargin/MenuButtons/LoadButton")
 optionsButton = NodePath("MenuCenter/WoodenBoard/MenuMargin/MenuButtons/OptionsButton")
+howToPlayButton = NodePath("MenuCenter/WoodenBoard/MenuMargin/MenuButtons/HowToPlayButton")
 creditsButton = NodePath("MenuCenter/WoodenBoard/MenuMargin/MenuButtons/CreditsButton")
 exitButton = NodePath("MenuCenter/WoodenBoard/MenuMargin/MenuButtons/ExitButton")
 
@@ -53,10 +54,10 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="WoodenBoard" type="Control" parent="MenuCenter"]
-custom_minimum_size = Vector2(540, 340)
+custom_minimum_size = Vector2(540, 400)
 layout_mode = 2
 script = ExtResource("2_wooden")
-plank_count = 5
+plank_count = 6
 
 [node name="MenuMargin" type="MarginContainer" parent="MenuCenter/WoodenBoard"]
 layout_mode = 1
@@ -118,6 +119,21 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
 text = "Options"
+flat = true
+
+[node name="HowToPlayButton" type="Button" parent="MenuCenter/WoodenBoard/MenuMargin/MenuButtons"]
+custom_minimum_size = Vector2(360, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
+text = "How to Play"
 flat = true
 
 [node name="CreditsButton" type="Button" parent="MenuCenter/WoodenBoard/MenuMargin/MenuButtons" unique_id=719801092]

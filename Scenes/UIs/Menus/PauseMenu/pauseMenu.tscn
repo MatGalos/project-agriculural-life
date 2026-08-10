@@ -10,7 +10,7 @@ shader_parameter/blurAmount = 1.6
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_menu_button"]
 
-[node name="PauseMenu" type="Control" unique_id=1779250105 node_paths=PackedStringArray("continueButton", "saveButton", "loadButton", "optionsButton", "saveAndQuitToMenu", "saveAndQuitToDesktop", "blurBg", "panel")]
+[node name="PauseMenu" type="Control" unique_id=1779250105 node_paths=PackedStringArray("continueButton", "saveButton", "loadButton", "optionsButton", "howToPlayButton", "saveAndQuitToMenu", "saveAndQuitToDesktop", "blurBg", "panel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,6 +22,7 @@ continueButton = NodePath("Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/M
 saveButton = NodePath("Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons/SaveButton")
 loadButton = NodePath("Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons/LoadButton")
 optionsButton = NodePath("Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons/OptionsButton")
+howToPlayButton = NodePath("Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons/HowToPlayButton")
 saveAndQuitToMenu = NodePath("Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons/SaveAndQuitToMenuButton")
 saveAndQuitToDesktop = NodePath("Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons/SaveAndQuitToDesktopMenu")
 blurBg = NodePath("blurBg")
@@ -63,10 +64,10 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="WoodenBoard" type="Control" parent="Panel/MenuCenter"]
-custom_minimum_size = Vector2(580, 448)
+custom_minimum_size = Vector2(580, 500)
 layout_mode = 2
 script = ExtResource("3_wooden")
-plank_count = 7
+plank_count = 8
 
 [node name="MenuMargin" type="MarginContainer" parent="Panel/MenuCenter/WoodenBoard"]
 layout_mode = 1
@@ -160,6 +161,21 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
 text = "Options"
+flat = true
+
+[node name="HowToPlayButton" type="Button" parent="Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons"]
+custom_minimum_size = Vector2(430, 38)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
+text = "How to Play"
 flat = true
 
 [node name="SaveAndQuitToMenuButton" type="Button" parent="Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons" unique_id=1935920013]

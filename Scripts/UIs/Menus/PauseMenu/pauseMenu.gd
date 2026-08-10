@@ -6,6 +6,7 @@ extends Control
 @export var saveButton: Button
 @export var loadButton: Button
 @export var optionsButton: Button
+@export var howToPlayButton: Button
 @export var saveAndQuitToMenu: Button
 @export var saveAndQuitToDesktop: Button
 @export var blurBg: ColorRect
@@ -32,6 +33,7 @@ func _ready() -> void:
 	saveButton.button_down.connect(onSaveGameButtonPressed)
 	loadButton.button_down.connect(onLoadGameButtonPressed)
 	optionsButton.button_down.connect(onOptionsButtonPressed)
+	howToPlayButton.button_down.connect(onHowToPlayButtonPressed)
 	saveAndQuitToMenu.button_down.connect(onSaveAndQuitToMenuButtonPressed)
 	saveAndQuitToDesktop.button_down.connect(onSaveAndQuitToDesktopButtonPressed)
 	confirm_button.button_down.connect(_on_confirmation_confirmed)
@@ -94,6 +96,11 @@ func onLoadGameButtonPressed() -> void:
 func onOptionsButtonPressed() -> void:
 	UISoundManager.play_ui_click()
 	gamemanager.openOptions(gamemanager.menuContext.Pause_Menu)
+
+
+func onHowToPlayButtonPressed() -> void:
+	UISoundManager.play_ui_click()
+	gamemanager.openHowToPlay(gamemanager.menuContext.Pause_Menu)
 
 
 func onSaveAndQuitToMenuButtonPressed() -> void:

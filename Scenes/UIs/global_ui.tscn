@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://dmhet5sgguh5s"]
+[gd_scene load_steps=7 format=3 uid="uid://dmhet5sgguh5s"]
 
 [ext_resource type="PackedScene" uid="uid://bg2wnf0pafkqt" path="res://Scenes/UIs/Menus/LaunchMenu/MainMenu.tscn" id="1_l3341"]
 [ext_resource type="PackedScene" uid="uid://cja8qampts6ut" path="res://Scenes/UIs/Menus/PauseMenu/pauseMenu.tscn" id="1_wfhki"]
 [ext_resource type="PackedScene" uid="uid://du4mrea3xpemq" path="res://Scenes/UIs/Menus/OptionsMenu/optionsMenu.tscn" id="2_70iah"]
+[ext_resource type="PackedScene" path="res://Scenes/UIs/Menus/HowToPlayMenu.tscn" id="3_howto"]
+[ext_resource type="PackedScene" path="res://Scenes/UIs/Menus/CreditsMenu.tscn" id="3_credits"]
 [ext_resource type="PackedScene" uid="uid://bqbytrpe2qhn3" path="res://Scenes/UIs/Menus/LaunchMenu/AdditionalMenus/new_game_panel.tscn" id="4_ngp"]
 [ext_resource type="PackedScene" uid="uid://dnd8qaa681pbk" path="res://Scenes/UIs/Menus/LaunchMenu/AdditionalMenus/load_game_panel.tscn" id="5_lgp"]
 
@@ -19,3 +21,9 @@ visible = false
 [node name="PauseMenu" parent="." unique_id=1779250105 instance=ExtResource("1_wfhki")]
 
 [node name="OptionsMenu" parent="." unique_id=430597010 instance=ExtResource("2_70iah")]
+
+[node name="HowToPlayMenu" parent="." instance=ExtResource("3_howto")]
+visible = false
+
+[node name="CreditsMenu" parent="." instance=ExtResource("3_credits")]
+visible = false
