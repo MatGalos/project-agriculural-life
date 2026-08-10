@@ -6,6 +6,7 @@ extends Control
 @export var startButton: Button
 @export var loadButton: Button
 @export var optionsButton: Button
+@export var howToPlayButton: Button
 @export var creditsButton: Button
 @export var exitButton: Button
 
@@ -19,6 +20,7 @@ func _ready() -> void:
 	startButton.button_down.connect(onStartButtonPressed)
 	loadButton.button_down.connect(onLoadButtonPressed)
 	optionsButton.button_down.connect(onOptionsButtonPressed)
+	howToPlayButton.button_down.connect(onHowToPlayButtonPressed)
 	creditsButton.button_down.connect(onCreditsButtonPressed)
 	exitButton.button_down.connect(onExitButtonPressed)
 	visible = true
@@ -39,10 +41,14 @@ func onOptionsButtonPressed() -> void:
 	gamemanager.openOptions(gamemanager.menuContext.Main_Menu)
 
 
+func onHowToPlayButtonPressed() -> void:
+	UISoundManager.play_ui_click()
+	gamemanager.openHowToPlay(gamemanager.menuContext.Main_Menu)
+
+
 func onCreditsButtonPressed() -> void:
 	UISoundManager.play_ui_click()
-	# Credits screen is not implemented yet.
-	pass
+	gamemanager.openCredits()
 
 
 func onExitButtonPressed() -> void:
