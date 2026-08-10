@@ -1,4 +1,4 @@
-Godot Audio Placeholders — UI + Notification SFX
+Godot Audio Placeholders - UI + Notification SFX
 
 Generated procedurally for Mateusz Galos's Godot 4.6 master's thesis project.
 

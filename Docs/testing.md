@@ -72,7 +72,7 @@ Core tests:
 - `SellAppLayoutTest.gd`: Sell app scene structure, storage product list, empty state, selected sale value summary, product sale cards, editable selected quantity field, quantity controls, Half/All controls, per-row Sell/Sell All buttons, summary Sell Selected button, and removal of the old one-click `SellOneButton` layout.
 - `GameplayFeedbackTest.gd`: source-level coverage for Shop/Sell/Silo/world feedback strings, HUD duplicate-message cooldown, selected sale feedback, transfer feedback, invalid world action feedback, item-use feedback, and inventory-gain feedback.
 - `AudioSettingsSourceTest.gd`: source-level coverage for the audio settings autoload, default bus layout, `SFX`/`Notifications`/`Music` buses sending to `Master`, `user://settings.cfg` persistence, linear-to-dB conversion, 0% mute behavior, Sound Options sliders, and keeping audio settings out of gameplay save-slot data.
-- `UISoundSourceTest.gd`: source-level coverage for the UI sound autoload, SFX/Notifications bus routing, prepared `.wav` asset paths, missing-file checks, notification cooldown, main menu/pause/options/new-game/load-game button hooks, FarmPhone open/close/app-switch hooks, and HUD notification sound hooks.
+- `UISoundSourceTest.gd`: source-level coverage for the UI sound autoload, SFX/Notifications bus routing, prepared `.wav` asset paths, missing-file checks, notification cooldown, main menu/pause/options/how-to-play/credits/new-game/load-game button hooks, FarmPhone open/close/app-switch hooks, and HUD notification sound hooks.
 - `GameplaySFXSourceTest.gd`: source-level coverage for gameplay SFX asset paths, playback methods, tilling/planting/watering/harvest hooks, shop buy hooks, sell hooks, storage transfer hooks, action-error hooks, and suppressing duplicate notification sounds for gameplay feedback.
 - `WeatherEffectsSourceTest.gd`: source-level coverage for weather VFX/SFX asset paths, SFX bus routing, WeatherManager signal hookup, sunny/cloudy/rain/storm state handling, runtime sky cloud layer setup, rain/storm manual loop restart paths, thunder scheduling, scene nodes, and gameplay-scene instancing.
 - `UIResponsivenessSourceTest.gd`: source-level coverage for responsive FarmPhone sizing, Inventory panel/slot scaling, Silo Storage panel sizing, drop-handler parameter naming that avoids `Control.position` shadowing, typed scroll-mode enum usage for custom scroll lines, scroll-line repositioning, Options board scaling, centralized HUD bottom layout, typed HUD UI mode enum usage, and visibility helper names that avoid `CanvasLayer.is_visible` shadowing.
@@ -316,10 +316,10 @@ Run this checklist in Godot after camera, player interaction, farm border, house
 3. Walk along each fence line and confirm there is no critical camera clipping or lockup.
 4. Test all four farm-border corners and confirm the camera remains controllable.
 5. Stand near the house and rotate the camera. Confirm there is no critical clipping through the house that blocks play.
-6. Look at the house interactable and confirm the prompt reads `E — Sleep`.
+6. Look at the house interactable and confirm the prompt reads `E - Sleep`.
 7. Walk away from the house and confirm the prompt disappears and the crosshair returns to its normal state.
 8. Stand near the silo and rotate the camera. Confirm there is no critical clipping through the silo that blocks play.
-9. Look at the silo interactable and confirm the prompt reads `E — Open Silo`.
+9. Look at the silo interactable and confirm the prompt reads `E - Open Silo`.
 10. Walk away from the silo and confirm the prompt disappears and the crosshair returns to its normal state.
 11. Look at the well and confirm its existing fill-watering-can interaction remains readable.
 12. Look at fences and boundary colliders and confirm no interaction prompt appears.
@@ -377,13 +377,15 @@ Run this checklist in Godot after UI polish changes, especially when no screensh
 31. In Inventory, confirm the top leather strip is centered and contains exactly 5 hotbar slots, the lower grid contains 20 regular slots in 5 columns, and both zones together represent the 25 inventory slots.
 32. In Inventory, hover and select filled and empty slots. Confirm hover/selected states are readable, item amounts stay inside their badges, and the bottom description panel has enough spacing between title, amount, and description.
 33. Open Options from Main Menu and Pause Menu. Confirm the root segment list opens Sound, Controls, Graphics, and Feedback submenus; `Back to Options`, root `Back`, and Escape return to the correct previous state.
-34. In Options, verify Sound sliders for Master, SFX, Notifications, and Music are visible, use the wooden-menu slider style, update their percentage labels, and keep their values after leaving and reopening Options.
-35. In Options, verify Graphics dropdown popups, the square fullscreen checkbox, and the Controls scroll line match the wooden menu style.
-36. Open New Game and Load Game from their supported contexts. Confirm wooden panels, paper save-slot cards, empty/occupied slot labels, disabled empty load slots, and occupied-slot overwrite confirmation in New Game.
-37. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting. Prompts should show as white text without a background and should not show placeholder text after starting or loading a game.
-38. Confirm the date/time and money displays sit inside compact wooden plaques, and that the money value is right-aligned with inner padding.
-39. Repeat the UI pass at 1280x720, 1600x900, 1920x1080, and 2560x1440.
-40. In Graphics options, switch Interface Scale between Small, Medium, and Big. Confirm FarmPhone, Inventory, Silo Storage, and Options panels remain inside the viewport and keep buttons clickable.
+34. Open How to Play from Main Menu and Pause Menu. Confirm the scrollable text is readable, Back returns to the correct menu, and opening it from Pause keeps the game paused.
+35. Open Credits from Main Menu. Confirm the scrollable text is readable, Back returns to Main Menu, and the screen does not list Times New Roman or a Documentation section.
+36. In Options, verify Sound sliders for Master, SFX, Notifications, and Music are visible, use the wooden-menu slider style, update their percentage labels, and keep their values after leaving and reopening Options.
+37. In Options, verify Graphics dropdown popups, the square fullscreen checkbox, and the Controls scroll line match the wooden menu style.
+38. Open New Game and Load Game from their supported contexts. Confirm wooden panels, paper save-slot cards, empty/occupied slot labels, disabled empty load slots, and occupied-slot overwrite confirmation in New Game.
+39. Check interaction prompts near the crosshair and bottom-left notifications for readable typography and formatting. Prompts should show as white text without a background and should not show placeholder text after starting or loading a game.
+40. Confirm the date/time and money displays sit inside compact wooden plaques, and that the money value is right-aligned with inner padding.
+41. Repeat the UI pass at 1280x720, 1600x900, 1920x1080, and 2560x1440.
+42. In Graphics options, switch Interface Scale between Small, Medium, and Big. Confirm FarmPhone, Inventory, Silo Storage, Options, How to Play, and Credits panels remain inside the viewport and keep buttons clickable.
 
 ## Manual Audio Settings Checklist
 
@@ -410,7 +412,7 @@ Run this checklist in Godot after UI sound or notification sound changes:
 2. Set SFX Volume to `100%`.
 3. Set Notifications Volume to `100%`.
 4. Set Music Volume to any value.
-5. Click Main Menu buttons for New Game, Load Game, Options, Credits, and Exit where safe to test.
+5. Click Main Menu buttons for New Game, Load Game, Options, How to Play, Credits, and Exit where safe to test.
 6. Confirm each normal main button click plays one UI click sound.
 7. Open New Game and click save slots, Back, and overwrite confirmation buttons if an occupied slot exists.
 8. Open Load Game and click an occupied slot and Back.

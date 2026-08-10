@@ -7,6 +7,8 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - [Architecture notes](Docs/architecture.md)
 - [Function reference](Docs/function-reference.md)
 - [Testing documentation](Docs/testing.md)
+- [How to Play](HOW_TO_PLAY.md)
+- [Credits and licenses](CREDITS.md)
 
 ## Current Gameplay Scope
 
@@ -20,6 +22,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Temporary HUD event messages for gameplay feedback, such as planting blocked by season.
 - Watering can capacity, refill at the well, and water-fill bars in inventory/hotbar UI.
 - Day/night and date progression.
+- In-game day length: 10 real-time minutes.
 - Interpolated day/night lighting with visible sun and moon visuals aligned to the shadow direction.
 - Four-season calendar: Spring, Summer, Autumn, and Winter.
 - Money, buy prices, sell prices, and commodity-backed dynamic crop prices.
@@ -44,6 +47,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Basic interactables for well, house, and silo prompts.
 - Editor farm-grid generator with stable tile IDs for save restoration.
 - Physical farm border boundaries built from invisible `StaticBody3D` colliders aligned with the existing visual fences.
+- Main Menu help screens for How to Play and Credits.
 
 ## Changelog
 
@@ -60,6 +64,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Added automated tests, full-year simulations, oversupply simulations, crop profitability reports, and related balance diagnostics.
 - Rebalanced selected crop prices, seed prices, event chances, cooldowns, and oversupply thresholds.
 - Fixed camera controls, rain harvest behavior, stale prompt/crosshair feedback, and several world/gameplay readability issues.
+- Added How to Play and Credits documentation screens.
 
 ### Version 0.3
 - Restructured the world
@@ -70,7 +75,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Implemented EconomyManager
 - Implemented storage and selling mechanics
   - Implemented StorageData
-  - Implemented SiloInteractive
+  - Implemented SiloInteractable
   - Implemented StorageUI
   - Implemented functionality to move between inventory and storage
   - Implemented sell interface
@@ -92,7 +97,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
   - Implemented sell app
   - Implemented shop app
   - Implemented stock market app
-  - Implement weather app
+  - Implemented weather app
   - Implemented news app
 - Implemented save game / load game functionality
   - Added three save slots.
