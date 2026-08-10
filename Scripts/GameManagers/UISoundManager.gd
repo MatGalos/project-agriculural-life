@@ -168,7 +168,7 @@ func _create_player_pool() -> void:
 		_players.append(player)
 
 
-func _play_stream(stream: AudioStream, bus_name: String) -> void:
+func _play_stream(stream: AudioStream, bus_name: String, volume_db: float = 0.0) -> void:
 	if stream == null:
 		return
 
@@ -176,6 +176,7 @@ func _play_stream(stream: AudioStream, bus_name: String) -> void:
 	player.stop()
 	player.stream = stream
 	player.bus = bus_name
+	player.volume_db = volume_db
 	player.play()
 
 

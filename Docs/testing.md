@@ -74,6 +74,7 @@ Core tests:
 - `AudioSettingsSourceTest.gd`: source-level coverage for the audio settings autoload, default bus layout, `SFX`/`Notifications`/`Music` buses sending to `Master`, `user://settings.cfg` persistence, linear-to-dB conversion, 0% mute behavior, Sound Options sliders, and keeping audio settings out of gameplay save-slot data.
 - `UISoundSourceTest.gd`: source-level coverage for the UI sound autoload, SFX/Notifications bus routing, prepared `.wav` asset paths, missing-file checks, notification cooldown, main menu/pause/options/new-game/load-game button hooks, FarmPhone open/close/app-switch hooks, and HUD notification sound hooks.
 - `GameplaySFXSourceTest.gd`: source-level coverage for gameplay SFX asset paths, playback methods, tilling/planting/watering/harvest hooks, shop buy hooks, sell hooks, storage transfer hooks, action-error hooks, and suppressing duplicate notification sounds for gameplay feedback.
+- `WeatherEffectsSourceTest.gd`: source-level coverage for weather VFX/SFX asset paths, SFX bus routing, WeatherManager signal hookup, sunny/cloudy/rain/storm state handling, runtime sky cloud layer setup, rain/storm manual loop restart paths, thunder scheduling, scene nodes, and gameplay-scene instancing.
 - `UIResponsivenessSourceTest.gd`: source-level coverage for responsive FarmPhone sizing, Inventory panel/slot scaling, Silo Storage panel sizing, drop-handler parameter naming that avoids `Control.position` shadowing, typed scroll-mode enum usage for custom scroll lines, scroll-line repositioning, Options board scaling, centralized HUD bottom layout, typed HUD UI mode enum usage, and visibility helper names that avoid `CanvasLayer.is_visible` shadowing.
 - `UIVisualPolishSourceTest.gd`: source-level visual polish coverage for visible UI text avoiding technical IDs, Weather forecast labels avoiding `Tomorrow`/`Day +N`, FarmPhone app safe left insets, and manual checklist coverage for left-edge clipping and actual season-date forecast labels.
 - `TestRunnerBehaviorTest.gd`: source-level coverage for keeping heavy simulation tests behind the headless/explicit simulation gate, gating verbose passed-assertion output, and printing compact final summaries.
@@ -483,6 +484,52 @@ Run this checklist in Godot after gameplay SFX changes:
 40. Confirm gameplay feedback messages do not also play `notification_new`.
 41. Check the Godot console for missing-file warnings or errors.
 42. Confirm gameplay save/load still works.
+
+## Manual Weather VFX And SFX Checklist
+
+Run this checklist in Godot after weather effect changes:
+
+1. Set Master Volume to `100%`.
+2. Set SFX Volume to `100%`.
+3. Set Notifications Volume to any value.
+4. Set Music Volume to any value.
+5. Force Sunny weather.
+6. Confirm the sky has no clear, visible cloud layer.
+7. Confirm rain and storm VFX are not visible.
+8. Confirm rain and storm SFX are not playing.
+9. Optional diagnostics: enable `debug_weather_effects` and confirm the Godot console prints `CloudLayer sunny OFF` and `Cloud intensity: 0.00`.
+10. Force Cloudy weather.
+11. Confirm light gray sky clouds are visible.
+12. Confirm rain and storm VFX/SFX remain off.
+13. Optional diagnostics: with `debug_weather_effects` enabled, confirm the Godot console prints `CloudLayer cloudy ON` and a medium cloud intensity.
+14. Force Rain weather.
+15. Confirm gray sky clouds are visible.
+16. Confirm the lighter rain particles are visible around the player/camera area.
+17. Confirm `rain_loop` plays once and manually loops/restarts through the `SFX` bus.
+18. Optional diagnostics: with `debug_weather_effects` enabled, confirm the Godot console prints `CloudLayer rain ON` and `Rain SFX PLAY`.
+19. Force Storm weather.
+20. Confirm darker, denser sky clouds are visible than in Cloudy/Rain.
+21. Confirm the stronger storm rain particles are visible.
+22. Confirm `storm_rain_loop` plays once and `rain_loop` is stopped.
+23. Optional diagnostics: with `debug_weather_effects` enabled, confirm the Godot console prints `CloudLayer storm ON` and `Storm SFX PLAY`.
+24. Wait for randomized thunder or temporarily lower the thunder timer in the scene.
+25. Confirm `thunder` plays only during Storm and the lightning flash is visible.
+26. Return to Sunny weather.
+27. Confirm the cloud layer turns off and all rain/storm VFX and SFX stop.
+28. Set SFX Volume to `0%`.
+29. Force Rain or Storm and confirm weather SFX are silent.
+30. Set SFX Volume back to `100%`.
+31. Set Master Volume to `0%`.
+32. Force Rain or Storm and confirm weather SFX are silent.
+33. Set Master Volume back to `100%`.
+34. Set Notifications Volume to `0%` and confirm weather SFX still follow SFX, not Notifications.
+35. Change Music Volume and confirm it does not affect weather SFX.
+36. Check the sky cloud layer in day and night lighting and confirm sun/moon readability remains acceptable.
+37. Save during Rain or Storm, reload, and confirm WeatherEffects applies the current weather.
+38. Confirm UI, FarmPhone, Weather app, notification SFX, gameplay SFX, and save/load still work.
+39. Confirm sky clouds and weather particles do not cover UI or FarmPhone.
+40. Check the Godot console for warnings or errors.
+41. Check for obvious FPS drops during Cloudy, Rain, and Storm.
 
 ## Manual Stage 5.4 Visual Checklist
 
