@@ -3,7 +3,7 @@ class_name WellInteractable
 
 
 func get_prompt_text() -> String:
-	return "E - Fill Watering Can"
+	return "E — Fill Watering Can"
 
 
 func interact() -> void:

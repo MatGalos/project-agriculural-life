@@ -1,13 +1,16 @@
-[gd_scene format=3 uid="uid://cja8qampts6ut"]
+[gd_scene load_steps=6 format=3 uid="uid://cja8qampts6ut"]
 
 [ext_resource type="Script" uid="uid://clva5q357i66b" path="res://Scripts/UIs/Menus/PauseMenu/pauseMenu.gd" id="1_t48jr"]
 [ext_resource type="Shader" uid="uid://bwo0opmxvukej" path="res://Shaders/UIs/Menus/PauseMenu/pauseMenu.gdshader" id="2_lx4i1"]
+[ext_resource type="Script" path="res://Scripts/UIs/Menus/WoodenMenuPanel.gd" id="3_wooden"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_05kyi"]
 shader = ExtResource("2_lx4i1")
-shader_parameter/blurAmount = 3.0
+shader_parameter/blurAmount = 1.6
 
-[node name="PauseMenu" type="Control" unique_id=1779250105 node_paths=PackedStringArray("continueButton", "saveButton", "loadButton", "optionsButton", "saveAndQuitToMenu", "saveAndQuitToDesktop", "blurBg", "panel")]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_menu_button"]
+
+[node name="PauseMenu" type="Control" unique_id=1779250105 node_paths=PackedStringArray("continueButton", "saveButton", "loadButton", "optionsButton", "howToPlayButton", "saveAndQuitToMenu", "saveAndQuitToDesktop", "blurBg", "panel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,12 +18,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_t48jr")
-continueButton = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/ContinueButton")
-saveButton = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/SaveButton")
-loadButton = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/LoadButton")
-optionsButton = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/OptionsButton")
-saveAndQuitToMenu = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/SaveAndQuitToMenuButton")
-saveAndQuitToDesktop = NodePath("Panel/MarginContainer/HBoxContainer/VBoxContainer/SaveAndQuitToDesktopMenu")
+continueButton = NodePath("Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons/ContinueButton")
+saveButton = NodePath("Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons/SaveButton")
+loadButton = NodePath("Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons/LoadButton")
+optionsButton = NodePath("Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons/OptionsButton")
+howToPlayButton = NodePath("Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons/HowToPlayButton")
+saveAndQuitToMenu = NodePath("Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons/SaveAndQuitToMenuButton")
+saveAndQuitToDesktop = NodePath("Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons/SaveAndQuitToDesktopMenu")
 blurBg = NodePath("blurBg")
 panel = NodePath("Panel")
 
@@ -34,6 +38,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="Overlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.34)
+
 [node name="Panel" type="Control" parent="." unique_id=837144493]
 layout_mode = 1
 anchors_preset = 15
@@ -42,85 +55,252 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1840797543]
+[node name="MenuCenter" type="CenterContainer" parent="Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=1500378062]
+[node name="WoodenBoard" type="Control" parent="Panel/MenuCenter"]
+custom_minimum_size = Vector2(580, 500)
 layout_mode = 2
-theme_override_constants/separation = 60
+script = ExtResource("3_wooden")
+plank_count = 8
 
-[node name="Separator" type="Control" parent="Panel/MarginContainer/VBoxContainer" unique_id=1120114370]
-layout_mode = 2
+[node name="MenuMargin" type="MarginContainer" parent="Panel/MenuCenter/WoodenBoard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 46
+theme_override_constants/margin_top = 34
+theme_override_constants/margin_right = 46
+theme_override_constants/margin_bottom = 38
 
-[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=663459965]
+[node name="MenuContent" type="VBoxContainer" parent="Panel/MenuCenter/WoodenBoard/MenuMargin"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 60
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="Label" type="Label" parent="Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent" unique_id=663459965]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0.88, 0.62, 0.32, 0.55)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 48
 text = "Paused"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer" unique_id=1009378099]
+[node name="MenuButtons" type="VBoxContainer" parent="Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent"]
 layout_mode = 2
+theme_override_constants/separation = 10
 alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/HBoxContainer" unique_id=381658834]
+[node name="ContinueButton" type="Button" parent="Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons" unique_id=1884860041]
+custom_minimum_size = Vector2(430, 38)
 layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 1
-
-[node name="Separator" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1938863417]
-layout_mode = 2
-
-[node name="ContinueButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1884860041]
-layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
 text = "Continue"
+flat = true
 
-[node name="Separator2" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=29916341]
+[node name="SaveButton" type="Button" parent="Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons" unique_id=408290562]
+custom_minimum_size = Vector2(430, 38)
 layout_mode = 2
-
-[node name="SaveButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=408290562]
-layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
 text = "Save"
+flat = true
 
-[node name="Separator3" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=34013420]
+[node name="LoadButton" type="Button" parent="Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons" unique_id=1294670980]
+custom_minimum_size = Vector2(430, 38)
 layout_mode = 2
-
-[node name="LoadButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1294670980]
-layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
 text = "Load"
+flat = true
 
-[node name="Separator4" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=899424875]
+[node name="OptionsButton" type="Button" parent="Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons" unique_id=335253849]
+custom_minimum_size = Vector2(430, 38)
 layout_mode = 2
-
-[node name="OptionsButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=335253849]
-layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
 text = "Options"
+flat = true
 
-[node name="Separator5" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=131647439]
+[node name="HowToPlayButton" type="Button" parent="Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons"]
+custom_minimum_size = Vector2(430, 38)
 layout_mode = 2
-
-[node name="SaveAndQuitToMenuButton" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1935920013]
-layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
-text = "Save and quit to menu"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
+text = "How to Play"
+flat = true
 
-[node name="Separator6" type="Control" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=170501703]
+[node name="SaveAndQuitToMenuButton" type="Button" parent="Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons" unique_id=1935920013]
+custom_minimum_size = Vector2(430, 38)
 layout_mode = 2
-
-[node name="SaveAndQuitToDesktopMenu" type="Button" parent="Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=900244190]
-layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
-text = "Save and quit to desktop"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
+text = "Save and Quit to Menu"
+flat = true
+
+[node name="SaveAndQuitToDesktopMenu" type="Button" parent="Panel/MenuCenter/WoodenBoard/MenuMargin/MenuContent/MenuButtons" unique_id=900244190]
+custom_minimum_size = Vector2(430, 38)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
+text = "Save and Quit to Desktop"
+flat = true
+
+[node name="ConfirmationOverlay" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Dim" type="ColorRect" parent="ConfirmationOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0, 0, 0, 0.16)
+
+[node name="ConfirmCenter" type="CenterContainer" parent="ConfirmationOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="WoodenBoard" type="Control" parent="ConfirmationOverlay/ConfirmCenter"]
+custom_minimum_size = Vector2(540, 230)
+layout_mode = 2
+script = ExtResource("3_wooden")
+plank_count = 4
+
+[node name="MenuMargin" type="MarginContainer" parent="ConfirmationOverlay/ConfirmCenter/WoodenBoard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 38
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 38
+theme_override_constants/margin_bottom = 30
+
+[node name="MenuContent" type="VBoxContainer" parent="ConfirmationOverlay/ConfirmCenter/WoodenBoard/MenuMargin"]
+layout_mode = 2
+theme_override_constants/separation = 22
+alignment = 1
+
+[node name="MessageLabel" type="Label" parent="ConfirmationOverlay/ConfirmCenter/WoodenBoard/MenuMargin/MenuContent"]
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Confirm action?"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ButtonRow" type="HBoxContainer" parent="ConfirmationOverlay/ConfirmCenter/WoodenBoard/MenuMargin/MenuContent"]
+layout_mode = 2
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="ConfirmButton" type="Button" parent="ConfirmationOverlay/ConfirmCenter/WoodenBoard/MenuMargin/MenuContent/ButtonRow"]
+custom_minimum_size = Vector2(190, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
+text = "Confirm"
+flat = true
+
+[node name="CancelButton" type="Button" parent="ConfirmationOverlay/ConfirmCenter/WoodenBoard/MenuMargin/MenuContent/ButtonRow"]
+custom_minimum_size = Vector2(170, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
+text = "Cancel"
+flat = true

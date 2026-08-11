@@ -3,7 +3,7 @@ class_name InventoryData
 
 signal inventory_changed
 
-@export var slot_count: int = 24
+@export var slot_count: int = 25
 @export var slots: Array[InventorySlot] = []
 
 

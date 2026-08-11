@@ -8,6 +8,8 @@ signal pauseChanged(paused: bool)
 
 var pauseMenu: PauseMenu
 var optionsMenu: OptionsMenu
+var howToPlayMenu: HowToPlayMenu
+var creditsMenu: CreditsMenu
 var mainMenu: MainMenu
 var newGamePanel: NewGamePanel
 var loadGamePanel: LoadGamePanel
@@ -45,11 +47,13 @@ func _ready() -> void:
 
 	pauseMenu = globalUIInstance.get_node_or_null("PauseMenu") as PauseMenu
 	optionsMenu = globalUIInstance.get_node_or_null("OptionsMenu") as OptionsMenu
+	howToPlayMenu = globalUIInstance.get_node_or_null("HowToPlayMenu") as HowToPlayMenu
+	creditsMenu = globalUIInstance.get_node_or_null("CreditsMenu") as CreditsMenu
 	mainMenu = globalUIInstance.get_node_or_null("MainMenu") as MainMenu
 	newGamePanel = globalUIInstance.get_node_or_null("NewGamePanel") as NewGamePanel
 	loadGamePanel = globalUIInstance.get_node_or_null("LoadGamePanel") as LoadGamePanel
 
-	if pauseMenu == null or optionsMenu == null or mainMenu == null or newGamePanel == null or loadGamePanel == null:
+	if pauseMenu == null or optionsMenu == null or howToPlayMenu == null or creditsMenu == null or mainMenu == null or newGamePanel == null or loadGamePanel == null:
 		push_error("Global UI is missing one or more required menus.")
 		return
 
@@ -58,6 +62,8 @@ func _ready() -> void:
 	loadGamePanel.visible = false
 	pauseMenu.setMenuVisible(false)
 	optionsMenu.visible = false
+	howToPlayMenu.visible = false
+	creditsMenu.visible = false
 	_updateMouseMode()
 
 
@@ -91,6 +97,9 @@ func startGame() -> void:
 	mainMenu.visible = false
 	newGamePanel.visible = false
 	loadGamePanel.visible = false
+	optionsMenu.visible = false
+	howToPlayMenu.visible = false
+	creditsMenu.visible = false
 	_updateMouseMode()
 
 
@@ -102,6 +111,8 @@ func returnToMenu() -> void:
 	loadGamePanel.visible = false
 	pauseMenu.setMenuVisible(false)
 	optionsMenu.visible = false
+	howToPlayMenu.visible = false
+	creditsMenu.visible = false
 	_updateMouseMode()
 
 
@@ -113,6 +124,8 @@ func openNewGamePanel() -> void:
 	loadGamePanel.visible = false
 	pauseMenu.setMenuVisible(false)
 	optionsMenu.visible = false
+	howToPlayMenu.visible = false
+	creditsMenu.visible = false
 	_updateMouseMode()
 
 
@@ -133,6 +146,8 @@ func openLoadGamePanel(from_context: int) -> void:
 	loadGamePanel.move_to_front()
 	loadGamePanel.refresh()
 	optionsMenu.visible = false
+	howToPlayMenu.visible = false
+	creditsMenu.visible = false
 	_updateMouseMode()
 
 
@@ -156,6 +171,8 @@ func showMainMenu() -> void:
 	loadGamePanel.visible = false
 	pauseMenu.setMenuVisible(false)
 	optionsMenu.visible = false
+	howToPlayMenu.visible = false
+	creditsMenu.visible = false
 	_updateMouseMode()
 
 
@@ -173,6 +190,40 @@ func openOptions(from_context: int) -> void:
 	optionsMenu.setContext(from_context)
 	optionsMenu.visible = true
 	optionsMenu.move_to_front()
+	howToPlayMenu.visible = false
+	creditsMenu.visible = false
+	_updateMouseMode()
+
+
+func openHowToPlay(from_context: int) -> void:
+	if from_context == menuContext.Pause_Menu:
+		pauseMenu.showBlurOnly()
+	else:
+		setPaused(false)
+		pauseMenu.setMenuVisible(false)
+
+	mainMenu.visible = false
+	newGamePanel.visible = false
+	loadGamePanel.visible = false
+	optionsMenu.visible = false
+	creditsMenu.visible = false
+	howToPlayMenu.set_context(from_context)
+	howToPlayMenu.visible = true
+	howToPlayMenu.move_to_front()
+	_updateMouseMode()
+
+
+func openCredits() -> void:
+	isInGame = false
+	setPaused(false)
+	mainMenu.visible = false
+	newGamePanel.visible = false
+	loadGamePanel.visible = false
+	pauseMenu.setMenuVisible(false)
+	optionsMenu.visible = false
+	howToPlayMenu.visible = false
+	creditsMenu.visible = true
+	creditsMenu.move_to_front()
 	_updateMouseMode()
 
 
@@ -192,6 +243,10 @@ func showGlobalUI() -> void:
 		pauseMenu.setMenuVisible(false)
 	if optionsMenu:
 		optionsMenu.visible = false
+	if howToPlayMenu:
+		howToPlayMenu.visible = false
+	if creditsMenu:
+		creditsMenu.visible = false
 
 	setPaused(false)
 	_updateMouseMode()
@@ -199,6 +254,12 @@ func showGlobalUI() -> void:
 
 func _handle_pause_action() -> void:
 	if optionsMenu and optionsMenu.visible:
+		optionsMenu.handle_back_action()
+		get_viewport().set_input_as_handled()
+		return
+
+	if howToPlayMenu and howToPlayMenu.visible:
+		howToPlayMenu.close()
 		get_viewport().set_input_as_handled()
 		return
 
@@ -229,8 +290,10 @@ func _handle_pause_action() -> void:
 func _updateMouseMode() -> void:
 	var options_visible: bool = optionsMenu != null and optionsMenu.visible
 	var load_visible: bool = loadGamePanel != null and loadGamePanel.visible
+	var how_to_play_visible: bool = howToPlayMenu != null and howToPlayMenu.visible
+	var credits_visible: bool = creditsMenu != null and creditsMenu.visible
 
-	if isInGame and not isPaused and not options_visible and not load_visible:
+	if isInGame and not isPaused and not options_visible and not load_visible and not how_to_play_visible and not credits_visible:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	else:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

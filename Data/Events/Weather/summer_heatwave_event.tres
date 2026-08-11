@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="MarketEventData" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Events/MarketEventData.gd" id="1"]
+[ext_resource type="Script" path="res://Scripts/Items/ItemData.gd" id="2"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/corn_item.tres" id="3"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/strawberry_item.tres" id="4"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/tomatoe_item.tres" id="5"]
+
+[resource]
+script = ExtResource("1")
+event_id = "summer_heatwave"
+display_name = "Summer Heatwave"
+description = "High summer temperatures threaten yields and lift market prices."
+duration_days = 3
+trigger_chance = 0.56
+event_category = 1
+trigger_mode = 1
+affected_items = Array[ExtResource("2")]([ExtResource("3"), ExtResource("4"), ExtResource("5")])
+trend_effect = 2
+trend_strength_modifier = 0.035
+volatility_modifier = 0.055
+requires_season = true
+required_seasons = Array[int]([1])
+requires_temperature = true
+minimum_temperature = 29.0
+maximum_temperature = 100.0

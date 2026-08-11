@@ -7,7 +7,25 @@ var current_save_slot: int = 1
 const MAX_NEWS_SAVE_COUNT := 20
 
 var item_database: Array[ItemData] = [
+	preload("res://Data/Items/Crops/beetroot_item.tres"),
+	preload("res://Data/Items/Crops/cabbage_item.tres"),
+	preload("res://Data/Items/Crops/carrot_item.tres"),
+	preload("res://Data/Items/Crops/corn_item.tres"),
+	preload("res://Data/Items/Crops/lettuce_item.tres"),
+	preload("res://Data/Items/Crops/potatoe_item.tres"),
+	preload("res://Data/Items/Crops/pumpkin_item.tres"),
+	preload("res://Data/Items/Crops/strawberry_item.tres"),
+	preload("res://Data/Items/Crops/tomatoe_item.tres"),
 	preload("res://Data/Items/Crops/wheat_item.tres"),
+	preload("res://Data/Items/Seeds/beetroot_seed_item.tres"),
+	preload("res://Data/Items/Seeds/cabbage_seed_item.tres"),
+	preload("res://Data/Items/Seeds/carrot_seed_item.tres"),
+	preload("res://Data/Items/Seeds/corn_seed_item.tres"),
+	preload("res://Data/Items/Seeds/lettuce_seed_item.tres"),
+	preload("res://Data/Items/Seeds/potatoe_seed_item.tres"),
+	preload("res://Data/Items/Seeds/pumpkin_seed_item.tres"),
+	preload("res://Data/Items/Seeds/strawberry_seed_item.tres"),
+	preload("res://Data/Items/Seeds/tomatoe_seed_item.tres"),
 	preload("res://Data/Items/Seeds/wheat_seed_item.tres"),
 	preload("res://Data/Items/Tools/hoe_item.tres"),
 	preload("res://Data/Items/Tools/watering_can_item.tres"),
@@ -16,6 +34,15 @@ var item_database: Array[ItemData] = [
 ]
 
 var crop_database: Array[CropData] = [
+	preload("res://Data/Crops/beetroot_crop.tres"),
+	preload("res://Data/Crops/cabbage_crop.tres"),
+	preload("res://Data/Crops/carrot_crop.tres"),
+	preload("res://Data/Crops/corn_crop.tres"),
+	preload("res://Data/Crops/lettuce_crop.tres"),
+	preload("res://Data/Crops/potatoe_crop.tres"),
+	preload("res://Data/Crops/pumpkin_crop.tres"),
+	preload("res://Data/Crops/strawberry_crop.tres"),
+	preload("res://Data/Crops/tomatoe_crop.tres"),
 	preload("res://Data/Crops/wheat_crop.tres")
 ]
 
@@ -109,6 +136,11 @@ func load_game() -> void:
 
 func _clear_runtime_events_before_load() -> void:
 	EventManager.active_market_events.clear()
+	EventManager.apply_calendar_event_state_save_data({})
+	EventManager.apply_daily_event_limit_save_data({})
+	EventManager.apply_event_activation_history_save_data({})
+	EventManager.apply_once_per_season_state_save_data({})
+	EventManager.apply_once_per_year_state_save_data({})
 	EventManager._apply_market_event_effects()
 	EventManager.market_events_changed.emit()
 
@@ -138,10 +170,13 @@ func _create_save_data() -> Dictionary:
 		"market": _create_market_save_data(),
 
 		"events": _create_events_save_data(),
+		"event_state": _create_event_state_save_data(),
 
 		"news": _create_news_save_data(),
 
-		"world": _create_world_save_data()
+		"world": _create_world_save_data(),
+		
+		"sales_stats": _create_sales_stats_save_data(),
 	}
 
 
@@ -173,14 +208,21 @@ func _apply_save_data(save_data: Dictionary) -> void:
 	if save_data.has("weather") and save_data["weather"] is Dictionary:
 		_apply_weather_save_data(save_data["weather"] as Dictionary)
 	
-	if save_data.has("market") and save_data["market"] is Dictionary:
-		_apply_market_save_data(save_data["market"] as Dictionary)
+	if save_data.has("sales_stats") and save_data["sales_stats"] is Dictionary:
+		_apply_sales_stats_save_data(save_data["sales_stats"] as Dictionary)
+
+	if save_data.has("event_state") and save_data["event_state"] is Dictionary:
+		_apply_event_state_save_data(save_data["event_state"] as Dictionary)
 	
 	var has_saved_news := save_data.has("news") and save_data["news"] is Array
+	var has_saved_market := save_data.has("market") and save_data["market"] is Dictionary
+
+	if has_saved_market:
+		_apply_market_save_data(save_data["market"] as Dictionary)
 
 	if save_data.has("events") and save_data["events"] is Array:
 		_apply_events_save_data(save_data["events"] as Array, not has_saved_news)
-	
+
 	if save_data.has("world") and save_data["world"] is Dictionary:
 		_apply_world_save_data(save_data["world"] as Dictionary)
 
@@ -362,19 +404,26 @@ func _create_weather_save_data() -> Dictionary:
 		var forecast_entry := entry as Dictionary
 		var weather: WeatherData = forecast_entry.get("weather", null)
 		var temperature := int(forecast_entry.get("temperature", 20))
+		var pattern := forecast_entry.get("pattern", null) as WeatherDayPatternData
+		var base_temperature := int(forecast_entry.get("base_temperature", temperature))
+		var rain_chance := int(forecast_entry.get("rain_chance", 0))
 
 		if weather == null:
 			continue
 
 		forecast_data.append({
 			"weather_name": weather.display_name,
-			"temperature": temperature
+			"temperature": temperature,
+			"pattern_id": pattern.pattern_id if pattern != null else "",
+			"base_temperature": base_temperature,
+			"rain_chance": rain_chance
 		})
 
 	return {
 		"current_weather": WeatherManager.get_current_weather_name(),
 		"current_temperature": WeatherManager.current_temperature,
-		"forecast": forecast_data
+		"forecast": forecast_data,
+		"daily_history": WeatherManager.create_weather_history_save_data()
 	}
 
 func _apply_weather_save_data(weather_data: Dictionary) -> void:
@@ -389,6 +438,11 @@ func _apply_weather_save_data(weather_data: Dictionary) -> void:
 	WeatherManager.forecast.clear()
 
 	if not (weather_data.get("forecast", []) is Array):
+		if weather_data.has("daily_history") and weather_data["daily_history"] is Array:
+			WeatherManager.apply_weather_history_save_data(weather_data["daily_history"] as Array)
+		else:
+			WeatherManager.apply_weather_history_save_data([])
+
 		WeatherManager.weather_changed.emit(
 			WeatherManager.current_weather,
 			WeatherManager.current_temperature
@@ -405,18 +459,30 @@ func _apply_weather_save_data(weather_data: Dictionary) -> void:
 		var weather_name := String(forecast_entry.get("weather_name", "Sunny"))
 		var weather := WeatherManager.get_weather_by_name(weather_name)
 		var temperature := int(forecast_entry.get("temperature", 20))
+		var pattern_id := String(forecast_entry.get("pattern_id", ""))
+		var pattern := WeatherManager.get_day_pattern_by_id(pattern_id)
+		var base_temperature := int(forecast_entry.get("base_temperature", temperature))
+		var rain_chance := int(forecast_entry.get("rain_chance", 0))
 
 		if weather == null:
 			continue
 
 		WeatherManager.forecast.append({
 			"weather": weather,
-			"temperature": temperature
+			"temperature": temperature,
+			"pattern": pattern,
+			"base_temperature": base_temperature,
+			"rain_chance": rain_chance
 		})
 
 	if WeatherManager.forecast.size() > 0:
 		WeatherManager.tomorrow_weather = WeatherManager.forecast[0]["weather"]
 		WeatherManager.tomorrow_temperature = int(WeatherManager.forecast[0]["temperature"])
+
+	if weather_data.has("daily_history") and weather_data["daily_history"] is Array:
+		WeatherManager.apply_weather_history_save_data(weather_data["daily_history"] as Array)
+	else:
+		WeatherManager.apply_weather_history_save_data([])
 
 	WeatherManager.weather_changed.emit(
 		WeatherManager.current_weather,
@@ -464,7 +530,7 @@ func _apply_market_save_data(market_data: Dictionary) -> void:
 
 		commodity.current_price = float(entry.get("current_price", commodity.base_price))
 		commodity.volatility = float(entry.get("volatility", commodity.volatility))
-		commodity.trend = int(entry.get("trend", CommodityData.MarketTrend.NEUTRAL))
+		commodity.trend = int(entry.get("trend", CommodityData.MarketTrend.NEUTRAL)) as CommodityData.MarketTrend
 		commodity.trend_strength = float(entry.get("trend_strength", commodity.trend_strength))
 
 		commodity.price_history.clear()
@@ -518,6 +584,43 @@ func _apply_events_save_data(events_data: Array, emit_change: bool = true) -> vo
 
 	if emit_change:
 		EventManager.market_events_changed.emit()
+
+
+func _create_event_state_save_data() -> Dictionary:
+	return {
+		"triggered_fixed_events": EventManager.create_calendar_event_state_save_data(),
+		"daily_event_limit": EventManager.create_daily_event_limit_save_data(),
+		"event_activation_history": EventManager.create_event_activation_history_save_data(),
+		"once_per_season_events": EventManager.create_once_per_season_state_save_data(),
+		"once_per_year_events": EventManager.create_once_per_year_state_save_data()
+	}
+
+
+func _apply_event_state_save_data(event_state_data: Dictionary) -> void:
+	if event_state_data.has("triggered_fixed_events") and event_state_data["triggered_fixed_events"] is Dictionary:
+		EventManager.apply_calendar_event_state_save_data(event_state_data["triggered_fixed_events"] as Dictionary)
+	else:
+		EventManager.apply_calendar_event_state_save_data({})
+
+	if event_state_data.has("daily_event_limit") and event_state_data["daily_event_limit"] is Dictionary:
+		EventManager.apply_daily_event_limit_save_data(event_state_data["daily_event_limit"] as Dictionary)
+	else:
+		EventManager.apply_daily_event_limit_save_data({})
+
+	if event_state_data.has("event_activation_history") and event_state_data["event_activation_history"] is Dictionary:
+		EventManager.apply_event_activation_history_save_data(event_state_data["event_activation_history"] as Dictionary)
+	else:
+		EventManager.apply_event_activation_history_save_data({})
+
+	if event_state_data.has("once_per_season_events") and event_state_data["once_per_season_events"] is Dictionary:
+		EventManager.apply_once_per_season_state_save_data(event_state_data["once_per_season_events"] as Dictionary)
+	else:
+		EventManager.apply_once_per_season_state_save_data({})
+
+	if event_state_data.has("once_per_year_events") and event_state_data["once_per_year_events"] is Dictionary:
+		EventManager.apply_once_per_year_state_save_data(event_state_data["once_per_year_events"] as Dictionary)
+	else:
+		EventManager.apply_once_per_year_state_save_data({})
 
 
 func _create_news_save_data() -> Array:
@@ -712,6 +815,11 @@ func _reset_runtime_state_for_new_game() -> void:
 	WeatherManager._apply_new_day_weather()
 
 	EventManager.active_market_events.clear()
+	EventManager.apply_calendar_event_state_save_data({})
+	EventManager.apply_daily_event_limit_save_data({})
+	EventManager.apply_event_activation_history_save_data({})
+	EventManager.apply_once_per_season_state_save_data({})
+	EventManager.apply_once_per_year_state_save_data({})
 	EventManager._apply_market_event_effects()
 	EventManager.market_events_changed.emit()
 
@@ -809,3 +917,9 @@ func get_season_name_from_month(month: int) -> String:
 			return "Winter"
 		_:
 			return "Unknown"
+
+func _create_sales_stats_save_data() -> Dictionary:
+	return SalesStatsManager.create_save_data()
+
+func _apply_sales_stats_save_data(sales_data: Dictionary) -> void:
+	SalesStatsManager.apply_save_data(sales_data)

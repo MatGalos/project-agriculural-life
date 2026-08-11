@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="CropData" format=3 uid="uid://dn1sev4hnngjk"]
+
+[ext_resource type="Resource" uid="uid://c74whj1dr53h4" path="res://Data/Items/Crops/potatoe_item.tres" id="1_h7w6y"]
+[ext_resource type="Script" uid="uid://cbipb3o5yusrn" path="res://Scripts/Farming/CropData.gd" id="1_yshcl"]
+[ext_resource type="PackedScene" uid="uid://c1kannbic5j5k" path="res://Assets/Models/Plants/Potatoe/potatoe_ready.glb" id="2_3xcyv"]
+[ext_resource type="Resource" uid="uid://b20nj4p1wtovx" path="res://Data/Items/Seeds/potatoe_seed_item.tres" id="4_qp81e"]
+[ext_resource type="PackedScene" uid="uid://b3gns5hmbubw0" path="res://Assets/Models/Plants/Potatoe/potatoe_seeded.glb" id="5_v4ck7"]
+[ext_resource type="PackedScene" uid="uid://hwi6cr2h50ik" path="res://Assets/Models/Plants/Potatoe/potatoe_stage_1.glb" id="6_xtv3x"]
+[ext_resource type="PackedScene" uid="uid://bbeub8rlg3of1" path="res://Assets/Models/Plants/Potatoe/potatoe_stage_2.glb" id="7_2uqwe"]
+[ext_resource type="PackedScene" uid="uid://1xtoih7s1rxp" path="res://Assets/Models/Plants/Potatoe/potatoe_stage_3.glb" id="8_pw5uh"]
+
+[resource]
+script = ExtResource("1_yshcl")
+crop_id = "potatoe"
+display_name = "Potato"
+seed_item = ExtResource("4_qp81e")
+harvest_item = ExtResource("1_h7w6y")
+seeded_scene = ExtResource("5_v4ck7")
+stage_1_scene = ExtResource("6_xtv3x")
+stage_2_scene = ExtResource("7_2uqwe")
+stage_3_scene = ExtResource("8_pw5uh")
+ready_scene = ExtResource("2_3xcyv")
+days_to_stage_1 = 2
+days_to_stage_2 = 6
+days_to_stage_3 = 9
+days_to_ready = 12
+harvest_amount = 3
+allowed_seasons = Array[int]([2])
+metadata/_custom_type_script = "uid://cbipb3o5yusrn"

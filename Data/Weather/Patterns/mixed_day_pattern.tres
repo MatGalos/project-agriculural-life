@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="WeatherDayPatternData" format=3 uid="uid://40lb16htyhsg"]
+
+[ext_resource type="Script" uid="uid://clu6qgm5qqwm2" path="res://Scripts/Weather/WeatherData.gd" id="1_4fauv"]
+[ext_resource type="Script" uid="uid://dba45k5t01a5n" path="res://Scripts/Weather/WeatherDayPatternData.gd" id="2_ewc44"]
+[ext_resource type="Resource" uid="uid://f86jhoifbyhe" path="res://Data/Weather/cloudy_weather.tres" id="2_xphlv"]
+[ext_resource type="Resource" uid="uid://c7yejsmobd4xl" path="res://Data/Weather/rain_weather.tres" id="3_dhefv"]
+[ext_resource type="Resource" uid="uid://oq12c40kkc14" path="res://Data/Weather/sunny_weather.tres" id="4_2s77y"]
+
+[resource]
+script = ExtResource("2_ewc44")
+pattern_id = "mixed_day"
+display_name = "Mixed Day"
+winter_weight = 20
+dawn_weather_options = Array[ExtResource("1_4fauv")]([ExtResource("4_2s77y"), ExtResource("2_xphlv")])
+morning_weather_options = Array[ExtResource("1_4fauv")]([ExtResource("4_2s77y"), ExtResource("2_xphlv")])
+afternoon_weather_options = Array[ExtResource("1_4fauv")]([ExtResource("2_xphlv"), ExtResource("3_dhefv")])
+night_weather_options = Array[ExtResource("1_4fauv")]([ExtResource("2_xphlv"), ExtResource("4_2s77y")])
+base_temperature_min = 12
+dawn_temperature_offset = -3
+metadata/_custom_type_script = "uid://dba45k5t01a5n"

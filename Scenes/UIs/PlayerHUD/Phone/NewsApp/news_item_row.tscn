@@ -1,31 +1,81 @@
-[gd_scene format=3 uid="uid://eywsmmhf7odx"]
+[gd_scene load_steps=3 format=3 uid="uid://eywsmmhf7odx"]
 
 [ext_resource type="Script" uid="uid://ddi3nrihhu7ds" path="res://Scripts/PhoneApps/NewsApp/NewsItemRow.gd" id="1_kb5vx"]
 
-[node name="NewsItemRow" type="VBoxContainer" unique_id=322434469]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_news_card"]
+bg_color = Color(0.045, 0.052, 0.064, 0.96)
+border_width_left = 2
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.18, 0.22, 0.28, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[node name="NewsItemRow" type="PanelContainer" unique_id=322434469]
+custom_minimum_size = Vector2(0, 150)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_news_card")
 script = ExtResource("1_kb5vx")
 
-[node name="TitleLabel" type="Label" parent="." unique_id=573093706]
+[node name="CardMargin" type="MarginContainer" parent="."]
 layout_mode = 2
-size_flags_horizontal = 3
-autowrap_mode = 2
-clip_text = true
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
-[node name="DateLabel" type="Label" parent="." unique_id=1775887589]
+[node name="CardRow" type="HBoxContainer" parent="CardMargin"]
 layout_mode = 2
-size_flags_horizontal = 3
-autowrap_mode = 2
-clip_text = true
+theme_override_constants/separation = 7
 
-[node name="BodyLabel" type="Label" parent="." unique_id=1541707618]
+[node name="CategoryIcon" type="Label" parent="CardMargin/CardRow"]
+custom_minimum_size = Vector2(24, 30)
+layout_mode = 2
+text = "$"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextStack" type="VBoxContainer" parent="CardMargin/CardRow"]
 layout_mode = 2
 size_flags_horizontal = 3
-autowrap_mode = 2
-clip_text = true
+theme_override_constants/separation = 5
+
+[node name="TitleLabel" type="Label" parent="CardMargin/CardRow/TextStack" unique_id=573093706]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
+text = "News title"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="MetaRow" type="HBoxContainer" parent="CardMargin/CardRow/TextStack"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="DateLabel" type="Label" parent="CardMargin/CardRow/TextStack/MetaRow" unique_id=1775887589]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Spring 1, Year 1"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="CategoryLabel" type="Label" parent="CardMargin/CardRow/TextStack/MetaRow"]
+custom_minimum_size = Vector2(54, 0)
+layout_mode = 2
+text = "Market"
+horizontal_alignment = 2
+
+[node name="BodyLabel" type="Label" parent="CardMargin/CardRow/TextStack" unique_id=1541707618]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "News body"
+autowrap_mode = 3
+max_lines_visible = 4

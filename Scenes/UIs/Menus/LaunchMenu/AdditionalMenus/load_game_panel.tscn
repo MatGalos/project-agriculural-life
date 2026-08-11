@@ -1,9 +1,82 @@
-[gd_scene format=3 uid="uid://dnd8qaa681pbk"]
+[gd_scene load_steps=8 format=3 uid="uid://dnd8qaa681pbk"]
 
 [ext_resource type="Script" uid="uid://cghq0a27cyv1m" path="res://Scripts/UIs/Menus/LaunchMenu/AdditionalMenus/LoadGamePanel.gd" id="1_load"]
+[ext_resource type="Script" path="res://Scripts/UIs/Menus/WoodenMenuPanel.gd" id="2_wooden"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_load_game_title"]
 font_size = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_paper_slot"]
+bg_color = Color(0.92, 0.82, 0.62, 1)
+border_color = Color(0.45, 0.30, 0.14, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+shadow_color = Color(0.12, 0.06, 0.025, 0.35)
+shadow_size = 5
+shadow_offset = Vector2(2, 3)
+content_margin_left = 18
+content_margin_top = 10
+content_margin_right = 18
+content_margin_bottom = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_paper_slot_hover"]
+bg_color = Color(1, 0.91, 0.70, 1)
+border_color = Color(0.20, 0.10, 0.035, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+shadow_color = Color(0.08, 0.04, 0.015, 0.45)
+shadow_size = 7
+shadow_offset = Vector2(2, 4)
+content_margin_left = 18
+content_margin_top = 10
+content_margin_right = 18
+content_margin_bottom = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_paper_slot_pressed"]
+bg_color = Color(0.86, 0.74, 0.52, 1)
+border_color = Color(0.20, 0.10, 0.035, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+content_margin_left = 18
+content_margin_top = 10
+content_margin_right = 18
+content_margin_bottom = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_paper_slot_disabled"]
+bg_color = Color(0.78, 0.70, 0.54, 0.92)
+border_color = Color(0.45, 0.30, 0.14, 0.65)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+content_margin_left = 18
+content_margin_top = 10
+content_margin_right = 18
+content_margin_bottom = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_menu_button"]
 
 [node name="LoadGamePanel" type="Control" unique_id=189585165]
 layout_mode = 3
@@ -23,63 +96,119 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.101961, 0.337255, 0.156863, 1)
 
-[node name="PanelContainer" type="PanelContainer" parent="." unique_id=321672058]
+[node name="MenuCenter" type="CenterContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -230.0
-offset_top = -220.0
-offset_right = 230.0
-offset_bottom = 220.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1519720826]
+[node name="WoodenBoard" type="Control" parent="MenuCenter"]
+custom_minimum_size = Vector2(600, 500)
 layout_mode = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 28
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 28
+script = ExtResource("2_wooden")
+plank_count = 7
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=133218427]
+[node name="MenuMargin" type="MarginContainer" parent="MenuCenter/WoodenBoard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 46
+theme_override_constants/margin_top = 34
+theme_override_constants/margin_right = 46
+theme_override_constants/margin_bottom = 36
+
+[node name="MenuContent" type="VBoxContainer" parent="MenuCenter/WoodenBoard/MenuMargin"]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 16
 alignment = 1
 
-[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=59528867]
+[node name="TitleLabel" type="Label" parent="MenuCenter/WoodenBoard/MenuMargin/MenuContent" unique_id=59528867]
+custom_minimum_size = Vector2(0, 62)
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_shadow_color = Color(0.88, 0.62, 0.32, 0.55)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
 text = "Load Game"
 label_settings = SubResource("LabelSettings_load_game_title")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Slot1Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=701256684]
-custom_minimum_size = Vector2(0, 68)
+[node name="SlotButtons" type="VBoxContainer" parent="MenuCenter/WoodenBoard/MenuMargin/MenuContent"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Slot1Button" type="Button" parent="MenuCenter/WoodenBoard/MenuMargin/MenuContent/SlotButtons" unique_id=701256684]
+custom_minimum_size = Vector2(470, 74)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 0.55)
 theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_paper_slot")
+theme_override_styles/hover = SubResource("StyleBoxFlat_paper_slot_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_paper_slot_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_paper_slot_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_paper_slot_disabled")
 text = "Slot 1"
+alignment = 0
 
-[node name="Slot2Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=997639259]
-custom_minimum_size = Vector2(0, 68)
+[node name="Slot2Button" type="Button" parent="MenuCenter/WoodenBoard/MenuMargin/MenuContent/SlotButtons" unique_id=997639259]
+custom_minimum_size = Vector2(470, 74)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 0.55)
 theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_paper_slot")
+theme_override_styles/hover = SubResource("StyleBoxFlat_paper_slot_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_paper_slot_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_paper_slot_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_paper_slot_disabled")
 text = "Slot 2"
+alignment = 0
 
-[node name="Slot3Button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=951234118]
-custom_minimum_size = Vector2(0, 68)
+[node name="Slot3Button" type="Button" parent="MenuCenter/WoodenBoard/MenuMargin/MenuContent/SlotButtons" unique_id=951234118]
+custom_minimum_size = Vector2(470, 74)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 0.55)
 theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_paper_slot")
+theme_override_styles/hover = SubResource("StyleBoxFlat_paper_slot_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_paper_slot_pressed")
+theme_override_styles/focus = SubResource("StyleBoxFlat_paper_slot_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_paper_slot_disabled")
 text = "Slot 3"
+alignment = 0
 
-[node name="BackButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=2066672007]
-custom_minimum_size = Vector2(0, 44)
+[node name="BackButton" type="Button" parent="MenuCenter/WoodenBoard/MenuMargin/MenuContent" unique_id=2066672007]
+custom_minimum_size = Vector2(360, 40)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 22
-text = "Back to menu"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_menu_button")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_menu_button")
+text = "Back to Menu"
+flat = true

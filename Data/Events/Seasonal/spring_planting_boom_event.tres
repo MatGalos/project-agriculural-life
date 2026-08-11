@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="MarketEventData" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Events/MarketEventData.gd" id="1"]
+[ext_resource type="Script" path="res://Scripts/Items/ItemData.gd" id="2"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/beetroot_seed_item.tres" id="3"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/cabbage_seed_item.tres" id="4"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/carrot_seed_item.tres" id="5"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/corn_seed_item.tres" id="6"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/lettuce_seed_item.tres" id="7"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/potatoe_seed_item.tres" id="8"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/pumpkin_seed_item.tres" id="9"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/strawberry_seed_item.tres" id="10"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/tomatoe_seed_item.tres" id="11"]
+[ext_resource type="Resource" path="res://Data/Items/Seeds/wheat_seed_item.tres" id="12"]
+
+[resource]
+script = ExtResource("1")
+event_id = "spring_planting_boom"
+display_name = "Spring Planting Boom"
+description = "Early spring planting demand raises seed prices."
+duration_days = 7
+trigger_chance = 1.0
+event_category = 2
+trigger_mode = 2
+affects_buy_prices = true
+affected_buy_price_items = Array[ExtResource("2")]([ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("10"), ExtResource("11"), ExtResource("12")])
+buy_price_multiplier = 1.2
+requires_season = true
+required_seasons = Array[int]([0])
+requires_day_range = true
+start_day = 1
+end_day = 7

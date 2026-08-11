@@ -5,4 +5,5 @@
 
 [resource]
 script = ExtResource("1_bcdbo")
+slot_count = 25
 metadata/_custom_type_script = "uid://btwfsvrsrv4qk"

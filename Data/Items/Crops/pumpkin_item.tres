@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CropItemData" format=3 uid="uid://dlt6hdpk41dgi"]
+
+[ext_resource type="Script" uid="uid://c3smts8jy3m4p" path="res://Scripts/Items/CropItemData.gd" id="1_jjxra"]
+[ext_resource type="Texture2D" path="res://Assets/Icons/Items/Plants/Pumpkin.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_jjxra")
+crop_id = "pumpkin"
+id = "pumpkin"
+display_name = "Pumpkin"
+description = "Harvested pumpkin crop"
+icon = ExtResource("2_icon")
+base_price = 39
+category = 0
+metadata/_custom_type_script = "uid://c3smts8jy3m4p"

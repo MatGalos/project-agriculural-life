@@ -8,6 +8,15 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | --- | --- |
 | `func setup(data: MarketEventData) -> void:` | Initializes this object or row from provided data. |
 
+## `Scripts/Events/MarketEventData.gd`
+
+Resource only plus helper functions. Stores event identity, category, trigger mode, affected products, commodity effects, buy-price effects, and optional sales/season/day-range/weather/temperature requirements.
+
+| Function | Description |
+| --- | --- |
+| `func get_affected_items() -> Array[ItemData]:` | Returns unique non-null commodity items affected by the event, using `affected_items` or legacy `target_item`. |
+| `func get_affected_buy_price_items() -> Array[ItemData]:` | Returns unique non-null items whose buy prices are affected by the event. |
+
 ## `Scripts/Farming/CropData.gd`
 
 | Function | Description |
@@ -47,14 +56,61 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _simulate_day_hours(day: int, start_hour: int, end_hour: int) -> void:` | Handles simulate day hours behavior. |
 | `func _update_commodity_price(commodity: CommodityData, log_time: String) -> void:` | Updates update commodity price from current data. |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
+| `func _capture_base_market_values() -> void:` | Captures base volatility and trend strength values used when rebuilding runtime event modifiers. |
+| `func _ensure_base_market_values() -> void:` | Ensures base commodity modifier values are available before applying event effects. |
 | `func _initialize_price_history() -> void:` | Handles initialize price history behavior. |
 | `func _on_time_changed() -> void:` | Handles the 'on time changed' signal callback. |
 | `func get_commodity_for_item(item_data: ItemData) -> CommodityData:` | Returns the current commodity for item. |
 | `func has_commodity(item_data: ItemData) -> bool:` | Returns whether commodity exists or is available. |
 | `func get_current_price(item_data: ItemData) -> int:` | Returns the current current price. |
 | `func _get_history_label(time_string: String) -> String:` | Builds or returns get history label for internal use. |
-| `func reset_event_modifiers() -> void:` | Resets event modifiers to its default state. |
-| `func apply_event_modifier(event_data: MarketEventData) -> void:` | Applies event modifier to current gameplay state. |
+| `func reset_event_modifiers() -> void:` | Restores commodity trend, trend strength, and volatility to base runtime values before active events are reapplied. |
+| `func apply_event_modifier(event_data: MarketEventData) -> void:` | Applies one event's commodity modifiers to every affected item. |
+| `func _apply_runtime_values_to_commodity(commodity: CommodityData) -> void:` | Resolves summed trend direction, trend strength, and volatility for one commodity. |
+
+## `Scripts/GameManagers/AudioSettingsManager.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Initializes audio settings, ensures required buses exist, loads saved values, and applies them. |
+| `func set_master_volume(value: float) -> void:` | Stores, saves, and applies the Master volume in the `0.0-1.0` range. |
+| `func set_sfx_volume(value: float) -> void:` | Stores, saves, and applies the SFX volume in the `0.0-1.0` range. |
+| `func set_notifications_volume(value: float) -> void:` | Stores, saves, and applies the Notifications volume in the `0.0-1.0` range. |
+| `func set_music_volume(value: float) -> void:` | Stores, saves, and applies the Music volume in the `0.0-1.0` range. |
+| `func apply_settings() -> void:` | Applies all audio settings to named buses and emits `audio_settings_changed`. |
+| `func save_settings() -> void:` | Writes audio settings to `user://settings.cfg`. |
+| `func load_settings() -> void:` | Loads audio settings from `user://settings.cfg`, keeping defaults for missing or invalid values. |
+| `func ensure_audio_buses() -> void:` | Ensures `SFX`, `Notifications`, and `Music` buses exist and send to `Master`. |
+| `func _ensure_bus(bus_name: String) -> void:` | Creates one missing child bus and routes it to `Master`. |
+| `func _apply_bus_volume(bus_name: String, value: float) -> void:` | Resolves a bus by name, mutes 0% values, and applies linear-to-dB volume for nonzero values. |
+| `func _read_volume(config: ConfigFile, key: String, default_value: float) -> float:` | Safely reads and clamps a saved volume value. |
+| `func _clamp_volume(value: float) -> float:` | Clamps a volume value to `0.0-1.0`. |
+
+## `Scripts/GameManagers/UISoundManager.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Prepares placeholder UI/notification streams and creates the pooled audio players. |
+| `func play_ui_click() -> void:` | Plays the generic UI click sound through the `SFX` bus. |
+| `func play_phone_open() -> void:` | Plays the FarmPhone opening sound through the `SFX` bus. |
+| `func play_phone_close() -> void:` | Plays the FarmPhone closing sound through the `SFX` bus. |
+| `func play_phone_app_switch() -> void:` | Plays the FarmPhone app-switch sound through the `SFX` bus. |
+| `func play_notification() -> void:` | Compatibility wrapper that routes to `play_notification_new()`. |
+| `func play_notification_new() -> void:` | Plays the new-notification sound through the notification bus with a short cooldown. |
+| `func play_plant_seed() -> void:` | Plays the successful seed-planting sound through the `SFX` bus. |
+| `func play_till_soil() -> void:` | Plays the successful soil-tilling sound through the `SFX` bus. |
+| `func play_water_crop() -> void:` | Plays the successful watering sound through the `SFX` bus. |
+| `func play_harvest_crop() -> void:` | Plays the successful harvest sound through the `SFX` bus. |
+| `func play_buy_item() -> void:` | Plays the successful purchase sound through the `SFX` bus. |
+| `func play_sell_item() -> void:` | Plays the successful sale sound through the `SFX` bus. |
+| `func play_transfer_item() -> void:` | Plays the successful storage-transfer sound through the `SFX` bus. |
+| `func play_action_error() -> void:` | Plays the selected blocked-action sound through the `SFX` bus. |
+| `func _load_audio_streams() -> void:` | Loads the prepared UI, notification, and gameplay `.wav` files when exported stream overrides are not assigned. |
+| `func _load_stream(path: String, label: String) -> AudioStream:` | Safely loads one audio stream, warning instead of crashing when the file is missing or invalid. |
+| `func _create_player_pool() -> void:` | Creates reusable `AudioStreamPlayer` nodes for short overlapping sounds. |
+| `func _play_stream(stream: AudioStream, bus_name: String) -> void:` | Assigns a stream and bus to an available pooled player and starts playback. |
+| `func _get_available_player() -> AudioStreamPlayer:` | Returns a non-playing audio player or reuses the first pooled player. |
+| `func _get_notification_bus_name() -> String:` | Resolves `Notifications`, falls back to `Notification`, and finally returns `Notifications`. |
 
 ## `Scripts/GameManagers/CropGrowthManager.gd`
 
@@ -71,21 +127,44 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
 | `func _register_prices() -> void:` | Handles register prices behavior. |
-| `func get_buy_price(item_data: ItemData) -> int:` | Returns the current buy price. |
+| `func get_buy_price(item_data: ItemData) -> int:` | Returns the current buy price after applying active runtime event multipliers. |
 | `func get_sell_price(item_data: ItemData) -> int:` | Returns the current sell price. |
+| `func reset_buy_price_modifiers() -> void:` | Clears all runtime buy-price multipliers and emits `buy_prices_changed`. |
+| `func apply_buy_price_event_modifier(event_data: MarketEventData) -> void:` | Applies one event's buy-price multiplier to all affected buy-price items. |
 
 ## `Scripts/GameManagers/EventManager.gd`
 
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
+| `func _rebuild_possible_market_events() -> void:` | Rebuilds the combined event list from market, weather, and seasonal event arrays. |
 | `func _on_day_changed() -> void:` | Handles the 'on day changed' signal callback. |
+| `func _finish_day_event_processing() -> void:` | Deferred day-end event processing after dependent managers have updated daily state. |
 | `func _process_active_events() -> void:` | Processes process active events for current game state. |
-| `func _try_trigger_market_event() -> void:` | Attempts to try trigger market event when rules allow it. |
+| `func _try_trigger_market_events() -> void:` | Attempts to start eligible daily events until the daily start cap is reached. |
+| `func _try_trigger_fixed_date_events_for_current_day() -> void:` | Attempts fixed-date events for the current date, used on startup/new day. |
 | `func _is_event_already_active(event_data: MarketEventData) -> bool:` | Checks whether is event already active is true for internal flow. |
+| `func trigger_event_by_id(event_id: String) -> bool:` | Safely starts a configured event directly by ID for tests/debug use. |
+| `func _start_market_event(event_data: MarketEventData, emit_started_signal: bool = true) -> bool:` | Creates an active event if it is not duplicate and the daily cap allows it. |
+| `func _update_daily_event_limit_key() -> void:` | Resets the daily start counter when the date changes. |
+| `func _can_start_event_today() -> bool:` | Returns whether the daily event-start cap still allows another event. |
 | `func _apply_market_event_effects() -> void:` | Applies apply market event effects to current state. |
 | `func get_active_market_events() -> Array[ActiveMarketEvent]:` | Returns the current active market events. |
 | `func get_event_by_id(event_id: String) -> MarketEventData:` | Finds a configured market event resource by save-game event ID. |
+| `func _does_event_meet_requirements(event_data: MarketEventData) -> bool:` | Checks sales and other event requirements before trigger chance is rolled. |
+| `func _meets_sales_requirements(event_data: MarketEventData) -> bool:` | Checks recent sales requirements through `SalesStatsManager`. |
+| `func _meets_season_requirements(event_data: MarketEventData) -> bool:` | Checks whether the current season is in the event's required season list. |
+| `func _meets_day_range_requirements(event_data: MarketEventData) -> bool:` | Checks inclusive current-season day ranges from 1 to 30. |
+| `func _meets_weather_requirements(event_data: MarketEventData) -> bool:` | Checks completed-day dry/rain history requirements. |
+| `func _meets_temperature_requirements(event_data: MarketEventData) -> bool:` | Checks the current day's stable base temperature against event min/max values. |
+| `func _can_trigger_fixed_date_event(event_data: MarketEventData) -> bool:` | Checks saved fixed-date event lock state. |
+| `func _mark_fixed_date_event_triggered(event_data: MarketEventData) -> void:` | Stores the fixed-date event lock key for the current year. |
+| `func _get_fixed_date_event_key(event_data: MarketEventData) -> String:` | Builds the `event_id:year` lock key. |
+| `func create_calendar_event_state_save_data() -> Dictionary:` | Serializes fixed-date event lock state. |
+| `func apply_calendar_event_state_save_data(save_data: Dictionary) -> void:` | Restores fixed-date event lock state. |
+| `func create_daily_event_limit_save_data() -> Dictionary:` | Serializes the current date key and number of events started today. |
+| `func apply_daily_event_limit_save_data(save_data: Dictionary) -> void:` | Restores the daily event-start counter. |
+| `func _validate_possible_market_events() -> void:` | Validates event resources for duplicate IDs, nulls, invalid ranges, and missing required data. |
 
 ## `Scripts/GameManagers/gameManager.gd`
 
@@ -102,6 +181,8 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func closeLoadGamePanel() -> void:` | Closes the load game slot picker and returns to the menu context it was opened from. |
 | `func showMainMenu() -> void:` | Shows the main menu and hides gameplay submenus. |
 | `func openOptions(from_context: int) -> void:` | Opens options. |
+| `func openHowToPlay(from_context: int) -> void:` | Opens the How to Play screen from Main Menu or Pause Menu and preserves the correct return context. |
+| `func openCredits() -> void:` | Opens the Credits screen from the Main Menu. |
 | `func showGlobalUI() -> void:` | Handles show global ui behavior. |
 | `func _handle_pause_action() -> void:` | Handles handle pause action behavior. |
 | `func _updateMouseMode() -> void:` | Handles update mouse mode behavior. |
@@ -149,15 +230,27 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func can_afford(amount: int) -> bool:` | Returns whether afford is allowed in the current state. |
 | `func spend_money(amount: int) -> bool:` | Attempts to spend money if the player can afford it. |
 
+## `Scripts/GameManagers/SalesStatsManager.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Connects daily rollover handling to `TimeManager.day_changed`. |
+| `func record_sale(item_data: ItemData, amount: int) -> void:` | Adds sold amount to the current day's item total, optionally prints debug output when `suppress_logs` is false, and emits `sales_stats_changed`. |
+| `func get_recent_sales_amount(item_id: String, days: int = HISTORY_DAYS) -> int:` | Returns sales for an item across the current day and recent history. |
+| `func _on_day_changed() -> void:` | Moves current-day sales into rolling history, trims old entries, and emits `sales_stats_changed`. |
+| `func create_save_data() -> Dictionary:` | Serializes current-day sales and recent sales history. |
+| `func apply_save_data(save_data: Dictionary) -> void:` | Restores sales statistics from save data and emits `sales_stats_changed`. |
+
 ## `Scripts/GameManagers/NewsManager.gd`
 
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func _on_market_event_started(event_data: MarketEventData) -> void:` | Handles the 'on market event started' signal callback. |
+| `func _on_market_event_started(event_data: MarketEventData) -> void:` | Creates news for a newly started market event and shows a HUD news alert when the news is new. |
 | `func _on_market_event_ended(event_data: MarketEventData) -> void:` | Clears the announced-event marker when an active market event expires. |
 | `func sync_active_market_event_news() -> void:` | Ensures every currently active market event has a corresponding news entry when no saved news list overrides it. |
-| `func add_market_event_news(event_data: MarketEventData) -> void:` | Creates a news entry for a market event unless that event was already announced. |
+| `func add_market_event_news(event_data: MarketEventData) -> bool:` | Creates a news entry for a market event unless that event was already announced; returns whether a new item was added. |
+| `func _show_market_event_news_alert(event_data: MarketEventData) -> void:` | Displays a bottom-left HUD alert for newly generated market-event news. |
 | `func add_news(news_item: NewsItem) -> void:` | Adds news and emits related updates when needed. |
 | `func clear_news() -> void:` | Clears current news and announced-event tracking, then emits `news_cleared`. |
 | `func replace_news_items(saved_news_items: Array[NewsItem]) -> void:` | Replaces current news with the loaded save-game news list, capped to `MAX_NEWS_COUNT`. |
@@ -182,12 +275,14 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _apply_hotbar_save_data(hotbar_save_data: Dictionary) -> void:` | Restores hotbar mapping, selected slot, and related UI signals. |
 | `func _create_storage_save_data() -> Dictionary:` | Serializes silo storage contents. |
 | `func _apply_storage_save_data(storage_data: Dictionary) -> void:` | Restores silo storage contents and refreshes dependent panels. |
-| `func _create_weather_save_data() -> Dictionary:` | Serializes current weather and forecast entries. |
-| `func _apply_weather_save_data(weather_data: Dictionary) -> void:` | Restores current weather, forecast, and weather signals. |
+| `func _create_weather_save_data() -> Dictionary:` | Serializes current weather, forecast entries, and completed-day weather history. |
+| `func _apply_weather_save_data(weather_data: Dictionary) -> void:` | Restores current weather, forecast, weather history, and weather signals. |
 | `func _create_market_save_data() -> Dictionary:` | Serializes commodity market prices, trends, volatility, and history. |
 | `func _apply_market_save_data(market_data: Dictionary) -> void:` | Restores commodity market state. |
 | `func _create_events_save_data() -> Array:` | Serializes active market events and remaining duration. |
 | `func _apply_events_save_data(events_data: Array, emit_change: bool = true) -> void:` | Restores active market events and optionally emits event-change signals. |
+| `func _create_event_state_save_data() -> Dictionary:` | Serializes event runtime state that cannot be derived from active events, including calendar locks and daily start limits. |
+| `func _apply_event_state_save_data(event_state_data: Dictionary) -> void:` | Restores event runtime state such as fixed-date locks and daily start counters. |
 | `func _create_news_save_data() -> Array:` | Serializes the latest saved news entries, capped to `MAX_NEWS_SAVE_COUNT`. |
 | `func _apply_news_save_data(news_data: Array) -> void:` | Restores saved news history and refreshes the news panel. |
 | `func _get_crop_by_id(crop_id: String) -> CropData:` | Finds a crop resource by crop ID for world restoration. |
@@ -195,6 +290,8 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _apply_world_save_data(world_data: Dictionary) -> void:` | Restores farm tile state through `WorldManager` tile IDs. |
 | `func _create_player_position_save_data() -> Dictionary:` | Serializes player world position. |
 | `func _apply_player_position_save_data(position_data: Dictionary) -> void:` | Restores player world position. |
+| `func _create_sales_stats_save_data() -> Dictionary:` | Serializes sales statistics through `SalesStatsManager`. |
+| `func _apply_sales_stats_save_data(sales_data: Dictionary) -> void:` | Restores sales statistics through `SalesStatsManager`. |
 | `func get_save_path(slot: int = current_save_slot) -> String:` | Resolves a save slot to its `user://save_slot_%d.json` path. |
 | `func set_current_save_slot(slot: int) -> void:` | Selects the active save slot, clamped to the valid slot range. |
 | `func has_save(slot: int) -> bool:` | Returns whether the given save slot file exists. |
@@ -228,38 +325,69 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | Function | Description |
 | --- | --- |
 | `func get_active_tool() -> ToolItemData:` | Returns the current active tool. |
-| `func use_active_tool(target: Node) -> void:` | Handles use active tool behavior. |
-| `func refill_watering_can() -> void:` | Handles refill watering can behavior. |
+| `func use_active_tool(target: Node) -> void:` | Uses the selected hotbar item on a world target or shows concise HUD feedback when no tool/target/action is valid. |
+| `func refill_watering_can() -> void:` | Refills watering-can water, emits refresh signal, and shows HUD feedback. |
 | `func get_tool_prompt_for_target(target: Node) -> String:` | Returns the current tool prompt for target. |
 | `func _use_tool_item(target: Node, tool: ToolItemData) -> void:` | Handles use tool item behavior. |
-| `func _use_hoe(target: Node) -> void:` | Handles use hoe behavior. |
-| `func _use_watering_can(target: Node) -> void:` | Handles use watering can behavior. |
-| `func _use_seed_item(target: Node, seed_item: SeedItemData) -> void:` | Handles use seed item behavior. |
-| `func _use_scythe(target: Node) -> void:` | Handles use scythe behavior. |
+| `func _use_hoe(target: Node) -> void:` | Plows grass farm tiles or shows invalid-action HUD feedback. |
+| `func _use_watering_can(target: Node) -> void:` | Waters plowed farm tiles or shows watering-can/invalid-action HUD feedback. |
+| `func _use_seed_item(target: Node, seed_item: SeedItemData) -> void:` | Plants valid seeds, consumes one seed, refreshes UI, and shows use/error HUD feedback. |
+| `func _use_scythe(target: Node) -> void:` | Harvests ready crops when inventory can accept the product and shows harvest/error HUD feedback. |
+| `func _can_inventory_fit(item_data: ItemData, amount: int) -> bool:` | Checks stack and empty-slot capacity before harvesting so full-inventory feedback does not destroy crops. |
 | `func _find_farm_tile(target: Node) -> FarmTile:` | Finds find farm tile from the provided context. |
 | `func _get_crop_data_for_seed(seed_item: SeedItemData) -> CropData:` | Builds or returns get crop data for seed for internal use. |
 | `func _get_tool_item_prompt(tile: FarmTile, tool: ToolItemData) -> String:` | Builds or returns get tool item prompt for internal use. |
 | `func _refresh_inventory_ui() -> void:` | Refreshes refresh inventory ui from current data. |
-| `func _show_hud_event_message(message: String) -> void:` | Handles show hud event message behavior. |
+| `func _show_hud_event_message(message: String) -> void:` | Sends short gameplay feedback through `PlayerHUD.show_event_message()`. |
 
 ## `Scripts/GameManagers/WeatherManager.gd`
 
 | Function | Description |
 | --- | --- |
-| `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func _on_day_changed() -> void:` | Handles the 'on day changed' signal callback. |
-| `func _apply_new_day_weather() -> void:` | Applies apply new day weather to current state. |
-| `func _roll_weather() -> WeatherData:` | Handles roll weather behavior. |
-| `func _roll_temperature(weather: WeatherData) -> int:` | Handles roll temperature behavior. |
+| `func _ready() -> void:` | Connects weather to time/day signals, builds initial forecasts, applies the current phase weather, and logs the starting phase. |
+| `func _on_day_changed() -> void:` | Records the completed day, applies the next daily weather entry, rebuilds phase forecast data, and applies the current phase. |
+| `func _on_time_changed() -> void:` | Updates cached day phase state after `TimeManager.time_changed`. |
+| `func _record_completed_day_weather() -> void:` | Adds the completed day to the capped weather-history list used by event requirements. |
+| `func _get_completed_day_date() -> Dictionary:` | Builds the year, season, and day values for the day that just ended. |
+| `func _get_season_for_month(month: int) -> SeasonData.Season:` | Converts a month number into the corresponding season enum. |
+| `func _is_representative_day_rainy(pattern: WeatherDayPatternData) -> bool:` | Determines whether a completed day should count as rainy for event history. |
+| `func _apply_new_day_weather() -> void:` | Advances the rolling daily forecast and emits `weather_changed` for daily weather data. |
+| `func _roll_weather() -> WeatherData:` | Picks one configured weather resource for daily forecast data. |
+| `func _roll_temperature(weather: WeatherData) -> int:` | Rolls a temperature within the selected weather resource range. |
 | `func get_current_weather_name() -> String:` | Returns the current current weather name. |
 | `func get_tomorrow_weather_name() -> String:` | Returns the current tomorrow weather name. |
 | `func get_current_temperature_string() -> String:` | Returns the current current temperature string. |
 | `func get_tomorrow_temperature_string() -> String:` | Returns the current tomorrow temperature string. |
-| `func _water_fields_if_needed() -> void:` | Handles water fields if needed behavior. |
-| `func _generate_initial_forecast() -> void:` | Handles generate initial forecast behavior. |
-| `func _generate_forecast_entry() -> Dictionary:` | Handles generate forecast entry behavior. |
+| `func _water_fields_if_needed() -> void:` | Waters plowed farm tiles when the active weather resource has `waters_fields`. |
+| `func _generate_initial_forecast() -> void:` | Rebuilds the rolling daily forecast to `FORECAST_DAYS` entries. |
+| `func _generate_forecast_entry() -> Dictionary:` | Creates one daily forecast dictionary containing weather, temperature, day pattern, base temperature, and rain chance. |
 | `func get_forecast() -> Array[Dictionary]:` | Returns the current forecast. |
 | `func get_weather_by_name(weather_name: String) -> WeatherData:` | Finds configured weather data by display name for save loading. |
+| `func is_current_weather_watering_fields() -> bool:` | Returns whether the current weather automatically waters fields. |
+| `func get_day_phase_name(phase: WeatherPhaseData.DayPhase) -> String:` | Converts a day phase enum to a display/log name. |
+| `func _update_day_phase() -> void:` | Recomputes the current day phase, updates `current_day_phase` only on change, logs the transition, and applies phase weather. |
+| `func get_current_day_phase() -> WeatherPhaseData.DayPhase:` | Maps `TimeManager.get_hour()` to Dawn, Morning, Afternoon, or Night. |
+| `func _generate_phase_forecast(phase: WeatherPhaseData.DayPhase, day_base_temperature: int) -> WeatherPhaseData:` | Creates phase-specific weather data from the current day pattern and shared daily base temperature. |
+| `func _roll_rain_chance(weather: WeatherData) -> int:` | Rolls rain chance based on weather type and watering behavior. |
+| `func _generate_today_phase_forecast() -> void:` | Rolls the current day pattern and one daily base temperature, then builds Dawn, Morning, Afternoon, and Night phase forecasts. |
+| `func _get_phase_forecast(phase: WeatherPhaseData.DayPhase) -> WeatherPhaseData:` | Finds the generated phase forecast for a specific day phase. |
+| `func _apply_current_phase_weather() -> void:` | Applies weather and temperature from the cached current phase and emits `weather_changed`. |
+| `func _get_pattern_weight_for_current_season(pattern: WeatherDayPatternData) -> int:` | Returns a day pattern's weight for the active season. |
+| `func _roll_day_pattern() -> WeatherDayPatternData:` | Picks a season-weighted weather day pattern. |
+| `func _roll_day_base_temperature(pattern: WeatherDayPatternData) -> int:` | Rolls one base temperature for all phase temperatures in the current day pattern. |
+| `func get_current_season_weather_profile() -> SeasonWeatherData:` | Returns the weather balancing profile for the active season. |
+| `func get_consecutive_recent_dry_days() -> int:` | Returns the number of consecutive non-rainy completed days at the end of history. |
+| `func get_rainy_days_in_recent_days(days: int) -> int:` | Counts rainy completed days in the requested recent-history window. |
+| `func get_current_day_base_temperature() -> float:` | Returns the stable daily base temperature for temperature-gated events. |
+| `func create_weather_history_save_data() -> Array:` | Serializes completed-day weather history. |
+| `func apply_weather_history_save_data(history_data: Array) -> void:` | Restores completed-day weather history from save data. |
+| `func _get_weather_options_for_phase(pattern: WeatherDayPatternData, phase: WeatherPhaseData.DayPhase) -> Array[WeatherData]:` | Returns weather options configured for a pattern and phase. |
+| `func _get_temperature_offset_for_phase(pattern: WeatherDayPatternData, phase: WeatherPhaseData.DayPhase) -> int:` | Returns the temperature offset configured for a pattern and phase. |
+| `func get_today_phase_forecast() -> Array[WeatherPhaseData]:` | Returns the generated phase forecast for the current day. |
+| `func get_current_phase_weather() -> WeatherPhaseData:` | Returns the active phase weather data. |
+| `func get_current_day_pattern_name() -> String:` | Returns the active day pattern display name. |
+| `func get_phase_forecast_text(phase_data: WeatherPhaseData) -> String:` | Formats one phase forecast for debug output. |
+| `func print_today_forecast() -> void:` | Prints the current day pattern and all phase forecast rows. |
 
 ## `Scripts/GameManagers/WorldManager.gd`
 
@@ -319,13 +447,24 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
+| `func _draw() -> void:` | Draws the current inventory or hotbar slot visual state. |
+| `func _draw_inventory_slot() -> void:` | Draws the regular inventory slot background, hover state, and selected outline. |
+| `func _draw_hotbar_slot() -> void:` | Draws the leather-pocket hotbar slot background and active state. |
+| `func set_display_mode(new_display_mode: int) -> void:` | Sets whether this slot renders as a regular inventory slot or hotbar slot. |
 | `func set_slot(index: int, slot: InventorySlot) -> void:` | Sets slot and applies related side effects. |
 | `func clear() -> void:` | Handles clear behavior. |
+| `func set_selected(is_selected: bool) -> void:` | Updates the selected visual state without changing inventory data. |
+| `func set_active_hotbar(is_active: bool) -> void:` | Updates the active-hotbar visual state without changing hotbar data. |
 | `func _get_drag_data(_position):` | Creates drag payload data and drag preview UI. |
 | `func _can_drop_data(_position, data) -> bool:` | Checks whether the current drag payload can be dropped here. |
 | `func _drop_data(_position, data) -> void:` | Applies the accepted drag-and-drop payload. |
 | `func _update_water_bar(item_data: ItemData) -> void:` | Updates update water bar from current data. |
 | `func _gui_input(event: InputEvent) -> void:` | Handles gui input behavior. |
+| `func _on_mouse_entered() -> void:` | Applies hover visuals and emits the hovered slot index. |
+| `func _on_mouse_exited() -> void:` | Clears hover visuals. |
+| `func _on_resized() -> void:` | Repositions slot contents and redraws when the slot size changes. |
+| `func _apply_layout() -> void:` | Positions the icon, amount badge, and watering-can bar inside the slot. |
+| `func _position_water_bar() -> void:` | Positions the watering-can fill bar at the bottom of the slot. |
 
 ## `Scripts/Inventory/InventoryData.gd`
 
@@ -357,10 +496,19 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func refresh() -> void:` | Rebuilds or updates this UI from current backing data. |
-| `func _update_status() -> void:` | Updates update status from current data. |
-| `func _on_commodity_selected(commodity: CommodityData) -> void:` | Handles the 'on commodity selected' signal callback. |
-| `func _update_history(commodity: CommodityData) -> void:` | Updates update history from current data. |
+| `func refresh() -> void:` | Rebuilds the market list from `CommodityMarketManager.commodities` and refreshes the details view when it is visible. |
+| `func _update_status() -> void:` | Updates the open/closed market status from configured market hours. |
+| `func _rebuild_list() -> void:` | Recreates the compact commodity row list without changing market data. |
+| `func _on_commodity_selected(commodity: CommodityData) -> void:` | Selects a commodity, marks the selected row, and opens the local details view. |
+| `func _show_list_view() -> void:` | Shows the product list and hides the local details back button. |
+| `func _show_details_view() -> void:` | Shows the selected product details and displays the local back button. |
+| `func _update_row_selection() -> void:` | Applies selected-row state to the current row instances. |
+| `func _update_details(commodity: CommodityData) -> void:` | Populates the details header, trend, current price, percent change, chart, and compact stats from `CommodityData`. |
+| `func _update_stats(commodity: CommodityData) -> void:` | Calculates min, max, and average price from real `price_history`. |
+| `func _set_stats_empty() -> void:` | Clears detail stats when no price history is available. |
+| `func _get_change_percent(commodity: CommodityData) -> float:` | Calculates percent change from current price versus the previous history entry. |
+| `func _get_change_color(change: float) -> Color:` | Maps positive, negative, and neutral changes to market UI colors. |
+| `func _on_visibility_changed() -> void:` | Resets the Market app to the product list when the app becomes visible. |
 
 ## `Scripts/PhoneApps/CommodityExchangeApp/CommodityItemRow.gd`
 
@@ -368,10 +516,31 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
 | `func setup(commodity: CommodityData) -> void:` | Initializes this object or row from provided data. |
-| `func _apply_values() -> void:` | Applies apply values to current state. |
-| `func _get_trend_text(commodity: CommodityData) -> String:` | Builds or returns get trend text for internal use. |
-| `func _get_change_text(commodity: CommodityData) -> String:` | Builds or returns get change text for internal use. |
+| `func set_selected(value: bool) -> void:` | Updates the visual selected state for the row. |
+| `func _apply_values() -> void:` | Applies icon, product name, current price, and percent change text from the assigned commodity. |
+| `func _get_change_percent(commodity: CommodityData) -> float:` | Calculates percent change from current price versus the previous history entry. |
+| `func _get_change_color(change: float) -> Color:` | Maps positive, negative, and neutral changes to market UI colors. |
+| `func _prepare_styles() -> void:` | Builds normal, hover, and selected row styleboxes. |
+| `func _configure_style(style: StyleBoxFlat, bg_color: Color, border_color: Color) -> void:` | Applies shared row card style settings to one stylebox. |
+| `func _apply_style() -> void:` | Applies normal, hover, or selected card styling. |
+| `func _on_mouse_entered() -> void:` | Applies hover state. |
+| `func _on_mouse_exited() -> void:` | Clears hover state. |
 | `func _gui_input(event: InputEvent) -> void:` | Handles gui input behavior. |
+
+## `Scripts/PhoneApps/CommodityExchangeApp/PriceHistoryChart.gd`
+
+| Function | Description |
+| --- | --- |
+| `func set_commodity(commodity: CommodityData) -> void:` | Sets the commodity whose real `price_history` should be drawn. |
+| `func _draw() -> void:` | Draws the chart grid, bars, and range labels from current history data. |
+| `func _recent_prices(history: Array[float]) -> Array[float]:` | Returns the latest history samples used for the visible chart. |
+| `func _draw_grid(chart_rect: Rect2) -> void:` | Draws subtle horizontal chart guide lines. |
+| `func _draw_bars(chart_rect: Rect2, prices: Array[float], min_price: float, price_range: float) -> void:` | Draws one bar per price sample, colored by movement versus the previous sample. |
+| `func _draw_range_labels(chart_rect: Rect2, min_price: float, max_price: float) -> void:` | Draws min and max price labels for the visible chart range. |
+| `func _draw_empty_state() -> void:` | Draws the no-history fallback text. |
+| `func _bar_color(prices: Array[float], index: int) -> Color:` | Returns positive, negative, or neutral bar color for a history sample. |
+| `func _min_price(prices: Array[float]) -> float:` | Returns the minimum visible chart price. |
+| `func _max_price(prices: Array[float]) -> float:` | Returns the maximum visible chart price. |
 
 ## `Scripts/PhoneApps/NewsApp/NewsItemRow.gd`
 
@@ -392,10 +561,18 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func setup(new_item_data: ItemData, new_amount: int) -> void:` | Initializes this object or row from provided data. |
-| `func _apply_values() -> void:` | Applies apply values to current state. |
-| `func _on_sell_one_pressed() -> void:` | Handles the 'on sell one pressed' signal callback. |
-| `func _on_sell_all_pressed() -> void:` | Handles the 'on sell all pressed' signal callback. |
+| `func setup(new_item_data: ItemData, new_amount: int, new_selected_amount: int = 0) -> void:` | Initializes one sell row from item data, stored amount, and selected sell amount. |
+| `func _apply_values() -> void:` | Applies icon, product name, stored amount, unit price, selected quantity, subtotal, and button enabled state. |
+| `func _set_selected_amount(value: int) -> void:` | Clamps selected quantity to available storage and emits the updated row quantity. |
+| `func _on_minus_pressed() -> void:` | Decreases selected sell quantity by one. |
+| `func _on_plus_pressed() -> void:` | Increases selected sell quantity by one. |
+| `func _on_half_pressed() -> void:` | Sets selected sell quantity to half of the stored amount. |
+| `func _on_all_pressed() -> void:` | Sets selected sell quantity to all stored items for this product. |
+| `func _on_selected_text_submitted(new_text: String) -> void:` | Commits direct typed quantity edits when Enter is pressed. |
+| `func _on_selected_focus_exited() -> void:` | Commits direct typed quantity edits when the field loses focus. |
+| `func _commit_selected_text(new_text: String) -> void:` | Validates typed selected quantity, clamps it to storage amount, or restores the previous valid number. |
+| `func _on_sell_pressed() -> void:` | Requests sale of the selected quantity. |
+| `func _on_sell_all_pressed() -> void:` | Requests sale of all stored items for this product. |
 
 ## `Scripts/PhoneApps/SellApp/SellingPanel.gd`
 
@@ -405,11 +582,24 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func open() -> void:` | Opens . |
 | `func close() -> void:` | Closes . |
 | `func toggle() -> void:` | Toggles  between active and inactive states. |
-| `func refresh() -> void:` | Rebuilds or updates this UI from current backing data. |
-| `func _on_sell_one_requested(item_data: ItemData) -> void:` | Handles the 'on sell one requested' signal callback. |
-| `func _on_commodity_prices_updated() -> void:` | Handles the 'on commodity prices updated' signal callback. |
-| `func _on_sell_all_requested(item_data: ItemData) -> void:` | Handles the 'on sell all requested' signal callback. |
-| `func _sell_item(item_data: ItemData, amount: int) -> void:` | Handles sell item behavior. |
+| `func refresh() -> void:` | Rebuilds sell rows from `StorageData`, clamps local selected quantities, and updates empty state and summary. |
+| `func set_sell_quantity(item_id: String, quantity: int) -> void:` | Sets local selected sell quantity for one stored product. |
+| `func increase_sell_quantity(item_id: String, amount: int = 1) -> void:` | Increases selected sell quantity for one product. |
+| `func decrease_sell_quantity(item_id: String, amount: int = 1) -> void:` | Decreases selected sell quantity for one product. |
+| `func set_half_quantity(item_id: String) -> void:` | Sets selected sell quantity to half of the stored amount. |
+| `func set_all_quantity(item_id: String) -> void:` | Sets selected sell quantity to all stored items for one product. |
+| `func get_sell_value(item_id: String) -> int:` | Calculates selected sale value for one product from current sell price and selected quantity. |
+| `func get_total_selected_value() -> int:` | Calculates total selected sale value across all rows. |
+| `func _on_row_quantity_changed(item_id: String, quantity: int) -> void:` | Stores a row's selected sell quantity. |
+| `func _on_commodity_prices_updated() -> void:` | Refreshes prices and sale values when commodity market prices update. |
+| `func _on_sell_requested(item_data: ItemData, amount: int) -> void:` | Handles a row request to sell selected quantity. |
+| `func _on_sell_all_requested(item_data: ItemData) -> void:` | Handles a row request to sell all stored quantity for one product. |
+| `func sell_product(item_data: ItemData, amount: int) -> void:` | Validates amount/storage, removes items from storage, adds money, records `SalesStatsManager` sale, refreshes UI, and shows feedback. |
+| `func sell_selected_products() -> void:` | Sells only the currently selected per-product quantities from the summary button, adds total money, records each sold product in `SalesStatsManager`, clears selected quantities, refreshes UI, and shows feedback. |
+| `func _remove_missing_selections(live_item_ids: Array[String]) -> void:` | Clears selected quantities for products no longer present in storage. |
+| `func _update_summary() -> void:` | Updates total selected sale value and enables `Sell Selected` only when selected value is above zero. |
+| `func _set_feedback(message: String, color: Color) -> void:` | Shows local Sell app feedback text. |
+| `func _refresh_game_ui() -> void:` | Refreshes inventory/hotbar UI after a sale. |
 
 ## `Scripts/PhoneApps/ShopApp/ShopData.gd`
 
@@ -422,24 +612,61 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func setup(shop_item: ShopItemData) -> void:` | Initializes this object or row from provided data. |
-| `func _apply_values() -> void:` | Applies apply values to current state. |
-| `func _on_buy_pressed() -> void:` | Handles the 'on buy pressed' signal callback. |
+| `func setup(shop_item: ShopItemData, new_owned_count: int = 0) -> void:` | Initializes one shop product row from configured shop data and the player's current owned count. |
+| `func _apply_values() -> void:` | Applies seed icon, display name, owned count, and current buy price to the row. |
+| `func _on_add_pressed() -> void:` | Emits a cart add request without spending money or changing inventory. |
+
+## `Scripts/PhoneApps/ShopApp/ShopCartRow.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Connects cart quantity buttons, editable quantity field, and remove button. |
+| `func setup(item: ItemData, new_quantity: int, new_unit_price: int) -> void:` | Initializes one cart row from item data, quantity, and current unit price. |
+| `func _apply_values() -> void:` | Applies display name, editable quantity, unit price, and subtotal text. |
+| `func _on_minus_pressed() -> void:` | Requests quantity decrease for this cart item. |
+| `func _on_plus_pressed() -> void:` | Requests quantity increase for this cart item. |
+| `func _on_remove_pressed() -> void:` | Requests removal of this cart item. |
+| `func _on_quantity_submitted(new_text: String) -> void:` | Commits a manually typed cart quantity from the edit field. |
+| `func _on_quantity_focus_exited() -> void:` | Commits a manually typed cart quantity when the edit field loses focus. |
+| `func _commit_quantity_text(new_text: String) -> void:` | Validates typed quantity text, emits a set-quantity request, or restores the previous value. |
 
 ## `Scripts/PhoneApps/ShopApp/ShopPanel.gd`
 
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func refresh() -> void:` | Rebuilds or updates this UI from current backing data. |
-| `func _on_buy_requested(shop_item: ShopItemData) -> void:` | Handles the 'on buy requested' signal callback. |
+| `func refresh() -> void:` | Rebuilds shop item lookup, product list, and cart summary from current backing data. |
+| `func refresh_product_list() -> void:` | Recreates product rows from available `ShopData` items. |
+| `func refresh_cart_view() -> void:` | Recreates cart rows, empty state, controls, and totals from local cart state. |
+| `func add_to_cart(shop_item: ShopItemData, amount: int = 1) -> void:` | Adds item quantity to the local cart without spending money. |
+| `func remove_from_cart(item_id: String, amount: int = 1) -> void:` | Decreases item quantity and removes the cart row when quantity reaches zero. |
+| `func clear_cart() -> void:` | Clears local cart state. |
+| `func get_cart_total() -> int:` | Calculates total cart cost from current buy prices. |
+| `func can_afford_cart() -> bool:` | Returns whether the player can afford the current cart total. |
+| `func purchase_cart() -> void:` | Validates non-empty cart, money, and inventory space, then spends money, adds items, clears cart, and refreshes UI. |
+| `func _rebuild_shop_item_lookup() -> void:` | Maps available shop items by item ID for cart calculations. |
+| `func _get_shop_item(item_id: String) -> ShopItemData:` | Returns the available shop item for a cart item ID. |
+| `func _get_owned_count(item_data: ItemData) -> int:` | Reads current inventory count for one item. |
+| `func _can_fit_cart() -> bool:` | Simulates stacking and empty slots to verify the whole cart fits before checkout. |
+| `func _get_first_remaining_item_id(remaining_by_id: Dictionary) -> String:` | Finds the first cart item quantity still not fitted in the inventory simulation. |
+| `func _get_cart_item_count() -> int:` | Counts all item units currently in the cart. |
+| `func _rollback_added_items(added_items: Array[Dictionary]) -> void:` | Removes already-added checkout items if an unexpected leftover occurs. |
+| `func _update_summary() -> void:` | Updates total, available money, purchase enabled state, and not-enough-money feedback. |
+| `func _set_feedback(message: String, color: Color) -> void:` | Shows local Shop app feedback text. |
+| `func _apply_cart_collapsed_state() -> void:` | Applies collapsed or expanded cart body visibility, `^`/`v` toggle text, and cart panel height. |
+| `func _on_toggle_cart_pressed() -> void:` | Toggles the cart body without clearing cart contents. |
+| `func _on_cart_quantity_changed(item_id: String, delta: int) -> void:` | Applies cart row quantity changes. |
+| `func _on_cart_quantity_set(item_id: String, quantity: int) -> void:` | Sets a cart item to a manually typed quantity and removes it when the value is zero. |
+| `func _on_cart_remove_requested(item_id: String) -> void:` | Removes one item from the cart. |
+| `func _on_buy_prices_changed() -> void:` | Refreshes shop rows when event-driven buy-price modifiers change. |
+| `func _on_money_changed(_new_amount: int) -> void:` | Refreshes cart summary when player money changes. |
 | `func _refresh_game_ui() -> void:` | Refreshes refresh game ui from current data. |
 
 ## `Scripts/PhoneApps/WeatherApp/WeatherForecastRow.gd`
 
 | Function | Description |
 | --- | --- |
-| `func setup(day_offset: int, weather: WeatherData, temperature: int) -> void:` | Initializes this object or row from provided data. |
+| `func setup(forecast_date: String, weather: WeatherData, temperature: int, pattern: WeatherDayPatternData = null, rain_chance: int = 0) -> void:` | Displays one next-day forecast row with a preformatted season date label, pattern name, temperature, and rain chance. |
 
 ## `Scripts/PhoneApps/WeatherApp/WeatherPanel.gd`
 
@@ -448,8 +675,13 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
 | `func _on_weather_changed(_current_weather: WeatherData, _temperature: int) -> void:` | Handles the 'on weather changed' signal callback. |
 | `func refresh() -> void:` | Rebuilds or updates this UI from current backing data. |
-| `func _update_today() -> void:` | Updates update today from current data. |
-| `func _update_forecast() -> void:` | Updates update forecast from current data. |
+| `func _update_today() -> void:` | Updates the current day pattern and current weather summary. |
+| `func _update_forecast() -> void:` | Rebuilds current-day phase rows and next-day forecast rows from `WeatherManager`. |
+| `func _get_forecast_date_label(day_offset: int) -> String:` | Converts a forecast offset into an actual future season day label such as `7th Spring`, wrapping across season boundaries. |
+
+## `Scripts/Seasons/SeasonWeatherData.gd`
+
+Resource only. Stores the season enum plus weather balancing fields: `temperature_modifier`, `rain_chance_modifier`, `storm_chance_modifier`, `rain_weight_modifier`, and `storm_weight_modifier`.
 
 ## `Scripts/Player/CharacterController.gd`
 
@@ -459,12 +691,13 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _input(event: InputEvent) -> void:` | Handles raw input events routed to this node. |
 | `func _physics_process(delta: float) -> void:` | Runs fixed-timestep movement or physics logic. |
 | `func _rotate_camera(mouse_motion: InputEventMouseMotion) -> void:` | Handles rotate camera behavior. |
-| `func _use_selected_tool() -> void:` | Handles use selected tool behavior. |
+| `func _use_selected_tool() -> void:` | Uses the selected hotbar tool on the raycast target or shows `No tool selected.`, `Nothing to interact with.`, or invalid-action HUD feedback. |
 | `func _is_inventory_open() -> bool:` | Checks whether is inventory open is true for internal flow. |
 | `func _is_phone_open() -> bool:` | Checks whether is phone open is true for internal flow. |
 | `func _is_storage_open() -> bool:` | Checks whether is storage open is true for internal flow. |
 | `func _is_any_game_menu_open() -> bool:` | Checks whether is any game menu open is true for internal flow. |
-| `func _ensure_player_hud() -> void:` | Ensures ensure player hud exists before it is used. |
+| `func _ensure_player_hud() -> void:` | Ensures the HUD reference exists before UI feedback or menu checks. |
+| `func _show_hud_event_message(message: String) -> void:` | Sends short world-interaction feedback through the existing HUD notification area. |
 
 ## `Scripts/Player/InteractionController.gd`
 
@@ -521,7 +754,8 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func onStartButtonPressed() -> void:` | Handles on start button pressed behavior. |
 | `func onLoadButtonPressed() -> void:` | Handles on load button pressed behavior. |
 | `func onOptionsButtonPressed() -> void:` | Handles on options button pressed behavior. |
-| `func onCreditsButtonPressed() -> void:` | Handles on credits button pressed behavior. |
+| `func onHowToPlayButtonPressed() -> void:` | Opens the How to Play screen from the Main Menu. |
+| `func onCreditsButtonPressed() -> void:` | Opens the Credits screen from the Main Menu. |
 | `func onExitButtonPressed() -> void:` | Handles on exit button pressed behavior. |
 | `func onOptionsClosed() -> void:` | Handles on options closed behavior. |
 
@@ -539,6 +773,21 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _load_slot(slot: int) -> void:` | Selects the slot, starts gameplay, changes to the game scene, and defers save loading. |
 | `func _on_back_pressed() -> void:` | Returns to the correct previous menu through `gamemanager.closeLoadGamePanel()`. |
 | `func _load_game_deferred() -> void:` | Waits for the game scene to initialize before applying save data. |
+
+## `Scripts/UIs/Menus/LaunchMenu/AdditionalMenus/NewGamePanel.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Connects slot buttons, the back button, and overwrite-confirmation buttons to panel actions. |
+| `func _notification(what: int) -> void:` | Refreshes visible save-slot labels when the panel becomes visible. |
+| `func refresh() -> void:` | Refreshes new-game slot cards from `SaveManager.get_save_slot_info()`. |
+| `func _update_slot_button(button: Button, slot: int) -> void:` | Updates one new-game slot card with empty or existing-save summary text. |
+| `func _start_slot(slot: int) -> void:` | Starts a new game in the selected save slot, resets that slot, and changes to the gameplay scene. |
+| `func _on_back_pressed() -> void:` | Returns from the new game slot picker to the main menu. |
+| `func _on_slot_pressed(slot: int) -> void:` | Starts an empty slot immediately or opens overwrite confirmation for an occupied slot. |
+| `func _show_overwrite_confirmation(slot: int) -> void:` | Shows the local overwrite prompt for the selected occupied slot. |
+| `func _hide_overwrite_confirmation() -> void:` | Hides the overwrite prompt and clears the pending slot. |
+| `func _on_overwrite_confirmed() -> void:` | Starts a new game in the pending slot after overwrite confirmation. |
 
 ## `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/control_bind_row.gd`
 
@@ -561,29 +810,125 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _start_waiting_for_action(action_name: String) -> void:` | Handles start waiting for action behavior. |
 | `func _notification(what: int) -> void:` | Handles notification behavior. |
 
+## `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/graphics.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Styles graphics controls, builds dropdown options, loads current settings, and connects setting callbacks. |
+| `func _build_resolution_options() -> void:` | Populates the resolution dropdown with supported presets and metadata. |
+| `func _build_interface_scale_options() -> void:` | Populates the interface-scale dropdown with supported scale labels and metadata. |
+| `func _load_values_from_settings() -> void:` | Selects current settings from `GraphicsSettingsManager` without reapplying them. |
+| `func _find_resolution_index(target_resolution: Vector2i) -> int:` | Finds the dropdown index for a saved resolution, falling back to 1080p. |
+| `func _find_interface_scale_index(target_interface_scale: String) -> int:` | Finds the dropdown index for a saved interface scale, falling back to Medium. |
+| `func _on_resolution_selected(index: int) -> void:` | Applies a selected resolution through `GraphicsSettingsManager`. |
+| `func _on_interface_scale_selected(index: int) -> void:` | Applies a selected interface scale through `GraphicsSettingsManager`. |
+| `func _on_fullscreen_toggled(is_fullscreen: bool) -> void:` | Applies fullscreen state through `GraphicsSettingsManager`. |
+| `func _update_fullscreen_text(_is_fullscreen: bool) -> void:` | Keeps the custom drawn fullscreen checkbox free of text. |
+| `func _apply_graphics_control_styles() -> void:` | Applies local wooden-menu styling to graphics dropdowns and checkbox. |
+| `func _apply_dropdown_style(option_button: OptionButton) -> void:` | Styles an `OptionButton` and its popup to match the wooden menu UI. |
+| `func _apply_checkbox_style(check_button: Button) -> void:` | Configures the fullscreen control as a textless square toggle. |
+
+## `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/audio.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Creates reusable slider knob textures, builds Sound options controls, and loads current audio values. |
+| `func _build_audio_options() -> void:` | Builds the local Sound options layout inside the existing Options content placeholder. |
+| `func _add_volume_row(parent: VBoxContainer, setting_key: String, label_text: String) -> void:` | Creates one label, styled `HSlider`, and percentage label row for an audio setting. |
+| `func _load_values_from_settings() -> void:` | Copies current values from `AudioSettingsManager` into sliders without resaving them. |
+| `func _set_slider_value(setting_key: String, volume: float) -> void:` | Updates one slider and percentage label from a `0.0-1.0` volume value. |
+| `func _on_slider_value_changed(value: float, setting_key: String) -> void:` | Converts slider percent to `0.0-1.0` and routes the change to the matching audio setting setter. |
+| `func _update_value_label(setting_key: String, value: float) -> void:` | Updates a visible percentage label for one slider. |
+| `func _apply_slider_style(slider: HSlider) -> void:` | Applies custom wooden-menu track, fill, and knob styling to one slider. |
+| `func _create_track_style(fill_color: Color) -> StyleBoxFlat:` | Creates the rounded track/fill style used by audio sliders. |
+| `func _create_knob_texture(fill_color: Color) -> Texture2D:` | Generates the round slider grabber texture used by audio sliders. |
+
 ## `Scripts/UIs/Menus/OptionsMenu/optionsMenu.gd`
 
 | Function | Description |
 | --- | --- |
-| `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func close() -> void:` | Closes . |
-| `func setContext(context: int) -> void:` | Handles set context behavior. |
+| `func _ready() -> void:` | Connects root segment buttons and submenu back buttons, then shows the root Options panel. |
+| `func _input(event: InputEvent) -> void:` | Routes pause/Escape input to options back navigation while Options is visible. |
+| `func close() -> void:` | Closes Options and returns to the menu context that opened it. |
+| `func handle_back_action() -> void:` | Returns from a submenu to the root Options panel, or closes Options from the root panel. |
+| `func setContext(context: int) -> void:` | Applies main-menu or pause-menu background behavior and resets to the root Options panel. |
+| `func _show_main_options() -> void:` | Shows the root Options segment list. |
+| `func _show_sound_options() -> void:` | Shows the Sound submenu. |
+| `func _show_controls_options() -> void:` | Shows the Controls submenu. |
+| `func _show_graphics_options() -> void:` | Shows the Graphics submenu. |
+| `func _show_feedback_options() -> void:` | Shows the Feedback submenu. |
+| `func _set_active_panel(active_panel: Control) -> void:` | Sets exactly one Options panel visible. |
+| `func _on_interface_scale_changed(_scale_multiplier: float) -> void:` | Reapplies Options board sizing after Interface Scale changes. |
+| `func _cache_board_base_sizes() -> void:` | Stores original wooden-board sizes before responsive fitting changes them. |
+| `func _apply_responsive_layout() -> void:` | Fits large Options boards inside the viewport using current interface scale while preserving style. |
+
+## `Scripts/UIs/Menus/OptionsMenu/OptionsCheckBox.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Configures the square toggle checkbox and connects redraw signals. |
+| `func _draw() -> void:` | Draws the checkbox border, checked fill, and check mark using menu colors. |
+| `func _on_mouse_entered() -> void:` | Switches the checkbox to hover color and redraws. |
+| `func _on_mouse_exited() -> void:` | Restores the normal checkbox color and redraws. |
+| `func _on_toggled(_is_pressed: bool) -> void:` | Redraws the check mark after the toggle state changes. |
+
+## `Scripts/UIs/Menus/OptionsMenu/OptionsScrollLine.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Resolves the target `ScrollContainer`, connects to its vertical scrollbar, and prepares redraws. |
+| `func _draw() -> void:` | Draws a black vertical line whose size and position follow the underlying scroll state. |
+| `func _on_scroll_changed(_value: float) -> void:` | Redraws the custom scroll indicator after scrolling. |
 
 ## `Scripts/UIs/Menus/PauseMenu/pauseMenu.gd`
 
 | Function | Description |
 | --- | --- |
-| `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
+| `func _ready() -> void:` | Connects pause-menu buttons, confirmation buttons, and initial visibility state. |
+| `func _input(event: InputEvent) -> void:` | Lets Escape close the active save/quit confirmation popup. |
 | `func onPauseButtonPressed(paused: bool) -> void:` | Handles on pause button pressed behavior. |
 | `func setMenuVisible(is_visible: bool) -> void:` | Handles set menu visible behavior. |
 | `func showBlurOnly() -> void:` | Handles show blur only behavior. |
 | `func onContinueButtonPressed() -> void:` | Handles on continue button pressed behavior. |
-| `func onSaveGameButtonPressed() -> void:` | Handles on save game button pressed behavior. |
+| `func onSaveGameButtonPressed() -> void:` | Opens confirmation before overwriting the current save slot. |
 | `func onLoadGameButtonPressed() -> void:` | Handles on load game button pressed behavior. |
 | `func onOptionsButtonPressed() -> void:` | Handles on options button pressed behavior. |
-| `func onSaveAndQuitToMenuButtonPressed() -> void:` | Handles on save and quit to menu button pressed behavior. |
-| `func onSaveAndQuitToDesktopButtonPressed() -> void:` | Handles on save and quit to desktop button pressed behavior. |
+| `func onHowToPlayButtonPressed() -> void:` | Opens the How to Play screen while keeping the game paused. |
+| `func onSaveAndQuitToMenuButtonPressed() -> void:` | Opens confirmation before saving and returning to the main menu. |
+| `func onSaveAndQuitToDesktopButtonPressed() -> void:` | Opens confirmation before saving and quitting to desktop. |
 | `func onOptionsClosed() -> void:` | Handles on options closed behavior. |
+| `func _show_confirmation(action: ConfirmationAction, message: String) -> void:` | Shows the local save/quit confirmation popup and stores the pending action. |
+| `func _hide_confirmation() -> void:` | Hides the confirmation popup and clears the pending action. |
+| `func _on_confirmation_confirmed() -> void:` | Executes the pending save, save-and-quit-to-menu, or save-and-quit-to-desktop action. |
+
+## `Scripts/UIs/Menus/CreditsMenu.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Initializes the Credits screen, connects Back, loads static credits text, and applies responsive board sizing. |
+| `func _input(event: InputEvent) -> void:` | Lets Escape close the Credits screen while it is visible. |
+| `func close() -> void:` | Plays the UI click sound, hides Credits, and returns to Main Menu. |
+| `func _on_interface_scale_changed(_scale_multiplier: float) -> void:` | Reapplies Credits board sizing after Interface Scale changes. |
+| `func _apply_responsive_layout() -> void:` | Fits the Credits wooden board inside the viewport using current interface scale. |
+
+## `Scripts/UIs/Menus/HowToPlayMenu.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Initializes the How to Play screen, connects Back, loads `res://HOW_TO_PLAY.md`, and applies responsive board sizing. |
+| `func _input(event: InputEvent) -> void:` | Lets Escape close the How to Play screen while it is visible. |
+| `func set_context(context: int) -> void:` | Stores whether the screen was opened from Main Menu or Pause Menu and applies the matching background. |
+| `func close() -> void:` | Plays the UI click sound, hides How to Play, and returns to the correct previous menu. |
+| `func _load_text() -> void:` | Reads the plain-text How to Play content from `res://HOW_TO_PLAY.md`. |
+| `func _on_interface_scale_changed(_scale_multiplier: float) -> void:` | Reapplies How to Play board sizing after Interface Scale changes. |
+| `func _apply_responsive_layout() -> void:` | Fits the How to Play wooden board inside the viewport using current interface scale. |
+
+## `Scripts/UIs/Menus/WoodenMenuPanel.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Ignores mouse input and redraws when the panel size changes. |
+| `func _draw() -> void:` | Draws the shared wooden board background used by menu panels and confirmation popups. |
 
 ## `Scripts/UIs/PlayerHUD/inventory_panel.gd`
 
@@ -597,6 +942,16 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func build_slots() -> void:` | Builds slots UI or runtime data. |
 | `func refresh() -> void:` | Rebuilds or updates this UI from current backing data. |
 | `func move_or_merge_slot(from_index: int, to_index: int) -> void:` | Moves or merge slot between source and target containers. |
+| `func select_slot(slot_index: int) -> void:` | Selects a slot for the Inventory description panel and visual highlight. |
+| `func _create_slot_ui(slot_index: int, is_hotbar_slot: bool) -> InventorySlotUI:` | Instantiates one slot UI and configures its display mode, signals, size, and data binding. |
+| `func _on_hotbar_selected_slot_changed(_slot_index: int) -> void:` | Refreshes active-hotbar visuals after hotbar selection changes. |
+| `func _on_slot_hovered(slot_index: int) -> void:` | Updates the description panel from the hovered slot. |
+| `func _update_slot_selection() -> void:` | Applies selected and active-hotbar visual states across all Inventory screen slots. |
+| `func _update_description(slot: InventorySlot) -> void:` | Shows selected item name, amount, and description or the empty-state text. |
+| `func _on_interface_scale_changed(_scale_multiplier: float) -> void:` | Reapplies Inventory panel and slot sizing after Interface Scale changes. |
+| `func _apply_responsive_layout() -> void:` | Fits the centered Inventory panel inside the viewport and reapplies responsive slot sizes. |
+| `func _apply_slot_sizes() -> void:` | Updates existing hotbar and grid slot minimum sizes from the current responsive scale. |
+| `func _get_slot_size(is_hotbar_slot: bool) -> Vector2:` | Returns the scaled minimum size for hotbar or inventory grid slots. |
 
 ## `Scripts/UIs/PlayerHUD/phone_panel.gd`
 
@@ -613,16 +968,18 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func _on_exchange_pressed() -> void:` | Handles the 'on exchange pressed' signal callback. |
 | `func _on_weather_pressed() -> void:` | Handles the 'on weather pressed' signal callback. |
 | `func _on_news_pressed() -> void:` | Handles the 'on news pressed' signal callback. |
+| `func _on_interface_scale_changed(_scale_multiplier: float) -> void:` | Reapplies FarmPhone responsive sizing after Interface Scale changes. |
+| `func _apply_responsive_layout() -> void:` | Fits the centered FarmPhone shell inside the viewport with uniform panel scaling so internal phone layout proportions stay intact. |
 
 ## `Scripts/UIs/PlayerHUD/player_hud.gd`
 
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func _update_layout() -> void:` | Updates update layout from current data. |
-| `func _update_corner_panels(ui_scale: float, margin: float) -> void:` | Updates update corner panels from current data. |
-| `func _update_bottom_panels(ui_scale: float, margin: float) -> void:` | Updates update bottom panels from current data. |
-| `func _update_center_prompt(viewport_size: Vector2, min_axis: float) -> void:` | Updates update center prompt from current data. |
+| `func _update_layout() -> void:` | Recalculates HUD placement from the current viewport size. |
+| `func _update_corner_panels(ui_scale: float, margin: float) -> void:` | Sizes and positions the date/time and money wood plaques in the top-right corner. |
+| `func _update_bottom_panels(ui_scale: float, margin: float) -> void:` | Sizes bottom-left notification cards and the existing hotbar area without changing hotbar behavior. |
+| `func _update_center_prompt(viewport_size: Vector2, min_axis: float) -> void:` | Positions the short white interaction prompt under the crosshair. |
 | `func _set_rect(control: Control, left: float, top: float, width: float, height: float) -> void:` | Sets set rect for internal UI or gameplay state. |
 | `func _set_top_right_rect(control: Control, right_margin: float, top: float, width: float, height: float) -> void:` | Sets set top right rect for internal UI or gameplay state. |
 | `func _set_bottom_left_rect(control: Control, left: float, bottom_margin: float, width: float, height: float) -> void:` | Sets set bottom left rect for internal UI or gameplay state. |
@@ -644,12 +1001,44 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func toggle_storage() -> void:` | Toggles storage between active and inactive states. |
 | `func is_storage_open() -> bool:` | Returns whether storage open is true. |
 | `func is_any_game_menu_open() -> bool:` | Returns whether any game menu open is true. |
-| `func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATION) -> void:` | Shows event message. |
-| `func _hide_event_message() -> void:` | Handles hide event message behavior. |
+| `func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATION) -> void:` | Shows a temporary bottom-left HUD message; multiple active messages stack as separate lines and repeated identical messages are briefly suppressed. |
+| `func _refresh_event_messages() -> void:` | Rebuilds the stacked HUD message label from active timed messages. |
+| `func _hide_event_message() -> void:` | Clears all active HUD messages and hides the event message panel. |
 | `func _on_time_changed() -> void:` | Handles the 'on time changed' signal callback. |
 | `func _update_time_ui() -> void:` | Updates update time ui from current data. |
 | `func _on_money_changed(_new_amount: int) -> void:` | Handles the 'on money changed' signal callback. |
 | `func _update_money_ui() -> void:` | Updates update money ui from current data. |
+
+## `Scripts/UIs/PlayerHUD/HUDPlaque.gd`
+
+Drawn `ColorRect` helper for compact gameplay HUD plaques. It is used by `player_hud.tscn` for date/time, money, and bottom-left notifications.
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Makes the base `ColorRect` transparent and queues redraws when resized. |
+| `func _draw() -> void:` | Draws either the wood or paper plaque variant based on `plaque_style`. |
+| `func _draw_wood_plaque() -> void:` | Draws a small wooden HUD plaque with border, grain lines, and highlight. |
+| `func _draw_paper_plaque() -> void:` | Draws a light paper notification card with border, subtle shadow, and guide line. |
+
+## `Scripts/UIs/UIFormatHelper.gd`
+
+RefCounted static helper only. It formats visible UI text without changing gameplay IDs, save data, market data, or economy values.
+
+| Function | Description |
+| --- | --- |
+| `static func money_int(amount: int) -> String:` | Formats whole-money UI values as `$110`. |
+| `static func money_float(amount: float) -> String:` | Formats market/history prices with two decimals, for example `$33.00`. |
+| `static func money_each(amount: int) -> String:` | Formats per-item prices, for example `$12 each`. |
+| `static func percent(value: float) -> String:` | Formats already-percent values as `+7.04%`, `-2.51%`, or `0.00%`. |
+| `static func season_date(season: Variant, day: int, year: int) -> String:` | Formats seasonal dates as `Spring 3, Year 1`. |
+| `static func ordinal_day(day: int) -> String:` | Formats a season day with an ordinal suffix, for example `1st`, `2nd`, `3rd`, or `11th`. |
+| `static func season_day(season: Variant, day: int) -> String:` | Formats compact in-season dates as `5th Spring` for phone forecast labels. |
+| `static func display_product_name(value: Variant) -> String:` | Converts item resources or technical product IDs to visible product names. |
+| `static func display_seed_name(value: Variant) -> String:` | Converts seed resources or seed IDs to visible seed names. |
+| `static func display_market_trend(trend: Variant) -> String:` | Converts trend enums or strings to `Bullish`, `Bearish`, or `Neutral`. |
+| `static func display_weather_name(value: Variant) -> String:` | Converts weather resources, patterns, or IDs to visible weather names. |
+| `static func display_news_category(category: String) -> String:` | Converts news category IDs to display labels. |
+| `static func input_event_text(event: InputEvent) -> String:` | Converts input event text to friendlier labels, including removing ` - Physical`. |
 
 ## `Scripts/UIs/PlayerHUD/quick_inventory_controller.gd`
 
@@ -675,25 +1064,100 @@ This document lists the main functions found in `Scripts/` and summarizes their 
 | `func transfer_from_inventory_slot(slot_index: int) -> void:` | Handles transfer from inventory slot behavior. |
 | `func is_open() -> bool:` | Returns whether open is true. |
 | `func can_accept_transfer_drop(target_type: String, data: Variant) -> bool:` | Returns whether accept transfer drop is allowed in the current state. |
-| `func drop_transfer_to(target_type: String, data: Variant) -> void:` | Handles drop transfer to behavior. |
+| `func drop_transfer_to(target_type: String, data: Variant) -> void:` | Routes accepted transfer drops or shows `Cannot transfer item.` feedback for invalid payloads. |
 | `func _can_drop_data(_position: Vector2, data: Variant) -> bool:` | Checks whether the current drag payload can be dropped here. |
-| `func _drop_data(position: Vector2, data: Variant) -> void:` | Applies the accepted drag-and-drop payload. |
+| `func _drop_data(position: Vector2, data: Variant) -> void:` | Applies the accepted drag-and-drop payload or shows transfer failure feedback. |
 | `func _refresh_storage_items() -> void:` | Refreshes refresh storage items from current data. |
 | `func _refresh_inventory_items() -> void:` | Refreshes refresh inventory items from current data. |
 | `func _create_row(item_data: ItemData, amount: int, source_type: String, inventory_slot_index: int) -> StorageItemRow:` | Creates create row for UI or runtime use. |
 | `func _on_row_transfer_requested(row: StorageItemRow) -> void:` | Handles the 'on row transfer requested' signal callback. |
 | `func _on_row_item_dropped(target_row: StorageItemRow, payload: Dictionary) -> void:` | Handles the 'on row item dropped' signal callback. |
-| `func _transfer_inventory_to_storage(slot_index: int) -> void:` | Handles transfer inventory to storage behavior. |
-| `func _transfer_storage_to_inventory(item_data: ItemData) -> void:` | Handles transfer storage to inventory behavior. |
+| `func _transfer_inventory_to_storage(slot_index: int) -> void:` | Transfers one inventory slot to silo storage and updates footer feedback for success, empty inventory, or invalid transfer. |
+| `func _transfer_storage_to_inventory(item_data: ItemData) -> void:` | Transfers up to one stack from silo storage to inventory and updates footer feedback for success, full inventory, missing items, or invalid transfer. |
 | `func _clear_container(container: Container) -> void:` | Clears clear container and related state. |
+| `func _update_hint(text: String) -> void:` | Updates the Silo Storage footer feedback text. |
 | `func _refresh_hotbar() -> void:` | Refreshes refresh hotbar from current data. |
 | `func _is_transfer_payload(data: Variant) -> bool:` | Checks whether is transfer payload is true for internal flow. |
+| `func _on_interface_scale_changed(_scale_multiplier: float) -> void:` | Reapplies Silo Storage panel sizing after Interface Scale changes. |
+| `func _apply_responsive_layout() -> void:` | Fits the centered Silo Storage transfer panel inside the viewport and repositions scroll indicators. |
+
+## `Scripts/Weather/WeatherEffectsController.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Configures rain/storm particles, loads weather audio, connects to `WeatherManager`, and applies the current weather. |
+| `func _process(_delta: float) -> void:` | Keeps the local weather emitter positioned above the configured follow target. |
+| `func apply_current_weather() -> void:` | Reads and applies the current weather from `WeatherManager`, used at startup and after loaded weather state changes. |
+| `func set_weather(weather_value: Variant) -> void:` | Compatibility entry point for applying a weather value to VFX/SFX. |
+| `func apply_weather(weather_value: Variant) -> void:` | Applies a weather value after normalizing resources, strings, and paths to a stable weather key. |
+| `func _connect_weather_manager() -> void:` | Connects to `WeatherManager.weather_changed` if not already connected. |
+| `func _on_weather_changed(current_weather: WeatherData, _temperature: int) -> void:` | Applies weather effects after WeatherManager emits a weather update. |
+| `func _get_current_weather() -> WeatherData:` | Reads `WeatherManager.current_weather` for startup/load application. |
+| `func _apply_weather_effects(weather_key: String) -> void:` | Routes normalized `sunny`, `cloudy`, `rain`, or `storm` keys to the matching effect state. |
+| `func _set_clear_weather() -> void:` | Disables rain/storm particles, stops weather loops, and stops thunder scheduling. |
+| `func _set_cloudy_weather() -> void:` | Enables the sky cloud layer for cloudy weather while keeping rain and storm effects disabled. |
+| `func _set_rain_weather() -> void:` | Enables rain particles and `rain_loop`, disables storm effects, and stops thunder scheduling. |
+| `func _set_storm_weather() -> void:` | Enables storm particles and `storm_rain_loop`, stops normal rain, and schedules thunder. |
+| `func _set_particles_active(particles: GPUParticles3D, is_active: bool) -> void:` | Toggles one weather particle emitter. |
+| `func _create_cloud_layer() -> void:` | Creates the runtime `WeatherCloudLayer` from lightweight low-poly cloud puff clusters. |
+| `func _create_cloud_cluster(cloud_index: int, cluster_position: Vector3) -> void:` | Builds one simple cloud cluster from several flattened sphere puffs. |
+| `func _create_cloud_puff_mesh() -> SphereMesh:` | Creates the low-poly sphere mesh used by cloud puffs. |
+| `func _set_cloud_layer(weather_key: String, color: Color, intensity: float) -> void:` | Applies cloud visibility, color, alpha, and debug output for the current weather state. |
+| `func _update_cloud_drift(delta: float) -> void:` | Slowly rotates the cloud layer while it is visible. |
+| `func _play_loop(player: AudioStreamPlayer) -> void:` | Starts a loop player only when it has a stream and is not already playing. |
+| `func _stop_audio(player: AudioStreamPlayer) -> void:` | Stops one weather audio player when active. |
+| `func _update_rain_audio_watchdog(delta: float) -> void:` | Checks once per second during rain weather and restarts the rebuilt rain player if playback has stopped. |
+| `func _update_storm_audio_watchdog(delta: float) -> void:` | Checks once per second during storm weather and restarts the rebuilt storm rain player if playback has stopped. |
+| `func _schedule_next_thunder() -> void:` | Starts the one-shot thunder timer with a randomized delay while storm weather is active. |
+| `func _on_thunder_timer_timeout() -> void:` | Plays one thunder sound during storm weather and schedules the next thunder. |
+| `func _configure_audio() -> void:` | Routes weather audio players to `SFX`, loads prepared `.wav` files, enables rain/storm looping, and connects the thunder timer. |
+| `func _load_stream(path: String, label: String) -> AudioStream:` | Safely loads one weather audio stream and warns instead of crashing when missing. |
+| `func _enable_looping(stream: AudioStream) -> void:` | Enables WAV looping for rain and storm loop assets. |
+| `func _disable_looping(stream: AudioStream) -> void:` | Disables WAV looping for rebuilt weather loops so the `finished` signal can manually replay from the beginning. |
+| `func _duplicate_stream(stream: AudioStream) -> AudioStream:` | Duplicates one weather audio stream before loop flags are changed, avoiding shared-resource side effects on gameplay SFX. |
+| `func _create_runtime_audio_players() -> void:` | Creates root-level weather audio players for thunder playback. |
+| `func _create_rebuilt_rain_audio_player() -> void:` | Builds the dedicated root-level rain loop player from `rain_loop.wav`, with a fallback load path if the rain stream is missing. |
+| `func _create_rebuilt_storm_audio_player() -> void:` | Builds the dedicated root-level storm rain loop player from `storm_rain_loop.wav`. |
+| `func _create_runtime_audio_player(...) -> AudioStreamPlayer:` | Builds one root-level `AudioStreamPlayer`, assigns stream, bus, volume, and process mode, then adds it to the root viewport. |
+| `func _create_lightning_flash() -> void:` | Creates the timer-limited runtime light and screen overlay used for storm thunder flashes. |
+| `func _trigger_lightning_flash() -> void:` | Enables the storm light and screen flash briefly when thunder plays. |
+| `func _on_lightning_flash_timeout() -> void:` | Disables the storm light and screen flash after its short timer expires. |
+| `func _free_runtime_audio_player(player: AudioStreamPlayer) -> void:` | Stops and frees one runtime weather audio player when the gameplay scene exits. |
+| `func _on_rebuilt_rain_audio_finished() -> void:` | Restarts the rebuilt rain loop if WAV looping is not active and the current weather is still rain. |
+| `func _on_rebuilt_storm_audio_finished() -> void:` | Restarts the rebuilt storm rain loop if WAV looping is not active and the current weather is still storm. |
+| `func _get_weather_key(weather_value: Variant) -> String:` | Normalizes weather resources, strings, resource paths, and unknown values to stable weather keys. |
+| `func _normalize_weather_text(raw_value: String) -> String:` | Detects `storm`, `rain`, `cloudy`, or `sunny` from display names and paths such as `storm_weather.tres`. |
+| `func _describe_weather_value(weather_value: Variant) -> String:` | Builds temporary non-spam debug text for incoming weather values. |
+| `func _debug_print(message: String) -> void:` | Prints temporary Stage 5.5.4 weather debug messages when `debug_weather_effects` is enabled. |
+| `func _configure_particles() -> void:` | Applies lightweight rain and storm particle settings and starts them disabled. |
+| `func _configure_rain_particles(...) -> void:` | Builds a simple box-emission rain particle material and short raindrop mesh. |
 
 ## `Scripts/World/DayNightController.gd`
 
 | Function | Description |
 | --- | --- |
 | `func _ready() -> void:` | Initializes node state, connects required signals, and prepares initial data. |
-| `func update_lighting() -> void:` | Updates lighting from current gameplay data. |
-| `func _update_environment(sky_color: Color, ambient_color: Color) -> void:` | Updates update environment from current data. |
+| `func update_lighting() -> void:` | Updates visual lighting, environment, sun/moon positions, and directional-light alignment from current `TimeManager` time. |
+| `func _setup_lighting_points() -> void:` | Builds the ordered day/night visual keyframes used for interpolated lighting and environment state. |
+| `func _create_lighting_point(minute: int, light_energy: float, light_color: Color, sky_color: Color, ambient_color: Color, ambient_energy: float) -> Dictionary:` | Creates one lighting/environment keyframe dictionary. |
+| `func _get_lighting_state(current_minute: int) -> Dictionary:` | Interpolates light energy, light color, sky color, ambient color, and ambient energy between configured keyframes. |
+| `func _update_environment(sky_color: Color, ambient_color: Color, ambient_energy: float) -> void:` | Applies the current background and ambient visual state to the configured `WorldEnvironment`. |
+| `func _update_celestial_visuals(day_progress: float, sun_source_direction: Vector3) -> void:` | Updates sun and moon visual positions and visibility from the current day progress and sun source direction. |
+| `func _update_celestial_body(body: MeshInstance3D, source_direction: Vector3, visibility_alpha: float, base_scale: float) -> void:` | Places one sky visual on the configured arc radius, scales it, toggles visibility, and applies fade alpha. |
+| `func _get_sun_source_direction(current_minute: int) -> Vector3:` | Computes the shared source direction used by both `SunVisual` placement and `SunLight` shadow alignment. |
+| `func _align_sun_light_to_source(source_direction: Vector3) -> void:` | Rotates the directional light to match the computed sun source direction so shadows match the visible sun. |
+| `func _set_visual_alpha(body: MeshInstance3D, alpha: float) -> void:` | Applies fade alpha to the active `StandardMaterial3D` on a celestial visual. |
+| `func _get_sun_visibility(day_progress: float) -> float:` | Returns the sun fade value for dawn, daytime, and sunset. |
+| `func _get_moon_visibility(day_progress: float) -> float:` | Returns the moon fade value for evening, nighttime, and dawn. |
 
+## `Tests/TestRunner.gd`
+
+| Function | Description |
+| --- | --- |
+| `func should_run_heavy_simulation_tests() -> bool:` | Returns true for headless `--run-tests` runs or explicit `--run-heavy-simulations` interactive runs. |
+| `func should_print_passed_assertions() -> bool:` | Returns true when `--verbose-tests` should print every passed assertion. |
+| `func run_all_tests() -> void:` | Runs registered tests, skips heavy simulations when gated off, and prints compact per-test and final summaries. |
+| `func _run_test_script(test_script: Object) -> void:` | Assigns the runner, runs one test object, and prints a compact `PASS/FAIL` line with assertion counts. |
+| `func _skip_test(test_name: String) -> void:` | Records and prints one skipped heavy simulation test. |
+| `func assert_true(value: bool, message: String) -> void:` | Increments pass/fail counters for boolean assertions and only prints passing assertions in verbose mode. |
+| `func assert_eq(actual, expected, message: String) -> void:` | Increments pass/fail counters for equality assertions and reports expected/actual values on failure. |

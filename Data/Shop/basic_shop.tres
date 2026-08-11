@@ -1,10 +1,19 @@
 [gd_resource type="Resource" script_class="ShopData" format=3 uid="uid://bfua1rlx5vmy4"]
 
 [ext_resource type="Script" uid="uid://c7fomv5bo2036" path="res://Scripts/PhoneApps/ShopApp/ShopItemData.gd" id="1_isft6"]
+[ext_resource type="Resource" path="res://Data/Shop/beetroot_seed_shop_item.tres" id="2_beetroot"]
+[ext_resource type="Resource" path="res://Data/Shop/cabbage_seed_shop_item.tres" id="2_cabbage"]
+[ext_resource type="Resource" path="res://Data/Shop/carrot_seed_shop_item.tres" id="2_carrot"]
+[ext_resource type="Resource" path="res://Data/Shop/corn_seed_shop_item.tres" id="2_corn"]
+[ext_resource type="Resource" path="res://Data/Shop/lettuce_seed_shop_item.tres" id="2_lettuce"]
+[ext_resource type="Resource" path="res://Data/Shop/potatoe_seed_shop_item.tres" id="2_potatoe"]
+[ext_resource type="Resource" path="res://Data/Shop/pumpkin_seed_shop_item.tres" id="2_pumpkin"]
+[ext_resource type="Resource" path="res://Data/Shop/strawberry_seed_shop_item.tres" id="2_strawberry"]
+[ext_resource type="Resource" path="res://Data/Shop/tomatoe_seed_shop_item.tres" id="2_tomatoe"]
 [ext_resource type="Resource" uid="uid://c8w27lf1vjawr" path="res://Data/Shop/wheat_seed_shop_item.tres" id="2_8dajx"]
 [ext_resource type="Script" uid="uid://bt312m6vqlhxs" path="res://Scripts/PhoneApps/ShopApp/ShopData.gd" id="2_lhmpb"]
 
 [resource]
 script = ExtResource("2_lhmpb")
-items = Array[ExtResource("1_isft6")]([ExtResource("2_8dajx")])
+items = Array[ExtResource("1_isft6")]([ExtResource("2_beetroot"), ExtResource("2_cabbage"), ExtResource("2_carrot"), ExtResource("2_corn"), ExtResource("2_lettuce"), ExtResource("2_potatoe"), ExtResource("2_pumpkin"), ExtResource("2_strawberry"), ExtResource("2_tomatoe"), ExtResource("2_8dajx")])
 metadata/_custom_type_script = "uid://bt312m6vqlhxs"

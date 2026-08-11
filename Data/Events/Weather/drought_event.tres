@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="MarketEventData" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Events/MarketEventData.gd" id="1"]
+[ext_resource type="Script" path="res://Scripts/Items/ItemData.gd" id="2"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/corn_item.tres" id="3"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/strawberry_item.tres" id="4"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/tomatoe_item.tres" id="5"]
+
+[resource]
+script = ExtResource("1")
+event_id = "drought"
+display_name = "Drought"
+description = "A stretch of dry summer days limits crop supply and raises prices."
+duration_days = 4
+trigger_chance = 0.75
+event_category = 1
+trigger_mode = 1
+affected_items = Array[ExtResource("2")]([ExtResource("3"), ExtResource("4"), ExtResource("5")])
+trend_effect = 2
+trend_strength_modifier = 0.03
+volatility_modifier = 0.04
+requires_season = true
+required_seasons = Array[int]([1])
+requires_weather_history = true
+required_dry_days = 4

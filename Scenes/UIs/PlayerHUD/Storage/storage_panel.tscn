@@ -1,7 +1,30 @@
-[gd_scene format=3 uid="uid://cb3qefv5afyy6"]
+[gd_scene load_steps=7 format=3 uid="uid://cb3qefv5afyy6"]
 
 [ext_resource type="Script" uid="uid://djx0ewvdb4b3d" path="res://Scripts/UIs/PlayerHUD/storage_panel.gd" id="1_cnyto"]
 [ext_resource type="Script" path="res://Scripts/Storage/StorageTransferDropTarget.gd" id="2_j7flx"]
+[ext_resource type="Script" path="res://Scripts/UIs/PlayerHUD/StorageWoodPanel.gd" id="3_wood"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_storage_panel"]
+content_margin_left = 20.0
+content_margin_top = 18.0
+content_margin_right = 20.0
+content_margin_bottom = 18.0
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_column_panel"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.86, 0.72, 0.49, 0.72)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.24, 0.12, 0.045, 0.85)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close_button_empty"]
+bg_color = Color(0, 0, 0, 0)
 
 [node name="StoragePanel" type="Control" unique_id=758351012]
 layout_mode = 3
@@ -11,69 +34,140 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -340.0
-offset_top = -200.0
+offset_top = -230.0
 offset_right = 340.0
-offset_bottom = 200.0
+offset_bottom = 230.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
 script = ExtResource("1_cnyto")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1008370134]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_storage_panel")
+script = ExtResource("3_wood")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1082354511]
 layout_mode = 2
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 18
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 18
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer" unique_id=2049391671]
+[node name="ContentContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 12
 
-[node name="StorageColumn" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=537507186]
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_filter = 0
-theme_override_constants/separation = 10
-script = ExtResource("2_j7flx")
-target_type = "storage"
-
-[node name="StorageTitleLabel" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/StorageColumn" unique_id=733966536]
-layout_mode = 2
-mouse_filter = 2
-text = "Silo Storage"
-horizontal_alignment = 1
-
-[node name="StorageItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer/StorageColumn" unique_id=1195032089]
+[node name="ColumnsContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/ContentContainer" unique_id=2049391671]
 layout_mode = 2
 size_flags_vertical = 3
-mouse_filter = 1
-theme_override_constants/separation = 6
+theme_override_constants/separation = 24
 
-[node name="InventoryColumn" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=1850153269]
+[node name="InventoryColumnPanel" type="PanelContainer" parent="PanelContainer/MarginContainer/ContentContainer/ColumnsContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_column_panel")
+
+[node name="InventoryColumn" type="VBoxContainer" parent="PanelContainer/MarginContainer/ContentContainer/ColumnsContainer/InventoryColumnPanel" unique_id=1850153269]
+layout_mode = 2
 mouse_filter = 0
 theme_override_constants/separation = 10
 script = ExtResource("2_j7flx")
 target_type = "inventory"
 
-[node name="InventoryTitleLabel" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer/InventoryColumn" unique_id=1683323750]
+[node name="InventoryTitleLabel" type="Label" parent="PanelContainer/MarginContainer/ContentContainer/ColumnsContainer/InventoryColumnPanel/InventoryColumn" unique_id=1683323750]
 layout_mode = 2
 mouse_filter = 2
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
+theme_override_font_sizes/font_size = 20
 text = "Player Inventory"
 horizontal_alignment = 1
 
-[node name="InventoryItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer/InventoryColumn" unique_id=1614566925]
+[node name="InventoryScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/ContentContainer/ColumnsContainer/InventoryColumnPanel/InventoryColumn"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 mouse_filter = 1
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 1
+
+[node name="ListMargin" type="MarginContainer" parent="PanelContainer/MarginContainer/ContentContainer/ColumnsContainer/InventoryColumnPanel/InventoryColumn/InventoryScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 12
+
+[node name="InventoryItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/ContentContainer/ColumnsContainer/InventoryColumnPanel/InventoryColumn/InventoryScroll/ListMargin" unique_id=1614566925]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
 theme_override_constants/separation = 6
+
+[node name="StorageColumnPanel" type="PanelContainer" parent="PanelContainer/MarginContainer/ContentContainer/ColumnsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_column_panel")
+
+[node name="StorageColumn" type="VBoxContainer" parent="PanelContainer/MarginContainer/ContentContainer/ColumnsContainer/StorageColumnPanel" unique_id=537507186]
+layout_mode = 2
+mouse_filter = 0
+theme_override_constants/separation = 10
+script = ExtResource("2_j7flx")
+target_type = "storage"
+
+[node name="StorageTitleLabel" type="Label" parent="PanelContainer/MarginContainer/ContentContainer/ColumnsContainer/StorageColumnPanel/StorageColumn" unique_id=733966536]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
+theme_override_font_sizes/font_size = 20
+text = "Silo Storage"
+horizontal_alignment = 1
+
+[node name="StorageScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/ContentContainer/ColumnsContainer/StorageColumnPanel/StorageColumn"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 1
+
+[node name="ListMargin" type="MarginContainer" parent="PanelContainer/MarginContainer/ContentContainer/ColumnsContainer/StorageColumnPanel/StorageColumn/StorageScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 12
+
+[node name="StorageItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/ContentContainer/ColumnsContainer/StorageColumnPanel/StorageColumn/StorageScroll/ListMargin" unique_id=1195032089]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_constants/separation = 6
+
+[node name="FooterContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/ContentContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="HintLabel" type="Label" parent="PanelContainer/MarginContainer/ContentContainer/FooterContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.08, 0.045, 0.02, 1)
+text = "Click or drag an item to transfer it."
+vertical_alignment = 1
+
+[node name="CloseButton" type="Button" parent="PanelContainer/MarginContainer/ContentContainer/FooterContainer"]
+custom_minimum_size = Vector2(96, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.02, 0.015, 0.008, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_close_button_empty")
+theme_override_styles/hover = SubResource("StyleBoxFlat_close_button_empty")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_close_button_empty")
+theme_override_styles/focus = SubResource("StyleBoxFlat_close_button_empty")
+text = "Close"

@@ -6,7 +6,7 @@ signal month_changed
 signal year_changed
 signal season_changed
 
-const REAL_SECONDS_PER_GAME_DAY := 5.0 * 60.0
+const REAL_SECONDS_PER_GAME_DAY := 12.0 * 60.0
 const GAME_MINUTES_PER_DAY := 24 * 60
 const DAYS_PER_MONTH := 30
 const MONTHS_PER_YEAR := 4
@@ -68,7 +68,7 @@ func _advance_year() -> void:
 	year_changed.emit()
 
 func get_hour() -> int:
-	return current_minute_of_day / 60
+	return int(floor(float(current_minute_of_day) / 60.0))
 
 func get_minute() -> int:
 	return current_minute_of_day % 60
@@ -90,11 +90,11 @@ func get_season_name() -> String:
 			return "Unknown"
 
 func get_date_string() -> String:
-	return "%s of %s, Year %d" % [
-		get_ordinal_day(),
+	return UIFormatHelper.season_date(
 		get_season_name(),
+		current_day,
 		current_year
-	]
+	)
 
 func get_day_progress() -> float:
 	return float(current_minute_of_day) / float(GAME_MINUTES_PER_DAY)
@@ -110,6 +110,17 @@ func skip_to_morning() -> void:
 		_advance_day()
 		current_minute_of_day = 6 * 60
 
+	time_changed.emit()
+
+
+func advance_day_for_test() -> void:
+	var previous_day := current_day
+
+	CommodityMarketManager.update_market_for_test_day(previous_day)
+	EventManager.process_day_synchronously_for_test = true
+	_advance_day()
+	EventManager.process_day_synchronously_for_test = false
+	current_minute_of_day = 6 * 60
 	time_changed.emit()
 
 func get_ordinal_day() -> String:

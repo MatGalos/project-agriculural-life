@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CropItemData" format=3 uid="uid://dot1i26lmo2ui"]
+
+[ext_resource type="Script" uid="uid://c3smts8jy3m4p" path="res://Scripts/Items/CropItemData.gd" id="1_fjrsb"]
+[ext_resource type="Texture2D" path="res://Assets/Icons/Items/Plants/Lettuce.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_fjrsb")
+crop_id = "lettuce"
+id = "lettuce"
+display_name = "Lettuce"
+description = "Harvested lettuce crop"
+icon = ExtResource("2_icon")
+base_price = 33
+category = 0
+metadata/_custom_type_script = "uid://c3smts8jy3m4p"

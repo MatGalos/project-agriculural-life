@@ -1,6 +1,37 @@
-[gd_scene format=3 uid="uid://datulgagyqbol"]
+[gd_scene load_steps=5 format=3 uid="uid://datulgagyqbol"]
 
 [ext_resource type="Script" uid="uid://o6o3yhcunume" path="res://Scripts/PhoneApps/WeatherApp/WeatherPanel.gd" id="1_fa7d6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_weather_root"]
+bg_color = Color(0.015, 0.018, 0.024, 0.94)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_today_card"]
+bg_color = Color(0.08, 0.13, 0.19, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.22, 0.31, 0.40, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_content_card"]
+bg_color = Color(0.045, 0.052, 0.064, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.13, 0.16, 0.20, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
 
 [node name="WeatherPanel" type="Control" unique_id=719591160]
 layout_mode = 3
@@ -12,27 +43,107 @@ grow_vertical = 2
 script = ExtResource("1_fa7d6")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=536580729]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_weather_root")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=359916078]
 layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=1467291478]
+[node name="ContentScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 1
 
-[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1918302909]
+[node name="Content" type="VBoxContainer" parent="PanelContainer/MarginContainer/ContentScroll"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/ContentScroll/Content" unique_id=1918302909]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
 text = "Weather"
 
-[node name="TodayLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1402723343]
+[node name="StateLabel" type="Label" parent="PanelContainer/MarginContainer/ContentScroll/Content"]
+visible = false
 layout_mode = 2
-text = "7-Day Forecast"
+text = "Weather data unavailable."
+horizontal_alignment = 1
+autowrap_mode = 3
 
-[node name="ForecastTitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1472588973]
+[node name="TodayCard" type="PanelContainer" parent="PanelContainer/MarginContainer/ContentScroll/Content"]
 layout_mode = 2
-text = "Today: -"
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_today_card")
 
-[node name="ForecastContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=2079540814]
+[node name="TodayMargin" type="MarginContainer" parent="PanelContainer/MarginContainer/ContentScroll/Content/TodayCard"]
 layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="TodayRow" type="HBoxContainer" parent="PanelContainer/MarginContainer/ContentScroll/Content/TodayCard/TodayMargin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TodayInfo" type="VBoxContainer" parent="PanelContainer/MarginContainer/ContentScroll/Content/TodayCard/TodayMargin/TodayRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="TodayTitleLabel" type="Label" parent="PanelContainer/MarginContainer/ContentScroll/Content/TodayCard/TodayMargin/TodayRow/TodayInfo"]
+layout_mode = 2
+text = "Today"
+
+[node name="TodayWeatherLabel" type="Label" parent="PanelContainer/MarginContainer/ContentScroll/Content/TodayCard/TodayMargin/TodayRow/TodayInfo"]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "Weather data unavailable."
+
+[node name="TodayCurrentLabel" type="Label" parent="PanelContainer/MarginContainer/ContentScroll/Content/TodayCard/TodayMargin/TodayRow/TodayInfo"]
+layout_mode = 2
+text = "Current: Unknown"
+autowrap_mode = 3
+
+[node name="TodayRainLabel" type="Label" parent="PanelContainer/MarginContainer/ContentScroll/Content/TodayCard/TodayMargin/TodayRow/TodayInfo"]
+layout_mode = 2
+text = "Rain: 0%"
+
+[node name="TodayIconAnchor" type="Control" parent="PanelContainer/MarginContainer/ContentScroll/Content/TodayCard/TodayMargin/TodayRow"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+
+[node name="DayPartsTitle" type="Label" parent="PanelContainer/MarginContainer/ContentScroll/Content"]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "Day Parts"
+
+[node name="DayPartsGrid" type="GridContainer" parent="PanelContainer/MarginContainer/ContentScroll/Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="NextDaysTitle" type="Label" parent="PanelContainer/MarginContainer/ContentScroll/Content"]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "Next Days"
+
+[node name="ForecastContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/ContentScroll/Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6

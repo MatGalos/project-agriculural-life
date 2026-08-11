@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CropItemData" format=3 uid="uid://c20mkdc0joxyt"]
+
+[ext_resource type="Script" uid="uid://c3smts8jy3m4p" path="res://Scripts/Items/CropItemData.gd" id="1_lq0pj"]
+[ext_resource type="Texture2D" path="res://Assets/Icons/Items/Plants/Beetroot.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_lq0pj")
+crop_id = "beetroot"
+id = "beetroot"
+display_name = "Beetroot"
+description = "Harvested beetroot crop"
+icon = ExtResource("2_icon")
+base_price = 33
+category = 0
+metadata/_custom_type_script = "uid://c3smts8jy3m4p"

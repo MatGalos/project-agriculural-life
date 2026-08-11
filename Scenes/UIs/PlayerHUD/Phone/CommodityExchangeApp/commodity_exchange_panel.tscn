@@ -1,6 +1,31 @@
-[gd_scene format=3 uid="uid://dx0gm8cd8556s"]
+[gd_scene load_steps=5 format=3 uid="uid://dx0gm8cd8556s"]
 
 [ext_resource type="Script" uid="uid://bmex5tochykx" path="res://Scripts/PhoneApps/CommodityExchangeApp/CommodityExchangePanel.gd" id="1_ubl6v"]
+[ext_resource type="Script" path="res://Scripts/PhoneApps/CommodityExchangeApp/PriceHistoryChart.gd" id="2_chart"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_market_card"]
+bg_color = Color(0.055, 0.061, 0.072, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.14, 0.16, 0.18, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_chart_card"]
+bg_color = Color(0.02, 0.024, 0.028, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.12, 0.14, 0.15, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="CommodityExchangePanel" type="Control" unique_id=1407838760]
 layout_mode = 3
@@ -12,6 +37,7 @@ grow_vertical = 2
 script = ExtResource("1_ubl6v")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1145123462]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,25 +47,176 @@ grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1484624141]
 layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=651330091]
+[node name="RootStack" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=651330091]
 layout_mode = 2
+theme_override_constants/separation = 8
 
-[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=241651815]
+[node name="TopBar" type="HBoxContainer" parent="PanelContainer/MarginContainer/RootStack"]
+custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
-text = "Commodity Exchange"
+theme_override_constants/separation = 8
 
-[node name="StatusLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=996340973]
+[node name="BackButton" type="Button" parent="PanelContainer/MarginContainer/RootStack/TopBar"]
+visible = false
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+theme_type_variation = &"HeaderButton"
+text = "<"
+
+[node name="HeaderStack" type="VBoxContainer" parent="PanelContainer/MarginContainer/RootStack/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/TopBar/HeaderStack" unique_id=241651815]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "Market"
+
+[node name="StatusLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/TopBar/HeaderStack" unique_id=996340973]
 layout_mode = 2
 text = "Market Status"
 
-[node name="ItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=45832445]
+[node name="ListView" type="VBoxContainer" parent="PanelContainer/MarginContainer/RootStack"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="ListHeader" type="HBoxContainer" parent="PanelContainer/MarginContainer/RootStack/ListView"]
 layout_mode = 2
 
-[node name="HistoryTitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=2062424749]
+[node name="ProductsLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/ListView/ListHeader"]
 layout_mode = 2
-text = "Price History"
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
+text = "Products"
 
-[node name="HistoryLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=816168539]
+[node name="ContentScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/RootStack/ListView"]
 layout_mode = 2
-text = "No data"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 1
+
+[node name="ItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/RootStack/ListView/ContentScroll" unique_id=45832445]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="DetailsView" type="VBoxContainer" parent="PanelContainer/MarginContainer/RootStack"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="DetailHero" type="PanelContainer" parent="PanelContainer/MarginContainer/RootStack/DetailsView"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_market_card")
+
+[node name="HeroMargin" type="MarginContainer" parent="PanelContainer/MarginContainer/RootStack/DetailsView/DetailHero"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HeroRow" type="HBoxContainer" parent="PanelContainer/MarginContainer/RootStack/DetailsView/DetailHero/HeroMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="DetailIconRect" type="TextureRect" parent="PanelContainer/MarginContainer/RootStack/DetailsView/DetailHero/HeroMargin/HeroRow"]
+custom_minimum_size = Vector2(52, 52)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DetailNameStack" type="VBoxContainer" parent="PanelContainer/MarginContainer/RootStack/DetailsView/DetailHero/HeroMargin/HeroRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="DetailNameLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/DetailsView/DetailHero/HeroMargin/HeroRow/DetailNameStack"]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "Product"
+text_overrun_behavior = 3
+
+[node name="DetailTrendLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/DetailsView/DetailHero/HeroMargin/HeroRow/DetailNameStack"]
+layout_mode = 2
+text = "Neutral"
+
+[node name="DetailPriceStack" type="VBoxContainer" parent="PanelContainer/MarginContainer/RootStack/DetailsView/DetailHero/HeroMargin/HeroRow"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="DetailPriceLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/DetailsView/DetailHero/HeroMargin/HeroRow/DetailPriceStack"]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "$0.00"
+horizontal_alignment = 2
+
+[node name="DetailChangeLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/DetailsView/DetailHero/HeroMargin/HeroRow/DetailPriceStack"]
+layout_mode = 2
+text = "0.00%"
+horizontal_alignment = 2
+
+[node name="ChartPanel" type="PanelContainer" parent="PanelContainer/MarginContainer/RootStack/DetailsView"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_chart_card")
+
+[node name="ChartMargin" type="MarginContainer" parent="PanelContainer/MarginContainer/RootStack/DetailsView/ChartPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HistoryChart" type="Control" parent="PanelContainer/MarginContainer/RootStack/DetailsView/ChartPanel/ChartMargin"]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("2_chart")
+
+[node name="StatsGrid" type="GridContainer" parent="PanelContainer/MarginContainer/RootStack/DetailsView"]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 3
+columns = 2
+
+[node name="MinKeyLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/DetailsView/StatsGrid"]
+layout_mode = 2
+text = "Min"
+
+[node name="MinValueLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/DetailsView/StatsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "$0.00"
+horizontal_alignment = 2
+
+[node name="MaxKeyLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/DetailsView/StatsGrid"]
+layout_mode = 2
+text = "Max"
+
+[node name="MaxValueLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/DetailsView/StatsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "$0.00"
+horizontal_alignment = 2
+
+[node name="AvgKeyLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/DetailsView/StatsGrid"]
+layout_mode = 2
+text = "Avg"
+
+[node name="AvgValueLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/DetailsView/StatsGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "$0.00"
+horizontal_alignment = 2

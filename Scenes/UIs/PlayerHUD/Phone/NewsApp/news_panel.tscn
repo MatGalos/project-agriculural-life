@@ -1,7 +1,26 @@
-[gd_scene load_steps=3 format=3 uid="uid://br8ir85avtkfg"]
+[gd_scene load_steps=5 format=3 uid="uid://br8ir85avtkfg"]
 
 [ext_resource type="Script" uid="uid://dxm8ppvmmg7w2" path="res://Scripts/PhoneApps/NewsApp/NewsPanel.gd" id="1_gi4sr"]
 [ext_resource type="PackedScene" uid="uid://eywsmmhf7odx" path="res://Scenes/UIs/PlayerHUD/Phone/NewsApp/news_item_row.tscn" id="2_t1eo0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_news_root"]
+bg_color = Color(0.015, 0.018, 0.024, 0.94)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_empty_card"]
+bg_color = Color(0.045, 0.052, 0.064, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.13, 0.16, 0.20, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
 
 [node name="NewsPanel" type="Control" unique_id=1909946604]
 layout_mode = 3
@@ -21,30 +40,66 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_news_root")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=521546201]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 6
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=758313188]
+[node name="ContentStack" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=758313188]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/ContentStack" unique_id=523918142]
+layout_mode = 2
+theme_type_variation = &"HeaderLabel"
+text = "News"
+
+[node name="EmptyStateCard" type="PanelContainer" parent="PanelContainer/MarginContainer/ContentStack"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_empty_card")
+
+[node name="EmptyMargin" type="MarginContainer" parent="PanelContainer/MarginContainer/ContentStack/EmptyStateCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="EmptyStack" type="VBoxContainer" parent="PanelContainer/MarginContainer/ContentStack/EmptyStateCard/EmptyMargin"]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=523918142]
+[node name="EmptyTitleLabel" type="Label" parent="PanelContainer/MarginContainer/ContentStack/EmptyStateCard/EmptyMargin/EmptyStack"]
 layout_mode = 2
-text = "News"
+theme_type_variation = &"HeaderLabel"
+text = "No news yet."
+horizontal_alignment = 1
 
-[node name="NewsScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="EmptyBodyLabel" type="Label" parent="PanelContainer/MarginContainer/ContentStack/EmptyStateCard/EmptyMargin/EmptyStack"]
+layout_mode = 2
+text = "Market and weather updates will appear here."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="NewsScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/ContentStack"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 1
 
-[node name="NewsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/NewsScroll" unique_id=1778471088]
+[node name="ListMargin" type="MarginContainer" parent="PanelContainer/MarginContainer/ContentStack/NewsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_right = 8
+
+[node name="NewsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/ContentStack/NewsScroll/ListMargin" unique_id=1778471088]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8

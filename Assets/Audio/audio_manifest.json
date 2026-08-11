@@ -1,0 +1,32 @@
+{
+  "files": [
+    {
+      "path": "Assets/Audio/UI/ui_click.wav",
+      "bus": "SFX",
+      "purpose": "General UI button click"
+    },
+    {
+      "path": "Assets/Audio/UI/ui_phone_open.wav",
+      "bus": "SFX",
+      "purpose": "FarmPhone open"
+    },
+    {
+      "path": "Assets/Audio/UI/ui_phone_close.wav",
+      "bus": "SFX",
+      "purpose": "FarmPhone close"
+    },
+    {
+      "path": "Assets/Audio/UI/ui_app_switch.wav",
+      "bus": "SFX",
+      "purpose": "FarmPhone app switch"
+    },
+    {
+      "path": "Assets/Audio/Notifications/notification_new.wav",
+      "bus": "Notifications/Notification",
+      "purpose": "New bottom-left notification"
+    }
+  ],
+  "sample_rate": 44100,
+  "channels": "mono",
+  "format": "WAV PCM 16-bit"
+}

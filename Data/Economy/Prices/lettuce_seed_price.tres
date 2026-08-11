@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemPriceData" format=3 uid="uid://bq0mkdc0joxpj"]
+
+[ext_resource type="Script" uid="uid://b7gcud8aoyqm4" path="res://Scripts/Economy/ItemPriceData.gd" id="1_script"]
+[ext_resource type="Resource" uid="uid://deoufmv2a1vr" path="res://Data/Items/Seeds/lettuce_seed_item.tres" id="1_item"]
+
+[resource]
+script = ExtResource("1_script")
+item_data = ExtResource("1_item")
+buy_price = 8
+sell_price = 2
+metadata/_custom_type_script = "uid://b7gcud8aoyqm4"

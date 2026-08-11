@@ -10,9 +10,11 @@
 [ext_resource type="Resource" uid="uid://exkyhl0jf7gm" path="res://Data/Inventory/player_inventory.tres" id="8_44o7y"]
 [ext_resource type="PackedScene" uid="uid://dx0gm8cd8556s" path="res://Scenes/UIs/PlayerHUD/Phone/CommodityExchangeApp/commodity_exchange_panel.tscn" id="9_4t3lr"]
 [ext_resource type="PackedScene" uid="uid://co8tk0tro0mec" path="res://Scenes/UIs/PlayerHUD/Phone/CommodityExchangeApp/commodity_item_row.tscn" id="10_814bx"]
+[ext_resource type="PackedScene" uid="uid://b65f1rejsifdq" path="res://Scenes/UIs/PlayerHUD/Phone/ShopApp/shop_cart_row.tscn" id="10_cart"]
 [ext_resource type="PackedScene" uid="uid://datulgagyqbol" path="res://Scenes/UIs/PlayerHUD/Phone/WeatherApp/weather_panel.tscn" id="11_se1to"]
 [ext_resource type="PackedScene" uid="uid://beet0aeil50xy" path="res://Scenes/UIs/PlayerHUD/Phone/WeatherApp/weather_forecast_row.tscn" id="12_5upr8"]
 [ext_resource type="PackedScene" uid="uid://br8ir85avtkfg" path="res://Scenes/UIs/PlayerHUD/Phone/NewsApp/news_panel.tscn" id="13_0jn3t"]
+[ext_resource type="Theme" path="res://Scenes/UIs/PlayerHUD/Phone/FarmPhoneTheme.tres" id="14_theme"]
 
 [node name="PhonePanel" type="Control" unique_id=270439995]
 layout_mode = 3
@@ -21,49 +23,296 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -300.0
-offset_right = 200.0
-offset_bottom = 300.0
+offset_left = -190.0
+offset_top = -320.0
+offset_right = 190.0
+offset_bottom = 320.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
+theme = ExtResource("14_theme")
 script = ExtResource("1_hrd0b")
 
-[node name="PanelContainer" type="PanelContainer" parent="." unique_id=229916539]
+[node name="PhoneShell" type="PanelContainer" parent="." unique_id=229916539]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_type_variation = &"PhoneShell"
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1508891745]
+[node name="ShellMargin" type="MarginContainer" parent="PhoneShell" unique_id=1508891745]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 16
+
+[node name="DeviceStack" type="VBoxContainer" parent="PhoneShell/ShellMargin" unique_id=722606447]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TopBezel" type="Control" parent="PhoneShell/ShellMargin/DeviceStack" unique_id=1269155512]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=722606447]
-layout_mode = 2
-
-[node name="PhoneHeader" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1269155512]
-custom_minimum_size = Vector2(0, 28)
-layout_mode = 2
-
-[node name="Label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PhoneHeader" unique_id=1672163018]
+[node name="Camera" type="PanelContainer" parent="PhoneShell/ShellMargin/DeviceStack/TopBezel"]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 4.0
-offset_bottom = 17.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -6.0
+offset_top = 8.0
+offset_right = 6.0
+offset_bottom = 20.0
 grow_horizontal = 2
-text = "FarmPhone"
-horizontal_alignment = 1
+theme_type_variation = &"PhoneSensor"
 
-[node name="ContentArea" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=2119467755]
+[node name="Speaker" type="PanelContainer" parent="PhoneShell/ShellMargin/DeviceStack/TopBezel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -46.0
+offset_top = 28.0
+offset_right = 46.0
+offset_bottom = 35.0
+grow_horizontal = 2
+theme_type_variation = &"PhoneSpeaker"
+
+[node name="ScreenFrame" type="PanelContainer" parent="PhoneShell/ShellMargin/DeviceStack" unique_id=961120559]
 clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
+theme_type_variation = &"PhoneScreenFrame"
 
-[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea" unique_id=961120559]
+[node name="ScreenMargin" type="MarginContainer" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ScreenArea" type="Control" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin" unique_id=2119467755]
+clip_contents = true
+layout_mode = 2
+
+[node name="Wallpaper" type="ColorRect" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.005, 0.006, 0.008, 1)
+
+[node name="HomeScreen" type="Control" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HomeGrid" type="GridContainer" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 26.0
+offset_right = -18.0
+offset_bottom = -26.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 12
+columns = 4
+
+[node name="NewsIcon" type="VBoxContainer" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="IconButton" type="Button" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/NewsIcon"]
+custom_minimum_size = Vector2(58, 58)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"PhoneAppIconNews"
+text = "N"
+
+[node name="NameLabel" type="Label" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/NewsIcon"]
+layout_mode = 2
+theme_type_variation = &"PhoneAppLabel"
+text = "News"
+horizontal_alignment = 1
+
+[node name="MarketIcon" type="VBoxContainer" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="IconButton" type="Button" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/MarketIcon"]
+custom_minimum_size = Vector2(58, 58)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"PhoneAppIconMarket"
+text = "$"
+
+[node name="NameLabel" type="Label" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/MarketIcon"]
+layout_mode = 2
+theme_type_variation = &"PhoneAppLabel"
+text = "Market"
+horizontal_alignment = 1
+
+[node name="ShopIcon" type="VBoxContainer" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="IconButton" type="Button" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/ShopIcon"]
+custom_minimum_size = Vector2(58, 58)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"PhoneAppIconShop"
+text = "S"
+
+[node name="NameLabel" type="Label" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/ShopIcon"]
+layout_mode = 2
+theme_type_variation = &"PhoneAppLabel"
+text = "Shop"
+horizontal_alignment = 1
+
+[node name="WeatherIcon" type="VBoxContainer" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="IconButton" type="Button" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/WeatherIcon"]
+custom_minimum_size = Vector2(58, 58)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"PhoneAppIconWeather"
+text = "W"
+
+[node name="NameLabel" type="Label" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/WeatherIcon"]
+layout_mode = 2
+theme_type_variation = &"PhoneAppLabel"
+text = "Weather"
+horizontal_alignment = 1
+
+[node name="SellIcon" type="VBoxContainer" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="IconButton" type="Button" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/SellIcon"]
+custom_minimum_size = Vector2(58, 58)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"PhoneAppIconSell"
+text = "P"
+
+[node name="NameLabel" type="Label" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/SellIcon"]
+layout_mode = 2
+theme_type_variation = &"PhoneAppLabel"
+text = "Sell"
+horizontal_alignment = 1
+
+[node name="StorageIcon" type="VBoxContainer" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="IconButton" type="Button" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/StorageIcon"]
+custom_minimum_size = Vector2(58, 58)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"PhoneAppIconStorage"
+disabled = true
+text = "St"
+
+[node name="NameLabel" type="Label" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid/StorageIcon"]
+layout_mode = 2
+theme_type_variation = &"PhoneAppLabel"
+text = "Storage"
+horizontal_alignment = 1
+
+[node name="EmptySlot7" type="Control" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptySlot8" type="Control" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptySlot9" type="Control" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptySlot10" type="Control" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptySlot11" type="Control" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptySlot12" type="Control" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptySlot13" type="Control" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptySlot14" type="Control" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptySlot15" type="Control" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptySlot16" type="Control" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/HomeScreen/HomeGrid"]
+custom_minimum_size = Vector2(68, 92)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AppContainer" type="Control" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea" unique_id=1125492911]
+visible = false
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
@@ -72,71 +321,76 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="AppContainer" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer" unique_id=1125492911]
-clip_contents = true
-layout_mode = 2
-
-[node name="SellApp" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer" unique_id=1774259236 instance=ExtResource("2_c8h6s")]
+[node name="SellApp" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/AppContainer" unique_id=1774259236 instance=ExtResource("2_c8h6s")]
 visible = false
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 storage_data = ExtResource("3_0jr7f")
 row_scene = ExtResource("4_y5yci")
 
-[node name="ShopApp" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer" unique_id=1245120243 instance=ExtResource("5_8j0k5")]
+[node name="ShopApp" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/AppContainer" unique_id=1245120243 instance=ExtResource("5_8j0k5")]
 visible = false
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 shop_data = ExtResource("6_4t3lr")
 row_scene = ExtResource("7_814bx")
+cart_row_scene = ExtResource("10_cart")
 player_inventory = ExtResource("8_44o7y")
 
-[node name="StockMarketApp" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer" unique_id=1407838760 instance=ExtResource("9_4t3lr")]
+[node name="StockMarketApp" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/AppContainer" unique_id=1407838760 instance=ExtResource("9_4t3lr")]
 visible = false
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 row_scene = ExtResource("10_814bx")
 
-[node name="WeatherApp" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer" unique_id=719591160 instance=ExtResource("11_se1to")]
+[node name="WeatherApp" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/AppContainer" unique_id=719591160 instance=ExtResource("11_se1to")]
 visible = false
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 row_scene = ExtResource("12_5upr8")
 
-[node name="NewsApp" parent="PanelContainer/MarginContainer/VBoxContainer/ContentArea/PanelContainer/AppContainer" unique_id=1909946604 instance=ExtResource("13_0jn3t")]
+[node name="NewsApp" parent="PhoneShell/ShellMargin/DeviceStack/ScreenFrame/ScreenMargin/ScreenArea/AppContainer" unique_id=1909946604 instance=ExtResource("13_0jn3t")]
 visible = false
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="BottomNav" type="Control" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1794645931]
+[node name="HomeBezel" type="Control" parent="PhoneShell/ShellMargin/DeviceStack"]
+custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav" unique_id=954857757]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="News" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1519948762]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "news"
-
-[node name="StockMarket" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1428452633]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Stock app"
-
-[node name="Shop" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1483380714]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "shop"
-
-[node name="Weather" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=688998947]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "weather"
-
-[node name="Storage" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=107771774]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Storage"
-
-[node name="Sell" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/BottomNav/HBoxContainer" unique_id=1371647034]
-layout_mode = 2
-text = "Stock
-"
+[node name="HomeButton" type="Button" parent="PhoneShell/ShellMargin/DeviceStack/HomeBezel"]
+custom_minimum_size = Vector2(46, 46)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -23.0
+offset_top = -23.0
+offset_right = 23.0
+offset_bottom = 23.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"PhoneHomeButton"
+text = ""

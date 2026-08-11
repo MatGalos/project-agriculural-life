@@ -1,20 +1,70 @@
-[gd_scene format=3 uid="uid://beet0aeil50xy"]
+[gd_scene load_steps=4 format=3 uid="uid://beet0aeil50xy"]
 
 [ext_resource type="Script" uid="uid://d7moeitt6m54" path="res://Scripts/PhoneApps/WeatherApp/WeatherForecastRow.gd" id="1_u6y55"]
+[ext_resource type="Script" path="res://Scripts/PhoneApps/WeatherApp/WeatherIcon.gd" id="2_icon"]
 
-[node name="WeatherForecastRow" type="HBoxContainer" unique_id=161124623]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_forecast_row"]
+bg_color = Color(0.045, 0.052, 0.064, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.13, 0.16, 0.20, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[node name="WeatherForecastRow" type="PanelContainer" unique_id=161124623]
+custom_minimum_size = Vector2(0, 50)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_forecast_row")
 script = ExtResource("1_u6y55")
 
-[node name="DayLabel" type="Label" parent="." unique_id=493260984]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
 
-[node name="WeatherLabel" type="Label" parent="." unique_id=1487925750]
+[node name="Row" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 5
 
-[node name="TemperatureLabel" type="Label" parent="." unique_id=1259574678]
+[node name="DayLabel" type="Label" parent="MarginContainer/Row" unique_id=493260984]
+custom_minimum_size = Vector2(72, 0)
 layout_mode = 2
+size_flags_horizontal = 3
+text = "2nd Spring"
+vertical_alignment = 1
+
+[node name="WeatherIcon" type="Control" parent="MarginContainer/Row"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+script = ExtResource("2_icon")
+
+[node name="WeatherLabel" type="Label" parent="MarginContainer/Row" unique_id=1487925750]
+custom_minimum_size = Vector2(42, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Unknown"
+vertical_alignment = 1
+
+[node name="TemperatureLabel" type="Label" parent="MarginContainer/Row" unique_id=1259574678]
+custom_minimum_size = Vector2(38, 0)
+layout_mode = 2
+text = "0°C"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="RainLabel" type="Label" parent="MarginContainer/Row"]
+custom_minimum_size = Vector2(52, 0)
+layout_mode = 2
+text = "Rain: 0%"
+horizontal_alignment = 2
+vertical_alignment = 1

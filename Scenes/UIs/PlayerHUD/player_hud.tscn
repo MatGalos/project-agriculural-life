@@ -13,9 +13,42 @@
 [ext_resource type="PackedScene" uid="uid://cb3qefv5afyy6" path="res://Scenes/UIs/PlayerHUD/Storage/storage_panel.tscn" id="11_i6vwx"]
 [ext_resource type="Resource" uid="uid://c46mxpfymbli4" path="res://Data/Storage/silo_storage.tres" id="12_uqy4o"]
 [ext_resource type="PackedScene" uid="uid://cpaiyaqvr2mmn" path="res://Scenes/UIs/PlayerHUD/Storage/storage_item_row.tscn" id="13_cn4vo"]
+[ext_resource type="Script" path="res://Scripts/UIs/PlayerHUD/HUDPlaque.gd" id="14_hudpl"]
+[ext_resource type="Script" path="res://Scripts/UIs/PlayerHUD/HotbarToolBeltPanel.gd" id="15_beltp"]
+[ext_resource type="Script" path="res://Scripts/UIs/PlayerHUD/HotbarToolBeltSlot.gd" id="16_belts"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_334lg"]
 font_size = 32
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hotbar_panel"]
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hotbar_slot"]
+content_margin_left = 7.0
+content_margin_top = 7.0
+content_margin_right = 7.0
+content_margin_bottom = 7.0
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hotbar_amount_badge"]
+content_margin_left = 5.0
+content_margin_top = 1.0
+content_margin_right = 5.0
+content_margin_bottom = 1.0
+bg_color = Color(0.86, 0.72, 0.48, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.18, 0.08, 0.035, 0.95)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [node name="PlayerHUD" type="CanvasLayer" unique_id=76956586 groups=["player_hud"]]
 script = ExtResource("1_p5k4q")
@@ -48,7 +81,8 @@ grow_horizontal = 0
 layout_mode = 0
 offset_right = 112.0
 offset_bottom = 48.0
-color = Color(0.15294118, 0.15294118, 0.15294118, 1)
+color = Color(0, 0, 0, 0)
+script = ExtResource("14_hudpl")
 
 [node name="DateTimeContainer" type="VBoxContainer" parent="Root/DateTimeController" unique_id=1634932118]
 layout_mode = 0
@@ -58,11 +92,13 @@ offset_bottom = 44.0
 
 [node name="DateLabel" type="Label" parent="Root/DateTimeController/DateTimeContainer" unique_id=1312538155]
 layout_mode = 2
-text = "30th of Winter"
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
+text = "Winter 30, Year 1"
 horizontal_alignment = 1
 
 [node name="TimeLabel" type="Label" parent="Root/DateTimeController/DateTimeContainer" unique_id=1239664169]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
 text = "10:00"
 horizontal_alignment = 1
 
@@ -80,14 +116,17 @@ grow_horizontal = 0
 layout_mode = 0
 offset_right = 112.0
 offset_bottom = 20.0
-color = Color(0.153, 0.153, 0.153, 1)
+color = Color(0, 0, 0, 0)
+script = ExtResource("14_hudpl")
 
 [node name="FundsLabel" type="Label" parent="Root/FundsController" unique_id=1665244698]
 layout_mode = 0
 offset_right = 112.0
 offset_bottom = 20.0
-text = "100$"
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
+text = "$100"
 horizontal_alignment = 2
+vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="EventController" type="Control" parent="Root" unique_id=251260563]
@@ -107,20 +146,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.153, 0.153, 0.153, 1)
+color = Color(0, 0, 0, 0)
+script = ExtResource("14_hudpl")
+plaque_style = 1
 
 [node name="EventLabel" type="Label" parent="Root/EventController" unique_id=974498104]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-horizontal_alignment = 1
+anchors_preset = 0
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
 vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="MapController" type="Control" parent="Root" unique_id=3203391]
+visible = false
 anchors_preset = 0
 offset_right = 147.0
 offset_bottom = 153.0
@@ -155,18 +193,25 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hotbar_panel")
+script = ExtResource("15_beltp")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Root/QuickInventoryController/PanelContainer" unique_id=497413186]
 layout_mode = 2
+theme_override_constants/separation = 8
 
 [node name="Slot1" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=482116249]
 custom_minimum_size = Vector2(96, 64)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hotbar_slot")
+script = ExtResource("16_belts")
 
 [node name="AmountLabel" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot1" unique_id=1036302836]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_hotbar_amount_badge")
 text = "Slot 1"
 
 [node name="IconRect" type="TextureRect" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot1" unique_id=1203370701]
@@ -175,11 +220,15 @@ layout_mode = 2
 [node name="Slot2" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=768597355]
 custom_minimum_size = Vector2(96, 64)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hotbar_slot")
+script = ExtResource("16_belts")
 
 [node name="AmountLabel" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot2" unique_id=1025412621]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_hotbar_amount_badge")
 text = "Slot 2"
 
 [node name="IconRect" type="TextureRect" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot2" unique_id=91858240]
@@ -188,11 +237,15 @@ layout_mode = 2
 [node name="Slot3" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=711113282]
 custom_minimum_size = Vector2(96, 64)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hotbar_slot")
+script = ExtResource("16_belts")
 
 [node name="AmountLabel" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot3" unique_id=2024014200]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_hotbar_amount_badge")
 text = "Slot 3"
 
 [node name="IconRect" type="TextureRect" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot3" unique_id=413159644]
@@ -201,11 +254,15 @@ layout_mode = 2
 [node name="Slot4" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=141672993]
 custom_minimum_size = Vector2(96, 64)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hotbar_slot")
+script = ExtResource("16_belts")
 
 [node name="AmountLabel" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot4" unique_id=1430704183]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_hotbar_amount_badge")
 text = "Slot 4"
 
 [node name="IconRect" type="TextureRect" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot4" unique_id=1211956001]
@@ -214,11 +271,15 @@ layout_mode = 2
 [node name="Slot5" type="PanelContainer" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer" unique_id=2027116879]
 custom_minimum_size = Vector2(96, 64)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hotbar_slot")
+script = ExtResource("16_belts")
 
 [node name="AmountLabel" type="Label" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot5" unique_id=1150460589]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.06, 0.035, 0.015, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_hotbar_amount_badge")
 text = "Slot 5"
 
 [node name="IconRect" type="TextureRect" parent="Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot5" unique_id=340217155]
@@ -266,7 +327,7 @@ offset_top = 52.0
 offset_right = 210.0
 offset_bottom = 92.0
 grow_horizontal = 2
-text = "Description"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2

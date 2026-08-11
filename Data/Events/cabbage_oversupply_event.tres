@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="MarketEventData" format=3 uid="uid://bs0mkdc0joxpe"]
+
+[ext_resource type="Script" uid="uid://dy0h10ql6luky" path="res://Scripts/Events/MarketEventData.gd" id="1_script"]
+[ext_resource type="Resource" uid="uid://cfqfe88uluog5" path="res://Data/Items/Crops/cabbage_item.tres" id="2_item"]
+
+[resource]
+script = ExtResource("1_script")
+event_id = "cabbage_oversupply"
+display_name = "Cabbage Oversupply"
+description = "Too much cabbage on the market causes prices to fall."
+duration_days = 2
+trigger_chance = 0.35
+cooldown_days = 5
+trigger_mode = 1
+target_item = ExtResource("2_item")
+trend_effect = 0
+trend_strength_modifier = 0.02
+volatility_modifier = 0.02
+requires_recent_sales = true
+recent_sales_threshold = 200
+metadata/_custom_type_script = "uid://dy0h10ql6luky"

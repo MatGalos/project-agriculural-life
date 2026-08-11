@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CropData" format=3 uid="uid://dl7ijhxsc4api"]
+
+[ext_resource type="Resource" uid="uid://23o5ycp5vrdb" path="res://Data/Items/Crops/carrot_item.tres" id="1_hjt55"]
+[ext_resource type="Script" uid="uid://cbipb3o5yusrn" path="res://Scripts/Farming/CropData.gd" id="1_ytr4g"]
+[ext_resource type="PackedScene" uid="uid://dbctyorhltef2" path="res://Assets/Models/Plants/Carrot/carrot_ready.glb" id="2_2das4"]
+[ext_resource type="Resource" uid="uid://ities5hxrheo" path="res://Data/Items/Seeds/carrot_seed_item.tres" id="4_keb4w"]
+[ext_resource type="PackedScene" uid="uid://ivbspaokouif" path="res://Assets/Models/Plants/Carrot/carrot_seeded.glb" id="5_dk81d"]
+[ext_resource type="PackedScene" uid="uid://cmrs2piyitn5d" path="res://Assets/Models/Plants/Carrot/carrot_stage_1.glb" id="6_7parn"]
+[ext_resource type="PackedScene" uid="uid://c2yq7uaskhbfl" path="res://Assets/Models/Plants/Carrot/carrot_stage_2.glb" id="7_ntleo"]
+[ext_resource type="PackedScene" uid="uid://ck4olv0cavb3f" path="res://Assets/Models/Plants/Carrot/carrot_stage_3.glb" id="8_tmwnp"]
+
+[resource]
+script = ExtResource("1_ytr4g")
+crop_id = "carrot"
+display_name = "Carrot"
+seed_item = ExtResource("4_keb4w")
+harvest_item = ExtResource("1_hjt55")
+seeded_scene = ExtResource("5_dk81d")
+stage_1_scene = ExtResource("6_7parn")
+stage_2_scene = ExtResource("7_ntleo")
+stage_3_scene = ExtResource("8_tmwnp")
+ready_scene = ExtResource("2_2das4")
+days_to_stage_2 = 3
+days_to_stage_3 = 6
+days_to_ready = 8
+metadata/_custom_type_script = "uid://cbipb3o5yusrn"

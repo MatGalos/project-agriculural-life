@@ -1,0 +1,204 @@
+[gd_resource type="Theme" format=3 uid="uid://comhv1gia0pw2"]
+
+[ext_resource type="FontFile" uid="uid://3pi4yx638aqm" path="res://Assets/Fonts/Lato/Lato-Regular.ttf" id="1_regular"]
+[ext_resource type="FontFile" uid="uid://dyd7je7x7xr6c" path="res://Assets/Fonts/Lato/Lato-Bold.ttf" id="2_bold"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_phone_content_panel"]
+bg_color = Color(0.035, 0.038, 0.045, 0.96)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_market"]
+bg_color = Color(0.08, 0.45, 0.3, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_pressed"]
+bg_color = Color(0.035, 0.038, 0.045, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_news"]
+bg_color = Color(0.18, 0.32, 0.66, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_sell"]
+bg_color = Color(0.44, 0.34, 0.12, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_shop"]
+bg_color = Color(0.7, 0.33, 0.12, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_storage"]
+bg_color = Color(0.22, 0.22, 0.25, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icon_weather"]
+bg_color = Color(0.16, 0.48, 0.68, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_home_button_hover"]
+bg_color = Color(0.045, 0.046, 0.052, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.24, 0.245, 0.27, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_home_button"]
+bg_color = Color(0.025, 0.026, 0.03, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.16, 0.165, 0.18, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_phone_screen_frame"]
+bg_color = Color(0.025, 0.026, 0.03, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.12, 0.125, 0.14, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_phone_sensor"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1, 0.105, 0.12, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_farm_phone_panel"]
+bg_color = Color(0.012, 0.013, 0.016, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.18, 0.18, 0.2, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_phone_speaker"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.14, 0.145, 0.16, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[resource]
+default_font = ExtResource("1_regular")
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_pressed_color = Color(0.86, 0.88, 0.92, 1)
+Button/fonts/font = ExtResource("1_regular")
+HeaderButton/base_type = &"Button"
+HeaderButton/fonts/font = ExtResource("2_bold")
+HeaderLabel/base_type = &"Label"
+HeaderLabel/fonts/font = ExtResource("2_bold")
+Label/fonts/font = ExtResource("1_regular")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_phone_content_panel")
+PhoneAppIconMarket/base_type = &"Button"
+PhoneAppIconMarket/font_sizes/font_size = 24
+PhoneAppIconMarket/fonts/font = ExtResource("2_bold")
+PhoneAppIconMarket/styles/hover = SubResource("StyleBoxFlat_icon_market")
+PhoneAppIconMarket/styles/normal = SubResource("StyleBoxFlat_icon_market")
+PhoneAppIconMarket/styles/pressed = SubResource("StyleBoxFlat_icon_pressed")
+PhoneAppIconNews/base_type = &"Button"
+PhoneAppIconNews/font_sizes/font_size = 24
+PhoneAppIconNews/fonts/font = ExtResource("2_bold")
+PhoneAppIconNews/styles/hover = SubResource("StyleBoxFlat_icon_news")
+PhoneAppIconNews/styles/normal = SubResource("StyleBoxFlat_icon_news")
+PhoneAppIconNews/styles/pressed = SubResource("StyleBoxFlat_icon_pressed")
+PhoneAppIconSell/base_type = &"Button"
+PhoneAppIconSell/font_sizes/font_size = 24
+PhoneAppIconSell/fonts/font = ExtResource("2_bold")
+PhoneAppIconSell/styles/hover = SubResource("StyleBoxFlat_icon_sell")
+PhoneAppIconSell/styles/normal = SubResource("StyleBoxFlat_icon_sell")
+PhoneAppIconSell/styles/pressed = SubResource("StyleBoxFlat_icon_pressed")
+PhoneAppIconShop/base_type = &"Button"
+PhoneAppIconShop/font_sizes/font_size = 24
+PhoneAppIconShop/fonts/font = ExtResource("2_bold")
+PhoneAppIconShop/styles/hover = SubResource("StyleBoxFlat_icon_shop")
+PhoneAppIconShop/styles/normal = SubResource("StyleBoxFlat_icon_shop")
+PhoneAppIconShop/styles/pressed = SubResource("StyleBoxFlat_icon_pressed")
+PhoneAppIconStorage/base_type = &"Button"
+PhoneAppIconStorage/colors/font_disabled_color = Color(0.62, 0.64, 0.68, 1)
+PhoneAppIconStorage/font_sizes/font_size = 24
+PhoneAppIconStorage/fonts/font = ExtResource("2_bold")
+PhoneAppIconStorage/styles/disabled = SubResource("StyleBoxFlat_icon_storage")
+PhoneAppIconStorage/styles/hover = SubResource("StyleBoxFlat_icon_storage")
+PhoneAppIconStorage/styles/normal = SubResource("StyleBoxFlat_icon_storage")
+PhoneAppIconStorage/styles/pressed = SubResource("StyleBoxFlat_icon_pressed")
+PhoneAppIconWeather/base_type = &"Button"
+PhoneAppIconWeather/font_sizes/font_size = 24
+PhoneAppIconWeather/fonts/font = ExtResource("2_bold")
+PhoneAppIconWeather/styles/hover = SubResource("StyleBoxFlat_icon_weather")
+PhoneAppIconWeather/styles/normal = SubResource("StyleBoxFlat_icon_weather")
+PhoneAppIconWeather/styles/pressed = SubResource("StyleBoxFlat_icon_pressed")
+PhoneAppLabel/base_type = &"Label"
+PhoneAppLabel/colors/font_color = Color(0.94, 0.95, 0.98, 1)
+PhoneAppLabel/colors/font_shadow_color = Color(0, 0, 0, 0.8)
+PhoneAppLabel/constants/shadow_offset_x = 1
+PhoneAppLabel/constants/shadow_offset_y = 1
+PhoneAppLabel/font_sizes/font_size = 13
+PhoneAppLabel/fonts/font = ExtResource("1_regular")
+PhoneHomeButton/base_type = &"Button"
+PhoneHomeButton/styles/hover = SubResource("StyleBoxFlat_home_button_hover")
+PhoneHomeButton/styles/normal = SubResource("StyleBoxFlat_home_button")
+PhoneHomeButton/styles/pressed = SubResource("StyleBoxFlat_home_button_hover")
+PhoneScreenFrame/base_type = &"PanelContainer"
+PhoneScreenFrame/styles/panel = SubResource("StyleBoxFlat_phone_screen_frame")
+PhoneSensor/base_type = &"PanelContainer"
+PhoneSensor/styles/panel = SubResource("StyleBoxFlat_phone_sensor")
+PhoneShell/base_type = &"PanelContainer"
+PhoneShell/styles/panel = SubResource("StyleBoxFlat_farm_phone_panel")
+PhoneSpeaker/base_type = &"PanelContainer"
+PhoneSpeaker/styles/panel = SubResource("StyleBoxFlat_phone_speaker")

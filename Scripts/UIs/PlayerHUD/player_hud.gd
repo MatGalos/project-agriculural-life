@@ -3,6 +3,16 @@ class_name PlayerHUD
 
 const CROSSHAIR_SIZE := 40.0
 const EVENT_MESSAGE_DURATION := 7.0
+const EVENT_MESSAGE_REPEAT_COOLDOWN := 1.2
+const LATO_REGULAR_FONT := preload("res://Assets/Fonts/Lato/Lato-Regular.ttf")
+
+enum UIMode {
+	GAMEPLAY,
+	PAUSE,
+	INVENTORY,
+	PHONE,
+	STORAGE
+}
 
 @export var player_inventory: InventoryData
 @export var hoe_item: ItemData
@@ -23,6 +33,7 @@ const EVENT_MESSAGE_DURATION := 7.0
 @onready var event_label: Label = $Root/EventController/EventLabel
 @onready var map_controller: Control = $Root/MapController
 @onready var quick_inventory_controller: Control = $Root/QuickInventoryController
+@onready var crosshair: Control = $Root/CenterContainer/Crosshair
 @onready var inventory_slot_1: PanelContainer = $Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot1
 @onready var inventory_slot_2: PanelContainer = $Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot2
 @onready var inventory_slot_3: PanelContainer = $Root/QuickInventoryController/PanelContainer/HBoxContainer/Slot3
@@ -34,8 +45,13 @@ const EVENT_MESSAGE_DURATION := 7.0
 @onready var storage_panel: StoragePanel = $Root/StoragePanel
 
 var _event_message_version := 0
+var _event_messages: Dictionary = {}
+var _event_message_last_shown: Dictionary = {}
+var _next_event_message_id := 0
+var _ui_mode := UIMode.GAMEPLAY
 
 func _ready() -> void:
+	_apply_scoped_typography()
 	_setup_starting_inventory()
 	TimeManager.time_changed.connect(_on_time_changed)
 	_update_time_ui()
@@ -46,9 +62,28 @@ func _ready() -> void:
 	phone_panel.visible = false
 	storage_panel.close()
 	_hide_event_message()
+	prompt_label.text = ""
+	set_interaction_prompt_visible(false)
 	MoneyManager.money_changed.connect(_on_money_changed)
 	_update_money_ui()
+	gamemanager.pauseChanged.connect(_on_pause_changed)
 	_update_layout()
+	_refresh_ui_mode()
+
+func _apply_scoped_typography() -> void:
+	var text_color: Color = Color(0.06, 0.035, 0.015, 1.0)
+	var shadow_color: Color = Color(0.94, 0.77, 0.45, 0.20)
+
+	for label: Label in [date_label, time_label, funds_label, event_label, prompt_label]:
+		label.add_theme_color_override("font_color", text_color)
+		label.add_theme_color_override("font_shadow_color", shadow_color)
+		label.add_theme_constant_override("shadow_offset_x", 1)
+		label.add_theme_constant_override("shadow_offset_y", 1)
+
+	prompt_label.add_theme_color_override("font_color", Color.WHITE)
+	prompt_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.65))
+	event_label.add_theme_font_override("font", LATO_REGULAR_FONT)
+	prompt_label.add_theme_font_override("font", LATO_REGULAR_FONT)
 
 func _update_layout() -> void:
 	var viewport_size: Vector2 = get_viewport().get_visible_rect().size
@@ -61,19 +96,22 @@ func _update_layout() -> void:
 	_update_center_prompt(viewport_size, min_axis)
 
 func _update_corner_panels(ui_scale: float, margin: float) -> void:
-	var date_width: float = 140.0 * ui_scale
-	var date_height: float = 54.0 * ui_scale
+	var date_width: float = 168.0 * ui_scale
+	var date_height: float = 56.0 * ui_scale
 	var funds_width: float = date_width
-	var funds_height: float = 28.0 * ui_scale
+	var funds_height: float = 30.0 * ui_scale
 	var map_size: Vector2 = Vector2(150.0, 156.0) * ui_scale
+	var plaque_padding: float = 10.0 * ui_scale
 
 	_set_top_right_rect(date_time_controller, margin, margin, date_width, date_height)
 	_set_rect(date_time_bg, 0.0, 0.0, date_width, date_height)
-	_set_rect(date_time_container, 0.0, 4.0 * ui_scale, date_width, date_height - (8.0 * ui_scale))
+	_set_rect(date_time_container, plaque_padding, 5.0 * ui_scale, date_width - (plaque_padding * 2.0), date_height - (10.0 * ui_scale))
 
 	_set_top_right_rect(funds_controller, margin, margin + date_height + (8.0 * ui_scale), funds_width, funds_height)
 	_set_rect(funds_bg, 0.0, 0.0, funds_width, funds_height)
-	_set_rect(funds_label, 0.0, 0.0, funds_width - (8.0 * ui_scale), funds_height)
+	_set_rect(funds_label, plaque_padding, 0.0, funds_width - (plaque_padding * 2.0), funds_height)
+	funds_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	funds_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 
 	_set_rect(map_controller, margin, margin, map_size.x, map_size.y)
 	date_label.add_theme_font_size_override("font_size", roundi(14.0 * ui_scale))
@@ -81,24 +119,28 @@ func _update_corner_panels(ui_scale: float, margin: float) -> void:
 	funds_label.add_theme_font_size_override("font_size", roundi(15.0 * ui_scale))
 
 func _update_bottom_panels(ui_scale: float, margin: float) -> void:
-	var event_size: Vector2 = Vector2(190.0, 96.0) * ui_scale
+	var event_size: Vector2 = Vector2(300.0, 86.0) * ui_scale
 	var slot_size: Vector2 = Vector2(96.0, 64.0) * ui_scale
-	var inventory_width: float = slot_size.x * 5.0
-	var inventory_height: float = slot_size.y
+	var hotbar_slot_gap: float = 8.0 * ui_scale
+	var hotbar_padding: Vector2 = Vector2(10.0, 8.0) * ui_scale
+	var inventory_width: float = (slot_size.x * 5.0) + (hotbar_slot_gap * 4.0) + (hotbar_padding.x * 2.0)
+	var inventory_height: float = slot_size.y + (hotbar_padding.y * 2.0)
+	var notification_padding: float = 12.0 * ui_scale
 
 	_set_bottom_left_rect(event_controller, margin, margin, event_size.x, event_size.y)
+	_set_rect(event_label, notification_padding, 6.0 * ui_scale, event_size.x - (notification_padding * 2.0), event_size.y - (12.0 * ui_scale))
 	_set_bottom_center_rect(quick_inventory_controller, margin, inventory_width, inventory_height)
 
 	_set_inventory_slot_sizes(slot_size)
 
-	event_label.add_theme_font_size_override("font_size", roundi(14.0 * ui_scale))
+	event_label.add_theme_font_size_override("font_size", roundi(17.0 * ui_scale))
 	_update_inventory_label_fonts(roundi(13.0 * ui_scale))
 
 func _update_center_prompt(viewport_size: Vector2, min_axis: float) -> void:
-	var prompt_width: float = clampf(viewport_size.x * 0.42, 280.0, 640.0)
+	var prompt_width: float = clampf(viewport_size.x * 0.28, 220.0, 460.0)
 	var prompt_gap: float = clampf(min_axis * 0.045, 28.0, 64.0)
-	var prompt_font_size: int = roundi(clampf(min_axis * 0.026, 18.0, 28.0))
-	var prompt_height: float = maxf(float(prompt_font_size) * 1.7, 40.0)
+	var prompt_font_size: int = roundi(clampf(min_axis * 0.021, 16.0, 22.0))
+	var prompt_height: float = maxf(float(prompt_font_size) * 1.9, 36.0)
 	var prompt_top: float = (CROSSHAIR_SIZE * 0.5) + prompt_gap
 
 	prompt_label.offset_left = -prompt_width * 0.5
@@ -169,10 +211,12 @@ func open_inventory() -> void:
 		return
 
 	inventory_panel.open()
+	_refresh_ui_mode()
 
 
 func close_inventory() -> void:
 	inventory_panel.close()
+	_refresh_ui_mode()
 
 
 func toggle_inventory() -> void:
@@ -189,11 +233,19 @@ func open_phone() -> void:
 	if is_inventory_open() or is_storage_open():
 		return
 
+	if not phone_panel.visible:
+		UISoundManager.play_phone_open()
+
 	phone_panel.visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	_refresh_ui_mode()
 
 func close_phone() -> void:
+	if phone_panel.visible:
+		UISoundManager.play_phone_close()
+
 	phone_panel.visible = false
+	_refresh_ui_mode()
 
 	if gamemanager.isInGame and not gamemanager.isPaused:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -212,9 +264,11 @@ func open_storage() -> void:
 		return
 
 	storage_panel.open()
+	_refresh_ui_mode()
 
 func close_storage() -> void:
 	storage_panel.close()
+	_refresh_ui_mode()
 
 func toggle_storage() -> void:
 	if is_storage_open():
@@ -228,23 +282,126 @@ func is_storage_open() -> bool:
 func is_any_game_menu_open() -> bool:
 	return is_inventory_open() or is_phone_open() or is_storage_open()
 
-func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATION) -> void:
+func is_gameplay_hud_visible() -> bool:
+	return _ui_mode == UIMode.GAMEPLAY
+
+func set_ui_mode(mode: UIMode) -> void:
+	_ui_mode = mode
+
+	match _ui_mode:
+		UIMode.GAMEPLAY:
+			set_crosshair_visible(true)
+			set_interaction_prompt_visible(prompt_label.text != "")
+			set_hotbar_visible(true)
+			set_status_hud_visible(true)
+			set_notifications_visible(not _event_messages.is_empty())
+		UIMode.PAUSE:
+			set_crosshair_visible(false)
+			set_interaction_prompt_visible(false)
+			set_hotbar_visible(false)
+			set_status_hud_visible(false)
+			set_notifications_visible(false)
+		UIMode.INVENTORY:
+			set_crosshair_visible(false)
+			set_interaction_prompt_visible(false)
+			set_hotbar_visible(false)
+			set_status_hud_visible(false)
+			set_notifications_visible(false)
+		UIMode.PHONE:
+			set_crosshair_visible(false)
+			set_interaction_prompt_visible(false)
+			set_hotbar_visible(false)
+			set_status_hud_visible(false)
+			set_notifications_visible(false)
+		UIMode.STORAGE:
+			set_crosshair_visible(false)
+			set_interaction_prompt_visible(false)
+			set_hotbar_visible(false)
+			set_status_hud_visible(false)
+			set_notifications_visible(false)
+
+
+func set_crosshair_visible(should_show: bool) -> void:
+	crosshair.visible = should_show
+
+
+func set_interaction_prompt_visible(should_show: bool) -> void:
+	prompt_label.visible = should_show and not prompt_label.text.strip_edges().is_empty()
+
+
+func set_hotbar_visible(should_show: bool) -> void:
+	quick_inventory_controller.visible = should_show
+
+
+func set_status_hud_visible(should_show: bool) -> void:
+	date_time_controller.visible = should_show
+	funds_controller.visible = should_show
+
+
+func set_notifications_visible(should_show: bool) -> void:
+	event_controller.visible = should_show and not _event_messages.is_empty()
+
+
+func _refresh_ui_mode() -> void:
+	if gamemanager.isPaused:
+		set_ui_mode(UIMode.PAUSE)
+	elif is_storage_open():
+		set_ui_mode(UIMode.STORAGE)
+	elif is_phone_open():
+		set_ui_mode(UIMode.PHONE)
+	elif is_inventory_open():
+		set_ui_mode(UIMode.INVENTORY)
+	else:
+		set_ui_mode(UIMode.GAMEPLAY)
+
+
+func _on_pause_changed(_paused: bool) -> void:
+	_refresh_ui_mode()
+
+func show_event_message(message: String, duration: float = EVENT_MESSAGE_DURATION, play_notification_sound: bool = true) -> void:
 	if message.is_empty():
 		_hide_event_message()
 		return
 
-	_event_message_version += 1
-	var current_version := _event_message_version
+	var now_msec := Time.get_ticks_msec()
+	var last_msec := int(_event_message_last_shown.get(message, -1000000))
 
-	event_label.text = message
-	event_controller.visible = true
+	if now_msec - last_msec < int(EVENT_MESSAGE_REPEAT_COOLDOWN * 1000.0):
+		return
+
+	_event_message_last_shown[message] = now_msec
+	_event_message_version += 1
+	_next_event_message_id += 1
+	var message_id := _next_event_message_id
+
+	_event_messages[message_id] = message
+
+	if play_notification_sound:
+		UISoundManager.play_notification_new()
+
+	_refresh_event_messages()
 
 	await get_tree().create_timer(duration).timeout
 
-	if current_version == _event_message_version:
+	_event_messages.erase(message_id)
+	_refresh_event_messages()
+
+
+func _refresh_event_messages() -> void:
+	if _event_messages.is_empty():
 		_hide_event_message()
+		return
+
+	var messages: Array[String] = []
+
+	for message_id in _event_messages.keys():
+		messages.append(String(_event_messages[message_id]))
+
+	event_label.text = "\n".join(messages)
+	set_notifications_visible(_ui_mode == UIMode.GAMEPLAY)
 
 func _hide_event_message() -> void:
+	_event_messages.clear()
 	event_controller.visible = false
 	event_label.text = ""
 
@@ -259,4 +416,4 @@ func _on_money_changed(_new_amount: int) -> void:
 	_update_money_ui()
 
 func _update_money_ui() -> void:
-	funds_label.text = "%d$" % MoneyManager.get_money()
+	funds_label.text = UIFormatHelper.money_int(MoneyManager.get_money())

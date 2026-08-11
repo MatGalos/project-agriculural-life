@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="CropData" format=3 uid="uid://dv2j3xhtggyma"]
+
+[ext_resource type="Resource" uid="uid://bdayqx2dpvlhm" path="res://Data/Items/Crops/corn_item.tres" id="1_esw6u"]
+[ext_resource type="Script" uid="uid://cbipb3o5yusrn" path="res://Scripts/Farming/CropData.gd" id="1_lfku3"]
+[ext_resource type="PackedScene" uid="uid://b0ij1y1nip5or" path="res://Assets/Models/Plants/Corn/Corn_ready.glb" id="2_vfm0p"]
+[ext_resource type="Resource" uid="uid://toxl27oy8mxl" path="res://Data/Items/Seeds/corn_seed_item.tres" id="4_pi42k"]
+[ext_resource type="PackedScene" uid="uid://egnqq30r247e" path="res://Assets/Models/Plants/Corn/Corn_seeded.glb" id="5_yamgu"]
+[ext_resource type="PackedScene" uid="uid://cr6maapmnbrv6" path="res://Assets/Models/Plants/Corn/Corn_statge_1.glb" id="6_uhh6p"]
+[ext_resource type="PackedScene" uid="uid://dwsae7s6s8gxw" path="res://Assets/Models/Plants/Corn/Corn_statge_2.glb" id="7_kd0ll"]
+[ext_resource type="PackedScene" uid="uid://gkcewmwko6t6" path="res://Assets/Models/Plants/Corn/Corn_statge_3.glb" id="8_a3qet"]
+
+[resource]
+script = ExtResource("1_lfku3")
+crop_id = "corn"
+display_name = "Corn"
+seed_item = ExtResource("4_pi42k")
+harvest_item = ExtResource("1_esw6u")
+seeded_scene = ExtResource("5_yamgu")
+stage_1_scene = ExtResource("6_uhh6p")
+stage_2_scene = ExtResource("7_kd0ll")
+stage_3_scene = ExtResource("8_a3qet")
+ready_scene = ExtResource("2_vfm0p")
+days_to_stage_1 = 2
+days_to_stage_2 = 4
+days_to_stage_3 = 7
+days_to_ready = 9
+harvest_amount = 3
+allowed_seasons = Array[int]([1])
+metadata/_custom_type_script = "uid://cbipb3o5yusrn"

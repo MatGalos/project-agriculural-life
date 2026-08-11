@@ -1,10 +1,10 @@
 extends Control
 class_name LoadGamePanel
 
-@onready var slot_1_button: Button = $PanelContainer/MarginContainer/VBoxContainer/Slot1Button
-@onready var slot_2_button: Button = $PanelContainer/MarginContainer/VBoxContainer/Slot2Button
-@onready var slot_3_button: Button = $PanelContainer/MarginContainer/VBoxContainer/Slot3Button
-@onready var back_button: Button = $PanelContainer/MarginContainer/VBoxContainer/BackButton
+@onready var slot_1_button: Button = $MenuCenter/WoodenBoard/MenuMargin/MenuContent/SlotButtons/Slot1Button
+@onready var slot_2_button: Button = $MenuCenter/WoodenBoard/MenuMargin/MenuContent/SlotButtons/Slot2Button
+@onready var slot_3_button: Button = $MenuCenter/WoodenBoard/MenuMargin/MenuContent/SlotButtons/Slot3Button
+@onready var back_button: Button = $MenuCenter/WoodenBoard/MenuMargin/MenuContent/BackButton
 @onready var background: ColorRect = $Background
 
 @onready var game_scene: PackedScene = preload("res://Scenes/Game/mainScene.tscn") as PackedScene
@@ -52,24 +52,27 @@ func _refresh_slots() -> void:
 
 
 func _update_slot_button(button: Button, slot: int) -> void:
-	var info := SaveManager.get_save_slot_info(slot)
+	var info: Dictionary = SaveManager.get_save_slot_info(slot)
 
 	if not bool(info.get("exists", false)):
-		button.text = "Slot %d\nEmpty" % slot
+		button.text = "Slot %d\nEmpty Slot" % slot
 		button.disabled = true
 		return
 
 	button.disabled = false
-	button.text = "Slot %d\n%s %d, Year %d\nMoney: %d$" % [
+	button.text = "Slot %d\n%s\nMoney: %s" % [
 		slot,
-		SaveManager.get_season_name_from_month(int(info["month"])),
-		int(info["day"]),
-		int(info["year"]),
-		int(info["money"])
+		UIFormatHelper.season_date(
+			SaveManager.get_season_name_from_month(int(info["month"])),
+			int(info["day"]),
+			int(info["year"])
+		),
+		UIFormatHelper.money_int(int(info["money"]))
 	]
 
 
 func _load_slot(slot: int) -> void:
+	UISoundManager.play_ui_click()
 	SaveManager.set_current_save_slot(slot)
 	gamemanager.startGame()
 	get_tree().change_scene_to_packed.call_deferred(game_scene)
@@ -77,6 +80,7 @@ func _load_slot(slot: int) -> void:
 
 
 func _on_back_pressed() -> void:
+	UISoundManager.play_ui_click()
 	gamemanager.closeLoadGamePanel()
 
 

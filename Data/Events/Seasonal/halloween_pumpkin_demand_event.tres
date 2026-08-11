@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="MarketEventData" format=3]
+
+[ext_resource type="Script" path="res://Scripts/Events/MarketEventData.gd" id="1"]
+[ext_resource type="Resource" path="res://Data/Items/Crops/pumpkin_item.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+event_id = "halloween_pumpkin_demand"
+display_name = "Halloween Pumpkin Demand"
+description = "Halloween celebrations create strong pumpkin demand."
+duration_days = 8
+trigger_chance = 1.0
+event_category = 2
+trigger_mode = 2
+target_item = ExtResource("2")
+trend_effect = 2
+trend_strength_modifier = 0.06
+volatility_modifier = 0.04
+requires_season = true
+required_seasons = Array[int]([2])
+requires_day_range = true
+start_day = 23
+end_day = 30

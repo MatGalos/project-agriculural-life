@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="SeedItemData" format=3 uid="uid://ities5hxrheo"]
+
+[ext_resource type="Script" uid="uid://cm2wggbancy40" path="res://Scripts/Items/SeedItemData.gd" id="1_wcb1u"]
+[ext_resource type="Texture2D" path="res://Assets/Icons/Items/SeedBags/CarrotSeedBag.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_wcb1u")
+crop_id = "carrot"
+id = "carrot_seed"
+display_name = "Carrot Seeds"
+description = "Seeds used to grow carrot."
+icon = ExtResource("2_icon")
+base_price = 5
+category = 1
+growth_days = 8
+metadata/_custom_type_script = "uid://cm2wggbancy40"

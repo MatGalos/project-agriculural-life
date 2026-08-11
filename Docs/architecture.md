@@ -11,17 +11,64 @@ The project uses these gameplay autoloads:
 - `HotbarManager` owns hotbar selection state and exposes the currently selected item.
 - `ToolManager` applies active hotbar tools/seeds to world targets and owns watering-can state.
 - `CropGrowthManager` advances registered farm tiles when the day changes.
-- `TimeManager` owns in-game time, date, seasons, and day/month/year signals.
+- `TimeManager` owns in-game time, date, seasons, and day/month/year signals. One full in-game day currently lasts 10 real-time minutes.
 - `MoneyManager` owns the current player money amount and emits money change signals.
-- `EconomyManager` resolves buy and sell prices, using commodity prices when an item is market-backed.
-- `CommodityMarketManager` updates commodity prices during market hours and stores price history.
-- `WeatherManager` owns current weather, temperature, forecast data, and rain/storm watering effects.
-- `EventManager` starts and expires market events that modify commodity behavior.
-- `NewsManager` converts market events into phone news entries.
+- `EconomyManager` resolves buy and sell prices, using commodity prices when an item is market-backed, and applies runtime buy-price event multipliers.
+- `CommodityMarketManager` updates commodity prices during market hours, stores price history, and applies runtime market-event modifiers without mutating base market data.
+- `WeatherManager` owns current weather, temperature, daily forecast data, cached day phase state, phase forecast data, rain/storm watering effects, and completed-day weather history.
+- `EventManager` starts and expires market, weather, seasonal, and fixed-date events that modify commodity behavior or buy prices.
+- `NewsManager` converts market events into phone news entries and HUD news alerts.
 - `SaveManager` serializes and restores persistent game state across three save slots.
+- `SalesStatsManager` tracks recent sold item amounts for sales-driven market events.
+- `GraphicsSettingsManager` persists and applies resolution, fullscreen mode, and interface scale.
+- `AudioSettingsManager` persists and applies audio volume settings and ensures the required runtime audio buses exist.
+- `UISoundManager` plays short UI and notification sound effects through the configured audio buses.
 - `UI` is the player HUD scene autoload.
 
 Keep cross-system state in autoloads only when multiple unrelated scenes need it. Scene-local display logic should stay in UI controllers.
+
+## World Registration
+
+`WorldManager` is attached to the gameplay scene and joins the `world_manager` group. It is not an autoload.
+
+Important behavior:
+
+- `register_farm_tiles()` scans `farm_tiles_root` for `FarmTile` children and stores them by `tile_id`.
+- `get_tile_by_id(tile_id)` is used by save loading to restore farm tiles by stable IDs.
+- `get_all_farm_tiles()` exposes registered farm tiles for systems that need world-wide tile data.
+- Farm tile IDs must remain stable between scene edits, otherwise saved crop and tile state cannot be restored correctly.
+
+`FarmGridGeneration` is an editor tool script for generating farm tile grids:
+
+- `tile_scene` must instantiate a `FarmTile`.
+- Generated tiles are named `Tile_x_z`.
+- Generated tile IDs use `grid_prefix_x_z`, for example `small_0_0`.
+
+## Farm Border Boundaries
+
+The farm border is scene-authored in `Scenes/Game/world.tscn` under `World/Farm/FarmBorder`.
+
+Structure:
+
+- `FarmBorder` contains the existing manually placed visual fence instances.
+- `FarmBorder/BoundaryColliders` contains invisible gameplay collision only.
+- Boundary nodes are `NorthBoundaryCollider`, `SouthBoundaryCollider`, `EastBoundaryCollider`, and `WestBoundaryCollider`.
+- Each boundary node is a `StaticBody3D` with one `CollisionShape3D` using a `BoxShape3D`.
+
+Current collision rules:
+
+- Boundary colliders do not define custom `collision_layer` or `collision_mask`, so they use Godot's default layer/mask `1`.
+- The player `CharacterBody3D`, farm tiles, home area ground, house, silo, and well also use default collision settings unless explicitly changed later.
+- Boundary colliders must not be added to the `interactable` group and must not have interaction scripts or prompt text.
+
+Positioning rules:
+
+- Keep fence models as visual border assets; do not rely on per-fence mesh collision for the gameplay boundary.
+- Keep the long boundary colliders near the playable ground edge, not far outside the fence, so the player cannot slip into a narrow unsupported strip and fall.
+- Corners should overlap enough to avoid diagonal escape gaps.
+- Adjust only the boundary collider transforms and shape sizes when fixing border blocking issues. Do not move the authored fence layout or regenerate the farm grid for boundary fixes.
+
+The legacy `WorldBoundaryShape3D` in `Scenes/Game/mainScene.tscn` is currently present under `MainScene/Area3D/CollisionShape3D`. It is not wired to gameplay scripts and should be left unchanged unless a later pass deliberately replaces or removes that legacy area.
 
 ## Input And Controls
 
@@ -34,6 +81,188 @@ Important behavior:
 - `reset_to_defaults()` recreates all known actions before assigning default binds.
 - `use_tool` defaults to left mouse button and is routed through `CharacterController` to `ToolManager`.
 
+## Player Camera
+
+The gameplay camera is a simple third-person rig owned by `CharacterBody3D` in `Scenes/Game/mainScene.tscn`.
+
+Scene structure:
+
+- `CharacterBody3D/CameraPivot`
+- `CharacterBody3D/CameraPivot/Camera3D`
+- `CharacterBody3D/CameraPivot/Camera3D/InteractionRayCast`
+
+Runtime camera setup is local to `Scripts/Player/CharacterController.gd`:
+
+- `camera_distance` is currently `4.0`.
+- `CameraPivot` is positioned at `Vector3(0, 1.4, 0)`.
+- `Camera3D` is positioned at `Vector3(0, 0.5, camera_distance)`.
+- Pitch is clamped from `-75` to `35` degrees.
+- Camera FOV uses the scene/default Godot value unless explicitly configured later.
+- There is currently no `SpringArm3D`, camera smoothing, or camera collision avoidance.
+
+Maintenance rules:
+
+- Keep movement input and camera rotation behavior in `CharacterController` unless doing a dedicated camera-system pass.
+- Small polish changes may tune camera distance, pivot height, FOV, or pitch limits.
+- If fences, house, or silo reveal serious camera clipping, prefer documenting it for a later camera-collision pass instead of adding a large new camera system inside a world-polish task.
+
+## Graphics Options
+
+`GraphicsSettingsManager` stores graphics settings in `user://graphics.cfg` and applies them at startup and when options change.
+
+Current settings:
+
+- Resolution: selected from common presets, including 480p, 720p, 1080p, 1440p, 4K/2160p, 4:3, 16:10, MacBook-style, and 21:9 ultrawide resolutions.
+- Interface scale: `Small`, `Medium`, or `Big`, applied through the root window content scale factor.
+- Fullscreen: toggles the game window between windowed and fullscreen mode.
+
+The Graphics submenu in options owns only UI controls. Runtime application and persistence stay in `GraphicsSettingsManager`.
+
+The graphics dropdowns and fullscreen checkbox are styled locally in `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/graphics.gd`. Dropdown popup styling stays UI-only; the selected values still flow through `GraphicsSettingsManager`. Fullscreen uses a square toggle button drawn by `Scripts/UIs/Menus/OptionsMenu/OptionsCheckBox.gd` instead of the default `CheckButton` visuals.
+
+## Audio Options
+
+`AudioSettingsManager` stores audio settings in `user://settings.cfg` and applies them at startup and when Sound options change.
+
+Current settings:
+
+- Master Volume: stored as `master_volume`, applied to the `Master` bus.
+- SFX Volume: stored as `sfx_volume`, applied to the `SFX` bus.
+- Notifications Volume: stored as `notifications_volume`, applied to the `Notifications` bus.
+- Music Volume: stored as `music_volume`, applied to the `Music` bus. This is only a foundation for later background music work.
+
+Audio bus layout:
+
+- `default_bus_layout.tres` defines `SFX`, `Notifications`, and `Music` buses.
+- All three child buses send to `Master`.
+- `Master` remains the built-in root bus.
+- `AudioSettingsManager.ensure_audio_buses()` also creates any missing child bus at runtime, so a missing or changed bus layout does not crash the game.
+
+Volume behavior:
+
+- Options UI sliders display values as `0-100%`.
+- Runtime values are stored as floats in the `0.0-1.0` range.
+- Values greater than zero are converted with `linear_to_db(value)` before being applied through `AudioServer`.
+- A value of `0%` mutes the target bus and sets it to `-80 dB`.
+- Bus indexes are resolved by name and missing buses are skipped safely.
+
+Persistence rules:
+
+- Audio settings are intentionally separate from gameplay save slots.
+- Missing or invalid settings use defaults: master `1.0`, SFX `1.0`, notifications `1.0`, music `0.8`.
+- Do not write audio settings to `SaveManager` save-slot JSON unless a later settings-system migration deliberately changes the persistence model.
+
+The Sound submenu in Options owns only UI controls. Runtime application and persistence stay in `AudioSettingsManager`.
+
+The Sound sliders are built and styled locally in `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/audio.gd`. They use custom track, fill, and knob styling to match the wooden Options menu instead of relying on default native `HSlider` visuals.
+
+## UI And Notification SFX
+
+`UISoundManager` is the central runtime entry point for short interface and gameplay sounds. It owns a small pool of `AudioStreamPlayer` nodes so UI/gameplay code can request sounds without adding players to every menu scene.
+
+Current methods:
+
+- `play_ui_click()` for main menu, pause menu, options navigation, new-game slot, load-game slot, and shared confirmation button clicks.
+- `play_phone_open()` for opening FarmPhone.
+- `play_phone_close()` for closing FarmPhone.
+- `play_phone_app_switch()` for FarmPhone app icons and the phone home button.
+- `play_notification_new()` for new bottom-left HUD notifications.
+- `play_plant_seed()` for successful seed planting.
+- `play_till_soil()` for successful hoe use that turns grass into plowed soil.
+- `play_water_crop()` for successful watering.
+- `play_harvest_crop()` for successful crop harvesting.
+- `play_buy_item()` for successful Shop purchases.
+- `play_sell_item()` for successful Sell app sales.
+- `play_transfer_item()` for successful Inventory/Silo transfers.
+- `play_action_error()` for selected blocked gameplay actions.
+
+Bus routing:
+
+- UI click, phone open, phone close, and phone app switch sounds play through the `SFX` bus.
+- New notification sounds play through `Notifications` when it exists.
+- `Notification` is supported as a fallback bus name for projects that use the singular form.
+- These sounds do not use the `Music` bus.
+- Gameplay SFX also use the `SFX` bus. They do not use `Notifications`, `Notification`, or `Music`.
+
+Audio asset paths:
+
+- `res://Assets/Audio/UI/ui_click.wav`
+- `res://Assets/Audio/UI/ui_phone_open.wav`
+- `res://Assets/Audio/UI/ui_phone_close.wav`
+- `res://Assets/Audio/UI/ui_app_switch.wav`
+- `res://Assets/Audio/Notifications/notification_new.wav`
+- `res://Assets/Audio/Gameplay/plant_seed.wav`
+- `res://Assets/Audio/Gameplay/till_soil.wav`
+- `res://Assets/Audio/Gameplay/water_crop.wav`
+- `res://Assets/Audio/Gameplay/harvest_crop.wav`
+- `res://Assets/Audio/Gameplay/buy_item.wav`
+- `res://Assets/Audio/Gameplay/sell_item.wav`
+- `res://Assets/Audio/Gameplay/transfer_item.wav`
+- `res://Assets/Audio/Gameplay/action_error.wav`
+- `res://Assets/Audio/Weather/rain_loop.wav`
+- `res://Assets/Audio/Weather/storm_rain_loop.wav`
+- `res://Assets/Audio/Weather/thunder.wav`
+- `UISoundManager` checks each path with `ResourceLoader.exists()` before loading; missing files produce a warning and leave the related sound silent instead of crashing the project.
+
+Notification rules:
+
+- `PlayerHUD.show_event_message()` calls `UISoundManager.play_notification_new()` only after a new message passes the existing duplicate-message cooldown and receives a new message ID.
+- Refreshing the notification label does not replay the sound.
+- `UISoundManager` also applies a short notification SFX cooldown so simultaneous messages do not stack too loudly.
+
+Gameplay SFX rules:
+
+- `ToolManager` plays tilling, planting, watering, and harvest sounds only after the tile/inventory state has changed successfully.
+- Shop purchase SFX plays only after money is spent, all items are added to inventory, the cart is cleared, and UI refresh has started.
+- Sell SFX plays only after storage is reduced, money is added, and `SalesStatsManager.record_sale()` has run.
+- Storage transfer SFX plays only after items move between inventory and silo storage.
+- Selected blocked actions play `action_error` before returning.
+- Gameplay feedback messages call `PlayerHUD.show_event_message(..., false)` so gameplay SFX do not stack with the notification sound from Stage 5.5.2.
+
+## Weather VFX And SFX
+
+`Scenes/Weather/WeatherEffects.tscn` is instanced only in `Scenes/Game/mainScene.tscn`, so weather effects are active during gameplay and not in the main menu.
+
+`Scripts/Weather/WeatherEffectsController.gd` owns the runtime weather effect layer:
+
+- `RainParticles` renders a light rain emitter.
+- `StormParticles` renders a denser storm rain emitter.
+- `WeatherCloudLayer` is created at runtime as a lightweight sky-cloud layer made from small low-poly `SphereMesh` puff clusters.
+- `RainAudio` plays `res://Assets/Audio/Weather/rain_loop.wav`.
+- `StormRainAudio` plays `res://Assets/Audio/Weather/storm_rain_loop.wav`.
+- `ThunderAudio` plays `res://Assets/Audio/Weather/thunder.wav`.
+- `ThunderTimer` schedules randomized thunder playback while storm weather is active.
+- Weather audio streams are duplicated in `WeatherEffectsController` before loop flags are changed, so rain/storm loop setup cannot mutate or silence gameplay SFX resources such as `water_crop.wav`.
+- Active weather SFX playback uses root-level runtime `AudioStreamPlayer` nodes created by `WeatherEffectsController` (`WeatherRainLoopRebuiltPlayer`, `WeatherStormRainLoopRebuiltPlayer`, and `WeatherThunderRuntimePlayer`). They are freed in `_exit_tree()`, keeping weather audio isolated from `UISoundManager` and gameplay SFX.
+
+Weather source:
+
+- The controller connects to `WeatherManager.weather_changed`.
+- On startup it also reads `WeatherManager.current_weather`, so loaded games apply the current weather without saving separate VFX state.
+- Weather values are normalized through `WeatherEffectsController._get_weather_key()`, which recognizes `WeatherData.weather_type`, display names, strings, resource paths such as `storm_weather.tres`, and returns `sunny`, `cloudy`, `rain`, or `storm`.
+- It does not change weather rolls, day phases, crop watering, forecasts, save data, events, or the FarmPhone Weather app.
+
+Weather state behavior:
+
+- Sunny disables visible clouds, rain particles, storm particles, rain loop audio, storm loop audio, and thunder.
+- Cloudy enables the runtime sky cloud layer with light gray medium-intensity clouds, but keeps rain/storm VFX/SFX disabled.
+- Rain enables gray sky clouds, `RainParticles`, and `rain_loop`, disables storm particles/audio, and stops thunder scheduling.
+- Storm enables darker high-intensity sky clouds, `StormParticles`, and `storm_rain_loop`, disables normal rain loop, and schedules thunder every randomized `8-20` seconds.
+- The cloud layer follows the gameplay weather effects node above the player and drifts slowly. It has no collision, no volumetric shader, and does not change sun/moon or day/night state.
+- Rain and storm loop streams use WAV looping when available and also have `finished` signal fallbacks so the loop restarts without creating duplicate players.
+- Rain audio was rebuilt into a dedicated root-level `WeatherRainLoopRebuiltPlayer` that loads `rain_loop.wav` directly. To avoid bad WAV loop point/import behavior, rain can disable `AudioStreamWAV` looping and use manual `finished` replay from `0.0` instead (`rain_loop_manual_restart = true`). It also has a one-second watchdog that restarts the player if rain weather is active but playback is not running. It only falls back to `storm_rain_loop.wav` if `rain_loop.wav` cannot be loaded (`rain_loop_fallback_to_storm_stream = true`).
+- Storm rain audio uses the same rebuilt-loop pattern through `WeatherStormRainLoopRebuiltPlayer`: it loads `storm_rain_loop.wav`, can disable WAV looping, manually replays from `0.0` on `finished`, and has a one-second watchdog while storm weather is active. Thunder remains a separate one-shot player controlled by `ThunderTimer`.
+- Thunder also triggers a short runtime lightning flash when `lightning_flash_enabled` is true. The flash combines an `OmniLight3D` (`WeatherLightningFlash`) with a brief screen-space `ColorRect` overlay, is timer-limited, and does not modify the day/night controller state.
+
+Audio routing:
+
+- All weather SFX use the `SFX` bus.
+- Weather SFX do not use `Notifications`, `Notification`, `Music`, or direct `Master` routing.
+- `SFX Volume` and `Master Volume` control weather audio through the normal audio settings buses; `Notifications Volume` and `Music Volume` do not affect it.
+- Weather players use neutral local volume (`rain_loop_volume_db = 0.0`, `storm_loop_volume_db = 0.0`, `thunder_volume_db = 0.0`). Weather loudness is controlled by the audio buses through `SFX Volume` and `Master Volume`, not by per-player boosts.
+- Weather `.wav.import` files use normalized, uncompressed playback for rain, storm rain, and thunder. After changing these import settings, run Reimport in Godot so the `.godot/imported/*.sample` files are regenerated.
+- `WeatherEffectsController.debug_weather_effects` is an exported diagnostic switch for weather audio/VFX troubleshooting. It defaults to `false` after final audio regression; enable it temporarily in Godot only when checking weather transitions or audio loop state.
+
 ## Pause And Mouse Capture
 
 `gamemanager` is the source of truth for game pause state.
@@ -41,11 +270,19 @@ Important behavior:
 Rules:
 
 - `setPaused()` must be used instead of changing `get_tree().paused` directly.
-- `Esc` is ignored while options or load game are open, so submenu overlays cannot accidentally unpause the game or create a second pause stack.
+- `Esc` closes active options/help submenus back to their previous menu context, closes options from the root, and is ignored while load game is open so submenu overlays cannot accidentally unpause the game or create a second pause stack.
 - Inventory and phone are closed before toggling pause.
 - Mouse capture is enabled only while the player is in game, not paused, and no blocking UI is visible.
-- Options and load game opened from pause keep the pause blur visible and hide the pause button panel.
-- Load game is moved to the front when opened so the pause blur remains behind it and cannot block slot buttons.
+- Options, How to Play, and load game opened from pause keep the pause blur visible and hide the pause button panel.
+- Load game and help overlays are moved to the front when opened so the pause blur remains behind them and cannot block controls.
+
+Pause menu visuals are intentionally local to `Scenes/UIs/Menus/PauseMenu/pauseMenu.tscn` and `Shaders/UIs/Menus/PauseMenu/pauseMenu.gdshader`:
+
+- The game world remains visible behind pause through a screen-texture blur.
+- The blur should stay subtle enough to avoid a doubled-image effect.
+- A full-screen dark overlay may improve contrast, but large opaque foreground blocks should be avoided unless they are part of the actual menu controls.
+- Save/load button behavior belongs to `pauseMenu.gd` and should not be changed when tuning blur or panel styling.
+- `Save`, `Save and Quit to Menu`, and `Save and Quit to Desktop` open a local confirmation overlay before writing the current save slot. Confirmation messages and buttons are part of `pauseMenu.tscn`; `SaveManager.save_game()` remains the only save writer.
 
 ## Inventory Data
 
@@ -117,7 +354,7 @@ Growth rules:
 
 Calendar rules:
 
-- One in-game day is `REAL_SECONDS_PER_GAME_DAY` real seconds.
+- One in-game day is `REAL_SECONDS_PER_GAME_DAY` real seconds, currently `10.0 * 60.0`.
 - Each day has `GAME_MINUTES_PER_DAY` minutes.
 - Each month has `DAYS_PER_MONTH` days.
 - Each year has `MONTHS_PER_YEAR` months.
@@ -125,9 +362,36 @@ Calendar rules:
 
 Important behavior:
 
-- `get_date_string()` returns an ordinal day plus season and year, for example `1st of Summer, Year 1`.
+- `get_date_string()` returns the season, day, and year, for example `Spring 1, Year 1`.
 - `skip_to_morning()` advances time to 06:00 and simulates missed commodity market updates when skipping past market hours.
 - Systems that need daily processing should connect to `day_changed` instead of checking the date every frame.
+
+## Day/Night Visuals
+
+`DayNightController` is attached in `Scenes/Game/mainScene.tscn` and owns only the visual mapping from current game time to lighting, environment, and sky objects. It does not advance time and should not change gameplay calendar rules.
+
+Scene wiring:
+
+- `SunLight` is the existing `DirectionalLight3D` used for world lighting and shadows.
+- `WorldEnvironment` provides the environment resource controlled by the day/night visual pass.
+- `CelestialVisuals` contains `SunVisual` and `MoonVisual`, both simple non-shadow-casting `MeshInstance3D` sky markers.
+- `DayNightController` exports node references for `sun_light`, `world_environment`, `sun_visual`, and `moon_visual`.
+
+Runtime behavior:
+
+- `DayNightController` listens to `TimeManager.time_changed` and calls `update_lighting()`.
+- Lighting state is interpolated between configured minute points with `smoothstep`, avoiding hard visual jumps around dawn, day, evening, and night.
+- The environment currently uses `Environment.BG_COLOR`; `DayNightController` updates background color, ambient color, and ambient energy from the interpolated state.
+- `SunVisual` follows a simple sky arc from sunrise to sunset. The arc starts low at 05:00, reaches its highest point around midday, and descends toward 20:00.
+- `MoonVisual` uses the opposite side of the same arc and fades in during evening and out during dawn.
+- `SunLight` is aligned from the same computed sun-source direction as `SunVisual`, so visible sun position and shadow direction remain consistent.
+- The sun and moon visuals do not affect lighting directly; they are presentation objects only.
+
+Maintenance rules:
+
+- Do not duplicate time progression inside `DayNightController`; use `TimeManager.current_minute_of_day` or `TimeManager.get_day_progress()`.
+- Keep future Weather VFX and weather audio separate from this controller unless the change is only a lightweight visual modifier hook.
+- If the visible sun path is adjusted, update the light alignment from the same source vector so shadows remain believable.
 
 ## Economy And Commodity Market
 
@@ -136,8 +400,30 @@ Important behavior:
 `EconomyManager` resolves item prices:
 
 - `get_buy_price()` uses `ItemPriceData.buy_price` when configured, otherwise falls back to `ItemData.base_price`.
+- Seed shop prices are stored in `Data/Economy/Prices/*_seed_price.tres` as `buy_price`.
+- Seed item `base_price` values in `Data/Items/Seeds/*_seed_item.tres` are kept in sync as fallback data.
+- Active event buy-price multipliers are applied at runtime and are multiplied together per item.
+- Runtime buy-price modifiers never mutate `ItemPriceData.buy_price`; removing the active events returns prices to their configured base values.
+- `buy_prices_changed` is emitted when buy-price modifiers are reset or reapplied so shop UI can refresh immediately.
 - `get_sell_price()` uses `CommodityMarketManager.get_current_price()` for commodity-backed items.
 - Non-commodity sell prices use `ItemPriceData.sell_price` or `ItemData.base_price` as fallback.
+
+Current crop economy baseline:
+
+| Crop id | Product base sell price | Seed buy price | Yield |
+|---|---:|---:|---:|
+| `wheat` | 15 | 5 | 1 |
+| `carrot` | 23 | 5 | 1 |
+| `beetroot` | 33 | 8 | 1 |
+| `lettuce` | 33 | 8 | 1 |
+| `cabbage` | 50 | 12 | 1 |
+| `pumpkin` | 39 | 8 | 1 |
+| `potatoe` | 16 | 8 | 3 |
+| `corn` | 15 | 9 | 3 |
+| `strawberry` | 15 | 11 | 3 |
+| `tomatoe` | 13 | 10 | 3 |
+
+The crop profitability analyzer owns diagnostic recommendations and reports. Production balance changes still happen through the data resources above, not by mutating runtime manager state.
 
 `CommodityMarketManager` owns commodity price updates:
 
@@ -145,40 +431,95 @@ Important behavior:
 - Prices update once per market hour.
 - `last_processed_day` and `last_processed_hour` prevent duplicate hourly updates.
 - Commodity price history is capped to the latest 30 entries.
-- The commodity exchange phone app displays market open/closed status and recent price history.
+- The commodity exchange phone app displays market open/closed status, a compact product list, per-product percentage changes, and a details screen built from saved price history.
 - `simulate_skipped_market_hours()` is used when time skipping would otherwise miss market updates.
 
 Event modifiers:
 
 - `EventManager` resets commodity modifiers before applying currently active events.
-- `MarketEventData.trend_effect`, `trend_strength_modifier`, and `volatility_modifier` modify the target commodity.
+- `MarketEventData.get_affected_items()` supports both legacy `target_item` events and multi-product `affected_items` events.
+- `MarketEventData.trend_effect`, `trend_strength_modifier`, and `volatility_modifier` modify all affected commodities.
+- Runtime market modifiers are rebuilt from active events after day changes and save loads.
+- Commodity volatility is restored from captured base values before event modifiers are reapplied, preventing permanent accumulation.
+- Multiple events on the same commodity are combined deterministically: trend direction is summed, positive values become bullish, negative values become bearish, and near-zero values become neutral.
 - New commodity-backed crops need a `CommodityData` resource and registration in `CommodityMarketManager.commodities`.
 
 ## Weather
 
-`WeatherManager` owns current weather, tomorrow weather, temperature, and a rolling forecast.
+`WeatherManager` owns current weather, tomorrow weather, temperature, a rolling daily forecast, and the active weather phase.
 
 Important behavior:
 
-- Weather changes on `TimeManager.day_changed`.
-- The forecast stores dictionaries containing `weather` and `temperature`.
+- The rolling daily forecast advances on `TimeManager.day_changed`.
+- `current_day_phase` caches the active `WeatherPhaseData.DayPhase`.
+- `TimeManager.time_changed` is connected to `_on_time_changed()`, which updates the cached phase only when the phase boundary is crossed.
+- Day phases are Dawn from 05:00, Morning from 09:00, Afternoon from 14:00, and Night from 20:00 through 04:59.
+- `WeatherPhaseData` stores phase-specific weather, temperature, and rain chance.
+- `WeatherDayPatternData` controls season-weighted day patterns, phase weather options, base temperature ranges, and phase temperature offsets.
+- `SeasonWeatherData` applies season-specific weather balancing: `temperature_modifier` shifts the daily base temperature, while `rain_weight_modifier` and `storm_weight_modifier` adjust rainy/stormy day pattern weights.
+- `current_day_base_temperature` is rolled once per generated day pattern; each phase temperature is that shared base plus the pattern's phase offset.
+- The current phase forecast is applied through `_apply_current_phase_weather()` and emits `weather_changed`.
+- The forecast stores dictionaries containing `weather`, `temperature`, `pattern`, `base_temperature`, and `rain_chance`.
 - `FORECAST_DAYS` controls forecast length.
 - Weather resources can set `waters_fields`.
 - Rain and storm currently water plowed farm tiles automatically.
-- The weather phone app listens to `weather_changed` and rebuilds the forecast list.
+- `daily_weather_history` stores completed-day records capped to the latest 30 days.
+- Weather history entries include year, season, day, whether the day was rainy, daily base temperature, and day-pattern identifiers.
+- Event requirements use completed-day history, not the current in-progress phase.
+- A rainy day is evaluated from the representative day pattern or watering weather options; a dry day is any completed day that is not rainy.
+- `get_consecutive_recent_dry_days()`, `get_rainy_days_in_recent_days(days)`, and `get_current_day_base_temperature()` are used by weather/temperature event requirements.
+- The weather phone app listens to `weather_changed` and rebuilds its Today card, current-day phase cards, and next-day forecast rows.
+- The weather phone app uses the existing `WeatherPhaseData` day parts: `Dawn`, `Morning`, `Afternoon`, and `Night`. Do not replace these with hourly forecast entries.
+- The Today card shows the current day pattern, current weather, current temperature, a drawn weather icon, and current phase rain chance.
+- Day-part cards show phase name, drawn weather icon, temperature, and rain chance.
+- Next-day forecast rows show the actual future season date, for example `7th Spring`, plus a drawn weather icon, normalized weather name, representative temperature, and rain chance.
+- Weather app content keeps a larger left safe inset than right inset inside the FarmPhone screen so labels such as `Weather`, `Day Parts`, `Dawn`, `Afternoon`, and `Next Days` do not clip against the black screen frame.
+- Day-part cards and next-day rows use compact minimum widths to avoid horizontal overflow in the narrow FarmPhone screen.
+- Humidity is not currently displayed because no humidity field exists in `WeatherData`, `WeatherPhaseData`, or forecast entries.
 
 ## Market Events And News
 
-`EventManager` rolls possible market events once per day.
+`EventManager` rolls possible market events once per day after active-event duration is processed. Daily event triggering is deferred after `day_changed` so weather and sales history can update deterministically before requirements are evaluated.
 
 Important behavior:
 
-- `possible_market_events` contains the market event resources that can start.
+- Events are grouped in `market_events`, `weather_events`, and `seasonal_events`, then combined into `possible_market_events` for lookup and save/load.
+- Dynamic filesystem scanning is avoided; event resources are preloaded explicitly so exported builds remain deterministic.
 - Each active event tracks remaining days through `ActiveMarketEvent`.
 - Duplicate active events are skipped.
+- At most `MAX_EVENTS_STARTED_PER_DAY` new events can start on one in-game day. The current value is `2`.
+- Product market events are further limited by `MAX_MARKET_EVENTS_STARTED_PER_DAY`. The current value is `1`, so random product events do not flood the market in a single day.
+- Daily event-limit state is saved and loaded so saving mid-day cannot bypass the cap.
+- Event activation history is saved and loaded. It is used by cooldowns, once-per-season rules, and once-per-year rules.
+- `_does_event_meet_requirements()` delegates to focused requirement helpers for sales, season, day range, weather history, and temperature.
+- `RANDOM` and `CONDITION_BASED` events check requirements and then roll `trigger_chance`.
+- `FIXED_DATE` events check requirements and start without trigger-chance rolling.
+- Fixed-date events are protected by a saved `event_id:year` key so they do not restart repeatedly in the same year.
+- If a fixed-date event is blocked by the daily cap, it is not marked as triggered and can still run on a later day in its configured range.
+- `MarketEventData.cooldown_days` blocks an event from restarting until its active duration plus cooldown have elapsed.
+- `MarketEventData.once_per_season` and `MarketEventData.once_per_year` prevent repeated seasonal or yearly activations while still allowing future valid seasons/years.
+- `MarketEventData.requires_recent_sales` gates events by recent sold item amount.
+- Sales-gated events use `target_item`, `recent_sales_threshold`, and `recent_sales_days`.
+- Bad harvest events are season-gated to the affected crop season.
+- `Winter Shortage` is once per season.
+- Fixed-date events such as `Spring Planting Boom`, `Halloween Pumpkin Demand`, and `Autumn Harvest Festival` keep their configured calendar behavior.
+- Current per-crop random tuning:
+  - Demand Spike: `0.032`.
+  - Export Contract: `0.01`.
+  - Market Panic: `0.02`.
+- Current selected balance tuning:
+  - `Summer Heatwave` trigger chance is `0.56`.
+  - `Heavy Rain` trigger chance is `0.25` with `cooldown_days = 7`.
+  - Bad Harvest events have `cooldown_days = 5`.
+  - `beetroot_bad_harvest` uses `trend_strength_modifier = 0.024`; other Bad Harvest variants use `0.03`.
+  - Oversupply events have `duration_days = 2`, `cooldown_days = 5`, `trigger_chance = 0.35`, `trend_strength_modifier = 0.02`, and `volatility_modifier = 0.02`.
+  - Oversupply sales thresholds are balanced by crop yield over a 7-day recent-sales window:
+    - Yield `1`: threshold `200` for beetroot, cabbage, carrot, lettuce, pumpkin, and wheat.
+    - Yield `3`: threshold `600` for corn, potatoe, strawberry, and tomatoe.
 - Started events emit `market_event_started`.
 - Expired events emit `market_event_ended`.
 - `market_events_changed` is emitted after daily event processing.
+- `trigger_event_by_id(event_id)` is available for tests and debug flows; it is safe against duplicate active events and respects the daily event cap.
 
 `NewsManager` listens for `EventManager.market_event_started`:
 
@@ -189,6 +530,27 @@ Important behavior:
 - `news_added` lets the phone news panel refresh immediately.
 - `news_cleared` lets the phone news panel clear itself during save loading.
 - Loading a save replaces current news history with the saved news list, then rebuilds announced event IDs from active saved events.
+- New event news also calls `PlayerHUD.show_event_message("News alert: <event name>")`.
+- `sync_active_market_event_news()` can recreate missing news for active events but does not show duplicate HUD alerts.
+- The News phone app renders news as cards with category icon, title, date, category, and body text.
+- The News phone app uses `NewsItem.title`, `NewsItem.body`, `NewsItem.day`, `NewsItem.month`, `NewsItem.year`, and `NewsItem.category`; it does not query or mutate event logic while rendering.
+- News categories should be displayed through `UIFormatHelper.display_news_category()`. Unknown or missing categories should fall back to `General`.
+- News impact markers are not currently displayed because `NewsItem` does not store trend/effect direction or a stable event reference.
+- The News phone app shows `No news yet.` when there are no generated news items or active event fallback items.
+
+## Sales Stats
+
+`SalesStatsManager` records sold item amounts and keeps a short rolling history for market-event requirements.
+
+Important behavior:
+
+- `record_sale(item_data, amount)` is called by the sell phone app after money is awarded.
+- `suppress_logs` can silence sale debug prints during high-volume simulation tests without changing sale totals or emitted signals.
+- `current_day_sales` stores totals for the active day.
+- `sales_history` stores previous day dictionaries and is capped by `HISTORY_DAYS`.
+- `get_recent_sales_amount(item_id, days)` returns current-day sales plus up to `days - 1` previous days.
+- `sales_stats_changed` is emitted after sales are recorded, day rollover occurs, or save data is loaded.
+- Save data persists both `current_day_sales` and `sales_history`.
 
 ## Save System
 
@@ -202,51 +564,120 @@ Save-slot behavior:
 - `get_save_path(slot)` resolves a slot to its `user://save_slot_%d.json` path.
 - `has_save(slot)` checks whether a slot file exists.
 - `delete_save(slot)` removes a slot file if it exists.
-- The new game menu selects a slot with `SaveManager.start_new_game(slot)`, clears any old file for that slot, resets runtime state, and writes the initial save.
+- The new game menu starts empty slots immediately. If the selected slot already has a save, it shows a local overwrite confirmation before calling `SaveManager.start_new_game(slot)`, which clears the old file, resets runtime state, and writes the initial save.
 - The load game menu selects a slot with `set_current_save_slot(slot)`, starts gameplay, changes to the main game scene, and then applies `load_game()`.
-- Pause menu `Save`, `Save and quit to menu`, and `Save and quit to desktop` all write to the current save slot before continuing their action.
+- Pause menu `Save`, `Save and quit to menu`, and `Save and quit to desktop` all ask for confirmation, then write to the current save slot before continuing their action.
 
 Saved data:
 
 - Player money, position, inventory slots, hotbar mapping, and selected hotbar slot.
 - Time/date state.
-- Current weather and forecast.
+- Current weather, forecast, and completed-day weather history.
 - Silo storage contents.
 - Commodity market state, including current prices, trends, volatility, and price history.
 - Active market events and their remaining duration.
+- Event runtime state needed for calendar locks and the daily event cap.
 - News history, capped to the latest 20 entries.
 - Farm tile state, planted crop IDs, and crop growth days.
+- Sales statistics for the current day and recent sales history.
 
 Load behavior:
 
 - Runtime active events are cleared before applying save data so old-session events do not create stale news.
 - News are cleared before applying save data.
+- Runtime commodity and buy-price event modifiers are reset and rebuilt from restored active events.
+- Derived runtime modifiers are not stored when they can be reconstructed from active event resources.
 - If the save contains a `news` array, it replaces the current news list atomically.
 - If the save has active events but no saved news array, news are rebuilt from the active saved events.
 - Farm tile state is restored through `WorldManager` tile IDs, so farm tiles must have stable `tile_id` values.
 
 ## Phone Apps
 
-`PhonePanel` hosts separate app scenes and bottom navigation buttons.
+`PhonePanel` renders the FarmPhone shell, home screen, and hosted app scenes.
+
+Base layout:
+
+- The phone shell is a stylized black smartphone front inspired by the general shape of older flat black smartphones, without Apple branding or product logos.
+- `PhoneShell` owns the black outer frame, rounded corners, subtle border, top camera/speaker details, screen frame, and lower physical-style home button.
+- `ScreenArea` contains a black `Wallpaper`, the `HomeScreen`, and a shared `AppContainer`.
+- `HomeScreen/HomeGrid` is a fixed 4-column grid with 16 slots. App entries are represented by a button-style icon plus a readable name label below it.
+- Opening the phone should land on the home screen. Pressing the home button while an app is open hides all apps and returns to the home screen.
+- Pressing the home button while already on the home screen is intentionally safe and keeps the phone open.
+- Closing the phone remains owned by `PlayerHUD` and the existing input flow.
 
 Current apps:
 
-- Sell app: sells storage items and uses dynamic commodity prices where available.
-- Shop app: buys items through configured shop data and `MoneyManager`.
-- Stock market app: displays commodity prices, market status, and recent history.
-- Weather app: displays current weather and forecast rows.
-- News app: displays latest `NewsManager` entries in a vertical scroll list.
+- Sell app: sells products from Silo Storage, uses dynamic commodity prices where available, lets the player select per-product sale quantities with buttons or direct numeric entry, supports per-product Sell All and summary-level Sell Selected, and records completed sales in `SalesStatsManager` so sales-driven market events still work.
+- Shop app: renders configured shop items as a seed/product list, keeps a local cart, shows cart subtotals and total cost, and purchases the whole cart through `MoneyManager` and `InventoryData` only after checkout validation succeeds.
+- Market app: displays a compact commodity list with icon, product name, current price, and percentage change. Selecting a product opens an in-app details view with a local back button, current price/trend data, min/max/average stats, and a bar chart drawn from real commodity price history. Internal scene and script names may still use stock/commodity terminology.
+- Storage is currently represented as a visible disabled home-screen icon because storage/silo UI remains a separate `PlayerHUD` panel, not a wired FarmPhone app.
+- Weather app: displays a Today card, current-day `Dawn`/`Morning`/`Afternoon`/`Night` cards, and next-day forecast cards using existing weather data.
+- News app: displays latest `NewsManager` entries as scrollable news cards with title, date, category, body, and category icon. The panel uses balanced outer content insets and an inner right gutter so the vertical scrollbar does not overlap card content.
 
 Rules:
 
 - Phone, inventory, and storage panels are mutually exclusive from `PlayerHUD`.
+- Visible phone app labels should use `News`, `Market`, `Shop`, `Weather`, `Storage`, and `Sell`.
 - Each app owns its own `refresh()` method.
+- Phone app switching should use the shared `AppContainer`: hide home, hide all app children, show the selected app, then call that app's `refresh()`.
 - App panels should connect to relevant manager signals only once.
 - App row scenes should be passed through exported `row_scene` fields, not hardcoded in scripts.
+- Phone app content that can grow beyond the phone frame should sit inside a vertical `ScrollContainer`.
+- Current scrollable phone areas are news entries, shop items, sellable silo items, commodity list rows, and weather forecast rows.
+- Shop app checkout is intentionally all-or-nothing: an empty cart, insufficient money, or insufficient inventory space blocks purchase before money is spent. Product row `Add` only changes local cart state; it must not mutate money or inventory.
+- Market app navigation is local to `CommodityExchangePanel`: the details back button returns to the product list and must not call the FarmPhone home flow.
+- Market app should not show generic finance UI, product-count labels, or price-history sample-count labels. Only game commodity data should be rendered.
+- FarmPhone typography, shell styles, home button style, and home-screen icon styles are centralized in `Scenes/UIs/PlayerHUD/Phone/FarmPhoneTheme.tres`. Keep this theme scoped to FarmPhone; do not migrate unrelated game menus into it.
+- FarmPhone layout tests in `Tests/Core/FarmPhoneLayoutTest.gd` cover scene structure, grid size, app labels, shared app container presence, and visible-text branding guardrails. Visual proportions still require a manual Godot pass.
+- Final visual polish guardrails in `Tests/Core/UIVisualPolishSourceTest.gd` check visible UI scene text for technical IDs, Weather forecast label regressions, and safe left insets for FarmPhone apps. These tests complement, but do not replace, manual viewport checks.
+
+## UI Formatting And Panel Styling
+
+`Scripts/UIs/UIFormatHelper.gd` owns visible formatting helpers for UI text. It does not change gameplay IDs, save data, prices, market state, or economy logic.
+
+Use it for:
+
+- Money: `$110`, `$33.00`, `$12 each`.
+- Market percentages: `+7.04%`, `-2.51%`, `0.00%`.
+- Season dates: `Spring 3, Year 1`.
+- Display names for product and seed IDs such as `potatoe`, `tomatoe`, and `wheat_seed`.
+- Market trends: `Bullish`, `Bearish`, `Neutral`.
+- Weather display names: `Sunny`, `Cloudy`, `Rainy`, `Stormy`, `Mixed`, `Snowy`, `Foggy`.
+- News categories and cleaned input labels such as removing ` - Physical`.
+
+Panel styling rules:
+
+- Gameplay HUD status elements use compact local plaques rather than menu-sized boards: date/time and money use small wood-drawn plaques, while bottom-left notifications use a light paper-style plaque.
+- Interaction prompts under the crosshair should stay as short white text without a background, using the control-action format such as `E - Open Silo` or `LMB - Water`.
+- Larger gameplay UI panels should use their local farm-themed style: Inventory and Storage/Silo use drawn wooden panels, while FarmPhone apps keep their phone-specific panel styling.
+- Inner cards, slots, and rows should stay in the `0.85-0.95` alpha range when they need a stable reading surface.
+- Modal overlays should remain lower opacity, generally `0.45-0.65`.
+- Avoid pure low-alpha black debug-looking panels. Prefer dark green/brown/black tones such as `Color(0.06, 0.07, 0.06, 0.92)`.
+- Do not use panel-opacity polish as a reason to change anchors, layout, app logic, inventory logic, storage logic, save/load behavior, or economy values.
+
+Menu styling rules:
+
+- Main Menu, Pause Menu, Options, New Game, Load Game, How to Play, and Credits use local scene styles rather than a global theme migration.
+- `Scripts/UIs/Menus/WoodenMenuPanel.gd` draws the shared wooden board background for central menu panels and confirmation overlays.
+- Main/Pause/Options menu buttons should read as text painted on wood: transparent button backgrounds, black normal text, and white hover/pressed text.
+- New Game and Load Game save slots use light beige paper-card `StyleBoxFlat` resources, black text, and subtle warm hover states.
+- Options uses a root segment list instead of tabs. Sound, Controls, Graphics, and Feedback are separate visible panels controlled by `OptionsMenu`.
+- Controls Options uses a custom black scroll indicator from `Scripts/UIs/Menus/OptionsMenu/OptionsScrollLine.gd` instead of relying on the native scrollbar skin.
+- Sound Options uses custom wooden-menu slider styling from `Scripts/UIs/Menus/OptionsMenu/AdditionalMenus/audio.gd`; keep slider visuals local to the options submenu unless a broader menu theme pass is intentionally planned.
+- UI/notification sounds should be requested through `UISoundManager` instead of adding ad hoc `AudioStreamPlayer` nodes to menu scenes.
 
 ## Inventory UI
 
-`InventoryPanel` builds slot UI nodes from `slot_ui_scene` and binds them to `InventoryData.slots` by index.
+`InventoryPanel` builds slot UI nodes from `slot_ui_scene` and binds them to `InventoryData.slots` by index. The player inventory currently contains 25 slots total:
+
+- Inventory slots `0-4` are the hotbar slots.
+- Inventory slots `5-24` are the regular inventory grid slots.
+
+The Inventory screen renders the same 25 slots in two visual zones:
+
+- A centered top leather tool-belt strip displays the five hotbar slots.
+- A lower `5 x 4` grid displays the remaining 20 inventory slots, preserving the total `5 x 5` inventory capacity when the hotbar row is included.
+- The bottom description panel shows the selected or hovered item's display name, amount, and optional `ItemData.description`.
 
 `InventorySlotUI` handles drag and drop:
 
@@ -254,12 +685,17 @@ Rules:
 - Drag payloads use `{ "type": "inventory_slot", "slot_index": index }` to avoid accepting unrelated UI drags.
 - Icons are displayed at a fixed UI size and do not resize slots based on source texture size.
 - Watering-can slots show a water-fill bar and refresh from `ToolManager.watering_can_changed`.
+- Slot visuals are drawn locally: hotbar slots use leather-pocket styling, regular inventory slots use warm wooden/card styling, and item amounts use a small light badge.
+- Hovered, selected, and active-hotbar states are visual only and must not change inventory or hotbar data.
+- Keep future inventory visual changes independent from inventory data, hotbar mapping, and drag/drop behavior.
 
 ## Hotbar UI
 
-`QuickInventoryController` renders the mapped inventory slots and refreshes when inventory data changes. It also refreshes after inventory drag and drop to keep hotbar icons synchronized with slot movement.
+`QuickInventoryController` renders the mapped inventory slots during gameplay and refreshes when inventory data changes. It also refreshes after inventory drag and drop to keep hotbar icons synchronized with slot movement.
 
 Watering-can bars are created under each slot icon at runtime. They are intentionally attached to `IconRect`, not the slot `PanelContainer`, so the bar does not resize or darken the whole hotbar slot.
+
+Hotbar panel and slot backgrounds are local scene styles in `player_hud.tscn` plus the drawn tool-belt helpers under `Scripts/UIs/PlayerHUD/`. Changing their visuals must not affect `HotbarData`, selected-slot state, or inventory mapping.
 
 ## Player HUD
 
@@ -268,16 +704,43 @@ Watering-can bars are created under each slot icon at runtime. They are intentio
 - Inventory cannot open while phone is open.
 - Phone cannot open while inventory is open.
 - Closing either panel restores mouse capture only if the game is active and not paused.
+- Storage/silo UI uses a fixed-size panel with separate vertical scroll areas for silo contents and player inventory contents.
+- Storage item rows are added under the scroll content containers; drag-and-drop still targets the storage and inventory columns.
 
-The current starting inventory is initialized in `PlayerHUD._setup_starting_inventory()`. Replace this with save-game loading when persistence is implemented.
+HUD visibility modes:
+
+- Gameplay shows crosshair, hotbar, date/time, money, prompts when valid, and gameplay notifications.
+- Pause hides crosshair, prompt, hotbar, date/time, money, and notifications.
+- Phone hides crosshair, prompt, hotbar, date/time, and money.
+- Inventory hides crosshair, prompt, hotbar, date/time, money, and notifications.
+- Storage hides crosshair, prompt, hotbar, date/time, money, and notifications.
+
+The current starting inventory is initialized in `PlayerHUD._setup_starting_inventory()` for new sessions. Save loading replaces inventory and hotbar state through `SaveManager`.
+
+HUD visual styling:
+
+- `Scripts/UIs/PlayerHUD/HUDPlaque.gd` draws compact HUD plaques directly on existing `ColorRect` backgrounds.
+- `DateTimeController` and `FundsController` use the wood plaque variant, keeping the existing date and money formatting.
+- `EventController` uses the paper plaque variant for bottom-left notifications.
+- `PromptLabel` has no background and is initialized with empty text so placeholder text is never shown after starting or loading gameplay.
+- `QuickInventoryController` remains visually separate from this HUD polish pass; hotbar slot visuals and selection behavior are documented under Hotbar UI.
 
 HUD event messages:
 
 - `EventController` is hidden by default.
 - `show_event_message(message, duration)` displays temporary feedback in the bottom-left event area.
 - Empty messages hide the panel immediately.
-- `_event_message_version` prevents an older timer from hiding a newer message.
-- Current seasonal planting feedback uses this path; future news/event notifications can reuse it.
+- The HUD stores active messages by local ID, so multiple simultaneous messages can be displayed as stacked lines.
+- Repeated identical messages are suppressed briefly by `EVENT_MESSAGE_REPEAT_COOLDOWN`, so invalid world actions cannot flood the notification area.
+- Each message removes only itself when its timer expires.
+- Current world-action feedback, seasonal planting feedback, harvest/inventory feedback, watering-can feedback, and market-event news alerts use this path.
+
+Gameplay feedback:
+
+- FarmPhone Shop and Sell apps use their existing local feedback labels because HUD gameplay notifications are hidden while the phone is open.
+- Silo Storage uses the existing footer `HintLabel` for transfer feedback because HUD notifications are hidden while storage is open.
+- World actions use `PlayerHUD.show_event_message()` for short messages such as `No tool selected.`, `Nothing to interact with.`, `Cannot use this here.`, `Cannot plant here.`, `No seeds selected.`, `Need a watering can.`, `Crop is not ready.`, `Cannot harvest this.`, `Used 1x <Seed>.`, and `Added 1x <Product>.`
+- Sell app still records completed sales through `SalesStatsManager`; feedback does not replace the sale/statistics path.
 
 ## Interaction UI
 
@@ -287,6 +750,20 @@ Prompt priority:
 
 - Tool prompts from `ToolManager.get_tool_prompt_for_target()` are shown first.
 - Interactable prompts are shown only when no tool prompt is available.
+- Prompt text should use concise control-action wording, for example `E - Interact`, `E - Open Silo`, `LMB - Plow`, and `LMB - Harvest Wheat`.
+- Prompt and crosshair state are refreshed when gameplay HUD visibility changes, so opening or closing FarmPhone, Inventory, Storage, or Pause cannot leave stale highlighted interaction feedback.
+- Non-interactive collision such as farm boundary colliders may be hit by the raycast, but it should produce no prompt unless an ancestor is an `Interactable`.
+
+## Responsive UI
+
+Final polish keeps large UI panels inside the active viewport without changing their visual style.
+
+- FarmPhone keeps its fixed base layout and applies uniform centered scaling, so the shell, screen, apps, and home button keep their proportions at 1280x720 with Big interface scale.
+- Inventory and Silo Storage keep fixed base sizes but recalculate centered offsets from the viewport and `GraphicsSettingsManager.get_interface_scale_multiplier()`.
+- Inventory also rescales its hotbar and grid slot minimum sizes with the panel fit scale, so the 5-slot hotbar strip and 5-column inventory grid remain visible at 1280x720 and Big interface scale.
+- Options caches base wooden-board sizes and reduces submenu board minimum sizes when the viewport/interface-scale combination would otherwise overflow.
+- HUD bottom layout remains centralized in `PlayerHUD._update_bottom_panels()`, keeping bottom-left notifications separate from the centered hotbar.
+- These are layout/responsiveness corrections only; they do not add animations or change gameplay, economy, save/load, market, inventory, or FarmPhone app behavior.
 
 ## Maintenance Checklist
 
@@ -299,6 +776,16 @@ Before adding new inventory, crop, tool, or UI behavior:
 - Add new crop resources to `ToolManager.all_crops` before adding special-case code.
 - Configure `CropData.allowed_seasons` for every new crop.
 - Register commodity-backed items in `CommodityMarketManager.commodities` and provide price data where needed.
+- Configure market events through `MarketEventData` resources rather than hardcoding event logic in managers.
+- Keep per-crop random event chances low enough to account for all product variants being rolled each day.
+- Keep generated `FarmTile.tile_id` values stable after saves exist.
+- For sales-driven events, configure `MarketEventData.target_item`, `requires_recent_sales`, `recent_sales_threshold`, and `recent_sales_days`.
+- For season-driven or calendar events, configure `requires_season`, `required_seasons`, `requires_day_range`, `start_day`, `end_day`, and the appropriate `trigger_mode`.
+- For weather-driven events, use `requires_weather_history`, `required_dry_days`, `required_rain_days`, or `requires_temperature`; do not inspect transient phase weather directly.
 - Use `PlayerHUD.show_event_message()` for short-lived gameplay feedback instead of leaving placeholder UI visible.
 - For phone apps, expose row scenes with `@export var row_scene: PackedScene` and refresh from manager signals.
+- For growing UI lists, prefer a fixed outer panel with inner `ScrollContainer` nodes over allowing rows to resize the panel.
+- Keep display/window settings in `GraphicsSettingsManager` rather than applying them directly from individual menu controls.
+- Keep audio volume settings in `AudioSettingsManager` and route future UI, notification, SFX, and music players to `SFX`, `Notifications`, or `Music` instead of using ad hoc bus names.
+- Keep short interface and gameplay sounds in `UISoundManager`; do not add hover/focus sounds, weather SFX, footstep SFX, or music as part of gameplay SFX maintenance.
 - Do not add debug `print()` calls in runtime paths unless they are temporary and removed before commit.

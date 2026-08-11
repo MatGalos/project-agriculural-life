@@ -1,6 +1,18 @@
-[gd_scene format=3 uid="uid://dy64evsu7tivf"]
+[gd_scene load_steps=3 format=3 uid="uid://dy64evsu7tivf"]
 
 [ext_resource type="Script" uid="uid://dpasqab4fo31m" path="res://Scripts/PhoneApps/SellApp/SellingPanel.gd" id="1_h85r7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sell_summary"]
+bg_color = Color(0.055, 0.061, 0.072, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.14, 0.16, 0.18, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="SellingPanel" type="Control" unique_id=1774259236]
 layout_mode = 3
@@ -12,6 +24,7 @@ grow_vertical = 2
 script = ExtResource("1_h85r7")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=428492081]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,13 +34,71 @@ grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=416041445]
 layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=880017755]
+[node name="RootStack" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=880017755]
 layout_mode = 2
+theme_override_constants/separation = 6
 
-[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=730179946]
+[node name="TitleLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack" unique_id=730179946]
 layout_mode = 2
+theme_type_variation = &"HeaderLabel"
 text = "Sell from Silo"
 
-[node name="ItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=659725499]
+[node name="SubtitleLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack"]
 layout_mode = 2
+text = "Sell products from storage."
+
+[node name="FeedbackLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack"]
+layout_mode = 2
+text = ""
+text_overrun_behavior = 3
+
+[node name="ItemsScroll" type="ScrollContainer" parent="PanelContainer/MarginContainer/RootStack"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 1
+
+[node name="ItemsContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/RootStack/ItemsScroll" unique_id=659725499]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="EmptyStateLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack"]
+visible = false
+layout_mode = 2
+text = "No products in storage."
+horizontal_alignment = 1
+
+[node name="SummaryPanel" type="PanelContainer" parent="PanelContainer/MarginContainer/RootStack"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sell_summary")
+
+[node name="SummaryMargin" type="MarginContainer" parent="PanelContainer/MarginContainer/RootStack/SummaryPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="SummaryRow" type="HBoxContainer" parent="PanelContainer/MarginContainer/RootStack/SummaryPanel/SummaryMargin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="SelectedValueLabel" type="Label" parent="PanelContainer/MarginContainer/RootStack/SummaryPanel/SummaryMargin/SummaryRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderLabel"
+text = "Selected value: $0"
+text_overrun_behavior = 3
+
+[node name="SellSelectedButton" type="Button" parent="PanelContainer/MarginContainer/RootStack/SummaryPanel/SummaryMargin/SummaryRow"]
+custom_minimum_size = Vector2(106, 28)
+layout_mode = 2
+text = "Sell Selected"
