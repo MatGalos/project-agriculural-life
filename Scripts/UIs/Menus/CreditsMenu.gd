@@ -11,11 +11,11 @@ const CREDITS_TEXT := """Project Agricultural Life
 Created as part of a master's thesis prototype.
 
 Engine
-Godot Engine — MIT License
+Godot Engine - MIT License
 
 Fonts
-Lato — SIL Open Font License 1.1
-Super Chips by All Super Font — Freeware
+Lato - SIL Open Font License 1.1
+Super Chips by All Super Font - Freeware
 
 Audio
 UI, notification, gameplay and weather placeholder SFX were generated procedurally from scratch for this academic prototype.

@@ -181,6 +181,8 @@ Resource only plus helper functions. Stores event identity, category, trigger mo
 | `func closeLoadGamePanel() -> void:` | Closes the load game slot picker and returns to the menu context it was opened from. |
 | `func showMainMenu() -> void:` | Shows the main menu and hides gameplay submenus. |
 | `func openOptions(from_context: int) -> void:` | Opens options. |
+| `func openHowToPlay(from_context: int) -> void:` | Opens the How to Play screen from Main Menu or Pause Menu and preserves the correct return context. |
+| `func openCredits() -> void:` | Opens the Credits screen from the Main Menu. |
 | `func showGlobalUI() -> void:` | Handles show global ui behavior. |
 | `func _handle_pause_action() -> void:` | Handles handle pause action behavior. |
 | `func _updateMouseMode() -> void:` | Handles update mouse mode behavior. |
@@ -752,7 +754,8 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 | `func onStartButtonPressed() -> void:` | Handles on start button pressed behavior. |
 | `func onLoadButtonPressed() -> void:` | Handles on load button pressed behavior. |
 | `func onOptionsButtonPressed() -> void:` | Handles on options button pressed behavior. |
-| `func onCreditsButtonPressed() -> void:` | Handles on credits button pressed behavior. |
+| `func onHowToPlayButtonPressed() -> void:` | Opens the How to Play screen from the Main Menu. |
+| `func onCreditsButtonPressed() -> void:` | Opens the Credits screen from the Main Menu. |
 | `func onExitButtonPressed() -> void:` | Handles on exit button pressed behavior. |
 | `func onOptionsClosed() -> void:` | Handles on options closed behavior. |
 
@@ -890,12 +893,35 @@ Resource only. Stores the season enum plus weather balancing fields: `temperatur
 | `func onSaveGameButtonPressed() -> void:` | Opens confirmation before overwriting the current save slot. |
 | `func onLoadGameButtonPressed() -> void:` | Handles on load game button pressed behavior. |
 | `func onOptionsButtonPressed() -> void:` | Handles on options button pressed behavior. |
+| `func onHowToPlayButtonPressed() -> void:` | Opens the How to Play screen while keeping the game paused. |
 | `func onSaveAndQuitToMenuButtonPressed() -> void:` | Opens confirmation before saving and returning to the main menu. |
 | `func onSaveAndQuitToDesktopButtonPressed() -> void:` | Opens confirmation before saving and quitting to desktop. |
 | `func onOptionsClosed() -> void:` | Handles on options closed behavior. |
 | `func _show_confirmation(action: ConfirmationAction, message: String) -> void:` | Shows the local save/quit confirmation popup and stores the pending action. |
 | `func _hide_confirmation() -> void:` | Hides the confirmation popup and clears the pending action. |
 | `func _on_confirmation_confirmed() -> void:` | Executes the pending save, save-and-quit-to-menu, or save-and-quit-to-desktop action. |
+
+## `Scripts/UIs/Menus/CreditsMenu.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Initializes the Credits screen, connects Back, loads static credits text, and applies responsive board sizing. |
+| `func _input(event: InputEvent) -> void:` | Lets Escape close the Credits screen while it is visible. |
+| `func close() -> void:` | Plays the UI click sound, hides Credits, and returns to Main Menu. |
+| `func _on_interface_scale_changed(_scale_multiplier: float) -> void:` | Reapplies Credits board sizing after Interface Scale changes. |
+| `func _apply_responsive_layout() -> void:` | Fits the Credits wooden board inside the viewport using current interface scale. |
+
+## `Scripts/UIs/Menus/HowToPlayMenu.gd`
+
+| Function | Description |
+| --- | --- |
+| `func _ready() -> void:` | Initializes the How to Play screen, connects Back, loads `res://HOW_TO_PLAY.md`, and applies responsive board sizing. |
+| `func _input(event: InputEvent) -> void:` | Lets Escape close the How to Play screen while it is visible. |
+| `func set_context(context: int) -> void:` | Stores whether the screen was opened from Main Menu or Pause Menu and applies the matching background. |
+| `func close() -> void:` | Plays the UI click sound, hides How to Play, and returns to the correct previous menu. |
+| `func _load_text() -> void:` | Reads the plain-text How to Play content from `res://HOW_TO_PLAY.md`. |
+| `func _on_interface_scale_changed(_scale_multiplier: float) -> void:` | Reapplies How to Play board sizing after Interface Scale changes. |
+| `func _apply_responsive_layout() -> void:` | Fits the How to Play wooden board inside the viewport using current interface scale. |
 
 ## `Scripts/UIs/Menus/WoodenMenuPanel.gd`
 

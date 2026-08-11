@@ -10,7 +10,7 @@ A farming game prototype with a simulated agricultural market/economy system.
 
 ## Engine
 
-Godot Engine — MIT License
+Godot Engine - MIT License
 
 This project was developed using Godot Engine, distributed under the MIT License.
 
@@ -18,7 +18,7 @@ This project was developed using Godot Engine, distributed under the MIT License
 
 ### Lato
 
-Lato — SIL Open Font License 1.1
+Lato - SIL Open Font License 1.1
 
 Used for UI/body text where applicable.
 
@@ -37,7 +37,7 @@ Files:
 
 ### Super Chips
 
-Super Chips by All Super Font — Freeware
+Super Chips by All Super Font - Freeware
 
 Designer:
 All Super Font

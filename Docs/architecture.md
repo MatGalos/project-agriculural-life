@@ -11,7 +11,7 @@ The project uses these gameplay autoloads:
 - `HotbarManager` owns hotbar selection state and exposes the currently selected item.
 - `ToolManager` applies active hotbar tools/seeds to world targets and owns watering-can state.
 - `CropGrowthManager` advances registered farm tiles when the day changes.
-- `TimeManager` owns in-game time, date, seasons, and day/month/year signals.
+- `TimeManager` owns in-game time, date, seasons, and day/month/year signals. One full in-game day currently lasts 10 real-time minutes.
 - `MoneyManager` owns the current player money amount and emits money change signals.
 - `EconomyManager` resolves buy and sell prices, using commodity prices when an item is market-backed, and applies runtime buy-price event multipliers.
 - `CommodityMarketManager` updates commodity prices during market hours, stores price history, and applies runtime market-event modifiers without mutating base market data.
@@ -270,11 +270,11 @@ Audio routing:
 Rules:
 
 - `setPaused()` must be used instead of changing `get_tree().paused` directly.
-- `Esc` closes the active options submenu back to the options root, closes options from the root, and is ignored while load game is open so submenu overlays cannot accidentally unpause the game or create a second pause stack.
+- `Esc` closes active options/help submenus back to their previous menu context, closes options from the root, and is ignored while load game is open so submenu overlays cannot accidentally unpause the game or create a second pause stack.
 - Inventory and phone are closed before toggling pause.
 - Mouse capture is enabled only while the player is in game, not paused, and no blocking UI is visible.
-- Options and load game opened from pause keep the pause blur visible and hide the pause button panel.
-- Load game is moved to the front when opened so the pause blur remains behind it and cannot block slot buttons.
+- Options, How to Play, and load game opened from pause keep the pause blur visible and hide the pause button panel.
+- Load game and help overlays are moved to the front when opened so the pause blur remains behind them and cannot block controls.
 
 Pause menu visuals are intentionally local to `Scenes/UIs/Menus/PauseMenu/pauseMenu.tscn` and `Shaders/UIs/Menus/PauseMenu/pauseMenu.gdshader`:
 
@@ -354,7 +354,7 @@ Growth rules:
 
 Calendar rules:
 
-- One in-game day is `REAL_SECONDS_PER_GAME_DAY` real seconds.
+- One in-game day is `REAL_SECONDS_PER_GAME_DAY` real seconds, currently `10.0 * 60.0`.
 - Each day has `GAME_MINUTES_PER_DAY` minutes.
 - Each month has `DAYS_PER_MONTH` days.
 - Each year has `MONTHS_PER_YEAR` months.
@@ -362,7 +362,7 @@ Calendar rules:
 
 Important behavior:
 
-- `get_date_string()` returns an ordinal day plus season and year, for example `1st of Summer, Year 1`.
+- `get_date_string()` returns the season, day, and year, for example `Spring 1, Year 1`.
 - `skip_to_morning()` advances time to 06:00 and simulates missed commodity market updates when skipping past market hours.
 - Systems that need daily processing should connect to `day_changed` instead of checking the date every frame.
 
@@ -648,7 +648,7 @@ Use it for:
 Panel styling rules:
 
 - Gameplay HUD status elements use compact local plaques rather than menu-sized boards: date/time and money use small wood-drawn plaques, while bottom-left notifications use a light paper-style plaque.
-- Interaction prompts under the crosshair should stay as short white text without a background, using the control-action format such as `E — Open Silo` or `LMB — Water`.
+- Interaction prompts under the crosshair should stay as short white text without a background, using the control-action format such as `E - Open Silo` or `LMB - Water`.
 - Larger gameplay UI panels should use their local farm-themed style: Inventory and Storage/Silo use drawn wooden panels, while FarmPhone apps keep their phone-specific panel styling.
 - Inner cards, slots, and rows should stay in the `0.85-0.95` alpha range when they need a stable reading surface.
 - Modal overlays should remain lower opacity, generally `0.45-0.65`.
@@ -657,7 +657,7 @@ Panel styling rules:
 
 Menu styling rules:
 
-- Main Menu, Pause Menu, Options, New Game, and Load Game use local scene styles rather than a global theme migration.
+- Main Menu, Pause Menu, Options, New Game, Load Game, How to Play, and Credits use local scene styles rather than a global theme migration.
 - `Scripts/UIs/Menus/WoodenMenuPanel.gd` draws the shared wooden board background for central menu panels and confirmation overlays.
 - Main/Pause/Options menu buttons should read as text painted on wood: transparent button backgrounds, black normal text, and white hover/pressed text.
 - New Game and Load Game save slots use light beige paper-card `StyleBoxFlat` resources, black text, and subtle warm hover states.
@@ -750,7 +750,7 @@ Prompt priority:
 
 - Tool prompts from `ToolManager.get_tool_prompt_for_target()` are shown first.
 - Interactable prompts are shown only when no tool prompt is available.
-- Prompt text should use concise control-action wording, for example `E — Interact`, `E — Open Silo`, `LMB — Plow`, and `LMB — Harvest Wheat`.
+- Prompt text should use concise control-action wording, for example `E - Interact`, `E - Open Silo`, `LMB - Plow`, and `LMB - Harvest Wheat`.
 - Prompt and crosshair state are refreshed when gameplay HUD visibility changes, so opening or closing FarmPhone, Inventory, Storage, or Pause cannot leave stale highlighted interaction feedback.
 - Non-interactive collision such as farm boundary colliders may be hit by the raycast, but it should produce no prompt unless an ancestor is an `Interactable`.
 

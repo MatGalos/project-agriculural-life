@@ -6,7 +6,7 @@ signal month_changed
 signal year_changed
 signal season_changed
 
-const REAL_SECONDS_PER_GAME_DAY := 5.0 * 60.0
+const REAL_SECONDS_PER_GAME_DAY := 12.0 * 60.0
 const GAME_MINUTES_PER_DAY := 24 * 60
 const DAYS_PER_MONTH := 30
 const MONTHS_PER_YEAR := 4
