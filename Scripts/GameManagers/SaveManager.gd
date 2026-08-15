@@ -808,11 +808,12 @@ func _reset_runtime_state_for_new_game() -> void:
 	TimeManager.time_changed.emit()
 
 	_reset_inventory()
+	_reset_hotbar_state()
+	_reset_tool_runtime_state()
 	_reset_storage()
 	_reset_world_tiles()
 
-	WeatherManager._generate_initial_forecast()
-	WeatherManager._apply_new_day_weather()
+	WeatherManager.reset_for_new_game()
 
 	EventManager.active_market_events.clear()
 	EventManager.apply_calendar_event_state_save_data({})
@@ -825,8 +826,8 @@ func _reset_runtime_state_for_new_game() -> void:
 
 	NewsManager.clear_news()
 
-	CommodityMarketManager.reset_event_modifiers()
-	CommodityMarketManager.commodity_prices_updated.emit()
+	SalesStatsManager.reset_for_new_game()
+	CommodityMarketManager.reset_for_new_game()
 
 func _reset_inventory() -> void:
 	var inventory := HotbarManager.inventory_data
@@ -843,6 +844,32 @@ func _reset_inventory() -> void:
 	inventory.add_item(_get_item_by_id("wheat_seed"), 10)
 
 	inventory.inventory_changed.emit()
+
+
+func _reset_hotbar_state() -> void:
+	if HotbarManager.hotbar_data == null:
+		return
+
+	HotbarManager.hotbar_data.setup()
+	HotbarManager.hotbar_data.inventory_slot_indexes.clear()
+
+	for index in range(HotbarManager.hotbar_data.hotbar_size):
+		HotbarManager.hotbar_data.inventory_slot_indexes.append(index)
+
+	HotbarManager.hotbar_data.selected_slot_index = 0
+	HotbarManager.selected_slot = 1
+	HotbarManager.selected_slot_changed.emit(HotbarManager.selected_slot)
+	HotbarManager.selected_item_changed.emit(HotbarManager.get_selected_item())
+
+	var hotbar_ui = get_tree().get_first_node_in_group("hotbar_ui")
+	if hotbar_ui:
+		hotbar_ui.refresh()
+
+
+func _reset_tool_runtime_state() -> void:
+	ToolManager.watering_can_water = 0
+	ToolManager.watering_can_changed.emit()
+
 
 func _reset_storage() -> void:
 	if silo_storage == null:

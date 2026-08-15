@@ -216,6 +216,24 @@ func get_current_price(item_data: ItemData) -> int:
 func _get_history_label(time_string: String) -> String:
 	return "%s %s" % [TimeManager.get_date_string(), time_string]
 
+
+func reset_for_new_game() -> void:
+	reset_event_modifiers()
+
+	for commodity in commodities:
+		if commodity == null:
+			continue
+
+		commodity.current_price = commodity.base_price
+		commodity.price_history.clear()
+		commodity.price_history_labels.clear()
+
+	last_processed_day = -1
+	last_processed_hour = -1
+	_initialize_price_history()
+	commodity_prices_updated.emit()
+
+
 func reset_event_modifiers() -> void:
 	_ensure_base_market_values()
 	_event_direction_by_item_id.clear()

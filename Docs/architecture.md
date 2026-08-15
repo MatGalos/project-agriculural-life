@@ -11,7 +11,7 @@ The project uses these gameplay autoloads:
 - `HotbarManager` owns hotbar selection state and exposes the currently selected item.
 - `ToolManager` applies active hotbar tools/seeds to world targets and owns watering-can state.
 - `CropGrowthManager` advances registered farm tiles when the day changes.
-- `TimeManager` owns in-game time, date, seasons, and day/month/year signals. One full in-game day currently lasts 10 real-time minutes.
+- `TimeManager` owns in-game time, date, seasons, and day/month/year signals. One full in-game day currently lasts 12 real-time minutes.
 - `MoneyManager` owns the current player money amount and emits money change signals.
 - `EconomyManager` resolves buy and sell prices, using commodity prices when an item is market-backed, and applies runtime buy-price event multipliers.
 - `CommodityMarketManager` updates commodity prices during market hours, stores price history, and applies runtime market-event modifiers without mutating base market data.

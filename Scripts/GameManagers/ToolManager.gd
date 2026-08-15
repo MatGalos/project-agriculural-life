@@ -182,7 +182,9 @@ func _use_scythe(target: Node) -> void:
 		_show_action_error("Cannot harvest this.")
 		return
 
-	if not _can_inventory_fit(expected_item, 1):
+	var harvest_amount := tile.crop_data.harvest_amount
+
+	if not _can_inventory_fit(expected_item, harvest_amount):
 		_show_action_error("Inventory is full.")
 		return
 
@@ -192,10 +194,18 @@ func _use_scythe(target: Node) -> void:
 		_show_action_error("Cannot harvest this.")
 		return
 
-	player_inventory.add_item(harvested_item, 1)
+	var leftover := player_inventory.add_item(harvested_item, harvest_amount)
+	if leftover > 0:
+		push_error("Harvest inventory fit check failed with %d leftover %s." % [
+			leftover,
+			harvested_item.display_name
+		])
 	_refresh_inventory_ui()
 	UISoundManager.play_harvest_crop()
-	_show_hud_event_message("Added 1x %s." % UIFormatHelper.display_product_name(harvested_item))
+	_show_hud_event_message("Added %dx %s." % [
+		harvest_amount,
+		UIFormatHelper.display_product_name(harvested_item)
+	])
 
 
 func _can_inventory_fit(item_data: ItemData, amount: int) -> bool:

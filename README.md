@@ -22,7 +22,7 @@ Project for my master thesis about implementing stock-market mechanics in a farm
 - Temporary HUD event messages for gameplay feedback, such as planting blocked by season.
 - Watering can capacity, refill at the well, and water-fill bars in inventory/hotbar UI.
 - Day/night and date progression.
-- In-game day length: 10 real-time minutes.
+- In-game day length: 12 real-time minutes.
 - Interpolated day/night lighting with visible sun and moon visuals aligned to the shadow direction.
 - Four-season calendar: Spring, Summer, Autumn, and Winter.
 - Money, buy prices, sell prices, and commodity-backed dynamic crop prices.
