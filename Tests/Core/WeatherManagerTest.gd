@@ -16,11 +16,14 @@ func run() -> void:
 	var saved_current_day_pattern := WeatherManager.current_day_pattern
 	var saved_current_day_base_temperature := WeatherManager.current_day_base_temperature
 	var saved_season_weather_profiles := WeatherManager.season_weather_profiles.duplicate()
+	var saved_suppress_logs := WeatherManager.suppress_logs
 
+	WeatherManager.suppress_logs = true
 	WeatherManager.today_phase_forecast.clear()
 
 	_test_day_phase_boundaries()
 	_test_time_changed_updates_cached_day_phase()
+	_test_phase_weather_waters_fields_when_active()
 	_test_phase_temperatures_use_one_day_base_temperature()
 	_test_phase_forecast_text_format()
 	_test_forecast_entry_contains_pattern_and_rain_chance()
@@ -40,6 +43,7 @@ func run() -> void:
 	WeatherManager.current_day_pattern = saved_current_day_pattern
 	WeatherManager.current_day_base_temperature = saved_current_day_base_temperature
 	WeatherManager.season_weather_profiles = saved_season_weather_profiles
+	WeatherManager.suppress_logs = saved_suppress_logs
 
 
 func _test_day_phase_boundaries() -> void:
@@ -112,6 +116,41 @@ func _test_time_changed_updates_cached_day_phase() -> void:
 		WeatherPhaseData.DayPhase.NIGHT,
 		"Weather cached phase updates to Night on time change"
 	)
+
+
+func _test_phase_weather_waters_fields_when_active() -> void:
+	var sunny := WeatherManager.get_weather_by_name("Sunny")
+	var cloudy := WeatherManager.get_weather_by_name("Cloudy")
+	var rain := WeatherManager.get_weather_by_name("Rain")
+	var storm := WeatherManager.get_weather_by_name("Storm")
+
+	_assert_single_phase_tile_state(
+		rain,
+		FarmTile.TileState.PLOWED,
+		FarmTile.TileState.WATERED,
+		"Rain phase waters plowed tile"
+	)
+	_assert_single_phase_tile_state(
+		storm,
+		FarmTile.TileState.PLOWED,
+		FarmTile.TileState.WATERED,
+		"Storm phase waters plowed tile"
+	)
+	_assert_single_phase_tile_state(
+		sunny,
+		FarmTile.TileState.PLOWED,
+		FarmTile.TileState.PLOWED,
+		"Sunny phase does not water plowed tile"
+	)
+	_assert_single_phase_tile_state(
+		cloudy,
+		FarmTile.TileState.PLOWED,
+		FarmTile.TileState.PLOWED,
+		"Cloudy phase does not water plowed tile"
+	)
+
+	_assert_rain_keeps_non_plowed_states(rain)
+	_assert_dry_to_rain_transition_waters_on_rain_phase(sunny, rain)
 
 
 func _test_phase_temperatures_use_one_day_base_temperature() -> void:
@@ -252,3 +291,116 @@ func _set_test_season_weather_profiles() -> void:
 
 func _set_hour(hour: int) -> void:
 	TimeManager.current_minute_of_day = hour * 60
+
+
+func _assert_single_phase_tile_state(
+	weather: WeatherData,
+	start_state: FarmTile.TileState,
+	expected_state: FarmTile.TileState,
+	message: String
+) -> void:
+	var tile := _create_test_farm_tile(start_state)
+	_set_single_phase_forecast(WeatherPhaseData.DayPhase.MORNING, weather)
+
+	WeatherManager.current_day_phase = WeatherPhaseData.DayPhase.MORNING
+	WeatherManager._apply_current_phase_weather()
+
+	runner.assert_eq(int(tile.current_state), int(expected_state), message)
+	_destroy_test_farm_tile(tile)
+
+
+func _assert_rain_keeps_non_plowed_states(rain: WeatherData) -> void:
+	var grass_tile := _create_test_farm_tile(FarmTile.TileState.GRASS)
+	var watered_tile := _create_test_farm_tile(FarmTile.TileState.WATERED)
+	_set_single_phase_forecast(WeatherPhaseData.DayPhase.AFTERNOON, rain)
+
+	WeatherManager.current_day_phase = WeatherPhaseData.DayPhase.AFTERNOON
+	WeatherManager._apply_current_phase_weather()
+
+	runner.assert_eq(
+		int(grass_tile.current_state),
+		int(FarmTile.TileState.GRASS),
+		"Rain phase leaves grass tile unchanged"
+	)
+	runner.assert_eq(
+		int(watered_tile.current_state),
+		int(FarmTile.TileState.WATERED),
+		"Rain phase leaves watered tile watered"
+	)
+
+	_destroy_test_farm_tile(grass_tile)
+	_destroy_test_farm_tile(watered_tile)
+
+
+func _assert_dry_to_rain_transition_waters_on_rain_phase(
+	sunny: WeatherData,
+	rain: WeatherData
+) -> void:
+	var tile := _create_test_farm_tile(FarmTile.TileState.PLOWED)
+	WeatherManager.today_phase_forecast.clear()
+	WeatherManager.today_phase_forecast.append(_make_phase_forecast(
+		WeatherPhaseData.DayPhase.DAWN,
+		sunny,
+		18
+	))
+	WeatherManager.today_phase_forecast.append(_make_phase_forecast(
+		WeatherPhaseData.DayPhase.MORNING,
+		rain,
+		20
+	))
+
+	WeatherManager.current_day_phase = WeatherPhaseData.DayPhase.DAWN
+	WeatherManager._apply_current_phase_weather()
+	runner.assert_eq(
+		int(tile.current_state),
+		int(FarmTile.TileState.PLOWED),
+		"Dry phase before rain does not water plowed tile"
+	)
+
+	WeatherManager.current_day_phase = WeatherPhaseData.DayPhase.MORNING
+	WeatherManager._apply_current_phase_weather()
+	runner.assert_eq(
+		int(tile.current_state),
+		int(FarmTile.TileState.WATERED),
+		"Dry to rain phase transition waters when rain phase is applied"
+	)
+
+	_destroy_test_farm_tile(tile)
+
+
+func _set_single_phase_forecast(
+	phase: WeatherPhaseData.DayPhase,
+	weather: WeatherData
+) -> void:
+	WeatherManager.today_phase_forecast.clear()
+	WeatherManager.today_phase_forecast.append(_make_phase_forecast(phase, weather, 20))
+
+
+func _make_phase_forecast(
+	phase: WeatherPhaseData.DayPhase,
+	weather: WeatherData,
+	temperature: int
+) -> WeatherPhaseData:
+	var phase_data := WeatherPhaseData.new()
+	phase_data.phase = phase
+	phase_data.weather = weather
+	phase_data.temperature = temperature
+	phase_data.rain_chance = 100 if weather != null and weather.waters_fields else 0
+	return phase_data
+
+
+func _create_test_farm_tile(state: FarmTile.TileState) -> FarmTile:
+	var tile := FarmTile.new()
+	runner.add_child(tile)
+	tile.set_state(state)
+	return tile
+
+
+func _destroy_test_farm_tile(tile: FarmTile) -> void:
+	if tile == null:
+		return
+
+	if tile.get_parent() != null:
+		tile.get_parent().remove_child(tile)
+
+	tile.free()

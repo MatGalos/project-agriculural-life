@@ -49,6 +49,13 @@ func _on_day_changed() -> void:
 
 	sales_stats_changed.emit()
 
+
+func reset_for_new_game() -> void:
+	current_day_sales.clear()
+	sales_history.clear()
+	sales_stats_changed.emit()
+
+
 func create_save_data() -> Dictionary:
 	return {
 		"current_day_sales": current_day_sales.duplicate(true),
