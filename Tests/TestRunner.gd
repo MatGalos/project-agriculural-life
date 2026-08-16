@@ -34,6 +34,7 @@ func run_all_tests() -> void:
 	_run_test_script(preload("res://Tests/Core/GameplayFeedbackTest.gd").new())
 	_run_test_script(preload("res://Tests/Core/AudioSettingsSourceTest.gd").new())
 	_run_test_script(preload("res://Tests/Core/UISoundSourceTest.gd").new())
+	_run_test_script(preload("res://Tests/Core/HowToPlayExportSourceTest.gd").new())
 	_run_test_script(preload("res://Tests/Core/GameplaySFXSourceTest.gd").new())
 	_run_test_script(preload("res://Tests/Core/WeatherEffectsSourceTest.gd").new())
 	_run_test_script(preload("res://Tests/Core/UIResponsivenessSourceTest.gd").new())
