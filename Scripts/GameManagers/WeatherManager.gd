@@ -150,6 +150,23 @@ func _is_representative_day_rainy(pattern: WeatherDayPatternData) -> bool:
 func _on_time_changed() -> void:
 	_update_day_phase()
 
+
+func reset_for_new_game() -> void:
+	daily_weather_history.clear()
+	forecast.clear()
+	today_phase_forecast.clear()
+	current_phase_weather = null
+	current_day_pattern = null
+	current_day_base_temperature = 20
+	current_day_phase = get_current_day_phase()
+
+	_generate_initial_forecast()
+	_apply_new_day_weather()
+	_generate_today_phase_forecast()
+	current_day_phase = get_current_day_phase()
+	_apply_current_phase_weather()
+
+
 func _apply_new_day_weather() -> void:
 	if forecast.is_empty():
 		_generate_initial_forecast()
@@ -160,8 +177,6 @@ func _apply_new_day_weather() -> void:
 	current_temperature = int(today["temperature"])
 	current_day_pattern = today.get("pattern", null) as WeatherDayPatternData
 	current_day_base_temperature = int(today.get("base_temperature", current_temperature))
-
-	_water_fields_if_needed()
 
 	forecast.append(_generate_forecast_entry())
 
@@ -405,6 +420,8 @@ func _apply_current_phase_weather() -> void:
 	current_phase_weather = phase_data
 	current_weather = phase_data.weather
 	current_temperature = phase_data.temperature
+
+	_water_fields_if_needed()
 
 	weather_changed.emit(current_weather, current_temperature)
 

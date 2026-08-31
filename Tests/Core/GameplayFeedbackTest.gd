@@ -44,7 +44,7 @@ func run() -> void:
 	runner.assert_true(tool_manager_source.contains("Cannot harvest this."), "World feedback covers invalid harvest")
 	runner.assert_true(character_controller_source.contains("Nothing to interact with."), "World feedback covers empty interaction target")
 	runner.assert_true(tool_manager_source.contains("Used 1x %s."), "Hotbar feedback covers item use")
-	runner.assert_true(tool_manager_source.contains("Added 1x %s."), "Inventory feedback covers item gain")
+	runner.assert_true(tool_manager_source.contains("Added %dx %s."), "Inventory feedback covers item gain")
 
 
 func _read_file(path: String) -> String:
