@@ -1,6 +1,8 @@
 extends Control
 class_name StoragePanel
 
+signal close_requested
+
 const BASE_PANEL_SIZE := Vector2(680.0, 460.0)
 const VIEWPORT_SAFE_MARGIN := Vector2(48.0, 48.0)
 const MIN_RESPONSIVE_SCALE := 0.5
@@ -36,8 +38,8 @@ func _ready() -> void:
 	if player_inventory and not player_inventory.inventory_changed.is_connected(refresh):
 		player_inventory.inventory_changed.connect(refresh)
 
-	if close_button and not close_button.pressed.is_connected(close):
-		close_button.pressed.connect(close)
+	if close_button and not close_button.pressed.is_connected(_on_close_button_pressed):
+		close_button.pressed.connect(_on_close_button_pressed)
 
 	_inventory_scroll_line = _create_scroll_line(inventory_scroll, "InventoryScrollLine")
 	_storage_scroll_line = _create_scroll_line(storage_scroll, "StorageScrollLine")
@@ -59,6 +61,10 @@ func close() -> void:
 
 	if gamemanager.isInGame and not gamemanager.isPaused:
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
+func _on_close_button_pressed() -> void:
+	close_requested.emit()
 
 
 func toggle() -> void:
