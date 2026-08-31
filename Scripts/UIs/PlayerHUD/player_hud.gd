@@ -60,6 +60,8 @@ func _ready() -> void:
 	inventory_panel.refresh()
 	quick_inventory_controller.refresh()
 	phone_panel.visible = false
+	if not storage_panel.close_requested.is_connected(close_storage):
+		storage_panel.close_requested.connect(close_storage)
 	storage_panel.close()
 	_hide_event_message()
 	prompt_label.text = ""

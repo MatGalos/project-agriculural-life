@@ -28,6 +28,8 @@ func run() -> void:
 	runner.assert_true(storage_source.contains("_position_scroll_lines_deferred"), "Silo Storage repositions custom scroll lines after responsive changes")
 	runner.assert_true(storage_source.contains("func _drop_data(drop_position: Vector2, data: Variant)"), "Silo Storage drop handler avoids Control.position shadowing")
 	runner.assert_true(storage_source.contains("ScrollContainer.SCROLL_MODE_SHOW_NEVER"), "Silo Storage uses typed scroll mode enum for custom scroll lines")
+	runner.assert_true(storage_source.contains("signal close_requested"), "Silo Storage delegates close-button state changes to PlayerHUD")
+	runner.assert_true(hud_source.contains("storage_panel.close_requested.connect(close_storage)"), "HUD restores gameplay UI mode after the Silo close button is pressed")
 
 	runner.assert_true(options_source.contains("responsive_boards"), "Options menu tracks responsive boards")
 	runner.assert_true(options_source.contains("_cache_board_base_sizes"), "Options menu caches board base sizes")
